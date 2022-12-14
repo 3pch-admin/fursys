@@ -1,0 +1,134 @@
+ResourceInfo.class=wt.tools.resource.EnumResourceInfo
+ResourceInfo.customizable=true
+ResourceInfo.deprecated=false
+
+
+# Entry Format (values equal to default value are not included)
+# <key>.value=
+# <key>.category=
+# <key>.comment=
+# <key>.argComment<n>=
+# <key>.constant=
+# <key>.customizable=
+# <key>.deprecated=
+# <key>.abbreviatedDisplay=
+# <key>.fullDisplay=
+# <key>.shortDescription=
+# <key>.longDescription=
+# <key>.order=
+# <key>.defaultValue=
+# <key>.selectable=
+
+# Entry Contents
+
+#BOM 상태
+BOM_STATUS.value=BOM \uC0C1\uD0DC
+BOM_STATUS.sort=1
+
+#브랜드
+BRAND.value=\uBE0C\uB79C\uB4DC
+BRAND.sort=2
+
+#카테고리 대
+CAT_L.value=\uCE74\uD14C\uACE0\uB9AC \uB300
+CAT_L.sort=3
+
+#카테고리 중
+CAT_M.value=\uCE74\uD14C\uACE0\uB9AC \uC911
+CAT_M.sort=4
+
+#코드유형
+CODETYPE.value=\uCF54\uB4DC\uC720\uD615
+CODETYPE.sort=5
+
+#색상
+COLOR.value=\uC0C9\uC0C1
+COLOR.sort=6
+
+#회사
+COMPANY.value=\uD68C\uC0AC
+COMPANY.sort=7
+
+#고객
+CUSTOMER.value=\uACE0\uAC1D
+CUSTOMER.sort=8
+
+#사업부
+DEVORGANIZATION.value=\uC0AC\uC5C5\uBD80
+DEVORGANIZATION.sort=9
+
+#적용 시점
+ECO_APPLY_TIME.value=\uC801\uC6A9 \uC2DC\uC810
+ECO_APPLY_TIME.sort=12
+
+#개발 구분
+ECO_DEV_TYPE.value=\uAC1C\uBC1C \uAD6C\uBD84
+ECO_DEV_TYPE.sort=13
+
+#통보 유형
+ECO_NOTI_TYPE.value=\uD1B5\uBCF4 \uC720\uD615
+ECO_NOTI_TYPE.sort=14
+
+#ECO 유형
+ECO_TYPE.value=ECO \uC720\uD615
+ECO_TYPE.sort=15
+
+#ECR 유형
+ECR_TYPE.value=ECR \uC720\uD615
+ECR_TYPE.sort=16
+
+#공장 코드
+FACTORY_CODE.value=\uACF5\uC7A5 \uCF54\uB4DC
+FACTORY_CODE.sort=17
+
+#이슈유형
+ISSUETYPE.value=\uC774\uC288\uC720\uD615
+ISSUETYPE.sort=18
+
+#제품 LOT관리
+LOT_MGMT.value=\uC81C\uD488 LOT\uAD00\uB9AC
+LOT_MGMT.sort=19
+
+#부품 유형
+PART_TYPE.value=\uBD80\uD488 \uC720\uD615
+PART_TYPE.sort=20
+
+#사업장
+PLANT.value=\uC0AC\uC5C5\uC7A5
+PLANT.sort=21
+
+#프로젝트역할
+PROJECTROLE.value=\uD504\uB85C\uC81D\uD2B8\uC5ED\uD560
+PROJECTROLE.sort=22
+
+#프로젝트유형
+PROJECTTYPE.value=\uD504\uB85C\uC81D\uD2B8\uC720\uD615
+PROJECTTYPE.sort=23
+
+#공정정보
+ROUTE.value=\uACF5\uC815\uC815\uBCF4
+ROUTE.sort=24
+
+#위치
+SITE_TYPE_CODE.value=\uC704\uCE58
+SITE_TYPE_CODE.sort=25
+
+#규격구분 코드
+STANDARD_CODE.value=\uADDC\uACA9\uAD6C\uBD84 \uCF54\uB4DC
+STANDARD_CODE.sort=26
+
+#단위 코드
+UNIT_CODE.value=\uB2E8\uC704 \uCF54\uB4DC
+UNIT_CODE.sort=27
+
+#사용 유무 코드
+USE_TYPE_CODE.value=\uC0AC\uC6A9 \uC720\uBB34 \uCF54\uB4DC
+USE_TYPE_CODE.sort=28
+
+#사용여부 코드
+USEYN_CODE.value=\uC0AC\uC6A9\uC5EC\uBD80 \uCF54\uB4DC
+USEYN_CODE.sort=29
+
+#여부
+YESNO.value=\uC5EC\uBD80
+YESNO.sort=30

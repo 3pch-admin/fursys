@@ -1,0 +1,106 @@
+ResourceInfo.class=wt.tools.resource.EnumResourceInfo
+ResourceInfo.customizable=true
+ResourceInfo.deprecated=false
+
+
+# Entry Format (values equal to default value are not included)
+# <key>.value=
+# <key>.category=
+# <key>.comment=
+# <key>.argComment<n>=
+# <key>.constant=
+# <key>.customizable=
+# <key>.deprecated=
+# <key>.abbreviatedDisplay=
+# <key>.fullDisplay=
+# <key>.shortDescription=
+# <key>.longDescription=
+# <key>.order=
+# <key>.defaultValue=
+# <key>.selectable=
+
+# Entry Contents
+
+BOM_STATUS.value=BOM_STATUS
+BOM_STATUS.sort=1
+
+BRAND.value=BRAND
+BRAND.sort=2
+
+CAT_L.value=CAT_L
+CAT_L.sort=3
+
+CAT_M.value=CAT_M
+CAT_M.sort=4
+
+CODETYPE.value=CODETYPE
+CODETYPE.sort=5
+
+COLOR.value=COLOR
+COLOR.sort=6
+
+COMPANY.value=COMPANY
+COMPANY.sort=7
+
+CUSTOMER.value=CUSTOMER
+CUSTOMER.sort=8
+
+DEVORGANIZATION.value=DEVORGANIZATION
+DEVORGANIZATION.sort=9
+
+ECO_APPLY_TIME.value=ECO_APPLY_TIME
+ECO_APPLY_TIME.sort=12
+
+ECO_DEV_TYPE.value=ECO_DEV_TYPE
+ECO_DEV_TYPE.sort=13
+
+ECO_NOTI_TYPE.value=ECO_NOTI_TYPE
+ECO_NOTI_TYPE.sort=14
+
+ECO_TYPE.value=ECO_TYPE
+ECO_TYPE.sort=15
+
+ECR_TYPE.value=ECR_TYPE
+ECR_TYPE.sort=16
+
+FACTORY_CODE.value=FACTORY_CODE
+FACTORY_CODE.sort=17
+
+ISSUETYPE.value=ISSUETYPE
+ISSUETYPE.sort=18
+
+LOT_MGMT.value=LOT_MGMT
+LOT_MGMT.sort=19
+
+PART_TYPE.value=PART_TYPE
+PART_TYPE.sort=20
+
+PLANT.value=PLANT
+PLANT.sort=21
+
+PROJECTROLE.value=PROJECTROLE
+PROJECTROLE.sort=22
+
+PROJECTTYPE.value=PROJECTTYPE
+PROJECTTYPE.sort=23
+
+ROUTE.value=ROUTE
+ROUTE.sort=24
+
+SITE_TYPE_CODE.value=SITE_TYPE_CODE
+SITE_TYPE_CODE.sort=25
+
+STANDARD_CODE.value=STANDARD_CODE
+STANDARD_CODE.sort=26
+
+UNIT_CODE.value=UNIT_CODE
+UNIT_CODE.sort=27
+
+USE_TYPE_CODE.value=USE_TYPE_CODE
+USE_TYPE_CODE.sort=28
+
+USEYN_CODE.value=USEYN_CODE
+USEYN_CODE.sort=29
+
+YESNO.value=YESNO
+YESNO.sort=30
