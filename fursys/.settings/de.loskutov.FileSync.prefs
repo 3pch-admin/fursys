@@ -9,4 +9,5 @@ map|2=configure/HTTPServer|C\:/ptc/Windchill_12.0/HTTPServer|,|,|,
 map|3=configure/tomcat|C\:/ptc/Windchill_12.0/Windchill/tomcat|,|,|,
 map|4=src|C\:/ptc/Windchill_12.0/Windchill/src|,|,|,
 map|5=src_gen|C\:/ptc/Windchill_12.0/Windchill/src_gen|,|,|,
+map|6=loadFiles|C\:/ptc/Windchill_12.0/Windchill/loadFiles|,|,|,
 useCurrentDateForDestinationFiles=false
