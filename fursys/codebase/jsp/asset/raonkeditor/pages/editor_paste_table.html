@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Split Cell</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt src="../config/editor_crossdomain_config.js?t=' + (new Date).getTime() + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+
+    <script type="text/javascript">
+        var KEDITORTOP = parent;
+        var KEditorLayerFrame = KEDITORTOP.KEDITORDOC.getElementById("raonk_frame_" + KEDITORTOP.G_CURRKEDITOR.ID);
+        if (KEDITORTOP.G_CURRKEDITOR.dialogWindow != null) {
+            KEDITORTOP = KEditorLayerFrame.contentWindow.KEDITORTOP;
+        }
+        var KEditorLayerWin = KEditorLayerFrame.contentWindow;
+
+        document.write('<link href="' + KEditorLayerWin._k_editor._config.popupCssUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" rel="stylesheet" type="text/css" />');
+        document.write('<scr' + 'ipt src="' + KEditorLayerWin._k_editor._config.dialogJSUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+
+    <script type="text/javascript">
+        function page_loaded_event() {
+            var _skin_name = LayerWin._k_editor._config.style.skinName;
+            document.getElementById('keditor_dialog_box').className = 'K_edITor_ED_Popup_Type03 K_edITor_PUi_' + _skin_name;
+
+            set_page_lang();
+
+            set_paste_table_button();
+
+            var btn_ok_a = document.getElementById('ok_btn');
+            KEDITORTOP.RAONKEDITOR.util.addEvent(btn_ok_a, 'click', function () { keditor_paste_table(); });
+
+            var inputTags = document.getElementsByTagName('input');
+            inputTags[0].checked = true;
+
+            if (LayerDoc.compatMode == "BackCompat") {
+                var inputs = document.getElementsByTagName('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == 'text') {
+                        inputs[i].style.height = '20px';
+                    }
+                }
+            }
+            var header = LayerWin.getElementsByClass('EdiTor_Popup_header', document);
+            header[0].onselectstart = function () { return false; };
+
+            setCursorPos(document.getElementById('radio_row'), false, false);
+            LayerWin.setFocusFirstAndLast(document, document.getElementById('radio_row'));
+        }
+
+        function set_page_lang() {
+            document.title = LayerWin.RAONKEditor_lang.table_paste.title;
+
+            document.getElementById("label_paste1").innerHTML = LayerWin.RAONKEditor_lang.table_paste.paste_type_1;
+            document.getElementById("label_paste2").innerHTML = LayerWin.RAONKEditor_lang.table_paste.paste_type_2;
+            document.getElementById("label_paste3").innerHTML = LayerWin.RAONKEditor_lang.table_paste.paste_type_3;
+            document.getElementById("label_paste4").innerHTML = LayerWin.RAONKEditor_lang.table_paste.paste_type_4;
+            document.getElementById("label_paste5").innerHTML = LayerWin.RAONKEditor_lang.table_paste.paste_type_5;
+            document.getElementById("label_paste6").innerHTML = LayerWin.RAONKEditor_lang.table_paste.paste_type_6;
+
+            document.getElementById("span_subject").innerHTML = LayerWin.RAONKEditor_lang.table_paste.title;
+            document.getElementById("span_ok").innerHTML = LayerWin.RAONKEditor_lang.table_paste.btn_ok;
+            document.getElementById("span_cancel").innerHTML = LayerWin.RAONKEditor_lang.table_paste.btn_cancel;
+        }
+    </script>
+</head>
+<body style="margin:0px; padding:0px; " onload="javascript:page_loaded_event();">
+    <div class="" id="keditor_dialog_box">
+        <!-- Header -->
+        <div class="EdiTor_Popup_header">
+            <span class="subject" id="span_subject">표 붙여넣기</span><span class="text">RAONKEDITOR Editor</span>
+            <div class="close">
+                <a href="javascript:event_popup_close();" title="close"></a>
+            </div>
+        </div>
+        <!-- // Header -->
+        <!-- Contents / general -->
+        <div class="EdiTor_Popup_contents view">
+            <div class="contents">
+                <div class="con">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <input id="radio_1" name="radio_select" type="radio" value="paste_table" />
+                                <label id="label_paste1" for="radio_1" style="vertical-align: middle;">표 붙여넣기</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="radio_2" name="radio_select" type="radio" value="paste_table_contents" />
+                                <label id="label_paste2" for="radio_2" style="vertical-align: middle;">표 내용 붙여넣기</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="radio_3" name="radio_select" type="radio" value="paste_table_right" disabled="disabled" />
+                                <label id="label_paste3" for="radio_3" style="vertical-align: middle;">오른쪽에 세로줄로 붙여넣기</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="radio_4" name="radio_select" type="radio" value="paste_table_left" disabled="disabled" />
+                                <label id="label_paste4" for="radio_4" style="vertical-align: middle;">왼쪽에 세로줄로 붙여넣기</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="radio_5" name="radio_select" type="radio" value="paste_table_up" disabled="disabled" />
+                                <label id="label_paste5" for="radio_5" style="vertical-align: middle;">위쪽에 가로줄로 붙여넣기</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="radio_6" name="radio_select" type="radio" value="paste_table_down" disabled="disabled" />
+                                <label id="label_paste6" for="radio_6" style="vertical-align: middle;">아래쪽에 가로줄로 붙여넣기</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- // Contents -->
+        <!-- Footer -->
+        <div class="EdiTor_Popup_footer">
+            <a id="ok_btn" class="confirm" href="javascript:void(0);"><span id="span_ok"></span></a> <a href="javascript:event_popup_close();" class="cancel"><span id="span_cancel"></span></a>
+        </div>
+        <!-- // Footer -->
+    </div>
+</body>
+</html>

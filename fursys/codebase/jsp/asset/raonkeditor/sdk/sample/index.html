@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>웹 표준 접근성의 차세대 HTML5 솔루션, K Editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="keywords" content="웹에디터, 웹표준, 웹접근성, HTML5, HTML편집기, 크로스브라우저, cross browser, XSS, 업로드, UPLOAD">
+    <meta name="description" content="웹 접근성 및 웹 표준을 준수하는 HTML5 기반의 솔루션입니다.">
+    <link href="css/sample.common.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        function fn_click(obj) {
+            var elementsA = document.getElementsByTagName('a');
+            var elementsALength = document.getElementsByTagName('a').length;
+            
+            for (var idx = 0; idx < elementsALength; idx++) {
+                if (elementsA[idx] == obj)
+                    elementsA[idx].className = "on";
+                else
+                    elementsA[idx].className = "";
+            }
+
+            var contentTitle = document.getElementById("contentTitle");
+            contentTitle.innerHTML = obj.innerHTML;
+
+            var iframeObj = document.getElementById("contentFrame");
+            iframeObj.src = obj.href;
+
+            return false;
+        }
+
+        function fn_load() {
+            var currLocation = window.location.href;
+            currLocation = currLocation.substring(0, currLocation.lastIndexOf('/'));
+            currLocation = currLocation.substring(0, currLocation.lastIndexOf('/'));
+
+            var helpRoot = currLocation;
+            var mainPageDev = helpRoot + '/help/index_dev.html';
+            var indexDevObj = document.getElementById("indexDev");
+            var mainPageKo = helpRoot + '/help/index_ko.html';
+            var indexUserObj = document.getElementById("indexUser");
+
+            // 개발자 가이드   
+            var xhr;
+            if (window.ActiveXObject) {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            } else if (window.XMLHttpRequest) {
+                xhr = new XMLHttpRequest();
+            }
+
+            var sendComplete = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        indexDevObj.href = mainPageDev;
+                    } else {
+                        indexDevObj.href = 'http://www.raonk.com/keditor/help/index_dev.html';
+                    }
+                }
+            }
+
+            xhr.onreadystatechange = sendComplete;
+            xhr.open("GET", mainPageDev, true);
+            xhr.send(null);
+
+            // 사용자 가이드
+            var xhru;
+            if (window.ActiveXObject) {
+                xhru = new ActiveXObject("Microsoft.XMLHTTP");
+            } else if (window.XMLHttpRequest) {
+                xhru = new XMLHttpRequest();
+            }
+
+            var sendComplete = function () {
+                if (xhru.readyState == 4) {
+                    if (xhru.status == 200) {
+                        indexUserObj.href = mainPageKo;
+                    } else {                        
+                        indexUserObj.href = 'http://www.raonk.com/keditor/help/index_ko.html';
+                    }
+                }
+            }
+
+            xhru.onreadystatechange = sendComplete;
+            xhru.open("GET", mainPageKo, true);
+            xhru.send(null);
+        }
+    </script>
+</head>
+<body onload="fn_load()">
+    <div id="wrap">
+        <div id="head">
+            <h1><a href="index.html">K Editor Sample</a></h1>
+            <span class="btn_info"><a target="_blank" href="../readme.txt">설치 가이드</a></span>
+            <span style="display:none;" class="btn_info btn_info2"><a target="_blank" id="indexDev" href="">개발자 가이드</a></span>
+            <span style="display:none;" class="btn_info btn_info3"><a target="_blank" id="indexUser" href="">사용자 가이드</a></span>
+        </div>
+        <div id="container">
+            <div id="snb">
+                <h2 class="blind">K Editor Sample list</h2>
+                <ul>
+                    <li><span>&gt;</span> <a href="html/sample_description.html" class="on" onclick="return fn_click(this);">Sample 설명</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_editor.html" onclick="return fn_click(this);">기본 에디터 생성</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_ajax.html" onclick="return fn_click(this);">동적 에디터 생성</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_multi_editor.html" onclick="return fn_click(this);">다중 에디터</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_insert_editor.html" onclick="return fn_click(this);">특정위치에 내용삽입</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_cssurl_editor.html" onclick="return fn_click(this);">Css Url 추가</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_loadhtml_editor.html" onclick="return fn_click(this);">Html Url 불러오기</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_toolbar_editor.html" onclick="return fn_click(this);">UI 컨트롤</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_cursor_editor.html" onclick="return fn_click(this);">포커스 제어</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_editor_dom.html" onclick="return fn_click(this);">에디터 객체 컨트롤</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_accessibility_validation.html" onclick="return fn_click(this);">웹 접근성 검증</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_form_editor.html" onclick="return fn_click(this);">DOM 관리</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_display_none.html" onclick="return fn_click(this);">숨겨진 영역에서 생성</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_insert_signature.html" onclick="return fn_click(this);">에디터 서명 삽입</a></li>
+                    <li><span>&gt;</span> <a href="html/sample_editor_view.html" onclick="return fn_click(this);">해상도별 보기 페이지</a></li>
+                </ul>
+            </div>
+            <div id="content">
+                <h3 id="contentTitle">Sample 설명</h3>
+                <div class="iframe_box"><iframe id="contentFrame" src="html/sample_description.html" frameborder="0" width="100%" height="100%" scrolling="no" style="min-height:1100px;" ></iframe></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

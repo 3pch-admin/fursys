@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>RAON K Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">
+    <div class="sdk_content">
+        <h3 class="title">설치 및 기본설정</h3><br />
+        <table class="h_table">
+            <caption>기본 설정 가이드</caption>
+            <colgroup>
+                <col style="!important;" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        <span class="firebrick">※ 제품을 연동하기 전 꼭 아래내용을 읽어주세요!</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="t_bg01">
+                        <pre class="pre">
+<span style="font-weight:bold; text-decoration:underline;">K Editor는 웹상에서 문서를 작성하기 위한 솔루션으로 다음과 같이 구성되어 있습니다.</span>
+
+<div class="cord" style="font-size:10pt;"> <span class="firebrick">- Client Module</span> : 화면 구성 및 파일을 전송하는 클라이언트쪽 모듈 [ Javascript, CSS, Images, XML, Agent, Pages(팝업HTML) ]
+ <span class="firebrick">- Server Module</span> : 클라이언트로 부터 전송된 데이터를 서버쪽에서 처리해 주는 모듈 [ .NET(ashx, dll), JAVA(jsp, jar)]
+</div>
+
+<span style="font-weight:bold; text-decoration:underline;">* 설치규격</span>
+
+<div class="cord" style="font-size:10pt;"> <span class="firebrick">- 지원 운영체제</span> : Microsoft Windows 2000 Server 이상, Linux, Unix 등
+ <span class="firebrick">- 지원 웹 언어</span> : JSP JDK 1.5 이상 (JDK 1.4 별도문의), ASP, ASP.NET 2.0 이상
+ <span class="firebrick">- 지원 웹 서버</span> : JDK 1.5 이상 (JDK 1.4 별도문의)을 사용하는 WAS, Microsoft .NET Framework 2.0 이상을 사용하는 IIS
+</div>
+
+<span style="font-weight:bold; text-decoration:underline;">* K Editor 폴더 설명</span>
+
+<div class="cord" style="font-size:10pt;">    <span class="firebrick">- agent</span>
+    K Editor 설치파일을 포함하고 있습니다.
+    <span class="firebrick">- config</span>
+    K Editor의 환경설정을 담당하는 raonkupload.config.xml 을 포함하고 있습니다.
+    <span class="firebrick">- css</span>
+    K Editor에 필요한 스타일시트 파일을 포함하고 있습니다.
+    <span class="firebrick">- handler</span>
+    파일을 서버에 저장하는 서버 모듈을 포함하고 있습니다. (.NET, JAVA 모듈)
+    <span class="firebrick">- images</span>
+    K Editor에 필요한 이미지 파일을 포함하고 있습니다.
+    <span class="firebrick">- js</span>
+    K Editor에 필요한 자바스크립트 파일을 포함하고 있습니다.
+    <span class="firebrick">- raonkeditordata</span>
+    저장경로에 대한 별도 설정이 없다면, 기본적으로 파일이 저장되는 ROOT 경로입니다.
+    <span class="firebrick">- pages</span>
+    K Editor에서 사용되는 다이얼로그창, 템플릿 등 필요한 HTML 파일을 포함하고 있습니다.
+    <span class="firebrick">- sdk</span>
+    K Editor의 개발자 매뉴얼과 기본 예제들을 포함하고 있습니다.
+    <span class="firebrick">&nbsp;&nbsp;&nbsp;&nbsp;<b>(개발 및 테스트에만 사용하시고, 운영 반영시 <b>반드시</b> 제외 후 반영하시기 바랍니다.)</b></span>
+    <span class="firebrick">- plugin</span>
+    플러그인 파일을 포함하고 있습니다. (에디터 추가 기능 관련 폴더)
+</div>
+
+<span style="font-weight:bold; text-decoration:underline;">* 설치방법</span>
+
+<div class="cord" style="font-size:10pt;"> <span class="firebrick">1. config\raonkeditor.config.xml 설정</span>
+   RaonkUpload > license > product_key, license_key 에 발급받은 키를 설정합니다.
+
+ <span class="firebrick">2. K Editor Core 전체 폴더 업로드(하위폴더 및 파일포함)</span>
+   WEB서버와 WAS가 분리되어 있는 경우 handler, handler\JAVA, handler\.NET 폴더는 WAS서버에 업로드 합니다.
+   나머지 폴더는 WEB서버에 설치합니다.(WEB서버와 경로를 맞춰 WAS에 설치합니다.)
+
+ <span class="firebrick">3. 웹 언어별 설정</span>
+  1) ASP, ASP.NET :
+    config\raonkeditor.config.xml 설정 : RaonKEditor > uploader_setting > develop_langage 에 NET 으로 설정합니다.
+    (필요에 따라 handler_url을 설정합니다. ex: /handler/raonkhandler.ashx)
+    handler\.NET 폴더의 dll 파일들을 해당 사이트 bin 폴더에 복사한 후,
+    첨부된 web.config의 내용을 사이트 web.config 에 적용합니다.
+
+  2) JSP(JAVA) :
+    config\raonkeditor.config.xml 설정 : RaonKEditor > uploader_setting > develop_langage 에 JAVA 로 설정합니다.
+    (필요에 따라 handler_url을 설정합니다. ex: /handler/raonkhandler.jsp)
+    handler\JAVA 폴더의 jar 파일들을 해당 사이트 WEB-INF\lib 폴더에 복사합니다.
+    jar 파일 변경시에는 서버를 재기동합니다.
+    (JAVA의 EXIF 추출 기능은 jdk 1.6이상에서만 지원합니다. 기능 활성화를 원하시면 1.6버전으로 컴파일된 jar를 고객센터로 요청하십시오.)
+
+ <span class="firebrick">4. 권한설정</span>
+  아래의 경로에 쓰기 권한을 추가합니다.
+  1) 환경 설정 정보가 저장되는 파일
+     ex) config\raonkeditor.config.xml
+  2) 파일이 업로드 되는 임시 폴더
+     ex) handler\temp (만일 SetTempPath로 다른경로로 설정했다면, 해당 폴더에 권한 설정)
+  3) 파일이 업로드 되는 기본 폴더
+     ex) /raonkeditordata
+
+ <span class="firebrick">5. Sample Page 확인</span>
+  Web Server에 맞게 /keditor/sample/index.html 연결
+     ex) http://localhost/keditor/sample/index.html
+                            ***** sdk수정필요
+</div>
+
+<span style="font-weight:bold; text-decoration:underline;">* K Editor 서버 모듈 구성</span>
+
+<div class="cord" style="font-size:10pt;"> 기본적으로 파일을 업로드하면 기본 설치폴더/raonkeditordata 하위에 파일이 업로드가 되며,<br /> WEB 서버와 WAS가 분리된 경우 WAS쪽 /raonkeditordata 하위에 파일이 업로드 됩니다.
+
+ <span class="firebrick">(※ 설정한 Root 경로는 실제 물리적경로로 설정합니다.)</span>
+</div>
+
+<span style="font-weight:bold; text-decoration:underline;">* K Editor를 생성하는 기본 방법</span>
+
+<div class="cord" style="font-size:10pt;"> <span class="firebrick">1) Javascript file include</span>
+    &#60;head&#62;
+        ...
+    &#60;/head&#62; 태그 사이에 아래의 코드를 추가합니다.
+       &#60;script type="text/javascript" src="RAONKEditor설치폴더URL/js/raonkeditor.js"&#62;
+
+ <span class="firebrick">2) 에디터 객체 생성</span>
+    &#60;body&#62;...&#60;/body&#62; 태그 사이에 에디터가 들어갈 위치에 에디터 생성 코드를 삽입합니다.
+    &#60;script type="text/javascript"&#62;
+        var raonkParam = {
+            Id: '생성할 에디터 이름'
+        };
+        var editor =  new RAONKEditor(raonkParam);
+    &#60;/script&#62;
+</div>
+
+<span style="font-weight:bold; text-decoration:underline;">* K Editor 환경 설정 방법</span>
+
+<div class="cord" style="font-size:10pt;"> <span class="firebrick">환경설정 방법은 Config xml 방식과 Javascript Property 방식을 지원합니다.</span>
+
+ 1) 클라이언트 가이드의 환경설정 파일 부분을 참고하여,
+    /keditor/config/raonkeditor.config.xml 파일에 설정 (기본 환경설정 파일이며, 다른 파일로 변경 가능합니다.)
+
+ 2) 클라이언트 가이드의 Properties 부분을 참고하여, 아래와 같이 설정 (이렇게 설정된 값이 Xml 설정방식보다 우선 적용됩니다.)
+    ex) 
+    var raonkParam = {
+        Id: 'upload1',
+        Width: '800px'
+    };
+    var editor =  new RAONKEditor(raonkParam);
+</div>
+                    </pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,136 @@
+1. JSP 바로 반영
+	- %WT_HOME%\tomcat\conf\web.xml 이동
+	- web.xml 텍스트 편집기 오픈 > <param-name>development</param-name> 검색 -> true 값 변경
+	
+2. Spring Component Scan 설정
+	- %WT_HOME%\codebase\config\mvc\custom.xml 텍스트 편집기 후 아래 라인 추가
+	-  <context:component-scan base-package="ext.midas">
+	-    <context:include-filter type="regex" expression="(service|controller)\..*" />
+    -  </context:component-scan>
+   
+2. Tiles Setting
+	- %WT_HOME%\codebase\config\mvc\custom.xml 텍스트 편집기 후 아래 라인 추가
+	-  <bean id="tilesviewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+	-    <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+	-    <property name="order" value="1" />
+	-  </bean>
+	-  <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+	-    <property name="definitions">
+	-      <list>
+	-        <value>classpath:config/tiles/layouts.xml</value>
+	-      </list>
+	-    </property>
+	-  </bean>
+	- %WT_HOME%\codebase\WEB-INF\lib 아래 TIles 관련 jar 파일추가
+
+3. Tiles Layout 파일 추가
+	- %WT_HOME%\codebase\config\tile\layout.xml 추가
+
+4. Apache Document Root 변경
+	- %HTTP_HOME%\conf\httpd.conf 텍스트 편집기 오픈
+	- 기존 DocumentRoot 주석 처리
+	- DocumentRoot "C:/ptc/Windchill_12.1/Windchill/codebase/login" 변경
+	- Apache 재시작
+	- DocumentRoot 아래 index.html 생성
+	
+5. web.xml 수정
+	-  <url-pattern>/gwt/*</url-pattern> 검색 후 아래줄에 입력
+	-  <url-pattern>/platform/*</url-pattern> 서버 재시작
+
+6. ajpWorker 추가
+	- %HTTP_HOME\conf\templates\webapp\webAppAJPConf.template 텍스트 편집기 오픈
+	- JkMount /@@WEB_APP_NAME@@/platform/* @@AJP_WORKER_NAME@@ 추가
+	- ant -f %HTTP_HOME%\webAppConfig.xml regenWebAppConf -DappName=Windchill -DprotocolAuthOnly=false 실행
+	- Apache 재시작
+	
+7. Windchill Shell 오픈
+	- xconfmanager -t codebase/wt.properties -s wt.auth.form.enabled=true
+	- xconfmanager -t codebase/wt.properties -s wt.auth.handlers=wt.auth.NullAuthentication,wt.httpgw.HTTPAuthentication
+	
+8. Tomcat 설정 추가
+	- %WT_HOM%\tomcat\conf\Catalina\localhost\Windchill.xml 텍스트 편집기 오픈 후 아래 문구 추가
+	-  <Realm className="org.apache.catalina.realm.JNDIRealm" debug="9" connectionURL="ldap://localhost:389"
+	-  connectionName="cn=Manager"
+	-  connectionPassword="ldapadmin"
+	-  userPattern="uid={0},ou=people,cn=AdministrativeLdap,cn=Windchill_12.1,o=ptc"
+	-  roleBase="ou=people,cn=AdministrativeLdap,cn=Windchill_12.1,o=ptc"
+	-  roleName="cn"
+	-  roleSearch="(uniqueMember={0})" />
+	
+9. Web.xml 설정 추가
+	- %WT_HOME%\codeabse\WEB-INF\web.xml 텍스트 편집기 오픈
+	- 제일 아래에서 바로 위 부분에 아래 내용 추가
+	-  <security-constraint>
+	-  <web-resource-collection>
+	-  <web-resource-name>Windchill</web-resource-name>
+	-  <url-pattern>/*</url-pattern>
+	-  </web-resource-collection>
+	-  <auth-constraint>
+	-  <role-name>*</role-name>
+	-  </auth-constraint>
+	-  </security-constraint>
+	-  <security-role>
+	-  <role-name>*</role-name>
+	-  </security-role>
+	-  <login-config>
+	-  <auth-method>FORM</auth-method>
+	-  <realm-name>ldap</realm-name>
+	-  <form-login-config>
+	-  <form-login-page>/login/login.jsp</form-login-page>
+	-  <form-error-page>/login/login-error.jsp</form-error-page>
+	-  </form-login-config>
+	-  </login-config>	
+
+10. %WT_HOME%\codebase\config\mvc\mvc.xml 텍스트 편집기 오픈 후 추가
+	- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		- <property name="messageConverters">
+			 - <list>
+				- <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					- <property name="objectMapper">
+						- <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"></bean>
+					- </property>
+				- </bean>
+			- </list>
+		- </property>
+	- </bean>	
+	
+11. 서비스 등록
+	- Windchill Shell -> xconfmanager -t codebase/wt.properties -s wt.services.service.100000=platform.user.service.UserService/platform.user.service.StandardUserService -p	
+	- Windchill Shell -> xconfmanager -t codebase/wt.properties -s wt.services.service.110000=platform.listener.EventService/platform.listener.StandardEventService -p	
+	
+	
+12. Resource Build 실행
+	- tools bundle -Dbundle.input=platform.code.entity.** -Dbundle.buildLocales=true
+	- codebase 이동 후 ant -f MakeJar.xml
+	
+13. WEB-INF -> ext-lib 라이브러리 추가
+	- com.raonwiz.keditor.jar
+	- jcifs-1.3.18.jar
+	
+	
+14. WTDocument BLOB 추가
+	- Windchill Shell -> bin 이동 -> AddColumns wt.doc.WTDocument InlineBLOB=1
+	- Server Stop -> Windchil Shell -> codebase -> ant -f MakeJar.xml
+	
+15. 속성 추가 - IBA
+	- Shell -> Windchill wt.load.LoadFromFile -d 파일위치 -u wcadmin -p wcadmin1	 	
+	
+16. 상태값 추가
+	- ResourceBuild wt.lifecycle.*
+	- codebase 이동 ant -f MakeJar.xml
+	- 기초 라이프 사이클 상태값 추가 (도면, 부품 공용)
+	
+17. web.xml session-timeout 검색후 값 증가
+
+18. xconfmanager –s com.ptc.netmarkets.userSearch.maxCount=5000 –t codebase\wt.properties –p
+
+
+
+
+
+
+tools model_uninstall -Dmodel_uninstall.filter=platform.dist.entity.DistDistributorLink
+
+tools model_uninstall -Dmodel_uninstall.filter=platform.ebom.entity.EBOMMasterManagerLink
+
+tools model_uninstall -Dmodel_uninstall.filter=platform.dist.entity.DistEPMLink

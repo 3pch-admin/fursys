@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Private Network Access - RAON K</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="./css/raonkupload.notice.css" rel="stylesheet" type="text/css">
+    <link href="./plugin/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <script src="./plugin/jquery-1.9.1.min.js"></script>
+    <script src="./plugin/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $( function () {
+            $( "#tabs-pna" ).tabs();
+            $( "#tabs-browser" ).tabs();
+            $( "#tabs-reg" ).tabs();
+        } );
+    </script>
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con">
+            <div class="sdk_content">
+                <table class="h_table">
+                    <caption>Default setting guide</caption>
+                    <colgroup>
+                        <col />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="firebrick">### Private Network Access description & Configuration Guide ###</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="t_bg01">
+                                <div style="margin: 10px 0 5px 0;">
+                                    <span style="font-weight: bold;">* What is Private Network Access? ( <a target="_blank" href="https://wicg.github.io/private-network-access/">https://wicg.github.io/private-network-access/</a> )</span>
+                                </div>
+                                <div class="cord" style="font-size:10pt;">
+                                    Private Network Access (formerly known as CORS-RFC1918) restricts the ability of websites to send requests to servers on private networks. It allows such requests only from secure contexts.
+                                    <br /><br />
+                                    This policy has been applied since version 94 of Google Chrome / Microsoft Edge.
+                                    <br /><br />
+
+                                    [ Related contents ]<br />
+                                    - Google Chrome : no longer allows insecure public pages to make requests to private or local URLs <br />
+                                    &nbsp;&nbsp;&nbsp;<a target="_blank" href="https://support.google.com/chrome/a/answer/7679408?hl=en#zippy=%2Cchrome">https://support.google.com/chrome/a/answer/7679408?hl=en#zippy=%2Cchrome</a><br />
+                                    - Microsoft Edge : Restrict private network requests to secure contexts <br />
+                                    &nbsp;&nbsp;&nbsp;<a target="_blank" href="https://docs.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel">https://docs.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel</a>
+                                    <br /><br />
+
+                                    Therefore as the website you are currently accessing was executed in a non-security context environment (HTTP), some functions have been restricted by this policy.
+                                    <br />
+                                    If it is not possible to switch to a security context environment (https), proceed with <span style="font-weight: bold;">"Private network access acceptance procedures" as below.</span>.
+                                    <br /><br />
+                                    <span style="color:red;">※ Windows OS is automatically set through the installer.</span>
+                                </div>
+                                
+                                <div style="margin: 20px 0 5px 0;">
+                                    <span style="font-weight: bold;">* Private network access acceptance procedures (Choose between the two options)</span>
+                                </div>
+
+                                <div id="tabs-pna">
+                                    <ul>
+                                        <li><a href="#tabs-pna-1">How to allow it through browser settings</a></li>
+                                        <li><a href="#tabs-pna-2">How to allow it through OS policy</a></li>
+                                    </ul>
+
+                                    <div id="tabs-pna-1">
+                                        <div class="cord" style="font-size:10pt;">
+                                            <div id="tabs-browser">
+                                                <ul>
+                                                    <li><a href="#tabs-browser-1">Chrome</a></li>
+                                                    <li><a href="#tabs-browser-2">Edge</a></li>
+                                                </ul>
+                                                <div id="tabs-browser-1">
+                                                    <span style="font-weight: bold;">1) In the browser address window, enter as follows. → chrome://flags/</span><br /><br />
+                                                    &nbsp;<img src="images/pna/chromeflag1.png" />
+                                                    <br /><br />
+                                                    <span style="font-weight: bold;">2) Search by entering the setting value. → Block insecure private network requests</span><br /><br />
+                                                    &nbsp;<img src="images/pna/chromeflag2.png" />
+                                                    <br /><br />
+                                                    <span style="font-weight: bold;">3) Set the value of the item to disabled. → Disabled</span><br /><br />
+                                                    &nbsp;<img src="images/pna/chromeflag3.png" />
+                                                    <br /><br />
+                                                    <span style="font-weight: bold;">4) Relaunch browser</span><br />
+                                                    &nbsp;&nbsp;- Close the entire running browser window and relaunch it to check the normal operation.
+                                                    <br />
+                                                    &nbsp;&nbsp;- It means kill of full browser processes, not current browser process.
+                                                    <br /><br />
+                                                </div>
+                                                <div id="tabs-browser-2">
+                                                    <span style="font-weight: bold;">1) In the browser address bar, enter as follows. → edge://flags/</span><br /><br />
+                                                    &nbsp;<img src="images/pna/edgeflag1.png" />
+                                                    <br /><br />
+                                                    <span style="font-weight: bold;">2) Search by entering the setting value. → Block insecure private network requests</span><br /><br />
+                                                    &nbsp;<img src="images/pna/edgeflag2.png" />
+                                                    <br /><br />
+                                                    <span style="font-weight: bold;">3) Set the value of the item to disabled. → Disabled</span><br /><br />
+                                                    &nbsp;<img src="images/pna/edgeflag3.png" />
+                                                    <br /><br />
+                                                    <span style="font-weight: bold;">4) Relaunch browser</span><br />
+                                                    &nbsp;&nbsp;- Close the entire running browser window and relaunch it to check the normal operation.
+                                                    <br />
+                                                    &nbsp;&nbsp;- It means kill of full browser processes, not current browser process.
+                                                    <br /><br />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="tabs-pna-2">
+                                        <div class="cord" style="font-size:10pt;">
+                                            <span class="firebrick" style="font-weight: bold;">① Step 1. Private Network Access Configuration</span>
+                                            <br />
+                                            &nbsp;&nbsp;- It proceeds according to the setting example of each OS.
+                                            <br /><br />
+
+                                            <div id="tabs-reg">
+                                                <ul>
+                                                    <li><a href="#tabs-reg-1">Windows</a></li>
+                                                    <!--
+                                                    <li><a href="#tabs-reg-2">Mac</a></li>
+                                                    <li><a href="#tabs-reg-3">Linux</a></li>
+                                                    -->                                                
+                                                </ul>
+                                                <div id="tabs-reg-1">
+                                                    <span style="font-weight: bold;">1) Start → Run → regedit</span><br /><br />
+                                                    &nbsp;<img src="images/pna/regedit1.png" />
+                                                    <br /><br />
+
+                                                    <span style="font-weight: bold;">2) Create the following key item in the registry editor</span><br />
+                                                    &nbsp;&nbsp;- <a href="https://chromeenterprise.google/policies/#InsecurePrivateNetworkRequestsAllowedForUrls" target="_blank">Google Chrome</a><br />
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\InsecurePrivateNetworkRequestsAllowedForUrls<br />
+                                                    &nbsp;&nbsp;- <a href="https://docs.microsoft.com/en-us/deployedge/microsoft-edge-policies#insecureprivatenetworkrequestsallowedforurls" target="_blank">Microsoft Edge</a><br />
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\InsecurePrivateNetworkRequestsAllowedForUrls
+                                                    <br /><br />
+                                                    &nbsp;<img src="images/pna/regedit2.png" />
+                                                    <br /><br />
+
+                                                    <span style="font-weight: bold;">3) Create the following string item in the registry editor</span>
+                                                    <br /><br />
+                                                    &nbsp;<img src="images/pna/regedit3.png" /><br />
+                                                    <br /><br />
+
+                                                    <span style="font-weight: bold;">4) Edit the generated string value to fit your website</span><br />
+                                                    &nbsp;&nbsp;- Change the name of the generated string item (e.g. 1, 2, 3, ...)<br />
+                                                    &nbsp;&nbsp;- Change the value of the string to the currently accessed website address (e.g. http://www.yourdomain.com)
+                                                    <br /><br />
+                                                    &nbsp;<img src="images/pna/regedit4.png" /><br />
+                                                    <br /><br />
+                                                </div>
+                                                <!--
+                                                <div id="tabs-reg-2">
+                                                    &nbsp;&nbsp;- <a href="https://chromeenterprise.google/policies/#InsecurePrivateNetworkRequestsAllowedForUrls" target="_blank">Google Chrome Guide</a><br /><br />
+
+                                                    &nbsp;&nbsp;- <a href="https://docs.microsoft.com/en-us/deployedge/microsoft-edge-policies#insecureprivatenetworkrequestsallowedforurls" target="_blank">Microsoft Edge Guide</a><br /><br />
+                                                </div>
+                                                <div id="tabs-reg-3">
+                                                    &nbsp;&nbsp;- <a href="https://chromeenterprise.google/policies/#InsecurePrivateNetworkRequestsAllowedForUrls" target="_blank">Google Chrome Guide</a><br />
+                                                </div>
+                                                -->
+                                            </div>
+
+                                            <br />
+
+                                            <span class="firebrick" style="font-weight: bold;">② Step 2. Relaunch Browser</span><br />
+                                            &nbsp;&nbsp;- Close the entire running browser window and relaunch it to check the normal operation.
+                                            <br />
+                                            &nbsp;&nbsp;- It means kill of full browser processes, not current browser process.
+                                            <br /><br />
+                                        </div>
+                                    </div>
+                                </div>                    
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

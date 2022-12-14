@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Editor Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">           
+    <h3 class="title">K Editor :: Mode</h3>
+    <p class="ttl">XML : &#60;mode&#62;.....&#60;/mode&#62;, Script : Mode</p>
+    <p class="txt">
+        <b>Script 설정이 우선 적용됩니다.</b><br />
+        에디터를 편집모드, 보기모드로 설정합니다. 
+    </p>
+    <p class="mttl01">remarks</p>               
+    <p class="txt">
+        기본값은 "edit" 편집모드로 설정됩니다.<br/>
+        "edit or 빈값"이면 "편집모드"이고, "view"로 설정시 보기모드 입니다. 
+    </p>    
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+<b>에디터를 보기모드로 설정합니다.</b>
+
+<b>XML</b>
+
+.....
+&#60;setting&#62;
+    .....
+    &#60;mode&#62;view&#60;/mode&#62;
+    .....
+&#60;/setting&#62;
+.....
+
+<b>Script</b>
+
+&#60;script type="text/javascript" src="raonkeditor/js/raonkeditor.js"&#62;&#60;/script&#62;
+	
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+    &#60;script type="text/javascript"&#62;
+        var raonkParam = {
+            .....
+            Mode: 'view'
+        }
+
+        new RAONKEditor(raonkParam);
+    &#60;/script&#62;
+&#60;/div&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

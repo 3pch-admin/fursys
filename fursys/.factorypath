@@ -1,0 +1,11 @@
+<factorypath>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\tool\AnnotationProcessing.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\tool\Annotations.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\wnc\CommonCore.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\jmxcore\WtLogR.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\install\InstallUtil.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\commons-collections4.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\log4j-api.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="C:\ptc\Windchill_12.0\Windchill\srclib\log4j-core.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="PLUGIN" id="org.eclipse.jst.ws.annotations.core" enabled="false" runInBatchMode="false"/>
+</factorypath>

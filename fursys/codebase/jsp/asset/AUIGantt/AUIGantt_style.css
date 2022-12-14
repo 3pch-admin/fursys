@@ -1,0 +1,1401 @@
+@CHARSET "UTF-8";
+/* 간트 차트 메인 */
+.aui-gantt {
+	font-family: 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo-Light,	sans-serif;
+	font-size: 12px;
+	-webkit-appearance: none;
+	outline: none;
+	border:none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* 간트 차트와 그리드 사이의 디바이더 손잡이 */
+.aui-gantt-hdivided-knob {
+	box-sizing:border-box;
+	background: #ddd url(./images/knob.png) 50% 50% no-repeat;
+	border:1px solid #ccc;
+	border-left:none;
+	border-right:none;
+}
+.aui-gantt-hdivided-knob:hover {
+	background: #aaa url(./images/knob.png) 50% 50% no-repeat;
+	cursor:w-resize;
+}
+
+/* 간트 차트와 그리드 사이의 디바이더 표시 선 */
+.aui-gantt-hdivided-resizer-showing-rule {
+	border-left: 2px dashed #888;
+	border-top: none;
+	border-right: none;
+	border-bottom: none;
+}
+
+/* 간트 차트 다이어그램 */
+.aui-gantt .aui-gantt-diagram {
+	box-sizing:border-box;
+	background:#fff;
+	border:1px solid #ccc;
+}
+
+/*간트 바 리사이징 시 나오는 바 프록시*/
+.aui-gantt-renderer-resizing-proxy {
+	border:1px solid #555;
+	box-sizing: border-box;
+	background: rgba(200, 200, 200, 0.5);
+}
+
+/*간트 마일스톤 리사이징 시 나오는 프록시*/
+.aui-gantt-milestone-renderer-resizing-proxy {
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+}
+ 
+/*간트 바 진행률 리사이징 시 나오는 프록시 */
+.aui-gantt-renderer-progress-proxy {
+	border:1px solid #555;
+	box-sizing: border-box;
+	background: rgba(200, 200, 200, 0.5);
+}
+
+/* 리소스 간트 이동 시 위치 화살표 프록시 */
+.aui-gantt-resource-renderer-moving-proxy {
+	background: url("./images/arrow-down-blue-icon.png") left top no-repeat;
+  	margin-left: -12px;
+  	margin-top:-20px;
+  	width: 24px !important;
+  	height: 24px !important;
+}
+
+/* 간트 바 리사이즈 손잡이 */
+.aui-gantt-renderer-resize-knob {
+	background: url("./images/dot_icon.png") repeat;
+}
+.aui-gantt-renderer-resize-knob:hover {
+	cursor:w-resize;
+}
+
+/* 간트 바 진행률 손잡이 */
+.aui-gantt-renderer-progress-knob {
+	background: url("./images/progress-knob.png") left top no-repeat;
+  	margin-left: -4px;
+  	width: 10px;
+  	height: 8px;
+  	cursor: w-resize;
+}
+.aui-gantt-renderer-progress-knob:hover {
+	cursor:w-resize;
+}
+
+/* 간트 바 리사이즈 할 때 나오는 툴팁 Div */
+.aui-gantt-chart-bar-resize-tooltip {
+	border:1px solid #555;
+	background:rgba(255,255,255,0.9);
+	color:#000;
+	z-index: 999;
+	padding:4px;
+}
+
+/* 간트 바 툴팁 Div */
+.aui-gantt-chart-bar-tooltip {
+	color:#000;
+	padding: 2px 6px;
+	border: 1px solid #999;
+	background: #eaeaea;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -moz-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -ms-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -o-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+	border-radius: 4px;
+	z-index: 999;
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 간트 그리드 간의 현재 선택된 행 표시 라인 */
+.aui-gantt .aui-gantt-grid-selection-row-border-lines {
+	background:rgba(50, 50, 50, 0.5);
+}
+
+/* 로딩바 스타일 */
+.aui-gantt-ajax-loader-showing {
+	background: rgba(255,255,255,0.5) url("./images/ajaxloader.gif") no-repeat 50% 50%;
+}
+
+/* 인포 메세지 스타일 */
+.aui-gantt-info-showing {
+	background: rgba(255,255,255,0.5);
+}
+
+/* 프로세스 로더 */
+.aui-gantt-process-loader-showing{
+	font-size:20px;
+	font-weight:bold;
+	background: rgba(255,255,255,0.9) url("./images/wait.png") no-repeat 50% 50%;
+}
+
+/* 간트 차트 오늘 날짜 핀 마커 */
+.aui-gantt-today-pin-marker {
+	background: url("./images/pin-red-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+
+/* 간트 차트 프로젝트 시작 날짜 핀 마커 */
+.aui-gantt-project-start-pin-marker {
+	background: url("./images/pin-green-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+
+/* 간트 차트 프로젝트 종료 날짜 핀 마커 */
+.aui-gantt-project-end-pin-marker {
+	background: url("./images/pin-green-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+
+/* 미리 정의된 핀 마커 색상 별 스타일 */
+.aui-gantt-black-pin-marker {
+	background: url("./images/pin-black-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+.aui-gantt-blue-pin-marker {
+	background: url("./images/pin-blue-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+.aui-gantt-green-pin-marker {
+	background: url("./images/pin-green-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+.aui-gantt-mint-pin-marker {
+	background: url("./images/pin-mint-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+.aui-gantt-red-pin-marker {
+	background: url("./images/pin-red-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+.aui-gantt-yellow-pin-marker {
+	background: url("./images/pin-yellow-icon.png") left top no-repeat;
+  	margin-left: -7px;
+  	margin-top:-30px;
+  	width: 14px;
+  	height: 30px;
+}
+
+/* 스크롤 시작 */
+.aui-gantt .aui-scroll-track {
+	box-sizing: border-box;
+	background: #f6f6f6;
+	border: 1px solid #f6f6f6;
+}
+
+.aui-gantt .aui-hscrollbar .aui-scroll-thumb {
+	box-sizing: border-box;
+	background: #dddddd;
+	border: 1px solid #aaa;
+	border-radius:0;
+	touch-action: none;
+	-ms-touch-action: none;
+}
+
+.aui-gantt .aui-hscrollbar .aui-scroll-thumb:hover {
+	background: #bbbbbb;
+}
+
+.aui-gantt .aui-vscrollbar .aui-scroll-thumb {
+	box-sizing: border-box;
+	background: #dddddd;
+	border: 1px solid #aaa;
+	border-radius:0;
+	touch-action: none;
+	-ms-touch-action: none;
+}
+
+.aui-gantt .aui-vscrollbar .aui-scroll-thumb:hover {
+	background: #bbbbbb;
+}
+
+.aui-gantt .aui-vscrollbar .aui-scroll-up {
+	box-sizing: border-box;
+	background: #eaeaea url("./images/icon-up.png") no-repeat 50% 50%;
+	border: 1px solid #eaeaea;
+}
+
+.aui-gantt .aui-vscrollbar .aui-scroll-up:hover {
+	background: #bbbbbb url("./images/icon-up.png") no-repeat 50% 50%;
+}
+
+.aui-gantt .aui-vscrollbar .aui-scroll-down {
+	box-sizing: border-box;
+	background: #eaeaea url("./images/icon-down.png") no-repeat 50% 50%;
+	border: 1px solid #eaeaea;
+}
+
+.aui-gantt .aui-vscrollbar .aui-scroll-down:hover {
+	background: #bbbbbb url("./images/icon-down.png") no-repeat 50% 50%;
+}
+
+.aui-gantt .aui-hscrollbar .aui-scroll-up {
+	box-sizing: border-box;
+	background: #eaeaea url("./images/icon-left.png") no-repeat 50% 50%;
+	border: 1px solid #eaeaea;
+}
+
+.aui-gantt .aui-hscrollbar .aui-scroll-up:hover {
+	background: #bbbbbb url("./images/icon-left.png") no-repeat 50% 50%;
+}
+
+.aui-gantt .aui-hscrollbar .aui-scroll-down {
+	box-sizing: border-box;
+	background: #eaeaea url("./images/icon-right.png") no-repeat 50% 50%;
+	border: 1px solid #eaeaea;
+}
+
+.aui-gantt .aui-hscrollbar .aui-scroll-down:hover {
+	background: #bbbbbb url("./images/icon-right.png") no-repeat 50% 50%;
+}
+/* 스크롤 끝 */
+
+
+/***************************************************************************/
+/*  간트 그리드 */
+/***************************************************************************/
+
+/* 그리드 메인 외곽 DIV */
+.aui-gantt-grid {
+	border: 1px solid #bdbdbd;
+	background: #ffffff;
+	box-sizing: content-box;
+	-webkit-appearance: none;
+	outline: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	 touch-action:none;
+    -ms-touch-action:none;
+}
+
+/* 셀 기본 */
+.aui-gantt-grid .aui-gantt-grid-table, .aui-gantt-grid .aui-gantt-grid-table tr, .aui-gantt-grid .aui-gantt-grid-table td {
+	padding: 0;
+	margin: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+	font-size: 12px;
+	line-height: 1.5em;
+}
+
+/* 편집 모드 기본 텍스트 인풋  */
+.aui-gantt-grid  .aui-textinputer {
+	font-size: 12px;
+	border: 2px solid #22741C;
+	outline: none;
+	box-sizing: border-box;
+}
+.aui-gantt-grid  .aui-textinputer::-ms-clear {
+	display: none;
+}
+
+/* 체크박스, 라디오  */
+.aui-checkbox, .aui-radio {
+	vertical-align:middle;
+	margin: 0;
+	margin-top:0 !important;
+	padding: 0;
+}
+
+/* 이미지  */
+.aui-gantt-grid .aui-img {
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing:  content-box;
+}
+
+/* 그리드 메세지 출력 레이어 */
+.aui-gantt-grid-info-layer {
+	background: #fff;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+/** 그리드 유효성 검사 툴팁 레이어 */
+.aui-gantt-grid-validator-message-layer {
+	color:#fff;
+	padding: 2px 6px;
+	border: 1px solid #999;
+	background: #ff0000;
+	background: -webkit-linear-gradient(top, #FF6C6C, #C90000);
+	background: -moz-linear-gradient(top, #FF6C6C, #C90000);
+	background: -ms-linear-gradient(top, #FF6C6C, #C90000);
+	background: -o-linear-gradient(top, #FF6C6C, #C90000);
+	background: linear-gradient(to bottom, #FF6C6C, #C90000);
+	border-radius: 4px;
+	z-index: 1065;
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 노데이터 메세지 레이어*/
+.aui-gantt-grid-nodata-msg-layer {
+	background: url(./images/info.png) 0 50% no-repeat;
+	position: absolute;
+	padding: 44px 0 0 80px;
+	margin: 0 auto;
+	width: auto;
+	height: 72px;
+	box-sizing:content-box;
+}
+
+/* 그리드 수평, 수직 라인 만들기 */
+.aui-gantt-grid-body-panel .aui-gantt-grid-table tr td {
+	border-bottom: 1px solid #DCDCDC;
+}
+.aui-gantt-grid-vertical-grid-lines {
+	background: #DCDCDC;
+}
+
+/* 그리드 오버 선택자 만들기 */
+.aui-gantt-grid-body-panel .aui-gantt-grid-table tr td:hover {
+	background: #EAEAEA;
+	color:#000;
+}
+
+/* 그리드 헤더 수평 라인 만들기 */
+.aui-gantt-grid-header-panel .aui-gantt-grid-table tr td {
+	border-top: 1px solid #DCDCDC;
+}
+
+.aui-gantt-grid-header-panel .aui-gantt-grid-table tr:first-child td {
+	border-top: none;
+}
+
+/* 그리드 칼럼 리사이즈 시 나타나는 임시 선 */
+.aui-gantt-grid-vertical-resizer-rule {
+	border-left: 2px dashed #888;
+	border-top: none;
+	border-right: none;
+	border-bottom: none;
+}
+
+/* 그리드 칼럼 위치 바꾸기 시 나타나는 임시 선 */
+.aui-gantt-grid-vertical-column-change-rule {
+	background: #f82;
+}
+
+/* 헤더 상, 하 테두리 경계선 */
+.aui-gantt-grid-header-top-bottom-line {
+	background: #bdbdbd;
+}
+
+/* 행 번호 칼럼 */
+.aui-gantt-grid-row-num-column {
+	text-align: center;
+	cursor: default;
+}
+/*행 체크박스 칼럼 */
+.aui-gantt-grid-row-check-column {
+	text-align: center;
+}
+
+/* 고정 칼럼과 일반 칼럼 경계선 */
+.aui-gantt-grid-fixed-column-rule {
+	background: #9D9D9D;
+	width: 1px;
+}
+
+/* 고정 로우와 일반 로우 경계선 */
+.aui-gantt-grid-fixed-row-rule {
+	background: #9D9D9D;
+	height: 1px;
+}
+
+/* 그리드 헤더 정렬 표시자 시작 */
+.aui-gantt-grid-multi-sorting-ascending {
+	color:#555;
+	font-size:9px;
+	text-align:center;
+	background: url(./images/icon-up.png) 50% 10px no-repeat;
+}
+.aui-gantt-grid-multi-sorting-descending {
+	color:#555;
+	font-size:9px;
+	text-align:center;
+	background: url(./images/icon-down.png) 50% 9px no-repeat;
+}
+.aui-gantt-grid-sorting-ascending {
+	background: url(./images/icon-up.png) 50% 50% no-repeat;
+}
+
+.aui-gantt-grid-sorting-descending {
+	background: url(./images/icon-down.png) 50% 50% no-repeat;
+}
+/* 그리드 헤더 정렬 표시자 끝*/
+
+
+/* 헤더 메뉴 아이콘 스타일 */
+.aui-gantt .aui-gantt-grid-header-menu-icon {
+	background: url(./images/three-menu.png) 50% 50% no-repeat;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+.aui-gantt .aui-gantt-grid-header-menu-icon:hover {
+	background: #BCD4E6 url(./images/three-menu.png) 50% 50% no-repeat;
+}
+
+/* 계층 트리 아이콘 */
+.aui-gantt .aui-gantt-grid-tree-plus-icon {
+	display: inline-block;
+	width:16px;
+	height:16px;
+	border:0;
+	background: url(./images/arrow-right.png) 50% 50% no-repeat;
+	background-size:16px;
+	vertical-align:bottom;
+	margin: 0 2px 0 0;
+}
+.aui-gantt .aui-gantt-grid-tree-minus-icon {
+	display: inline-block;
+	width:16px;
+	height:16px;
+	border:0;
+	background: url(./images/arrow-downright.png) 50% 50% no-repeat;
+	background-size:16px;
+	vertical-align:bottom;
+	margin: 0 2px 0 0;
+}
+.aui-gantt .aui-gantt-grid-tree-branch-icon {
+	display: inline-block;
+	display:none;
+	margin: 0;
+	width:0;
+	height:0;
+}
+.aui-gantt .aui-gantt-grid-tree-branch-open-icon {
+	display: inline-block;
+	display:none;
+	margin: 0;
+	width:0;
+	height:0;
+}
+.aui-gantt .aui-gantt-grid-tree-leaf-icon {
+	display: inline-block;
+	width: 14px;
+	height:14px;
+	background:transparent;
+	margin:0;
+}
+/* 계층 트리 아이콘 끝*/
+
+/*디폴트 헤더 스타일*/
+.aui-gantt-grid-default-header {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.1em;
+	background: #eee;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eee);
+	background: -moz-linear-gradient(top, #f8f8f8, #eee);
+	background: -ms-linear-gradient(top, #f8f8f8, #eee);
+	background: -o-linear-gradient(top, #f8f8f8, #eee);
+	background: linear-gradient(to bottom, #f8f8f8, #eee);
+	cursor: pointer;
+}
+
+.aui-gantt-grid-default-header:hover {
+	background: #dadada;
+	background: -webkit-linear-gradient(top, #f8f8f8, #dadada);
+	background: -moz-linear-gradient(top, #f8f8f8, #dadada);
+	background: -ms-linear-gradient(top, #f8f8f8, #dadada);
+	background: -o-linear-gradient(top, #f8f8f8, #dadada);
+	background: linear-gradient(to bottom, #f8f8f8, #dadada);
+}
+
+.aui-gantt-grid-group-branch-header {
+	cursor: default;
+}
+
+/** 헤더 툴팁 아이콘 스타일 */
+.aui-gantt-grid-header-help-tooltip-icon {
+	background: url(./images/help_ico.png) no-repeat;
+	width: 12px;
+	height: 12px;
+	cursor: default;
+}
+/** 헤더 툴팁 아이콘 마우스 오버 시 나오는 툴팁 외형 */
+.aui-gantt-grid-header-help-tooltip-wrapper {
+	border: 1px solid #6799FF;
+	border-radius: 4px;
+	padding: 4px;
+	background: #fff;
+	font-family: 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo-Light,sans-serif;
+	font-size: 12px;
+	z-index: 999;
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/** 라이브 스크롤 사용하지 않을 때 나오는 스크롤 툴팁 외형 */
+.aui-gantt-grid-scroll-tip-wrapper {
+	border: 1px solid #6799FF;
+	border-radius: 4px;
+	padding: 2px 8px;
+	background: #fff;
+	font-family: 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo-Light,sans-serif;
+	font-size: 12px;
+	z-index: 999;
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/** 그리드 툴팁 외형 */
+.aui-gantt-grid-tooltip-wrapper {
+	padding: 2px 6px;
+	border: 1px solid #999;
+	background: #eaeaea;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -moz-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -ms-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -o-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+	border-radius: 4px;
+	z-index: 999;
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 디폴트 칼럼 스타일 */
+.aui-gantt-grid-default-column {
+	text-align: center;
+	font-size: 1em;
+	cursor: default;
+}
+
+/* 셀력션 대표 백그라운드 스타일 */
+.aui-gantt-grid-selection-bg {
+	background: inherit;
+	color:inherit;
+}
+/* 셀렉션 대표 셀 이외의 백그라운드 스타일 */
+.aui-gantt-grid-selection-others-bg {
+	background: #ccc !important;
+	color:inherit;
+}
+/* 셀력션 행 대표 백그라운드 스타일 */
+.aui-gantt-grid-selection-row-bg {
+	background: #dadada !important;
+	background: -webkit-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -moz-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -ms-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -o-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: linear-gradient(to bottom, #e8e8e8, #dadada) !important;
+}
+/* 셀력션 행 대표 셀 이외의 백그라운드 스타일 */
+.aui-gantt-grid-selection-row-others-bg {
+	background: #dadada !important;
+	background: -webkit-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -moz-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -ms-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -o-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: linear-gradient(to bottom, #e8e8e8, #dadada) !important;
+}
+/* 셀렉션의 대표 셀 보더(테두리) 색상 스타일*/
+.aui-gantt-grid-selection-cell-border-lines {
+	background: #22741C;	
+}
+
+/* 셀력션 행번호 칼럼 스타일 */
+.aui-gantt-grid-selection-row-num-column {
+	font-weight: bold !important;
+	color:#000 !important;
+	background: #dadada !important;
+	background: -webkit-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -moz-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -ms-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -o-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: linear-gradient(to bottom, #e8e8e8, #dadada) !important;
+}
+/* 셀렉션 헤더 칼럼 스타일 */
+.aui-gantt-grid-selection-header-column {
+	font-weight: bold !important;
+	background: #dadada !important;
+	background: -webkit-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -moz-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -ms-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: -o-linear-gradient(top, #e8e8e8, #dadada) !important;
+	background: linear-gradient(to bottom, #e8e8e8, #dadada) !important;
+}
+
+/* 그리드 Row 배경색 */
+.aui-gantt-grid-row-background {
+	background: rgb(250, 250, 250);
+}
+
+/* 그리드 Row 다음 배경색*/
+.aui-gantt-grid-alternative-row-background {
+	background: rgb(255, 255, 255);
+}
+
+/* 칼럼 위치 변경 할 때 보이는 이미지 */
+.aui-gantt-grid-column-dragging-proxy {
+	background: #eeeeee;;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter: alpha(opacity = 80);
+	opacity: 0.8;
+	border: 1px solid #aaaaaa;
+	cursor: default;
+	font-weight: bold;
+	text-align: center;
+	padding: 3px 0;
+	font-size: 13px;
+	z-index:9999;
+}
+/* 상태 칼럼에 출력 시킬 스타일 */
+
+/* 현재 행 상태 스타일 */
+.aui-gantt-grid-row-state-current {
+	background: url(./images/arrow_icon.png) 50% 50% no-repeat !important;
+}
+/* 추가 행 상태 스타일 */
+.aui-gantt-grid-row-state-added {
+	background: url(./images/add_icon.png) 50% 50% no-repeat !important;
+	cursor:pointer;
+}
+/* 삭제 행 상태 스타일 */
+.aui-gantt-grid-row-state-removed {
+	background: url(./images/delete_icon.png) 50% 50% no-repeat !important;
+	cursor:pointer;
+}
+/* 수정 행 상태 스타일 */
+.aui-gantt-grid-row-state-edited {
+	background: url(./images/modified_icon.png) 50% 50% no-repeat !important;
+	cursor:pointer;
+}
+/* 추가한 행-수정 상태 스타일 */
+.aui-gantt-grid-row-state-added-edited {
+	background: url(./images/modified_a_icon.png) 50% 50% no-repeat !important;
+	cursor:pointer;
+}
+/* 상태 칼럼에 출력 시킬 스타일 끝*/
+
+/* 소프트 모드 삭제한 행 스타일*/
+.aui-gantt-grid-row-soft-removed-marker {
+	color:#aaa !important;
+	text-decoration:line-through !important;
+}
+
+/* 수정한 셀 표시 스타일(마커) */
+.aui-gantt-grid-cell-edited-marker {
+	width: 0px;
+	height: 0px;
+	border-left: 4px solid #990085;
+	border-top: 4px solid #990085;
+	border-bottom: 4px solid transparent;
+	border-right: 4px solid transparent;
+}
+
+/* 엑스트차 체크박스 체크된 행 스타일*/
+.aui-gantt-grid-extra-checked-row {
+	background : #FFFFE4;
+}
+
+/* 헤더 필터 아이콘 스타일 */
+.aui-gantt-grid-header-filter-icon {
+	border-left: 1px solid #dadada;
+	border-right: 1px solid #eaeaea;
+	background: url(./images/filter_ico.png) 50% 50% no-repeat;
+	box-sizing: content-box;
+	cursor: pointer;
+}
+.aui-gantt-grid-header-filter-icon:hover {
+	background: #ddd url(./images/filter_ico.png) 50% 50% no-repeat;
+}
+
+/* 현재 필터링 된 상태 아이콘 스타일 */
+.aui-gantt-grid-header-filter-icon-filtered {
+	border-left: 1px solid #dadada;
+	border-right: 1px solid #eaeaea;
+	background: #999 url(./images/filter_ico.png) 50% 50% no-repeat;
+	box-sizing: content-box;
+	cursor: pointer;
+}
+
+/* 필터 팝업 레이어 */
+.aui-gantt-grid-filter-popup-layer {
+	font-family: 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo-Light,sans-serif;
+	font-size:12px;
+	background: #fff;
+	border: 1px solid #aaaaaa;
+	border-radius: 4px;
+	box-sizing:border-box;
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+	z-index:1999;
+}
+
+/* 필터 초기화 */
+.aui-gantt-grid-filter-popup-layer>span:first-child {
+	background: url(./images/filter.png) 0 60% no-repeat;
+	margin: 10px 5px;
+	display: block;
+	padding: 4px;
+	padding-left: 16px;
+	line-height: 18px;
+}
+/* 필터 초기화 over */
+.aui-gantt-grid-filter-popup-layer>span:first-child:hover {
+	background: #4374D9 url(./images/filter.png) 0 60% no-repeat;
+	color: #fff;
+	cursor: pointer;
+}
+/* 필터 스크롤 컨테이너 영역*/
+.aui-gantt-grid-filter-popup-layer .aui-container {
+	border: 1px solid #aaaaaa;
+	margin: 10px 5px;
+}
+
+/* 필터 스크롤 컨테이너 스크롤 재정의*/
+.aui-gantt-grid-filter-popup-layer .aui-container .aui-hscrollbar .aui-scroll-thumb,.aui-gantt-grid-filter-popup-layer .aui-container .aui-vscrollbar .aui-scroll-thumb
+	{
+	background: #aaaaaa;
+}
+
+/* 필터 안의 Too may Items..문구 */
+.aui-gantt-grid-filter-popup-layer .aui-container .aui-gantt-grid-filter-info-message
+	{
+	padding-left: 4px;
+	font-weight: bold;
+	cursor: default;
+}
+
+/* 필터 체크박스*/
+.aui-gantt-grid-filter-popup-layer .aui-container .aui-checkLabelBox {
+	padding: 2px 6px;
+	cursor: default;
+}
+.aui-gantt-grid-filter-popup-layer .aui-container .aui-checkLabelBox:hover{
+	background:#ddd;
+}
+
+.aui-gantt-grid-filter-popup-layer .aui-container .aui-checkLabelBox .aui-checkbox	{
+	vertical-align: middle;
+	margin-right: 4px;
+	margin-top:0 !important;
+}
+/* 필터 자동완성 검색 인풋 시작 */
+.aui-gantt-grid-filter-popup-layer .aui-autocomplete-input {
+	overflow: hidden;
+	position: relative;
+	height: 20px;
+	margin: 10px 5px;
+	border: 1px solid #c9c9c9;
+	vertical-align: middle;
+}
+
+.aui-gantt-grid-filter-popup-layer .aui-autocomplete-input .aui-input-text {
+	width: 166px;
+	height: 18px;
+	border: 0;
+	font-size: 12px;
+	outline: none;
+	line-height: 18px;
+	vertical-align: middle;
+	padding:0 4px;
+	box-sizing:border-box;
+}
+
+.aui-gantt-grid-filter-popup-layer .aui-autocomplete-input .aui-autocomplete-btn {
+	position: absolute;
+	top: 1px;
+	right:1px;
+	display: inline-block;
+	background: url(./images/search.png) 0 0 no-repeat;
+	width: 16px;
+	height: 16px;
+}
+
+.aui-gantt-grid-filter-popup-layer-footer {
+	text-align: right;
+    padding-right: 5px;
+    padding-bottom: 5px;
+}
+
+.aui-gantt-grid-filter-popup-layer .filer-layer-resizer {
+	background: url(./images/grid-dot-icon.png) 0 0 no-repeat;
+	cursor:se-resize;
+	right:1px;
+	bottom:1px;
+	width: 8px;
+	height: 8px;
+}
+
+/* 컨텍스트 메뉴 */
+.aui-gantt-grid-context-popup-layer {
+	font-size:12px;
+	min-width:180px;
+	max-width: 300px;
+	padding: 10px 0px;
+	background: #fff;
+	border: 1px solid #aaaaaa;
+	border-radius: 0px;
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3); 
+	-webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+/* 컨텍스트 아이템 */
+.aui-gantt-grid-context-item {
+	display: block;
+	cursor: default;
+	padding: 4px 6px 4px 20px;
+	background: #fff url(./images/gray_circle.png) 0 50% no-repeat;
+	cursor: pointer;
+}
+
+.aui-gantt-grid-context-item:hover {
+	background: #ddd url(./images/gray_circle.png) 0 50% no-repeat;
+}
+
+/* 컨텍스트 아이템 구분 라인 */
+.aui-gantt-grid-context-item-line {
+	display: inline-block;
+	width: 100%;
+	border-top: 1px solid #999;
+}
+
+/* 모든 칼럼 렌더러의 베이스 */
+.aui-gantt-grid-renderer-base {
+	text-overflow: ellipsis;
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing:  content-box;
+}
+
+.aui-gantt-grid-custom-complex-renderer {
+	position: relative;
+}
+
+/* 버턴 렌더러 스타일 */
+.aui-gantt-grid-button-renderer {
+	color: #000000;
+	background: #eee;
+	border: 1px solid #aaaaaa;
+	background-clip: padding-box;
+	display: inline-block;
+	line-height: 1em;
+	border-radius: 0px;
+	-webkit-appearance: none;
+	font-weight: bold;
+	text-align: center;
+	cursor: pointer;
+	padding: 4px 2em;
+}
+
+.aui-gantt-grid-button-renderer:hover {
+	background: #ddd;
+}
+/* 버턴 렌더러 스타일 끝 */
+
+/** 넘버 스텝퍼 렌더러 시작 */
+.aui-gantt-grid-number-step-renderer {
+	/*border-radius: 3px;*/
+	margin: 0;
+	overflow: hidden;
+	position: relative;
+}
+
+.aui-gantt-grid-number-step-input {
+	background: #F9F9F9;
+	border: 1px solid #ccc;
+	/*border-radius: 3px;*/
+	overflow: hidden;
+	z-index: 49;
+	text-align: center;
+	padding-right: 18px;
+	font-size: 12px;
+	color:#000;
+	height: 21px; /* 행 높이에 맞게 조절하세요*/
+	line-height: 12px; /* 행 높이에 맞게 조절하세요*/
+	-webkit-appearance: none;
+	outline: none;
+	cursor: default;
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing:  content-box;
+}
+
+.aui-gantt-grid-number-step-input::-ms-clear {
+	display: none;
+}
+
+.aui-gantt-grid-number-step-up-btn {
+	border: 1px solid #ccc;
+	background: #eee url(./images/icon-up.png) 50% 50% no-repeat;
+	border-bottom: none;
+	cursor: pointer;
+	display: block;
+	height: 50%;
+	top: 0;
+	right: 0;
+	text-indent: -99999px;
+}
+
+.aui-gantt-grid-number-step-down-btn {
+	border: 1px solid #ccc;
+	background: #eee url(./images/icon-down.png) 50% 50% no-repeat;
+	border-top: none;
+	cursor: pointer;
+	display: block;
+	height: 50%;
+	right: 0;
+	bottom: 0;
+	text-indent: -99999px;
+}
+
+.aui-gantt-grid-number-step-up-btn:hover {
+	background: #bbb url(./images/icon-up.png) 50% 50% no-repeat;
+}
+
+.aui-gantt-grid-number-step-down-btn:hover {
+	background: #bbb url(./images/icon-down.png) 50% 50% no-repeat;
+}
+/** 넘버 스텝퍼 렌더러 끝 */
+
+/* 드랍다운리스트 렌더러 시작 */
+.aui-gantt-grid-drop-list-wrapper {
+	background: #eaeaea;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -moz-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -ms-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -o-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+	border: 1px solid #aaa;
+	border-radius: 0px;
+	display: block;
+	height: 22px;
+	color:#000 !important;
+	font-weight:normal !important;
+	font-size: 1em;
+	line-height: 1em;
+	box-sizing:content-box;
+}
+
+.aui-gantt-grid-drop-list-content {
+	display: inline-block;
+	border-radius: 0px;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	overflow: hidden;
+	font-size: 1em;
+	line-height: 2em;
+	vertical-align: top;
+	text-align: center;
+}
+
+.aui-gantt-grid-drop-list-icon {
+	display: inline-block;
+	border-left: 1px solid #ccc;
+	background: url(./images/icon-down.png) 50% 50% no-repeat;
+	cursor: pointer;
+	height: 22px;
+}
+/* 드랍다운리스트 렌더러 끝 */
+
+/* 드랍다운리스트, 콤보박스에서 나오는 리스트의 상위 랩퍼 */
+.aui-gantt-grid-drop-list-item-wrapper {
+	background: #fff;
+	font-size: 12px;
+	border: 1px solid #aaa;
+	overflow-y: auto;
+	overflow-x: hidden;
+	text-align:center;
+	border-radius: 0;
+	z-index:1999;
+	max-height:300px;
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 드랍다운리스트, 콤보박스에서 나오는 리스트 개별 아이템 ul */
+.aui-gantt-grid-drop-list-ul {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+
+/* 드랍다운리스트, 콤보박스에서 나오는 리스트 개별 아이템 li */
+.aui-gantt-grid-drop-list-item {
+	cursor: default;
+	height:24px;
+	line-height:24px;
+	padding: 0 4px;
+	white-space:nowrap;
+	margin:0;
+}
+.aui-gantt-grid-drop-list-item-selected {
+	background: #B2CCFF;
+}
+.aui-gantt-grid-drop-list-item:hover {
+	background: #4374D9;
+	color: #fff;
+}
+/* 드랍다운리스트 다중 선택에서 선택된 아이템 체크박스 표시 li */
+.aui-gantt-grid-drop-list-item-checked {
+	background: #B2CCFF url("./images/blue-check.png") no-repeat 4px 50%;
+}
+.aui-gantt-grid-drop-list-item-checked:hover {
+	background: #4374D9 url("./images/blue-check.png") no-repeat 4px 50%;
+	color: #fff;
+}
+
+/* 바렌더러 바게이지 시작*/
+/* 바게이지 전체 랩핑 div */
+.aui-gantt-grid-bar-renderer {
+	position: relative;
+}
+/* 바게이지 텍스트 span*/
+.aui-gantt-grid-bar-renderer span {
+	position: relative;
+	margin-top: 4px;
+	padding: 0 2px;
+}
+/* 바게이지 바 베이스*/
+.aui-gantt-grid-bar-renderer-bar-base {
+	box-sizing: border-box;
+	border: 1px solid #E4E4E4;
+}
+/* 바게이지 일반 바 */
+.aui-gantt-grid-bar-renderer-normal {
+	background: #2F9D27;
+	background: -webkit-linear-gradient(right, #86E57F, #2F9D27);
+	background: -moz-linear-gradient(right, #86E57F, #2F9D27);
+	background: -ms-linear-gradient(right, #86E57F, #2F9D27);
+	background: -o-linear-gradient(right, #86E57F, #2F9D27);
+	background: linear-gradient(to left, #86E57F, #2F9D27);
+}
+/* 바게이지 오른쪽에서 왼쪽으로 렌더링 될 때  바 */
+.aui-gantt-grid-bar-renderer-reverse {
+	background: #DF4D4D;
+	background: -webkit-linear-gradient(left, #FF9595, #DF4D4D);
+	background: -moz-linear-gradient(left, #FF9595, #DF4D4D);
+	background: -ms-linear-gradient(left, #FF9595, #DF4D4D);
+	background: -o-linear-gradient(left, #FF9595, #DF4D4D);
+	background: linear-gradient(to right, #FF9595, #DF4D4D);
+}
+/* 바게이지 양수 음수 함께 사용되는 영역에서 음수 바 */
+.aui-gantt-grid-bar-renderer-negative {
+	background: #DF4D4D;
+}
+/* 바게이지 양수 음수 함께 사용되는 영역에서 양수 바 */
+.aui-gantt-grid-bar-renderer-positive {
+	background: #2F9D27;
+}
+/* 바렌더러 바게이지 끝*/
+
+/* 달력 */
+.aui-gantt-grid-calendar-wrapper {
+	z-index:1999;
+	background:#ffffff;
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar {
+	font-family: 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo-Light,	sans-serif;
+	background:#fff;
+	font-size: 12px;
+	width:190px;
+	height:auto;
+	border:1px solid #aaa;
+	border-radius:0px;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-header {
+	height : 38px;
+	background: #eaeaea;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -moz-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -ms-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -o-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+	border-bottom : 1px solid #aaa;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-left-btn {
+	display:inline-block;
+	position:absolute;
+	top:2px;
+	left:2px;
+	width:20px;
+	height:36px;
+	box-sizing:border-box;
+	background: url("./images/prev_ico.png") no-repeat 50% 50%;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-right-btn {
+	display:inline-block;
+	position:absolute;
+	top:2px;
+	right:2px;
+	width:20px;
+	height:36px;
+	box-sizing:border-box;
+	background: url("./images/next_ico.png") no-repeat 50% 50%;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-left-btn:hover,  
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-right-btn:hover{
+	cursor:pointer;
+}
+
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-footer {
+	background: #eaeaea;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -moz-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -ms-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -o-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+	height:30px;
+	position:relative;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-today-btn {
+	display:inline-block;
+	position:absolute;
+	font-weight:bold;
+	top:3px;
+	right:2px;
+	padding:2px 4px;
+	border: 1px solid #2e6da4;
+	color:#fff;
+	background: #337ab7;
+	border-radius:0px;
+	cursor:pointer;
+	box-sizing:border-box;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-today-btn:hover {
+	border: 1px solid #122b40;
+	background: #286090;
+}
+
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-delete-btn {
+	display:inline-block;
+	position:absolute;
+	top:3px;
+	left:2px;
+	padding:2px 4px;
+	border: 1px solid #aaa;
+	background: #eaeaea;
+	border-radius:0px;
+	cursor:pointer;
+	box-sizing:border-box;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-delete-btn:hover {
+	border: 1px solid #aaa;
+	background: #ddd;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-title {
+	display:inline-block;
+	text-align:center;
+	width:100%;
+	font-size:14px;
+	margin-top:10px;
+	box-sizing:border-box;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar  .aui-calendar-title:hover {
+	cursor:pointer;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .aui-calendar-table {
+	width:100%;
+	border-spacing: 1px;
+    border-collapse: separate;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .day-title {
+	font-weight:bold;
+	text-align: center;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .weekday {
+	text-align:center;
+	color:#555;
+	padding:4px;
+	border:1px solid #d3d3d3;
+	box-sizing:border-box;
+	background: #eaeaea;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -moz-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -ms-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -o-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .weekday:hover {
+	cursor:pointer;
+	border:1px solid #777;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .sunday {
+	color :#f00;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .saturday {
+	color :#00f;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .selected-day {
+	background: #555;
+	background: -webkit-linear-gradient(top, #989898, #555);
+	background: -moz-linear-gradient(top, #989898, #555);
+	background: -ms-linear-gradient(top, #989898, #555);
+	background: -o-linear-gradient(top, #989898, #555);
+	background: linear-gradient(to bottom, #989898, #555);
+	color: #ffffff !important;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .today {
+	border: 1px solid #CC723D;
+	box-sizing:border-box;
+}
+/* 이전, 다음 달의 여분 날짜(day) */
+.aui-gantt-grid-calendar-wrapper .aui-calendar .extraday {
+	text-align:center;
+	color:#aaa;
+	padding:4px;
+	border:1px solid #d3d3d3;
+	box-sizing:border-box;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .extraday:hover {
+	cursor:pointer;
+	border:1px solid #777;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .month, 
+.aui-gantt-grid-calendar-wrapper .aui-calendar .year{
+	text-align:center;
+	color:#555;
+	text-align:center;
+	padding:14px 4px;
+	border:1px solid #d3d3d3;
+	box-sizing:border-box;
+	background: #eaeaea;
+	background: -webkit-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -moz-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -ms-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: -o-linear-gradient(top, #f8f8f8, #eaeaea);
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .month:hover,
+.aui-gantt-grid-calendar-wrapper .aui-calendar .year:hover {
+	cursor:pointer;
+	border:1px solid #777;
+}
+.aui-gantt-grid-calendar-wrapper .aui-calendar .selected-month,
+.aui-gantt-grid-calendar-wrapper .aui-calendar .selected-year {
+	background: #555;
+	background: -webkit-linear-gradient(top, #989898, #555);
+	background: -moz-linear-gradient(top, #989898, #555);
+	background: -ms-linear-gradient(top, #989898, #555);
+	background: -o-linear-gradient(top, #989898, #555);
+	background: linear-gradient(to bottom, #989898, #555);
+	color: #ffffff !important;
+}
+/* 달력 끝 */
+
+/* bootstrap-datepicker 달력 시작*/
+.aui-gantt-grid-bootstrap-calendar-wrapper {
+	font-family: 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo-Light,	sans-serif;
+	font-size: 13px;
+	padding: 4px;
+	position: absolute;
+    z-index: 1060;
+    min-width: 160px;
+    margin: 2px 0 0;
+    list-style: none;
+    box-sizing:border-box;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    background-clip: padding-box;
+} 
+.aui-gantt-grid-bootstrap-calendar-wrapper * {
+	box-sizing:content-box;
+}
+/* bootstrap-datepicker 달력 끝*/
+
+/* 링크 렌더러 */
+.aui-gantt-grid-link-renderer > a {
+	text-decoration:underline;
+}
+/* 링크 렌더러 끝*/
+
+/* 셀 에디터 버턴 기본 스타일 */
+.aui-gantt-grid-cell-editor-button {
+	cursor:pointer;
+	background: url(./images/pad-icon.png) 50% 50% no-repeat;
+	background-size:14px;
+	border:none;
+}
+/* 셀 에디터 버턴 텍스트 인풋 스타일 */
+.aui-gantt-grid-cell-editor-button-inputer  {
+	background: url(./images/input-icon.png) 50% 50% no-repeat;
+}
+/* 셀 에디터 버턴 콤보박스, 드랍다운리스트 스타일 */
+.aui-gantt-grid-cell-editor-button-combo-list, .aui-gantt-grid-cell-editor-button-drop-list {
+	background: url(./images/list-icon.png) 50% 50% no-repeat;
+}
+/* 셀 에디터 버턴 달력 스타일 */
+.aui-gantt-grid-cell-editor-button-calendar {
+	background: url(./images/calendar-icon.png) 50% 50% no-repeat;
+}
+/* 셀 에디터 버턴 리모트리스트 검색 스타일 */
+.aui-gantt-grid-cell-editor-button-remote-search {
+	background: url(./images/search2.png) 50% 50% no-repeat;
+}
+/* 셀 에디터 버턴 리모트리스트 프리로더 */
+.aui-gantt-grid-cell-editor-button-ajax-loader {
+	background: url(./images/tiny-ajax-loader.gif) 50% 50% no-repeat;
+}
+
+/*****************************************************************/
+/* 내부 예약 스타일 */
+/****************************************************************/
+.aui-gantt-default-left-style {
+	text-align:left;
+}
+.aui-gantt-default-right-style {
+	text-align:right;
+}
+.aui-gantt-default-actual-start-column {
+	color:#741800;
+}
+.aui-gantt-default-actual-end-column {
+	color:#741800;
+}

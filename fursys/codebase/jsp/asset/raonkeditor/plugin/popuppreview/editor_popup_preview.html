@@ -1,0 +1,10 @@
+<script>
+    if (typeof window.opener._rke_pewviewHtml == 'string' ) {
+		var _doc = document;
+		_doc.open();
+        _doc.write(window.opener._rke_pewviewHtml );
+		_doc.close();
+
+        delete window.opener._rke_pewviewHtml;
+	}
+</script>

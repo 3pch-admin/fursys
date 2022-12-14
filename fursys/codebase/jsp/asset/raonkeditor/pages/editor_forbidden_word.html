@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Data</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt src="../config/editor_crossdomain_config.js?t=' + (new Date).getTime() + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+    <script type="text/javascript">
+        var KEDITORTOP = parent;
+        var KEditorLayerFrame = KEDITORTOP.KEDITORDOC.getElementById("raonk_frame_" + KEDITORTOP.G_CURRKEDITOR.ID);
+        if (KEDITORTOP.G_CURRKEDITOR.dialogWindow != null) {
+            KEDITORTOP = KEditorLayerFrame.contentWindow.KEDITORTOP;
+        }
+        var KEditorLayerWin = KEditorLayerFrame.contentWindow;
+
+        document.write('<link href="' + KEditorLayerWin._k_editor._config.popupCssUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" rel="stylesheet" type="text/css" />');
+        document.write('<scr' + 'ipt src="' + KEditorLayerWin._k_editor._config.dialogJSUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+    <style type="text/css">
+        .color li {
+            width: 14px;
+            height: 14px;
+            float: left;
+            padding: 0px;
+            margin: 1px;
+            border: 0px none;
+            list-style-type: none;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript">
+        function page_loaded_event() {
+            var btn_close = document.getElementById('btn_close');
+            LayerWin.setFocusFirstAndLast(document, btn_close.parentNode);
+            setCursorPos(btn_close.parentNode, true, false);
+
+            set_page();
+
+            if (document.compatMode == "BackCompat") {
+                var inputs = document.getElementsByTagName('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == 'text') {
+                        inputs[i].style.height = '20px';
+                    }
+                }
+            }
+        }
+
+        function set_page() {
+
+            var _skin_name = LayerWin._k_editor._config.style.skinName;
+            document.title = LayerWin.RAONKEditor_lang.forbiddenWord.title;
+            if (KEDITORTOP.RAONKEDITOR.browser.mobile) { // mobile 환경에서 UI 개선 junmo 19.06.03
+                document.getElementById("editor_popup_table").className = 'K_edITor_ED_Popup_Type03 K_edITor_PUi_' + _skin_name;
+
+            } else {
+                document.getElementById("editor_popup_table").className = 'K_edITor_ED_Popup_Type01 K_edITor_PUi_' + _skin_name;
+            }
+            document.getElementById('span_title').innerHTML = LayerWin.RAONKEditor_lang.forbiddenWord.title;
+            document.getElementById('label_cont').innerHTML = LayerWin.RAONKEditor_lang.forbiddenWord.label_cont;
+            document.getElementById('btn_close').innerHTML = LayerWin.RAONKEditor_lang.forbiddenWord.btn_close;
+            document.getElementById('span_all_del').innerHTML = LayerWin.RAONKEditor_lang.forbiddenWord.span_all_del;
+
+            var forbiddenWord = LayerWin.getForbiddenWord(KEDITORTOP.G_CURRKEDITOR);
+            var violation_body = document.getElementById('violation_body');
+            var firstFocus = true;
+            if (forbiddenWord) {
+                forbiddenWord = KEDITORTOP.RAONKEDITOR.util.removeDuplicatesArray(forbiddenWord);
+                var forbiddenWordLen = forbiddenWord.length;
+                for (var i = 0; i < forbiddenWordLen; i++) {
+                    var tr = document.createElement('tr');
+                    var td2 = document.createElement('td');
+                    var td3 = document.createElement('td');
+
+                    tr.style.cursor = 'pointer';
+                    tr.style.height = '35px';
+                    td2.className = 't_left';
+                    td2.style.borderRight = 'solid 1px #e0e0e0';
+                    if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion <= 7 && KEDITORTOP.RAONKEDITOR.browser.quirks) {
+                        td2.style.width = '304px';
+                    } else {
+                        td2.style.width = '288px';
+                    }
+                    td3.className = 't_center';
+
+                    var td2Span = document.createElement('span');
+                    td2Span.innerHTML = forbiddenWord[i];
+
+                    var td3input = document.createElement('input');
+                    td3input.className = "in_btn";
+                    td3input.style.cursor = 'pointer';
+                    td3input.type = 'button';
+                    td3input.value = LayerWin.RAONKEditor_lang.forbiddenWord.btn_del;
+
+                    var td3input_click = function (e) {
+                        if (confirm(LayerWin.RAONKEditor_lang.personalData.confirm_msg)) {
+                            var evt = e || window.event;
+                            var target = evt.target ? evt.target : evt.srcElement;
+                            var trNode = target;
+
+                            while (target != 'tr') {
+                                trNode = trNode.parentNode;
+                                if (!trNode.tagName) {
+                                    return;
+                                }
+                                if (trNode.tagName.toLowerCase() == 'tr')
+                                    break;
+                            }
+                            // 선택, 위치이동, 삭제
+                            //LayerWin.doSetCaretPosition(LayerWin._iframeDoc.body, 0);
+                            var targetText = trNode.cells[0].firstChild.innerHTML;
+                            LayerWin.removeFindText(targetText, KEDITORTOP.G_CURRKEDITOR);
+                            violation_body.removeChild(trNode);
+
+                            LayerWin.onCommand({ editor: KEDITORTOP.G_CURRKEDITOR, cmd: "forbidden_word" });
+                        }
+                    };
+                    KEDITORTOP.RAONKEDITOR.util.addEvent(td3input, 'click', td3input_click);
+
+
+                    td3.appendChild(td3input);
+                    td2.appendChild(td2Span);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    violation_body.appendChild(tr);
+
+                    /*
+                    var event_focus = (function (tr, violation_body) {
+                        var _clicked_node = tr;
+                        return function (event) {
+                            for (var i = 0; i < violation_body.childNodes.length; i++) {
+                                if (violation_body.childNodes[i].nodeType == 1 && (violation_body.childNodes[i] != _clicked_node)) {
+                                    violation_body.childNodes[i].style.background = 'white';
+                                } else if (violation_body.childNodes[i].nodeType == 1) {
+                                    violation_body.childNodes[i].style.background = '#e5e5e5';
+                                }
+                            }
+                        };
+                    })(tr, violation_body);
+                    KEDITORTOP.RAONKEDITOR.util.addEvent(td3input, 'focus', event_focus);
+                    */
+
+                    if (i == 0 && firstFocus) {
+                        firstFocus = false;
+                        LayerWin.setFocusFirstAndLast(document, td3input);
+                        setCursorPos(td3input, true, false);
+                    }
+                }
+            }
+
+            /*
+            var _clicked_node;
+            var event_click = function (e) {
+                var evt = e || window.event;
+                var target = evt.target ? evt.target : evt.srcElement;
+
+                var trNode = target;
+                while (target != 'tr') {
+                    trNode = trNode.parentNode;
+                    if (!trNode.tagName) {
+                        return;
+                    }
+                    if (trNode.tagName.toLowerCase() == 'tr')
+                        break;
+                }
+
+                _clicked_node = trNode;
+                trNode.style.background = '#e5e5e5';
+
+                for (var i = 0; i < violation_body.childNodes.length; i++) {
+                    if (violation_body.childNodes[i].nodeType == 1 && (violation_body.childNodes[i] != _clicked_node)) {
+                        violation_body.childNodes[i].style.background = 'white';
+                    }
+                }
+                setCursorPos(_clicked_node.cells[0].getElementsByTagName('a')[0], true, false);
+                if (navigator.userAgent.match(/iPad|iPhone/)) {
+                    _clicked_node.cells[0].getElementsByTagName('a')[0].focus();
+                }
+            };
+            KEDITORTOP.RAONKEDITOR.util.addEvent(violation_body, 'click', event_click);
+            */
+
+            if (!forbiddenWord) {
+                var tr = document.createElement('tr');
+                var td = document.createElement('td');
+                td.colSpan = '3';
+                td.className = 't_center';
+                var htmlVal = '<span>' + LayerWin.RAONKEditor_lang.personalData.no_list + '</span>';
+                td.innerHTML = htmlVal;
+                tr.appendChild(td);
+                violation_body.appendChild(tr);
+
+                document.getElementById('btn_all_del').parentNode.removeChild(document.getElementById('btn_all_del'));
+            }
+
+        }
+
+        function forbiddenWord_close() {
+            event_popup_close();
+            //KEDITORTOP.RAONKEDITOR.setEditorChangeMode('source', LayerWin._k_editor.ID);
+            //KEDITORTOP.RAONKEDITOR.setEditorChangeMode('design', LayerWin._k_editor.ID);
+        }
+
+        function btn_all_del_click() {
+            if (confirm(LayerWin.RAONKEditor_lang.forbiddenWord.confirm_msg)) {
+                var violation_body = document.getElementById('violation_body');
+                var rows = violation_body.rows;
+                var rowsLen = rows.length;
+                for (var i = rowsLen - 1; i >= 0; i--) {
+                    var targetText = rows[i].cells[0].firstChild.innerHTML;
+                    LayerWin.removeFindText(targetText, KEDITORTOP.G_CURRKEDITOR);
+                    violation_body.removeChild(rows[i]);
+                }
+                event_popup_close();
+                LayerWin.onCommand({ editor: KEDITORTOP.G_CURRKEDITOR, cmd: "forbidden_word" });
+            }
+        }
+    </script>
+</head>
+<body style="margin: 0px; padding: 0px;" onload="page_loaded_event();">
+    <div id="editor_popup_table" class="editor_popup">
+        <!-- Header -->
+        <div class="EdiTor_Popup_header">
+            <span class="subject" id="span_title"></span><span class="text"></span>
+            <div class="close">
+                <a href="javascript:forbiddenWord_close();" title="close"></a>
+            </div>
+        </div>
+        <!-- // Header -->
+        <input type="hidden" id="tab_value" name="tab_value" value="1" />
+        <!-- Contents / general -->
+        <div id="tab_div1" class="EdiTor_Popup_contents view">
+            <div id="contents_1" class="contents" style="height: 390px; overflow: hidden;">
+                <div class="con">
+                    <div class="select_tb">
+                        <table cellpadding="0" cellspacing="0">
+                            <tr>
+                                <!-- td width="52px" class="t_center" style="border-right:solid 1px #e0e0e0;"><span id="label_elem"></span></td -->
+                                <td width="*" class="t_center" style="border-right:solid 1px #e0e0e0;"><span id="label_cont"></span></td>
+                                <td width="53px" class="t_center"></td>
+                                <td width="14px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="list_div" class="select_td" style="height:350px">
+                        <table cellpadding="0" cellspacing="0">
+                            <tbody id="violation_body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // Contents -->
+        <!-- Footer -->
+        <div class="EdiTor_Popup_footer">
+            <a href="javascript:btn_all_del_click();" class="cancel" id="btn_all_del"><span id="span_all_del"></span></a>
+            <a href="javascript:forbiddenWord_close();" class="cancel"><span id="btn_close"></span></a>
+        </div>
+        <!-- // Footer -->
+    </div>
+</body>
+</html>

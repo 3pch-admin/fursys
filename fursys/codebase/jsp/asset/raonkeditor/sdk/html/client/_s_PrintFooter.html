@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Editor Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con">
+            <span class="pl_type">[Agent 전용]</span>
+            <h3 class="title">K Editor :: PrintFooter</h3>
+            <p class="ttl">
+                XML : &#60;print_footer_left&#62;.....&#60;/print_footer_left&#62;<br />
+                XML : &#60;print_footer_center&#62;.....&#60;/print_footer_center&#62;<br />
+                XML : &#60;print_footer_right&#62;.....&#60;/print_footer_right&#62;<br />
+
+            </p>
+            <p class="txt">
+                인쇄 시 Footer 영역의 내용을 설정합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                print_footer설명<br />
+                &w : 현재 페이지의 title 값<br />
+                &u : 현재 페이지의 url<br />
+                &p : 현재 페이지 번호<br />
+                &P : 전체 페이지 수<br />
+                &d : 약식 날짜 예) 2017-00-00<br />
+                &D : 긴 형식 날짜 예) 2017년 00월 00일 O요일<br />
+                &t : 시간 예) 오후 1:40:00<br />
+                &T : 24시간 형식 시간 예) 오후 13:40:00<br />
+                이외의 값은 넣은 값 그대로 들어감.
+            </p>
+            <p class="mttl01">sample code</p>
+            <div class="cord">
+                <pre class="pre">
+                <b>인쇄 시 Footer 영역의 우측에 "Footer"를 설정합니다.</b>
+
+    &#60;setting&#62;
+        .....
+        &#60;print_footer_right&#62;Header&#60;/print_footer_right&#62;
+        .....
+    &#60;/setting&#62;
+    .....
+        </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

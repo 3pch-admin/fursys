@@ -1,0 +1,923 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Setting</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt src="../config/editor_crossdomain_config.js?t=' + (new Date).getTime() + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+
+    <script type="text/javascript">
+        var KEDITORTOP = parent;
+        var KEditorLayerFrame = KEDITORTOP.KEDITORDOC.getElementById("raonk_frame_" + KEDITORTOP.G_CURRKEDITOR.ID);
+        if (KEDITORTOP.G_CURRKEDITOR.dialogWindow != null) {
+            KEDITORTOP = KEditorLayerFrame.contentWindow.KEDITORTOP;
+        }
+        var KEditorLayerWin = KEditorLayerFrame.contentWindow;
+
+        document.write('<link href="' + KEditorLayerWin._k_editor._config.popupCssUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" rel="stylesheet" type="text/css" />');
+        document.write('<scr' + 'ipt src="' + KEditorLayerWin._k_editor._config.dialogJSUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+
+    <script type="text/javascript">
+        function page_loaded_event() {
+
+            var arr_lang = ['', 'af', 'ar', 'bg', 'bn', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el', 'en', 'en-au', 'en-ca', 'en-gb', 'eo',
+                            'es', 'et', 'eu', 'fa', 'fl', 'fo', 'fr', 'fr-ca', 'gl', 'gu', 'he', 'hi', 'hr', 'hu', 'is', 'it', 'ja', 'ka', 'km',
+                            'ko', 'ku', 'lt', 'lv', 'mk', 'mn', 'ms', 'nb', 'nl', 'no', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sk', 'sl', 'sq',
+                            'sr', 'sr-latn', 'sv', 'th', 'tr', 'ug', 'uk', 'vi', 'zh'];
+            var sel_lang = document.getElementById('lang');
+            for (var i = 0; i < arr_lang.length; i++) {
+                sel_lang.options.add(new Option(arr_lang[i].toUpperCase(), arr_lang[i]), sel_lang.options.length);
+            }
+
+            var _skin_name = LayerWin._k_editor._config.style.skinName;
+            if (KEDITORTOP.RAONKEDITOR.browser.mobile) { // mobile 환경에서 UI 개선junmo 19.06.03
+                document.getElementById("keditor_dialog_box").className = 'K_edITor_ED_Popup_Type03 K_edITor_PUi_' + _skin_name;
+                document.getElementById("label_page_title").parentElement.style.width = '29%';
+                document.getElementById('page_title').style.width = '185px';
+                document.getElementById('encoding').style.width = '104px';
+                document.getElementById('encoding_value').style.width = '70px';
+                document.getElementById('tr_word_break').firstElementChild.style.width = '44%';
+
+
+            } else {
+                document.getElementById("keditor_dialog_box").className = 'K_edITor_ED_Popup_Type01 K_edITor_PUi_' + _skin_name;
+            }
+            document.getElementById("span_title").innerHTML = LayerWin.RAONKEditor_lang.setting.title;
+
+            var accessibility = LayerWin._k_editor._config.accessibility;
+            if (accessibility == "-1") {
+                document.getElementById("access_img").style.display = "none";
+            }
+
+            var _encoding = document.getElementById('encoding');
+            var _encoding_change_evt = function () {
+                document.getElementById('encoding_value').value = _encoding.value;
+            };
+            KEDITORTOP.RAONKEDITOR.util.addEvent(_encoding, 'change', _encoding_change_evt);
+
+            
+            var grid_select_ul = document.getElementById('grid_select_ul');
+            var grid_color_select_evt = function (evt) {
+                var grid_color = document.getElementById('grid_color');
+                var grid_color_name = document.getElementById('grid_color_name');
+                var click_li = LayerWin.getClickCell(evt, 'li');
+                var click_child;
+                var _arr_child = [];
+
+                for (var i in click_li.childNodes) {
+                    if (click_li.childNodes[i].nodeType == 1) {
+                        click_child = click_li.childNodes[i];
+                        break;
+                    }
+                }
+                for (var i in click_child.childNodes) {
+                    if (click_child.childNodes[i].nodeType == 1) {
+                        _arr_child.push(click_child.childNodes[i]);
+                    }
+                }
+
+                var _color_val = _arr_child[0].style.backgroundColor;
+                var _color_nam = _arr_child[1].innerHTML;
+
+                grid_color.style.background = _color_val;
+                grid_color_name.innerHTML = _color_nam;
+
+                fn_grid_color_toggle();
+                setCursorPos(document.getElementById('btn_color'), false, false);
+            };
+            KEDITORTOP.RAONKEDITOR.util.addEvent(grid_select_ul, 'click', grid_color_select_evt);
+
+            setSelectBoxOption(LayerWin.RAONKEditor_lang.setting.arr_encoding, "arr_encoding", "encoding", LayerWin.RAONKEditor_lang.setting.arr_encoding.value.length);
+
+            document.getElementById('lang').value = LayerWin._k_editor._setting.lang;
+            document.getElementById('grid_color_name').innerHTML = LayerWin._k_editor._setting.grid_color_nm;
+            document.getElementById('grid_color').style.background = LayerWin._k_editor._setting.grid_color;
+            document.getElementById('grid_spans').value = LayerWin._k_editor._setting.grid_spans;
+            if (LayerWin._k_editor._setting.grid_form == 'dot') {
+                document.getElementsByName('grid_form')[1].checked = 'checked';
+            }
+            if (LayerWin._k_editor._setting.page_title) { document.getElementById('page_title').value = LayerWin._k_editor._setting.page_title; }
+            document.getElementById('encoding_value').value = LayerWin._k_editor._setting.encoding;
+            document.getElementById('encoding').value = LayerWin._k_editor._setting.encoding;
+
+            if (KEDITORTOP.G_CURRKEDITOR._config.enforceDoctype >= '1') {
+                document.getElementById('doctype').parentNode.parentNode.style.display = 'none';
+                var addOption = document.createElement('option');
+                addOption.value = 'Auto';
+                addOption.innerHTML = 'Auto';
+                document.getElementById('doctype').appendChild(addOption);
+            }
+
+            document.getElementById('doctype').value = LayerWin._k_editor._setting.doctype;
+            if (LayerWin._k_editor._setting.xhtml == 'http://www.w3.org/1999/xhtml') {
+                document.getElementById('xhtml').checked = true;
+            }
+
+            // 개인화 설정했을때만 보여주도록 설정 by jh 2018.06.07
+            if (LayerWin._k_editor._config.usePersonalSetting == '1' && KEDITORTOP.RAONKEDITOR.browser.LocalStorageSupported) {
+                var _auto_save_params = LayerWin._k_editor._setting.auto_save.toString().split(',');
+
+                if (_auto_save_params[0] != '0') {
+                    document.getElementById('div_auto_save').style.display = '';
+
+                    if (_auto_save_params[0] == '2') {
+                        document.getElementById('input_auto_save').value = '';
+                        document.getElementById('check_auto_save').checked = false;
+                        document.getElementById('input_auto_save').disabled = true;
+                    } else if (_auto_save_params[0] == '1') {
+                        document.getElementById('input_auto_save').value = _auto_save_params[1];
+                        document.getElementById('check_auto_save').checked = true;
+                        document.getElementById('input_auto_save').disabled = false;
+                    }
+                }
+
+                if (LayerWin._k_editor._config.autoList.use == '1') {
+                    document.getElementById('check_auto_list').checked = true;
+                }
+
+                if (LayerWin._k_editor._config.setAutoSave.mode != "2") {
+                    document.getElementById('input_auto_save').disabled = true;
+                    document.getElementById('check_auto_save').disabled = true;
+                }
+
+
+                document.getElementById('check_auto_save').onclick = function () {
+                    if (document.getElementById('check_auto_save').checked) {
+                        document.getElementById('input_auto_save').disabled = false;
+                    } else {
+                        document.getElementById('input_auto_save').value = '';
+                        document.getElementById('input_auto_save').disabled = true;
+                    }
+                };
+
+                // 환경설정에 개인화 기능 추가 by jh 2018.05.15
+                var personal_font_family = document.getElementById('personal_font_family');
+                var personal_font_size = document.getElementById('personal_font_size');
+                var personal_line_height = document.getElementById('personal_line_height');
+                var divPersonalSetting = document.getElementById('div_personal_setting');
+                var raonkPersonalSetting = '';
+                if (KEDITORTOP.RAONKEDITOR.browser.LocalStorageSupported) {
+                    raonkPersonalSetting = KEDITORTOP.RAONKEDITOR.util.loadJsonFromLocalStorage('raonk_personal_setting');
+                }
+
+                var getFontFamily = '', getFontSize = '', getLineHeight = '', getPasteToImage = '';
+                if (raonkPersonalSetting && raonkPersonalSetting != '' && raonkPersonalSetting != null) {
+                    getFontFamily = raonkPersonalSetting.fontFamily;
+                    getFontSize = raonkPersonalSetting.fontSize;
+                    getLineHeight = raonkPersonalSetting.lineHeight;
+                    getPasteToImage = raonkPersonalSetting.pasteToImage;
+                };
+                
+                personalSetting(personal_font_family, 'font_family', 'font', getFontFamily);
+                personalSetting(personal_font_size, 'font_size', 'size', getFontSize);
+                personalSetting(personal_line_height, 'line_height', 'line', getLineHeight);
+
+                divPersonalSetting.style.display = '';
+                document.getElementById('div_auto_save').className = 'con border';
+                
+                // 줄 바꿈 기능 사용 시 border line 설정 by sj.yoo 19.04.24
+                //if (LayerWin._k_editor._config.useLineBreak == '1')
+                    //document.getElementById('div_word_break_wrap_setting').className = 'con border';
+
+                // 다중 눈금자 수정 by hyeokjoo 18.07.18
+                // 사용자별 눈금자 설정 by jh 2018.06.07
+                if (LayerWin._k_editor._config.ruler.use == "1") {
+                    var ruler_px = document.getElementById('ruler_px');
+
+                    var raonkRuler = '';
+                    if (KEDITORTOP.RAONKEDITOR.browser.LocalStorageSupported) {
+                        raonkRuler = KEDITORTOP.RAONKEDITOR.util.loadJsonFromLocalStorage('raonk_' + KEDITORTOP.G_CURRKEDITOR.ID + '_ruler');
+                    }
+                    if (KEDITORTOP.G_CURRKEDITOR._config.ruler.view == "1") {
+                        document.getElementById('check_ruler').checked = true;
+                        var rulerPosition = '';
+                        if (raonkRuler && raonkRuler.use == '1') {
+                            //document.getElementById('ruler_px').value = raonkRuler.position;
+                            rulerPosition = raonkRuler.position.split(',');
+                        } else {
+                            rulerPosition = LayerWin._k_editor._setting['ruler_position'].split(',');
+                        }
+                        // 다중 눈금자 수정 by hyeokjoo 18.07.18
+                        var tempRulerPosition = rulerPosition.join(',');
+                        tempRulerPosition = tempRulerPosition.replace('10,10,', '');
+                        if (tempRulerPosition == "" || tempRulerPosition == "0") {
+                            tempRulerPosition = LayerWin._k_editor._config.ruler.rulerInitPosition.split(',');
+                        }
+                        ruler_px.value = tempRulerPosition;
+                    } else {
+                        ruler_px.disabled = true;
+                        if (LayerWin._k_editor._config.ruler.mode == '2') {
+                            document.getElementById('check_ruler').checked = false;
+                        }
+                    }
+
+                    document.getElementById('check_ruler').onclick = function () {
+                        if (document.getElementById('check_ruler').checked) {
+                            var rulerPosition = LayerWin._k_editor._config.ruler.rulerInitPosition.split(',');
+                            ruler_px.value = rulerPosition.join(',');
+                            ruler_px.disabled = false;
+
+                        } else {
+                            if (LayerWin._k_editor._config.ruler.mode == '2') {
+                                ruler_px.value = LayerWin._k_editor._config.ruler.rulerInitPosition;
+                            } else {
+                                ruler_px.value = '';
+                            }
+                            ruler_px.disabled = true;
+                        }
+                    };
+                }
+
+                // 이미지로 붙여넣기 활성화 추가 by dahyun 21.05.24
+                if (!KEDITORTOP.RAONKEDITOR.browser.mobile && (LayerWin._k_editor._config.useKManager == '1' || (!KEDITORTOP.RAONKEDITOR.browser.ie && LayerWin._k_editor._config.useKManager == '0'))) {
+                    var personal_paste_to_image = document.getElementById('personal_paste_to_image');
+                    document.getElementById("div_paste_to_image").style.display = "";
+                    var pateToImageArr;
+                    if (LayerWin._k_editor._config.useKManager == '1') {
+                        pateToImageArr = LayerWin.RAONKEditor_lang.setting.agent_arr_paste_to_image;
+                    } else {
+                        pateToImageArr = LayerWin.RAONKEditor_lang.setting.html5_arr_paste_to_image;
+                    }
+                    var pateToImageCnt = pateToImageArr.value.length;
+                    setSelectBoxOption(pateToImageArr, "arr_paste_to_image", "personal_paste_to_image", pateToImageCnt);
+                    for (var pIdx = 0; pIdx < pateToImageCnt; pIdx++) {
+                        if (getPasteToImage == '') {
+                            getPasteToImage = LayerWin._k_editor._config.pasteToImage;
+                        }
+                        if (personal_paste_to_image.options[pIdx].value == getPasteToImage) {
+                            personal_paste_to_image.options[pIdx].selected = true;
+                            break;
+                        }
+                    }
+                }
+                //KEDITORTOP.RAONKEDITOR.util.addEvent(ruler_px, 'keydown', LayerWin.onlyNumber);
+                KEDITORTOP.RAONKEDITOR.util.addEvent(document.getElementById('input_auto_save'), 'keydown', LayerWin.onlyNumber);
+            } //
+            //document.getElementById('input_auto_save').onkeydown = LayerWin.onlyNumber;
+
+            document.getElementById("label_lang").innerHTML = LayerWin.RAONKEditor_lang.setting.lang;
+            document.getElementById("span_grid_color").innerHTML = LayerWin.RAONKEditor_lang.setting.color;
+            document.getElementById("label_grid_spans").innerHTML = LayerWin.RAONKEditor_lang.setting.spans;
+            document.getElementById("span_grid_form").innerHTML = LayerWin.RAONKEditor_lang.setting.form;
+            document.getElementById("label_grid_form_line").innerHTML = LayerWin.RAONKEditor_lang.setting.form_line;
+            document.getElementById("label_grid_form_dot").innerHTML = LayerWin.RAONKEditor_lang.setting.form_dot;
+            document.getElementById("label_page_title").innerHTML = LayerWin.RAONKEditor_lang.setting.page_title;
+            document.getElementById("label_encoding").innerHTML = LayerWin.RAONKEditor_lang.setting.encoding;
+            document.getElementById("label_doctype").innerHTML = LayerWin.RAONKEditor_lang.setting.doctype;
+            document.getElementById("label_xhtml").innerHTML = LayerWin.RAONKEditor_lang.setting.xhtml;
+            document.getElementById("btn_ok").innerHTML = LayerWin.RAONKEditor_lang.setting.btn_ok;
+            document.getElementById("btn_cancel").innerHTML = LayerWin.RAONKEditor_lang.setting.btn_cancel;
+            if (LayerWin._k_editor._config.usePersonalSetting == '1') {  // 개인화 설정 사용할 때만 그려줌 by jh 2018.06.07
+                document.getElementById("label_auto_save").innerHTML = LayerWin.RAONKEditor_lang.setting.auto_save;
+                document.getElementById("label_auto_list").innerHTML = LayerWin.RAONKEditor_lang.setting.auto_list;
+                document.getElementById("span_auto_save_minute").innerHTML = LayerWin.RAONKEditor_lang.setting.auto_save_minute;
+                document.getElementById('label_ruler').innerHTML = LayerWin.RAONKEditor_lang.setting.ruler;
+                document.getElementById('label_ruler_px').innerHTML = LayerWin.RAONKEditor_lang.setting.ruler_px;
+                document.getElementById("label_personal_font_family").innerHTML = LayerWin.RAONKEditor_lang.setting.personal_font_family;
+                document.getElementById("label_personal_font_size").innerHTML = LayerWin.RAONKEditor_lang.setting.personal_font_size;
+                document.getElementById("label_personal_line_height").innerHTML = LayerWin.RAONKEditor_lang.setting.personal_line_height;
+                document.getElementById("label_personal_paste_to_image").innerHTML = LayerWin.RAONKEditor_lang.setting.personal_paste_to_image;
+                //document.getElementById("personal_use_msg").innerHTML = LayerWin.RAONKEditor_lang.setting.personal_use_msg;
+            }
+
+            document.title = LayerWin.RAONKEditor_lang.setting.frame_title;
+
+            var header = LayerWin.getElementsByClass('EdiTor_Popup_header', document);
+            header[0].onselectstart = function () { return false; };
+
+            if (LayerDoc.compatMode == "BackCompat") {
+                var inputs = document.getElementsByTagName('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == 'text') {
+                        inputs[i].style.height = '20px';
+                    }
+                }
+            }            
+            var grid_len = grid_select_ul.getElementsByTagName('a').length;
+            var grid_first = grid_select_ul.getElementsByTagName('a')[0];
+            var grid_last = grid_select_ul.getElementsByTagName('a')[grid_len - 1];
+
+            if (LayerWin._k_editor._config.ruler.mode == '2') {
+                document.getElementById('ruler_px').parentNode.style.visibility = 'hidden';
+                document.getElementById('label_ruler_px').parentNode.style.visibility = 'hidden';
+            }
+
+            setCursorPos(document.getElementById('page_title'), true, false);
+            LayerWin.setFocusFirstAndLast(document, document.getElementById('page_title'));
+
+
+            // useWordBreakWrap 설정시에만 보여주도록 설정 by sj.yoo 19.04.23
+            if (LayerWin._k_editor._config.useLineBreak == '1') {
+                document.getElementById('div_word_break_for_table').style.paddingTop = '0px';
+
+                var divWordBreakWrapSetting = document.getElementById('div_word_break_wrap_setting');
+                divWordBreakWrapSetting.style.display = '';
+
+                setSelectBoxOption(LayerWin.RAONKEditor_lang.setting.arr_word_break, "arr_word_break", "word_break", LayerWin.RAONKEditor_lang.setting.arr_word_break.value.length);
+                setSelectBoxOption(LayerWin.RAONKEditor_lang.setting.arr_word_wrap, "arr_word_wrap", "word_wrap", LayerWin.RAONKEditor_lang.setting.arr_word_wrap.value.length);
+
+                //var raonkLineBreakSetting = '';
+                //if (KEDITORTOP.RAONKEDITOR.browser.LocalStorageSupported) {
+                //    raonkLineBreakSetting = KEDITORTOP.RAONKEDITOR.util.loadJsonFromLocalStorage('raonk_line_break_setting');
+                //}
+
+                //var getWordBreak = '', getWordWrap = '';
+                //if (raonkLineBreakSetting && raonkLineBreakSetting != '' && raonkLineBreakSetting != null) {
+                //    getWordBreak = raonkLineBreakSetting.wordBreak;
+                //    getWordWrap = raonkLineBreakSetting.wordWrap;
+                //};
+
+                // autoBodyFit 설정 시에는 무조건 '글 내용 가로 길이 맞춤' 허용, disable 설정.
+                if (LayerWin._k_editor._config.autoBodyFit == "1") {
+                    getWordWrap = "break-word";
+                    document.getElementById("word_wrap").disabled = 1;
+                }
+
+                // word_break, word_wrap 타입 관련하여 localStorage 저장이 아닌 설정값으로 적용되도록 수정 by sj.yoo 19.04.25
+                var getWordBreak = LayerWin._k_editor._setting["word_break_type"];
+                var getWordWrap = LayerWin._k_editor._setting["word_wrap_type"];
+
+                if (getWordBreak == "" || getWordBreak == null) getWordBreak = "normal";
+                if (getWordWrap == "" || getWordWrap == null) getWordWrap = "normal";
+
+                document.getElementById('word_break').value = getWordBreak;
+
+                document.getElementById('word_wrap').value = getWordWrap;
+
+                document.getElementById("label_word_break").innerHTML = LayerWin.RAONKEditor_lang.setting.word_break;
+                document.getElementById("label_word_wrap").innerHTML = LayerWin.RAONKEditor_lang.setting.word_wrap;
+
+                //var div_contents_height = document.getElementById('div_contents').style.height;
+                //div_contents_height = (parseInt(div_contents_height) + 65) + "px";
+                //document.getElementById('div_contents').style.height = div_contents_height;
+                document.getElementById('div_lang').className = 'con border';
+
+                setTableLineBreakText(getWordBreak);
+            } else {
+                setTableLineBreakText(LayerWin._k_editor._config.wordBreakType);
+            }
+
+            //if (LayerWin.KEDITORTOP.G_CURRKEDITOR._config.ruler.use == "1" && LayerWin._k_editor._config.usePersonalSetting == '1') {
+            //    document.getElementById('div_contents').style.height = parseInt(document.getElementById('div_contents').style.height, 10) + 10 + "px";
+            //}
+
+            //mobile 환경에서 UI 개선junmo 19.06.03
+            if (KEDITORTOP.RAONKEDITOR.browser.mobile) {
+                if (document.getElementById('word_break')) {
+                    document.getElementById('word_break').style.width = '155px';
+                    document.getElementById('word_break').firstElementChild.style.width = '45%';
+                }
+                if (document.getElementById('word_wrap')) {
+                    document.getElementById('word_wrap').style.width = '155px';
+                    document.getElementById('word_wrap').firstElementChild.style.width = '45%';
+                }
+                if (document.getElementById('input_auto_save')) {
+                    document.getElementById('input_auto_save').parentElement.nextSibling.nextSibling.style.width = '48%';
+                    document.getElementById('input_auto_save').parentElement.style.width = '20%';
+                    document.getElementById('input_auto_save').parentElement.parentElement.firstElementChild.style.width = '40%';
+                    document.getElementById('input_auto_save').style.width = '15px';
+                }
+                if (document.getElementById('tr_personal_font_family')) {
+                    document.getElementById('tr_personal_font_family').firstElementChild.style.width = '30%';
+                    if (document.getElementById('personal_font_family')) document.getElementById('personal_font_family').style.width = '185px';
+                    if (document.getElementById('personal_font_size')) document.getElementById('personal_font_size').style.width = '185px';
+                    if (document.getElementById('personal_line_height')) document.getElementById('personal_line_height').style.width = '185px';
+
+                }
+            }
+
+            if (LayerWin._k_editor._config.checkApplyWordBreakForTable == '1') {
+                document.getElementById('check_apply_word_break_for_table').checked = true;
+            }
+
+            // 환경설정 다이얼로그창 style 변경 by jh 2018.06.07
+            if (LayerWin._k_editor._config.usePersonalSetting == '1') {
+                if (LayerWin.KEDITORTOP.G_CURRKEDITOR._config.ruler.use == "0") {
+                    //document.getElementById('div_contents').style.height = '205px';
+                    document.getElementById('div_ruler').style.display = 'none';
+                } else {
+                    document.getElementById('div_ruler').style.display = '';
+                }
+
+                // 개인화 기능 사용으로 설정 시 div_contents 높이 변경 by jh 2018.05.15
+                //var div_contents_height = document.getElementById('div_contents').style.height;
+                //if (LayerWin.KEDITORTOP.G_CURRKEDITOR._config.usePersonalSetting == "1" && divPersonalSetting.style.display != "none") {
+                //    div_contents_height = (parseInt(div_contents_height) + 90) + "px";
+                //    document.getElementById('div_contents').style.height = div_contents_height;
+                //}
+            } else {
+                document.getElementById('div_lang').className = 'con border';
+                //document.getElementById('div_contents').style.height = '170px';
+                document.getElementById('div_word_break_for_table').className = 'con';
+            }
+
+            // div_contents 동적으로 높이 구할 수 있도록 수정 by dahyun 21.05.27
+            var divContents = document.getElementById('div_contents');
+            var divContentsRect = divContents.getBoundingClientRect();
+            var divContentsHeight = divContentsRect.bottom - divContentsRect.top;
+            divContents.style.height = divContentsHeight + 'px';
+        }
+
+        function setSelectBoxOption(arr_opt, node, sel_id, count) {
+            var _select = document.getElementById(sel_id);
+            for (var i = 0; i < count; i++) {
+                _select.options.add(new Option(arr_opt.text[i], arr_opt.value[i]), _select.options.length);
+            }
+        }
+
+        function fn_grid_color_toggle() {
+            var grid_select = document.getElementById('grid_select');
+
+            if (grid_select.style.display == 'none') {
+                grid_select.style.display = 'block';
+            } else {
+                grid_select.style.display = 'none';
+            }
+        }
+
+        // 환경설정에 개인화 기능 값 설정 by jh 2018.05.15
+        function personalSetting(settingId, configValue, configAttValue, localStorageValue) {
+            var config, cnt, value;
+            if (configValue == "line_height") {
+                config = KEDITORTOP.G_CURRKEDITOR._config.lineHeightList;
+                cnt = config.length;
+            } else {
+                config = KEDITORTOP.RAONKEDITOR.util.xml.getNode(KEDITORTOP.G_CURRKEDITOR._configXml, configValue);
+                cnt = KEDITORTOP.RAONKEDITOR.util.xml.count(config, configAttValue);
+            }
+
+            settingId.options.add(new Option(LayerWin.RAONKEditor_lang.setting.personal_default, ""));
+            for (var _step = 0; _step < cnt; _step++) {
+                if (configValue == "line_height") {
+                    value = config[_step];
+                } else {
+                    value = KEDITORTOP.RAONKEDITOR.util.xml.getNodeValueIdx(config, configAttValue, _step);
+                }
+                var option = new Option(value, value);
+                if (value == localStorageValue) {
+                    option.selected = true;
+                }
+                settingId.options.add(option, settingId.options.length);
+            }
+        }
+
+        function setTableLineBreakText(type) {
+            var tempStr = LayerWin.RAONKEditor_lang.setting.word_break_for_table_1;
+            if (type == 'normal') {
+                tempStr = LayerWin.RAONKEditor_lang.setting.word_break_for_table_2;
+            }
+            else {
+                if (type == '1' || type == 'break-all') {
+                    tempStr = tempStr.replace('{0}', LayerWin.RAONKEditor_lang.setting.arr_word_break.text[1]);
+                }
+                else {
+                    tempStr = tempStr.replace('{0}', LayerWin.RAONKEditor_lang.setting.arr_word_break.text[2]);
+                }
+            }
+            
+            document.getElementById('label_apply_word_break_for_table').innerHTML = tempStr;
+        }
+    </script>
+</head>
+<body style="margin:0px; padding:0px; " onload="page_loaded_event();">
+    <div id="keditor_dialog_box">
+        <!-- Header -->
+        <div class="EdiTor_Popup_header">
+            <span class="subject" id="span_title">환경설정</span><span class="text"></span>
+            <div class="close">
+                <a href="javascript:event_keditor_image_upload_cancel();" title="close"></a>
+            </div>
+        </div>
+        <!-- // Header -->
+        <!-- Contents / general -->
+        <div class="EdiTor_Popup_contents view">
+            <div class="contents" id="div_contents">
+                <div class="speech_balloons" id="access_div" style="position:absolute; display:none; width:287px;">
+                    <span class="sp_t" style="width:270px;"><p></p></span>
+                    <span class="sp_arrow"><img src="../images/editor/dialog/speech_arrow.gif" width="15" height="16" alt="web accessibility" /></span>
+                </div>
+                <div class="con border" style="display:none;">
+                    <table cellpadding="0" cellspacing="0" style="table-layout:auto !important;">
+                        <tr>
+                            <td style="width: 25%;">
+                                <span id="span_grid_color">그리드 색상</span>
+                            </td>
+                            <td colspan="3" style="width: 75%;">
+                                <div style="z-index: 1; position: relative;">
+                                    <button class="color_btn" type="button" title="색상" onclick="fn_grid_color_toggle();" id="btn_color">
+                                        <span class="cr" style="background: #8b0000;" id="grid_color"></span><span id="grid_color_name" class="crn">Dark Red</span>
+                                    </button>
+                                    <div id="grid_select" class="grid" style="z-index: 1; position: absolute; left: 0px; top: 20px; _left: 2px; display:none;">
+                                        <ul id="grid_select_ul">
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #000;"></span>
+                                                    <span class="crn">Black</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #808080;"></span>
+                                                    <span class="crn">Gray</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #d3d3d3;"></span>
+                                                    <span class="crn">Light Gray</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #8b0000;"></span>
+                                                    <span class="crn">Dark Red</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ff0000;"></span>
+                                                    <span class="crn">Red</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ff7f50;"></span>
+                                                    <span class="crn">Coral</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ffa07a;"></span>
+                                                    <span class="crn">Light Salmon</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ffdab9;"></span>
+                                                    <span class="crn">Peach Puff</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ffe4c4;"></span>
+                                                    <span class="crn">Bisque</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #d2b48c;"></span>
+                                                    <span class="crn">Tan</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #f5deb3;"></span>
+                                                    <span class="crn">Wheat</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #daa520;"></span>
+                                                    <span class="crn">Goldenrod</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ffd700;"></span>
+                                                    <span class="crn">Gold</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #eee8aa;"></span>
+                                                    <span class="crn">Pale Goldenrod</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #adff2f;"></span>
+                                                    <span class="crn">Green Yellow</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #90ee90;"></span>
+                                                    <span class="crn">Light Green</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #008000;"></span>
+                                                    <span class="crn">Green</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #00ff00;"></span>
+                                                    <span class="crn">Lime</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #7fffd4;"></span>
+                                                    <span class="crn">Aqua marine</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #00ffff;"></span>
+                                                    <span class="crn">Cyan</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #00ced1;"></span>
+                                                    <span class="crn">Dark Turquoise</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #87ceeb;"></span>
+                                                    <span class="crn">Sky Blue</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #4682b4;"></span>
+                                                    <span class="crn">Steel Blue</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #6495ed;"></span>
+                                                    <span class="crn">Cornflower Blue</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #4169e1;"></span>
+                                                    <span class="crn">Royal Blue</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #0000ff;"></span>
+                                                    <span class="crn">Blue</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #9370db;"></span>
+                                                    <span class="crn">Medium Purple</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #8a2be2;"></span>
+                                                    <span class="crn">Blue Violet</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #800080;"></span>
+                                                    <span class="crn">Purple</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ff00ff;"></span>
+                                                    <span class="crn">Magenta</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ff1493;"></span>
+                                                    <span class="crn">Deep Pink</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sebt" href="javascript:void(0);">
+                                                    <span class="cr" style="background-color: #ffc0cb;"></span>
+                                                    <span class="crn">Pink</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%;">
+                                <label for="grid_spans" id="label_grid_spans">그리드 간격</label>
+                            </td>
+                            <td style="width: 20%;">
+                                <select id="grid_spans" style="width: 50px;">
+                                    <option value="8">8</option>
+                                    <option value="12">12</option>
+                                    <option value="16">16</option>
+                                    <option value="24">24</option>
+                                    <option value="32">32</option>
+                                    <option value="50" selected>50</option>
+                                    <option value="64">64</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </td>
+                            <td style="width: 25%;">
+                                <span id="span_grid_form">그리드 모양</span>
+                            </td>
+                            <td style="width: 30%;">
+                                <input id="grid_line" name="grid_form" type="radio" value="line" checked="checked" />
+                                <label style="vertical-align: middle;" for="grid_line" id="label_grid_form_line">선</label>
+                                <input id="grid_dot" name="grid_form" type="radio" value="dot" style="margin-left: 7px;" />
+                                <label style="vertical-align: middle;" for="grid_dot" id="label_grid_form_dot">점</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--<div class="con border">-->
+                <div class="con border" id="div_lang">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width: 25%;">
+                                <label for="page_title" id="label_page_title">페이지명</label>
+                                <a href="javascript:LayerWin.showAccessPopup(document, document.getElementById('access_img'), document.getElementById('access_div'), LayerWin.RAONKEditor_lang.access_explain.page_title, 15, 0);"><img id="access_img" src="../images/editor/dialog/editor_a.gif" alt="web_accessibility" style="margin-left:5px; border:0;" /></a>
+                            </td>
+                            <td style="width: 75%;">
+                                <input id="page_title" style="width: 260px;" class="con_input" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%;">
+                                <label for="encoding" id="label_encoding">인코딩</label>
+                            </td>
+                            <td style="width: 75%;">
+                                <select id="encoding" style="width: 160px;"></select>
+                                <input id="encoding_value" style="width: 90px; margin-left: 5px;" class="con_input" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%;">
+                                <label for="doctype" id="label_doctype">문서 유형 :</label>
+                            </td>
+                            <td style="width: 75%;">
+                                <select id="doctype" style="width: 160px;">
+                                    <option value="None">""</option>
+                                    <option value="HTML 5">HTML 5</option>
+                                    <option value="XHTML 1.1">XHTML 1.1</option>
+                                    <option value="XHTML 1.0 Transitional">XHTML 1.0 Transitional</option>
+                                    <option value="XHTML 1.0 Strict">XHTML 1.0 Strict</option>
+                                    <option value="XHTML 1.0 Frameset">XHTML 1.0 Frameset</option>
+                                    <option value="HTML 4.01 Transitional">HTML 4.01 Transitional</option>
+                                    <option value="HTML 4.01 Strict">HTML 4.01 Strict</option>
+                                    <option value="HTML 4.01 Frameset">HTML 4.01 Frameset</option>
+                                    <option value="HTML 3.2">HTML 3.2</option>
+                                    <option value="HTML 2.0">HTML 2.0</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 25%;">
+                                <label for="lang" id="label_lang">Language</label>
+                            </td>
+                            <td style="width: 75%;">
+                                <select id="lang" style="width: 160px;"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input id="xhtml" type="checkbox" value="http://www.w3.org/1999/xhtml" /> <label style="vertical-align: middle;" for="xhtml" id="label_xhtml">XHTML 문서정의</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- 줄 바꿈 기능 Start by sj.yoo 19.04.24 -->
+                <div id="div_word_break_wrap_setting" class="con" style="display:none;">
+                    <table>
+                        <tr id="tr_word_break">
+                            <td style="width: 40%;">
+                                <label for="word_break" id="label_word_break"></label>
+                            </td>
+                            <td>
+                                <select id="word_break" style="width: 205px;" onchange="javascript:setTableLineBreakText(this.value)"></select>
+                            </td>
+                        </tr>
+                        <tr id="tr_word_wrap">
+                            <td style="width: 40%;">
+                                <label for="word_wrap" id="label_word_wrap"></label>
+                            </td>
+                            <td>
+                                <select id="word_wrap" style="width: 205px;"></select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="div_word_break_for_table" class="con border">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td colspan="4">
+                                <input id="check_apply_word_break_for_table" type="checkbox" />
+                                <label for="check_apply_word_break_for_table" id="label_apply_word_break_for_table" style="vertical-align: middle;"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- 줄 바꿈 기능 End by sj.yoo 19.04.24 -->
+                <!--<div class="con border" id="div_ruler">-->
+                <div class="con border" id="div_ruler" style="display:none;">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width: 30%;">
+                                <input id="check_ruler" type="checkbox" />
+                                <label for="check_ruler" id="label_ruler" style="vertical-align: middle;">눈금자 사용</label>
+                            </td>
+                            <td style="width: 24%;">
+                                <label for="ruler_px" id="label_ruler_px" style="vertical-align: middle;"></label>
+                            </td>
+                            <td style="width: 46%;">
+                                <!--<td style="width: 75%;">-->
+                                <input id="ruler_px" class="con_input" style="width: 90px;" />px
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="div_auto_save" class="con" style="display:none;">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width: 30%;">
+                                <input id="check_auto_save" type="checkbox" />
+                                <label for="check_auto_save" id="label_auto_save" style="vertical-align: middle;"></label>
+                            </td>
+                            <td style="width: 25%;">
+                                <input id="input_auto_save" class="con_input" style="width: 50px;" /> <span id="span_auto_save_minute"></span>
+                            </td>
+                            <td style="width: 45%;">
+                                <input id="check_auto_list" type="checkbox" />
+                                <label for="check_auto_list" id="label_auto_list" style="vertical-align: middle;">자동 글머리 사용</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="div_paste_to_image" class="con border" style="display:none;">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr id="tr_personal_paste_to_image">
+                            <td style="width: 50%;">
+                                <label for="personal_paste_to_image" id="label_personal_paste_to_image"></label>
+                            </td>
+                            <td style="width: 50%;">
+                                <select id="personal_paste_to_image" style="width: 167px;"></select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- 개인화 기능 Start by jh 2018.05.15 -->
+                <div id="div_personal_setting" class="con" style="display:none;">
+                    <table>
+                        <tr id="tr_personal_font_family">
+                            <td style="width: 25%;">
+                                <label for="personal_font_family" id="label_personal_font_family"></label>
+                            </td>
+                            <td style="width: 75%;">
+                                <select id="personal_font_family" style="width: 260px;"></select>
+                            </td>
+                        </tr>
+                        <tr id="tr_personal_font_size">
+                            <td style="width: 25%;">
+                                <label for="personal_font_size" id="label_personal_font_size"></label>
+                            </td>
+                            <td style="width: 75%;">
+                                <select id="personal_font_size" style="width: 260px;"></select>
+                            </td>
+                        </tr>
+                        <tr id="tr_personal_line_height">
+                            <td style="width: 25%;">
+                                <label for="personal_line_height" id="label_personal_line_height"></label>
+                            </td>
+                            <td style="width: 75%;">
+                                <select id="personal_line_height" style="width: 260px;"></select>
+                            </td>
+                        </tr>
+                        <!--<tr>
+                <td colspan="2">
+                    <span id="personal_use_msg" style="font-size:11px; color:rgb(229, 94, 53);"></span>
+                </td>
+            </tr>-->
+                    </table>
+                </div>
+                <!-- 개인화 기능 End by jh 2018.05.15 -->
+            </div>
+        </div>
+        <!-- // Contents -->
+        <!-- Footer -->
+        <div class="EdiTor_Popup_footer">
+            <a style="cursor:pointer;" href="javascript:keditor_setting();" class="confirm" id="btn_ok_a"><span id="btn_ok">확인</span></a> <a href="javascript:event_popup_close();" class="cancel"><span id="btn_cancel">취소</span></a>
+        </div>
+        <!-- // Footer -->
+    </div>
+</body>
+</html>

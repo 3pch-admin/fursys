@@ -1,0 +1,1 @@
+(function(){var a={icon:{p_popuppreview:"\u30d7\u30ec\u30d3\u30e5\u30fc (\u5225\u30a6\u30a3\u30f3\u30c9\u30a6)"}};try{if(G_KPlugin){G_KPlugin.popuppreview.lang=a;RAONKEditor_lang.plugins.popuppreview=a;var b=document.getElementById("ue_"+KEDITORTOP.G_CURRKEDITOR.ID+"p_popuppreview");b&&b.setAttribute("title",a.icon.p_popuppreview)}}catch(c){}})();

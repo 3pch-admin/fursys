@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Translate</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt type="text/javascript" src="../config/editor_crossdomain_config.js?t=' + (new Date).getTime() + '"><\/scr' + 'ipt>');
+    </script>
+
+    <!--한/영 변환 js by jh 2017.04.14-->
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt type="text/javascript" src="../js_dev/editor_translate.js"><\/scr' + 'ipt>');
+    </script>
+
+    <script type="text/javascript">
+        var KEDITORTOP = parent;
+
+        var KEditorLayerFrame = KEDITORTOP.KEDITORDOC.getElementById("raonk_frame_" + KEDITORTOP.G_CURRKEDITOR.ID);
+        if (KEDITORTOP.G_CURRKEDITOR.dialogWindow != null) {
+            KEDITORTOP = KEditorLayerFrame.contentWindow.KEDITORTOP;
+        }
+        var KEditorLayerWin = KEditorLayerFrame.contentWindow;
+
+        document.write('<link href="' + KEditorLayerWin._k_editor._config.popupCssUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" rel="stylesheet" type="text/css" />');
+        document.write('<scr' + 'ipt src="' + KEditorLayerWin._k_editor._config.dialogJSUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+
+    <script>
+        function page_loaded_event() {
+            var _skin_name = LayerWin._k_editor._config.style.skinName;
+            document.getElementById("keditor_dialog_box").className = 'K_edITor_ED_Popup_Type02 K_edITor_PUi_' + _skin_name;
+
+            var span_title = document.getElementById("span_title");
+            var source_title = document.getElementById("source_title");
+            var target_title = document.getElementById("target_title");
+            var KtoE_title = document.getElementById("KtoE_title");
+            var EtoK_title = document.getElementById("EtoK_title")
+            var msg = document.getElementById("msg");
+
+            // 선택 영역의 텍스트를 뽑아 sourceContent에 삽입 by jh 2017.04.14
+            var Range = LayerWin.getFirstRange();
+            var selObjectText = Range.range;
+
+            if (selObjectText == null || selObjectText.toString().length == 0 || selObjectText == undefined) {
+                selObjectText = LayerWin._k_editor._LastRange;
+            }
+
+            if (selObjectText != null) {
+                try {
+                    if (selObjectText.toString && selObjectText.toString().length > 0) {
+                        sourceContent.value = selObjectText;
+                    } else if (selObjectText.text && selObjectText.text().length > 0) {
+                        sourceContent.value = selObjectText;
+                    }
+                } catch (e) {
+                    sourceContent.value = ""; // selObjectText.text;
+                }
+            }
+            convert();
+
+            var ok_btn = document.getElementById("ok_btn");
+            KEDITORTOP.RAONKEDITOR.util.addEvent(ok_btn, 'click', function () {
+                keditor_create_translate();
+            });
+
+            span_title.innerHTML = LayerWin.RAONKEditor_lang.translate.span_title;
+            source_title.innerHTML = LayerWin.RAONKEditor_lang.translate.source_title;
+            target_title.innerHTML = LayerWin.RAONKEditor_lang.translate.target_title;
+            KtoE_title.innerHTML = LayerWin.RAONKEditor_lang.translate.KtoE_title;
+            EtoK_title.innerHTML = LayerWin.RAONKEditor_lang.translate.EtoK_title;
+            msg.innerHTML = LayerWin.RAONKEditor_lang.translate.msg;
+        }
+
+        // 한영 변환 함수 호출 by jh 2017.04.14
+        function convert() {
+            doConvert(checkValue(), sourceContent, targetContent);
+        }
+
+        // 라디오 버튼 체크 by jh 2017.04.14
+        function checkValue() {
+            if (EtoK.checked) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    </script>
+
+</head>
+<body style="margin:0px; padding:0px;" onload="page_loaded_event()">
+    <div class="K_edITor_ED_Popup_Type02 K_edITor_PUi_blue" id="keditor_dialog_box">
+        <!-- Header -->
+        <div class="EdiTor_Popup_header">
+            <span class="subject" id="span_title">한/영 변환</span><span class="text">RAONKEDITOR Editor</span>
+            <div class="close">
+                <a href="javascript:event_popup_close();" title="close"></a>
+            </div>
+        </div>
+        <!-- // Header -->
+        <!-- Contents / general -->
+        <div class="EdiTor_Popup_contents view">
+            <div class="contents" style="height: 180px;">
+                <div class="con">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width:80px; height:auto">
+                                <span id="source_title">문장 입력</span>
+                            </td>
+                            <td style="width:380px; height:auto">
+                                <textarea id="sourceContent" style="width:350px;height:50px;" onkeyup="convert();"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="radio" name="translate" id="EtoK" value="true" checked="checked" onclick="this.blur()" onchange="convert();" /> <span id="EtoK_title">영타 → 한타</span>
+                            </td>
+                            <td>
+                                <input type="radio" name="translate" id="KtoE" value="false" onclick="this.blur()" onchange="convert();" /> <span id="KtoE_title">한타 → 영타</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="con">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width:80px; height:auto">
+                                <span id="target_title">변환 결과</span>
+                            </td>
+                            <td style="width:380px; height:auto">
+                                <textarea id="targetContent" style="width:350px;height:50px;" readonly></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span id="msg" style="font-size:11px"> ※ 한/영 변환 시 적용된 서식이 사라질 수 있습니다.</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- // Contents -->
+        <!-- Footer -->
+        <div class="EdiTor_Popup_footer">
+            <a href="javascript:void(0);" class="confirm" id="ok_btn"><span id="span_ok_btn">확인</span></a>
+            <a href="javascript:event_popup_close();" class="cancel" id="cancel_btn"><span id="span_cancel_btn">취소</span></a>
+        </div>
+        <!-- // Footer -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,628 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Video</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt src="../config/editor_crossdomain_config.js?t=' + (new Date).getTime() + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+
+    <script type="text/javascript">
+        var KEDITORTOP = parent;
+        var KEditorLayerFrame = KEDITORTOP.KEDITORDOC.getElementById("raonk_frame_" + KEDITORTOP.G_CURRKEDITOR.ID);
+        if (KEDITORTOP.G_CURRKEDITOR.dialogWindow != null) {
+            KEDITORTOP = KEditorLayerFrame.contentWindow.KEDITORTOP;
+        }
+        var KEditorLayerWin = KEditorLayerFrame.contentWindow;
+
+        document.write('<link href="' + KEditorLayerWin._k_editor._config.popupCssUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" rel="stylesheet" type="text/css" />');
+        document.write('<scr' + 'ipt src="' + KEditorLayerWin._k_editor._config.dialogJSUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" type="text/javascript"><\/scr' + 'ipt>');
+
+        if (KEditorLayerWin._k_editor._config.uploadUseHTML5 == "1" || KEditorLayerWin._k_editor._config.useKManager == '1') {
+            document.write('<scr' + 'ipt src="' + KEditorLayerWin._k_editor._config.ajaxUploadJSUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" type="text/javascript"><\/scr' + 'ipt>');
+        }
+    </script>
+
+    <script type="text/javascript">
+        var file_field_id = LayerWin._k_editor._config.fileFieldID;
+
+        var elemModify = KEDITORTOP.RAONKEDITOR.G_SELECTED_ELEMENT;
+        var elemData = null;
+
+        if (elemModify != null) {
+            try {
+                if (KEditorLayerWin._k_editor._config.useReplaceImage == "0") {
+                    if (elemModify.tagName == 'VIDEO') {
+                        elemData = LayerWin.getKEditorVideoData(elemModify);
+                    } else {
+                        elemData = null;
+                        elemModify = null;
+                    }
+                } else {
+                    var keyid = elemModify.getAttribute('keditorcustomdata');
+                    if (keyid != null && keyid != undefined) {
+                        elemData = LayerWin.getKEditorCustomData(keyid);
+                    } else {
+                        KEDITORTOP.RAONKEDITOR.G_SELECTED_ELEMENT = elemModify = null;
+                    }
+                }
+            } catch (e) {
+                elemModify = null;
+            }
+        }
+
+        function page_loaded_event() {
+            set_upload_holder('video_media');
+            set_upload_holder('poster_media');
+            set_page_lang();
+            set_page_lang2('video_media');
+            set_page_lang2('poster_media');
+
+            if (LayerWin._k_editor._config.uploadUseHTML5 != "1" && KEditorLayerWin._k_editor._config.useKManager != '1') {
+                var _upload_frame = document.getElementById("upload_frame");
+
+                var eventHandler = function () {
+                    var _body;
+
+                    try {
+                        _body = (_upload_frame.contentDocument) ? _upload_frame.contentDocument.body : _upload_frame.contentWindow.document.body;
+                    }
+                    catch (e) {
+                        _body = _upload_frame.document.body;
+                    }
+
+                    if ('textContent' in _body) { _web_url = _body.textContent; }
+                    else { _web_url = _body.innerText; }
+                    event_keditor_video_upload_completed(_web_url);
+                }
+
+                KEDITORTOP.RAONKEDITOR.util.addEvent(_upload_frame, "load", eventHandler, true);
+            }
+
+            set_page();
+
+            if (LayerDoc.compatMode == "BackCompat") {
+                var inputs = document.getElementsByTagName('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == 'text') {
+                        inputs[i].style.height = '20px';
+                    }
+                }
+            }
+
+            var media_width = document.getElementById('media_width');
+            var media_height = document.getElementById('media_height');
+            KEDITORTOP.RAONKEDITOR.util.addEvent(media_width, 'keydown', LayerWin.onlyNumber);
+            KEDITORTOP.RAONKEDITOR.util.addEvent(media_height, 'keydown', LayerWin.onlyNumber);
+
+
+            var btn_ok_a = document.getElementById('btn_ok_a');
+            if (elemData != null) {
+                KEDITORTOP.RAONKEDITOR.util.addEvent(btn_ok_a, 'click', function () {
+                    G_UploadCompleteCallBackFn = processEnd;
+
+                    if (KEditorLayerWin._k_editor._config.useVideoPoster == '0') {
+                        if (keditor_upload_video_media_validation('video_media')) {
+                            keditor_upload_video_media();
+                        }
+                    } else {
+                        if (keditor_upload_video_media_validation('poster_media') && keditor_upload_video_media_validation('video_media')) {
+                            keditor_upload_poster_media();
+                        }
+                    }
+                });
+
+                set_modify_field();
+                set_modify_field2('video_media');
+                set_modify_field2('poster_media');
+            } else {
+                KEDITORTOP.RAONKEDITOR.util.addEvent(btn_ok_a, 'click', function () {
+                    if (KEditorLayerWin._k_editor._config.useVideoPoster == '0') {
+                        if (keditor_upload_video_media_validation('video_media')) {
+                            keditor_upload_video_media();
+                        }
+                    } else {
+                        if (keditor_upload_video_media_validation('poster_media') && keditor_upload_video_media_validation('video_media')) {
+                            keditor_upload_poster_media();
+                        }
+                    }
+                });
+            }
+
+            setCursorPos(document.getElementById('radio_video_media_file_info'), false, false);
+            LayerWin.setFocusFirstAndLast(document, document.getElementById('radio_video_media_file_info'));
+        }
+
+        function set_upload_holder(_type) {
+            var _td0InnerHtml = '', _td1InnerHtml = '', _td2InnerHtml = '', _td3InnerHtml = '';
+
+            if (KEditorLayerWin._k_editor._config.uploadUseHTML5 == "1" || KEditorLayerWin._k_editor._config.useKManager == '1') {
+                _td0InnerHtml = '<label id="label_' + _type + '_file_title"></label>'
+                _td1InnerHtml = '<input id="radio_' + _type + '_file_info" name="InputFlag_' + _type + '" onclick="InputFlag_change(this, \'' + _type + '\');" type="radio" value="1" checked="checked" />';
+                _td2InnerHtml = '<label id="label_' + _type + '_file_info" for="radio_' + _type + '_file_info"></label>';
+                _td3InnerHtml = '<input type="hidden" id="' + _type + '_text" />';
+                _td3InnerHtml += '<div class="K_edITor_ED_Popup_DropZone K_edITor_ED_Popup_DropZone_1" id="drop_zone_' + _type + '" drop_zone_uploadtype="' + _type + '" file_text="' + _type + '_text" style="border:dashed 1px gray; width:100%; height:40px; line-height:40px; text-align:center; color:gray; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;"></div>';
+                _td3InnerHtml += '<div style="position:absolute; left:0px; top:-40px;"><input class="noline" type="file" id="Filedata_' + _type + '" name="Filedata' + _type + '" style="width:0px; height:0px" onchange="fileOnchange(this, \'' + _type + '\', \'drop_zone_' + _type + '\');" /></div>';
+
+            } else {
+                //_td0InnerHtml = '<label id="label_video_file_title"></label>'
+                //_td1InnerHtml = '<input id="radio_video_file_info" name="InputFlag" onclick="InputFlag_change(this);" type="radio" value="1" checked="checked" />';
+                //_td2InnerHtml = '<label id="label_video_file_info" for="radio_video_file_info"></label>';
+                //_td3InnerHtml = '<span id="file_find_sec"><input name="image_url" id="image_url" type="text" class="con_input" style="width:180px; float:left;background:#fff" disabled="disabled" />';
+                //_td3InnerHtml += '<span id="find_file_nm" style="width:67px; height:20px; *margin-left:-3px;_margin-left:-3px; background-position: 0px 0px; display:block; float:left; cursor:pointer; background-repeat:no-repeat;">';
+                //_td3InnerHtml += '<span id="file_input_search" class="file_input_button2">찾아보기</span>';
+                //_td3InnerHtml += '<input class="noline" type="file" id="Filedata" name="Filedata" style="margin-top:-35px;*margin-top: -28px; margin-left:-185px;width:260px;height:25px; opacity:0; filter:alpha(opacity=0); -moz-opacity:0; cursor:pointer;" onchange="fileOnchange(this, \'video_media\', \'drop_zone_video\');" />';
+                //_td3InnerHtml += '<a href="javascript:void(0);" id="a_file"></a></span></span>';
+            }
+            var _td0 = document.createElement('td');
+            _td0.width = '13%';
+            _td0.rowSpan = '2';
+            _td0.style.textAlign = 'center';
+            _td0.style.display = 'none';
+            _td0.innerHTML = _td0InnerHtml;
+
+            var _td1 = document.createElement('td');
+            _td1.width = '7%';
+            _td1.innerHTML = _td1InnerHtml;
+
+            var _td2 = document.createElement('td');
+            _td2.width = '20%';
+            _td2.innerHTML = _td2InnerHtml;
+
+            var _td3 = document.createElement('td');
+            _td3.width = '60%';
+            if (KEditorLayerWin._k_editor._config.uploadUseHTML5 == "1" || KEditorLayerWin._k_editor._config.useKManager == '1') {
+                _td3.rowSpan = '2';
+                _td3.id = '_td_drop_zone_' + _type;
+            }
+            _td3.innerHTML = _td3InnerHtml;
+
+            document.getElementById(_type + '_file_tag_or_drop_zone').appendChild(_td0);
+            document.getElementById(_type + '_file_tag_or_drop_zone').appendChild(_td1);
+            document.getElementById(_type + '_file_tag_or_drop_zone').appendChild(_td2);
+            document.getElementById(_type + '_file_tag_or_drop_zone').appendChild(_td3);
+
+            if (KEditorLayerWin._k_editor._config.uploadUseHTML5 == "1" || KEditorLayerWin._k_editor._config.useKManager == '1') {
+                setDragAndDropEvent('drop_zone_' + _type);
+
+                // url입력 input태그 hidden
+                document.getElementById('drop_zone_' + _type).removeAttribute('hidden')
+                document.getElementById('web_' + _type + '_url').setAttribute('hidden', 'hidden');
+            }
+
+            changeStyleForiOS(document.getElementById('media_width_unit'), { width: '25px' });
+            changeStyleForiOS(document.getElementById('media_height_unit'), { width: '25px' });
+        }
+
+        function set_page() {
+            var _upload_url = LayerWin._k_editor._config.handlerUrl;
+            document.getElementById("upload_url").value = _upload_url;
+
+            var _proxy_url = LayerWin._k_editor._config.proxy_url;
+
+            var enforceDocumentDomain = false;
+            try {
+                enforceDocumentDomain = kEditorEnforceDocumentDomain;
+            } catch (e) { }
+            var currentDocDomain = document.domain;
+            if (enforceDocumentDomain) {
+                currentDocDomain += '|';
+            }
+
+            document.getElementById("tr_responsiveWidth").style.display = KEditorLayerWin._k_editor._config.useReplaceImage === '1' ? 'none' : '';
+            if (KEditorLayerWin._k_editor._config.useReplaceImage === '0') {
+                document.getElementById("cb_responsiveWidth").checked = KEditorLayerWin._k_editor._config.videoResponsiveWidthDefaultValue === '1' ? true : false;
+            }
+
+            var div_poster_con = document.getElementById('div_poster_con');
+            div_poster_con.style.display = KEditorLayerWin._k_editor._config.useVideoPoster == '0' ? 'none' : '';
+        }
+
+        function set_page_lang() {
+            var _skin_name = LayerWin._k_editor._config.style.skinName;
+            document.getElementById("keditor_dialog_box").className = 'K_edITor_ED_Popup_Type03 K_edITor_PUi_' + _skin_name;
+            document.getElementById("span_title").innerHTML = LayerWin.RAONKEditor_lang.video.title;
+
+            document.getElementById("label_width").innerHTML = LayerWin.RAONKEditor_lang.video.width;
+            document.getElementById("label_responsiveWidth").innerHTML = LayerWin.RAONKEditor_lang.video.responsive_width;
+            document.getElementById("label_height").innerHTML = LayerWin.RAONKEditor_lang.video.height;
+            document.getElementById("label_auto_start").innerHTML = LayerWin.RAONKEditor_lang.video.auto_start;
+            document.getElementById("label_infinity_loop").innerHTML = LayerWin.RAONKEditor_lang.video.infinity_loop;
+            document.getElementById("label_show_controls").innerHTML = LayerWin.RAONKEditor_lang.video.show_controls;
+            document.getElementById("label_show_muted").innerHTML = LayerWin.RAONKEditor_lang.video.show_volumn;
+            document.getElementById("label_allow_download").innerHTML = LayerWin.RAONKEditor_lang.video.allow_download;
+
+            document.getElementById("btn_ok").innerHTML = LayerWin.RAONKEditor_lang.video.btn_ok;
+            document.getElementById("btn_cancel").innerHTML = LayerWin.RAONKEditor_lang.video.btn_cancel;
+
+            document.title = LayerWin.RAONKEditor_lang.video.frame_title;
+
+            var header = LayerWin.getElementsByClass('EdiTor_Popup_header', document);
+            header[0].onselectstart = function () { return false; };
+        }
+
+        function set_page_lang2(_type) {
+            if (_type === 'video_media') {
+                document.getElementById("label_" + _type + "_file_title").innerHTML = LayerWin.RAONKEditor_lang.video.video;
+
+                /*
+                if (LayerWin.RAONKEditor_lang.video.videofile_user_msg === '') {
+                    document.getElementById("tr_" + _type + "_file_user_msg").parentNode.style.display = 'none';
+                } else {
+                    var _videoFileUserMsg = LayerWin.RAONKEditor_lang.video.videofile_user_msg;
+                    _videoFileUserMsg = _videoFileUserMsg.replace("{allow_extension}", KEditorLayerWin._k_editor._config.allowVideoFileType.join(', ').toUpperCase());
+                    if (KEditorLayerWin._k_editor._config.maxVideoFileSize !== 0) {
+                        _videoFileUserMsg = _videoFileUserMsg.replace("{max_size}", KEDITORTOP.RAONKEDITOR.util.bytesToSize(KEditorLayerWin._k_editor._config.maxVideoFileSize).toString);
+                    } else {
+                        _videoFileUserMsg = _videoFileUserMsg.replace("{max_size}", LayerWin.RAONKEditor_lang.video.unlimited);
+                    }
+                    document.getElementById("tr_" + _type + "_file_user_msg").parentNode.style.display = '';
+                    document.getElementById("tr_" + _type + "_file_user_msg").innerHTML = _videoFileUserMsg;
+                }
+                */
+                document.getElementById("tr_" + _type + "_file_user_msg").parentNode.style.display = 'none';
+            } else {
+                document.getElementById("label_" + _type + "_file_title").innerHTML = LayerWin.RAONKEditor_lang.video.poster;
+
+                if (LayerWin.RAONKEditor_lang.video.posterfile_user_msg === '') {
+                    document.getElementById("tr_" + _type + "_file_user_msg").parentNode.style.display = 'none';
+                } else {
+                    var _posterFileUserMsg = LayerWin.RAONKEditor_lang.video.posterfile_user_msg;
+                    _posterFileUserMsg = _posterFileUserMsg.replace("{allow_extension}", KEditorLayerWin._k_editor._config.allowImageFileType.join(', ').toUpperCase());
+                    if (KEditorLayerWin._k_editor._config.maxImageFileSize !== 0) {
+                        _posterFileUserMsg = _posterFileUserMsg.replace("{max_size}", KEDITORTOP.RAONKEDITOR.util.bytesToSize(KEditorLayerWin._k_editor._config.maxImageFileSize).toString);
+                    } else {
+                        _posterFileUserMsg = _posterFileUserMsg.replace("{max_size}", LayerWin.RAONKEditor_lang.video.unlimited);
+                    }
+                    document.getElementById("tr_" + _type + "_file_user_msg").parentNode.style.display = '';
+                    document.getElementById("tr_" + _type + "_file_user_msg").innerHTML = _posterFileUserMsg;
+                }
+            }
+
+            document.getElementById("label_" + _type + "_file_info").innerHTML = LayerWin.RAONKEditor_lang.video.file_info2;
+            document.getElementById("url_label_" + _type + "_file_info").innerHTML = LayerWin.RAONKEditor_lang.video.url_insert2;
+
+            if (KEditorLayerWin._k_editor._config.uploadUseHTML5 == "1" || KEditorLayerWin._k_editor._config.useKManager == '1') {
+                if (KEDITORTOP.RAONKEDITOR.browser.mobile == true || KEDITORTOP.RAONKEDITOR.UserAgent.device.type == 'mobile') {
+                    document.getElementById("drop_zone_" + _type).innerHTML = LayerWin.RAONKEditor_lang.upload.drop_zone_content2; // 모바일 드랍존 문구
+                }
+                else {
+                    document.getElementById("drop_zone_" + _type).innerHTML = LayerWin.RAONKEditor_lang.upload.drop_zone_content; // 드랍존 문구
+                }
+            }
+        }
+
+        function set_modify_field() {
+            var _width = document.getElementById('media_width');
+            var _height = document.getElementById('media_height');
+
+            var selectWidthUnit = document.getElementById('media_width_unit');
+            var selectHeightUnit = document.getElementById('media_height_unit');
+
+            var tmpWidth = tmpHeight = "";
+            tmpWidth = elemModify.getAttribute("width");
+            if (tmpWidth == null) {
+                tmpWidth = elemData.width;
+            }
+            tmpHeight = elemModify.getAttribute("height")
+            if (tmpHeight == null) {
+                tmpHeight = elemData.height;
+            }
+
+            if (tmpWidth.indexOf('%') > -1) {
+                selectWidthUnit.value = '%';
+            } else {
+                selectWidthUnit.value = 'px';
+            }
+            _width.value = tmpWidth.replace("px", "").replace("%", "");
+
+            if (tmpHeight.indexOf('%') > -1) {
+                selectHeightUnit.value = '%';
+            } else {
+                selectHeightUnit.value = 'px';
+            }
+            _height.value = tmpHeight.replace("px", "").replace("%", "");
+
+            var cb_autostart = document.getElementById('cb_autostart');
+            var cb_loop = document.getElementById('cb_loop');
+            var cb_controls = document.getElementById('cb_controls');
+            var cb_muted = document.getElementById('cb_muted');
+            var cb_responsiveWidth = document.getElementById('cb_responsiveWidth');
+            var cb_allowDownload = document.getElementById('cb_allowDownload');
+
+            cb_autostart.checked = elemData.autoPlay;
+            cb_loop.checked = elemData.loop;
+            cb_controls.checked = elemData.controls;
+            cb_muted.checked = elemData.muted;
+            cb_responsiveWidth.checked = elemData.responsiveWidth;
+            cb_allowDownload.checked = elemData.allowDownload;
+        }
+
+        function set_modify_field2(_type) {
+            var web_media_url = document.getElementById('web_' + _type + '_url');
+
+            if (_type === 'video_media') {
+                if (elemData.src != "") { web_media_url.value = elemData.src }
+                else if (elemData.source.length > 0) { web_media_url.value = elemData.source[0].src; }
+            } else {
+                if (elemData.poster != "") { web_media_url.value = elemData.poster }
+            }
+
+            if (KEditorLayerWin._k_editor._config.uploadUseHTML5 == "1" || KEditorLayerWin._k_editor._config.useKManager == '1') {
+                var modify_default_radio = document.getElementById('radio_' + _type + '_url');
+                var modify_radio = document.getElementById('radio_' + _type + '_file_info');
+                modify_radio && modify_radio.removeAttribute('checked');
+                modify_default_radio && modify_default_radio.setAttribute('checked', 'checked');
+                InputFlag_change(modify_default_radio, _type);
+            }
+        }
+
+        function InputFlag_change(obj, _type) {
+
+            var web_url = document.getElementById("web_" + _type + "_url");
+
+            if (KEditorLayerWin._k_editor._config.uploadUseHTML5 == "1" || KEditorLayerWin._k_editor._config.useKManager == '1') {
+                var drop_zone = document.getElementById("drop_zone_" + _type);
+                var td_drop_zone = document.getElementById("_td_drop_zone_" + _type);
+
+                if (obj.value == "1") {
+                    drop_zone.removeAttribute('hidden')
+                    drop_zone.setAttribute('style', 'border:dashed 1px gray; width:260px; height:40px; text-align:center; display:table-cell; vertical-align:middle; color:gray;');
+
+                    td_drop_zone.setAttribute('rowspan', '2');
+                    //web_url.value = "";
+                    web_url.setAttribute('hidden', 'hidden');
+                } else if (obj.value == "2") {
+                    drop_zone.setAttribute('hidden', 'hidden');
+                    drop_zone.removeAttribute('style');
+
+                    td_drop_zone.removeAttribute('rowspan');
+
+                    web_url.removeAttribute('hidden');
+
+                    if (!elemModify) {
+                        web_url.value = "http://";
+                        web_url.removeAttribute("disabled");
+                        setCursorPos(web_url, true, false);
+                    }
+                }
+            } else {
+                var file_data = document.getElementById(file_field_id);
+
+                file_data.setAttribute("disabled", "disabled");
+                web_url.setAttribute("disabled", "disabled");
+
+                if (!elemModify) {
+                    web_url.value = "";
+                }
+
+                if (obj.value == "1") {
+                    file_data.removeAttribute("disabled");
+                } else if (obj.value == "2") {
+                    if (!elemModify) {
+                        web_url.value = "http://";
+                    }
+                    web_url.removeAttribute("disabled");
+                    setCursorPos(web_url, true, false);
+                }
+            }
+        }
+
+        function processEnd() {
+            var _width = document.getElementById('media_width');
+            var _height = document.getElementById('media_height');
+
+            var cb_autostart = document.getElementById('cb_autostart');
+            var cb_loop = document.getElementById('cb_loop');
+            var cb_controls = document.getElementById('cb_controls');
+            var cb_muted = document.getElementById('cb_muted');
+            var cb_responsiveWidth = document.getElementById('cb_responsiveWidth');
+            var cb_allowDownload = document.getElementById('cb_allowDownload');
+
+            var selectWidthUnit = document.getElementById('media_width_unit');
+            var selectHeightUnit = document.getElementById('media_height_unit');
+
+            if (_width.value === '') {
+                elemModify.removeAttribute("width");
+            } else {
+                elemModify.setAttribute("width", (KEDITORTOP.RAONKEDITOR.util.parseIntOr0(_width.value) == 0 ? '0' : _width.value) + selectWidthUnit.value);
+            }
+            if (_height.value === '') {
+                elemModify.removeAttribute("height");
+            } else {
+                elemModify.setAttribute("height", (KEDITORTOP.RAONKEDITOR.util.parseIntOr0(_height.value) == 0 ? '0' : _height.value) + selectHeightUnit.value);
+            }
+
+            elemModify.style.width = "";
+            elemModify.style.height = "";
+
+            if (KEditorLayerWin._k_editor._config.useReplaceImage == "0") {
+                if (elemData.src != "") {
+                    elemModify.src = elemData.src;
+                } else {
+                    var _source = elemModify.getElementsByTagName('source');
+                    if (_source.length > 0) {
+                        if (typeof (_source[0]) != 'undefined') _source[0].src = elemData.source[0].src;
+                        if (typeof (_source[1]) != 'undefined') _source[1].src = '';
+                        if (typeof (_source[2]) != 'undefined') _source[2].src = '';
+
+                        var newVideo = elemModify.cloneNode(true);
+                        elemModify.parentNode.replaceChild(newVideo, elemModify);
+                        elemModify = null;
+                        elemModify = newVideo;
+                    }
+                }
+                elemModify.setAttribute("poster", elemData.poster);
+
+                if (cb_autostart.checked) { elemModify.setAttribute("autoPlay", true) } else { elemModify.removeAttribute("autoPlay"); }
+                if (cb_loop.checked) { elemModify.setAttribute("loop", true) } else { elemModify.removeAttribute("loop"); }
+                if (cb_controls.checked) { elemModify.setAttribute("controls", true) } else { elemModify.removeAttribute("controls"); }
+                if (cb_muted.checked) { elemModify.setAttribute("muted", true) } else { elemModify.removeAttribute("muted"); }
+                if (cb_responsiveWidth.checked) {
+                    elemModify.setAttribute("data-responsive", "")
+                    elemModify.style.maxWidth = "100%";
+                    elemModify.style.height = "auto";
+                } else {
+                    elemModify.removeAttribute("data-responsive");
+                    elemModify.style.maxWidth = "";
+                    elemModify.style.height = "";
+                }
+                if (cb_allowDownload.checked) {
+                    elemModify.removeAttribute("controlslist");
+                } else {
+                    elemModify.setAttribute("controlslist", "nodownload");
+                }
+            } else {
+                elemData.width = LayerWin.parseIntOr0(_width.value) == 0 ? "" : _width.value + selectWidthUnit.value;
+                elemData.height = LayerWin.parseIntOr0(_height.value) == 0 ? "" : _height.value + selectHeightUnit.value;
+                elemData.autoPlay = cb_autostart.checked;
+                elemData.loop = cb_loop.checked;
+                elemData.controls = cb_controls.checked;
+                elemData.muted = cb_muted.checked;
+                elemData.responsiveWidth = cb_responsiveWidth.checked;
+                elemData.allowDownload = cb_allowDownload.checked;
+
+                if (elemData.responsiveWidth === true) {
+                    elemModify.style.maxWidth = '100%';
+                    elemModify.style.height = 'auto';
+                }
+            }
+
+            LayerWin._k_editor.UndoManager.putUndo();
+            //event_keditor_image_upload_cancel();
+
+            LayerWin.hideDialog(window.frameElement.parentNode.parentNode);
+        }
+    </script>
+</head>
+<body style="margin:0px; padding:0px;" onload="page_loaded_event()">
+    <div class="editor_s01_popup ed_green" id="keditor_dialog_box">
+        <!-- Header -->
+        <div class="EdiTor_Popup_header">
+            <span class="subject" id="span_title"></span><span class="text">RAONKEDITOR Editor</span>
+            <div class="close">
+                <a href="javascript:event_keditor_image_upload_cancel();" title="close"></a>
+            </div>
+        </div>
+        <!-- // Header -->
+        <!-- Contents / general -->
+        <div class="EdiTor_Popup_contents view">
+            <div class="contents">
+                <input type="hidden" id="upload_url" name="upload_url" value="" />
+                <div class="con border">
+                    <form name="keditor_upload_form" id="keditor_upload_form" method="post" target="upload_frame" enctype="multipart/form-data" action="">
+                        <table cellpadding="0" cellspacing="0">
+                            <tr id="video_media_file_tag_or_drop_zone"></tr>
+                            <tr>
+                                <td><input id="radio_video_media_url" name="InputFlag_video_media" onclick="InputFlag_change(this, 'video_media');" type="radio" value="2" /></td>
+                                <td><label id="url_label_video_media_file_info" for="radio_video_media_url"></label></td>
+                                <td>
+                                    <input type="text" id="web_video_media_url" name="web_video_media_url" style="width:94%; " class="con_input" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;"></td>
+                                <td id="tr_video_media_file_user_msg" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="height:1px;" class="ue_line_b"><iframe id="upload_frame" name="upload_frame" frameborder="0" style="width:0px; height:0px; display:none;" title="K Editor Upload"></iframe></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div id="div_poster_con" class="con border">
+                    <form name="keditor_upload_poster_form" id="keditor_upload_poster_form" method="post" target="upload_poster_frame" enctype="multipart/form-data" action="">
+                        <table cellpadding="0" cellspacing="0">
+                            <tr id="poster_media_file_tag_or_drop_zone"></tr>
+                            <tr>
+                                <td><input id="radio_poster_media_url" name="InputFlag_poster_media" onclick="InputFlag_change(this, 'poster_media');" type="radio" value="2" /></td>
+                                <td><label id="url_label_poster_media_file_info" for="radio_poster_media_url"></label></td>
+                                <td>
+                                    <input type="text" id="web_poster_media_url" name="web_poster_media_url" style="width:94%; " class="con_input" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;"></td>
+                                <td id="tr_poster_media_file_user_msg" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="height:1px;" class="ue_line_b"><iframe id="upload_poster_frame" name="upload_poster_frame" frameborder="0" style="width:0px; height:0px; display:none;" title="K Editor Upload"></iframe></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div class="con border">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="30%"><label id="label_width" for="media_width"></label></td>
+                            <td width="70%">
+                                <input name="media_width" id="media_width" type="text" style="width:30px;" class="con_input" value="300" />
+                                <select id="media_width_unit">
+                                    <option selected value="px">px</option>
+                                    <option value="%">%</option>
+                                </select>
+                            </td>
+                            <td width="30%"><label id="label_height" for="media_height"></label></td>
+                            <td width="70%">
+                                <input name="media_height" id="media_height" type="text" style="width:30px;" class="con_input" value="300" />
+                                <select id="media_height_unit">
+                                    <option selected value="px">px</option>
+                                    <option value="%">%</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr id="tr_responsiveWidth">
+                            <td width="30%" align="center">
+                                <label id="label_responsiveWidth" for="cb_responsiveWidth"></label>
+                            </td>
+                            <td width="70%">
+                                <input type="checkbox" id="cb_responsiveWidth" />
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+                <div class="con">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="50%">
+                                <input type="checkbox" id="cb_autostart" />
+                                <label style="vertical-align:middle;" id="label_auto_start" for="cb_autostart"></label>
+                            </td>
+                            <td width="50%">
+                                <input type="checkbox" id="cb_loop" />
+                                <label style="vertical-align:middle;" id="label_infinity_loop" for="cb_loop"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                <input type="checkbox" id="cb_controls" checked="checked" />
+                                <label style="vertical-align:middle;" id="label_show_controls" for="cb_controls"></label>
+                            </td>
+                            <td width="50%">
+                                <input type="checkbox" id="cb_muted" />
+                                <label style="vertical-align:middle;" id="label_show_muted" for="cb_muted"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%" colspan="2">
+                                <input type="checkbox" id="cb_allowDownload" />
+                                <label style="vertical-align:middle;" id="label_allow_download" for="cb_allowDownload"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- // Contents -->
+        <!-- Footer -->
+        <div class="EdiTor_Popup_footer">
+            <span id="keditor_loading" style="display:none;"><img src="../images/editor/dialog/loading.gif" alt="working" style="vertical-align:middle; " /> Uploading... </span>
+            <a href="javascript:void(0);" class="confirm" id="btn_ok_a"><span id="btn_ok"></span></a>
+            <a href="javascript:event_keditor_image_upload_cancel();" class="cancel" id="abtn_cancel"><span id="btn_cancel"></span></a>
+        </div>
+        <!-- // Footer -->
+    </div>
+</body>
+</html>

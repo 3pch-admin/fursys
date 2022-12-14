@@ -1,0 +1,31 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+<title>RAONK Editor</title>
+    <link type="text/css" rel="stylesheet" href="css/raonkeditor.setup.css">
+    <script src="../../config/editor_crossdomain_config.js?ver=2018.1196447.1500.01" type="text/javascript"></script>
+    <link href="./plugin/select2/select2.min.css" rel="stylesheet" type="text/css">
+    <script src="./plugin/jquery-1.9.1.min.js"></script>
+    <script src="./plugin/select2/select2.min.js"></script>
+    <style type="text/css">
+        .select2_dropdown {z-index: 999999; font-family: "맑은 고딕","돋움",Dotum,helvetica,arial,sans-serif;}
+        .select2_container {margin-left: 24px;}
+        .select2_container a {background-image: none !important; color:rgb(58, 56, 56) !important;}
+        .select2-results { min-height: 120px; max-height: 120px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="setupPopup raonk_ko-kr" style="width:430px;">
+        <div class="setupPopup_w">
+            <img src="" alt="">
+            <ul id="content1"></ul>
+        </div>
+        <div>
+            <select id="select_user" class="js-example-basic-single"></select><br />
+        </div>
+        <div class="bottom_btn">
+            <button class="btn_ok" id="btn_ok"></button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+﻿{
+	"name": "RAONKEditor",
+	"version": "2019.01.10",
+	"description": "RAONKEditor Plugin for nexacro platform 17",
+	"license": "Commercial license",
+	"scripts": [
+		"raonkeditor/js/raonkeditor.js",
+		"raonkeditor/plugin/nexacro/17/raonkeditor.nexacro17.js"
+	],
+	"objInfo": [
+		"raonkeditor/plugin/nexacro/17/metainfo/raonkeditor.nexacro.enum.info",
+		"raonkeditor/plugin/nexacro/17/metainfo/raonkeditor.nexacro.meta.info",
+		"raonkeditor/plugin/nexacro/17/metainfo/raonkeditor.nexacro.event.info"
+	],
+	"designscripts": [
+		"raonkeditor/plugin/nexacro/17/design/raonkeditor.nexacro.design.js"
+	]
+}

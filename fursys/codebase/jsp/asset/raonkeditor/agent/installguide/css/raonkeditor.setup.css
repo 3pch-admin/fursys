@@ -1,0 +1,44 @@
+﻿@charset "utf-8";
+
+/* CSS Document */
+
+body, html, div, p, span, ul, ol, li, h1, h2, h3, h4, h5, h6, a, img, dl, dt, dd, form, pre, code, fieldset, legend, textarea, blockquot, button, th, td, input, select, strong { margin:0; padding:0}
+fieldset,i, img {border:0 none}
+img {width:inherit; max-width:100%; height:auto;}
+dl, ul, ol, menu, li {list-style:none}
+blockquote, p {quotes:none}
+blockquote:before, blockquote:after, q:before, q:after {content:""; content:none}
+input, select, textarea, button {vertical-align:middle}
+button {border:0 none; background-color: transparent; cursor:pointer}
+body, th, td, input, select, textarea, button { font-size:100%;/*** Font Size 수정금지 ***/ line-height:1.5; letter-spacing:-1; word-spacing:1}
+body, html {width:100%; height:100%}
+address, caption, cite, code, dfn, em, var {font-style:normal; font-weight:normal}
+
+/* lang */
+.raonk_ko-kr {font-family:"맑은 고딕","돋움",Dotum,helvetica,arial,sans-serif;}
+.raonk_en-us {font-family:Arial,Verdana,sans-serif;}
+.raonk_zh-cn {font-family:Arial,Verdana,sans-serif;}
+.raonk_zh-tw {font-family:Arial,Verdana,sans-serif;}
+.raonk_ja-jp {font-family:MS PGothic,MS UI Gothic,Verdana,sans-serif;}
+
+/* RAON_K_Solution Index */
+.setupPopup a {color:#333; text-decoration:none}
+.setupPopup a:active, .RAON_K_Solution a:hover {text-decoration:underline}
+.setupPopup .hidden { position:-625.000em -625.000em; height:0; line-height:0; font-size:0; visibility:hidden}
+body {color:rgb(255,255,255); font-size:12px;}
+
+/* common */
+.setupPopup {width:500px; height:248px; /*box-shadow: 0 0 18px 1px rgba(0,0,0,0.4);*/ display:block; background-color:rgb(245,245,245); border:1px solid rgb(157,157,157);; position:relative; z-index:99999;}
+.setupPopup .close {background:url(../images/x.png) no-repeat 0 0; width:8px; height:8px; position:absolute; z-index:20; right:10px; top:10px; display:inline-block;}
+.setupPopup .setupPopup_w {margin:20px 18px 24px; box-sizing:border-box; position:relative;}
+.setupPopup .txt_org {color:rgb(255,118,35)}
+.setupPopup .bold {font-weight:600;}
+.setupPopup .setupPopup_w ul {margin-top:18px;}
+.setupPopup .setupPopup_w ul li {color:rgb(11,11,11); line-height:19px; letter-spacing:1; *letter-spacing:0px; font-size:11px;}
+.setupPopup .setupPopup_w ul li i {margin-right:5px;}
+.setupPopup .setupPopup_w ul .first {font-size:16px; margin-bottom:8px; color:rgb(0,0,0); font-weight:400; text-indent:8px;}
+.setupPopup .line {position:absolute; width:100%; height:1px; line-height:0; overflow:hidden; font-size:0; background-color:rgb(196,196,196); bottom:58px; display:block;}
+.setupPopup .client_info {background:url(../images/exclamationMark.png) no-repeat 0 50%; display:block; text-indent:30px; color:rgb(21,43,87); font-size:13px; line-height:24px; position:absolute; bottom:20px; width:465px; height:24px;}
+.setupPopup .btn_ok {background-color: rgb(63,86,120);width: 96px;height: 30px;color: #fff;font-size: 11px;margin: 10px 5px 0 0;line-height: 30px;padding: 0 0 3px 0;float:right;}
+select {width: 380px;margin-left:24px;padding: .8em .5em;border: 1px solid #999;font-family: inherit;border-radius: 3px;}
+.setupPopup .bottom_btn {position:absolute; bottom:5px; width:100%;}

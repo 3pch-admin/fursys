@@ -1,0 +1,102 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+<title>RAON K Agent Install</title>
+    <link type="text/css" rel="stylesheet" href="css/raonkeditor.setup.css">
+    <script src="../../config/editor_crossdomain_config.js?ver=2018.1196447.1500.01" type="text/javascript"></script>
+    <script type="text/javascript">
+        var _needPrivateNetworkAccess = false;
+
+        function set_page() {
+            var lang = parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._FRAMEWIN.RAONKEditor_lang;
+            var agentInfo = parent.KEDITORWIN.KEDITORTOP.RAONKEDITOR.UserAgent;
+
+            if (parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.installGuideLogoUrl) {
+                document.getElementsByTagName('img')[0].src = parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.installGuideLogoUrl;
+            } else {
+                document.getElementsByTagName('img')[0].src = 'images/BI-raonk.png';
+            }
+
+            document.getElementsByTagName('div')[0].className = 'setupPopup raonk_' + parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.lang;
+
+            var content1 = document.getElementById('content1');
+            var _html = '';
+            _html += '<li class="first">' + lang.install_guide.desc1 + '</li>';
+
+            // private network access info            
+            if ( document.location.protocol.toLowerCase() === 'http:'
+                &&
+                !( document.location.href.toLowerCase().indexOf( 'http://127.0.0.1' ) === 0 || document.location.href.toLowerCase().indexOf( 'http://localhost' ) === 0 )
+                &&
+                (
+                    ( agentInfo.browser.name.toLowerCase() === 'chrome' && agentInfo.browser.major >= 94 )
+                    ||
+                    ( agentInfo.browser.name.toLowerCase() === 'edge' && agentInfo.browser.major >= 94 )
+                )
+            ) {
+                _needPrivateNetworkAccess = true;
+            }
+
+            var _lang = parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.lang.substring( 0, 2 );
+            if ( _lang !== 'ko' ) _lang = 'en';
+
+            if ( _needPrivateNetworkAccess && ( agentInfo.os.name.toLowerCase() == 'linux' || agentInfo.os.name.toLowerCase() == 'mac') ) {
+                _html += '<li><i>·</i>' + lang.install_guide.pna_notice1 + '&nbsp;';
+                _html += '<a href="javascript:window.open(\'raonk_pna_guide_' + _lang + '.html\');" class="txt_org bold">' + lang.install_guide.pna_notice2 + '</a>';
+                _html += '</li>';                
+            }
+
+            _html += '<li><i>·</i>' + lang.install_guide.desc2.replace('{0}', parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.agentInstallFileName) + '</li>';
+            _html += '<li><i>·</i>' + lang.install_guide.desc3 + '</li>';
+
+            if ( !_needPrivateNetworkAccess ) {
+                _html += '<li><i>·</i>' + lang.install_guide.desc4 + '</li>';
+            } else {
+                _html += '<li><i>·</i>' + lang.install_guide.pna_notice3;
+
+                if ( agentInfo.os.name.toLowerCase() === 'windows' ) {
+                    _html += ' <a href="javascript:window.open(\'raonk_pna_guide_' + _lang + '.html\');" class="txt_org bold">(Private Network Access)</a>';
+                }
+                    
+                _html += '</li>';
+            }            
+
+            content1.innerHTML = _html;
+
+            var content2 = document.getElementById('content2');
+            content2.innerHTML = lang.install_guide.agent_info.replace('{0}', agentInfo.os.name + ' ' + agentInfo.os.version).replace('{1}', agentInfo.browser.name + agentInfo.browser.major);
+
+            install_ready();
+        }
+
+        function install_ready() {
+            try {                
+                if ( _needPrivateNetworkAccess ) {
+                    var _installFileUrl = parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.agentInstallFileUrl;
+                    _installFileName = _installFileUrl.substring( _installFileUrl.lastIndexOf( "/" ) + 1);
+                    _installFileUrl = _installFileUrl.substring( 0, _installFileUrl.lastIndexOf( "/" ) );                    
+                    parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.agentInstallFileUrl = _installFileUrl + "/pna/" + _installFileName;
+                }
+
+                var downloadLink = document.getElementById('download_link');
+                downloadLink.href = parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._config.agentInstallFileUrl;
+
+                parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._FRAMEWIN.requestManagerInstall(parent.KEDITORWIN.window, document);
+            } catch (e) { }
+        }
+    </script>
+</head>
+<body onload="set_page();">
+    <div class="setupPopup">
+        <div class="setupPopup_w">
+            <img src="images/BI-raonk.png" alt="RAON K 2018">
+            <ul id="content1"></ul>
+        </div>
+        <div>
+            <div id="content2" class="client_info" style="position:absolute; bottom:18px; left:20px;"></div>
+            <span class="line"></span>
+        </div>
+        <a href="javascript:parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR._FRAMEWIN.closeInstallPopup(parent.KEDITORWIN.KEDITORTOP.G_CURRKEDITOR, true)" class="close"><span class="hidden">닫힘</span></a>
+    </div>
+</body>
+</html>

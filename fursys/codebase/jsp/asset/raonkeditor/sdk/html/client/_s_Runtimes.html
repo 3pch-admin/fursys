@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Editor Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">           
+    <h3 class="title">K Editor :: Runtimes</h3>
+    <p class="ttl">XML : &#60;runtimes&#62;.....&#60;/runtimes&#62;, Script : Runtimes</p>
+    <p class="txt">
+        <b>Script 설정이 우선 적용됩니다.</b><br />
+        agent 설정시 agent 모드가 적용됩니다.<br />
+        html5 설정시 html5 모드가 적용되며, html5모드는 ie10 이상만 지원합니다<br />
+        (html5가 지원되지 않는 브라우저로 접속을 하게 되면 에디터에서 자동으로 agent모드로 구동됩니다.)
+        예) "agent" or "html5"
+    </p>
+    <p class="mttl01">remarks</p>               
+    <p class="txt">
+        agent 설정(기본값)시 모든 브라우저가 Agent모드로 동작됩니다.<br/><br />
+        html5 설정시 Html5가 지원되는 브라우저는 Html5모드로,<br />
+        지원되지 않는 브라우저는 Agent모드로 동작됩니다.
+    </p>    
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+<b>에디터를 Agent 모드로 설정합니다.</b>
+
+<b>XML</b>
+
+.....
+&#60;setting&#62;
+    .....
+    &#60;runtimes&#62;agent&#60;/runtimes&#62;
+    .....
+&#60;/setting&#62;
+.....
+
+<b>Script</b>
+
+&#60;script type="text/javascript" src="raonkeditor/js/raonkeditor.js"&#62;&#60;/script&#62;	
+
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+    &#60;script type="text/javascript"&#62;
+        var raonkParam = {
+            .....
+            Runtimes: 'agent'
+        }
+
+        new RAONKEditor(raonkParam);
+    &#60;/script&#62;
+&#60;/div&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

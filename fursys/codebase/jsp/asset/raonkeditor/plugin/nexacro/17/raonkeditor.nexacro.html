@@ -1,0 +1,125 @@
+﻿<html>
+<head>
+    <title>K Editor with nexacro 17 Runtime</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt src="../../../js/raonkeditor.js?t=' + (new Date).getTime() + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+    <script type="text/javascript">
+        var G_EventReturnValue;
+
+        if (!window.NEXACROHTML) {
+            window.NEXACROHTML = {};
+        }
+
+        window.NEXACROHTML.FireUserNotify = function (userdata) {
+            if (window.NEXACROWEBBROWSER) {
+                // 윈도우 html5, 안드로이드 html5, iOS html5, iOS 런타임
+                window.NEXACROWEBBROWSER.on_fire_onusernotify(window.NEXACROWEBBROWSER, userdata);
+            } else if (typeof nexacro == "undefined") {
+                //윈도우 런타임
+                window.document.title = userdata;
+            } else if (nexacro) {
+                //안드로이드 런타임
+                nexacro.fireUserNotify(userdata);
+            }
+        }
+
+        function fn_bodyOnload() {
+            window.NEXACROHTML.FireUserNotify("RAONK_WEBBROWSER_INIT");
+        }
+
+        function fn_FireUserNotify(userdata) {
+            window.NEXACROHTML.FireUserNotify(userdata);
+        }
+
+        // loaded
+        function RAONKEDITOR_CreationComplete(editorId) {
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_CreationComplete");
+        }
+
+        // CustomAction
+        function RAONKEDITOR_CustomAction(id, paramObj) {
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_CustomAction");
+        }
+
+        // SetComplete
+        function RAONKEDITOR_SetComplete(editorId) {
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_SetComplete");
+        }
+
+        // AfterChangeMode
+        function RAONKEDITOR_AfterChangeMode(editorId, paramObj) {
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_AfterChangeMode");
+        }
+
+        // KeyEvent
+        function RAONKEDITOR_KeyEvent(editorId, paramObj) {
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_KeyEvent");
+        }
+
+        // MouseEvent
+        function RAONKEDITOR_MouseEvent(editorId, paramObj) {
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_MouseEvent");
+        }
+
+        // CommandEvent
+        function RAONKEDITOR_CommandEvent(editorId, paramObj) {
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_CommandEvent");
+        }
+
+        // ResizedEvent
+        function RAONKEDITOR_Resized(editorId, paramObj) {
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_Resized");
+        }
+
+        // SetForbiddenWordCompleteEvent
+        function RAONKEDITOR_SetForbiddenWordComplete(editorId, paramObj) {
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_SetForbiddenWordComplete");
+        }
+
+        function fn_GetHtmlContents(paramObj) {
+            paramObj = RAONKEDITOR.util.stringToJson(paramObj);
+            paramObj.callback = function (param) {
+                G_EventReturnValue = param;
+                window.NEXACROHTML.FireUserNotify("GetHtmlContents");
+            };
+            RAONKEDITOR.GetHtmlContents(paramObj);
+        }
+        function fn_EncodeMime(paramObj) {
+            paramObj = RAONKEDITOR.util.stringToJson(paramObj);
+            paramObj.callback = function (param) {
+                G_EventReturnValue = param;
+                window.NEXACROHTML.FireUserNotify("EncodeMime");
+            };
+            RAONKEDITOR.EncodeMime(paramObj);
+        }
+        function fn_DecodeMime(paramObj) {
+            paramObj = RAONKEDITOR.util.stringToJson(paramObj);
+            paramObj.callback = function (param) {
+                G_EventReturnValue = param;
+                window.NEXACROHTML.FireUserNotify("DecodeMime");
+            };
+            RAONKEDITOR.DecodeMime(paramObj);
+        }
+        function RAONKEDITOR_OnLanguageDefinition(editorId, paramObj) {
+            //paramObj = RAONKEDITOR.util.stringToJson(paramObj);
+            G_EventReturnValue = paramObj;
+            window.NEXACROHTML.FireUserNotify("RAONKEDITOR_OnLanguageDefinition");
+        }
+    </script>
+</head>
+<body onload="fn_bodyOnload();" style="padding:0; margin:0; height:100%; text-align: center; overflow: hidden; border: 0;">
+    <div id="raonk_Holder" style="width: 100%; height: 100%; margin: 0 auto; overflow: hidden;"></div>
+</body>
+</html>

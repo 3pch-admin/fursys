@@ -1,0 +1,648 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Forbidden Word</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt src="../../config/editor_crossdomain_config.js?t=' + (new Date).getTime() + '" type="text/javascript"><\/scr' + 'ipt>');
+
+        var KEDITORTOP = parent;
+        var KEditorLayerFrame = KEDITORTOP.KEDITORDOC.getElementById("raonk_frame_" + KEDITORTOP.G_CURRKEDITOR.ID);
+        if (KEDITORTOP.G_CURRKEDITOR.dialogWindow != null) {
+            KEDITORTOP = KEditorLayerFrame.contentWindow.KEDITORTOP;
+        }
+        var KEditorLayerWin = KEditorLayerFrame.contentWindow;
+
+        document.write('<link href="../' + KEditorLayerWin._k_editor._config.popupCssUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer  + '" rel="stylesheet" type="text/css" />');
+        document.write('<link href="css' + (KEDITORTOP.RAONKEDITOR.isRelease ? "" : "_dev") + '/popup.css?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" rel="stylesheet" type="text/css" />');
+        document.write('<scr' + 'ipt src="../' + KEditorLayerWin._k_editor._config.dialogJSUrl + '?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+
+    <script type="text/javascript">
+        var backup_showDialogPosition = KEDITORTOP.G_CURRKEDITOR._config.showDialogPosition;
+        var popup_FrameStatus = "";
+        if (KEDITORTOP.G_CURRKEDITOR._config.showDialogPosition == 1) {
+            KEDITORTOP.G_CURRKEDITOR._config.showDialogPosition = 0;
+        }
+
+        var G_Width = KEDITORTOP.G_CURRKEDITOR._config.forbiddenWordWidth;
+        var G_Height = KEDITORTOP.G_CURRKEDITOR._config.forbiddenWordHeight;
+        function page_loaded_event() {
+            if (KEDITORTOP.RAONKEDITOR.browser.mobile) {
+                G_Width = "350px";
+            }
+            document.body.style.width = G_Width + "px";
+            document.body.style.height = G_Height + "px";
+
+            var copycontent = document.getElementById("copycontent");
+
+            // cross domain
+            var srcUrl = 'document.open();' + (isCustomDomain(document) ? ('document.domain="' + document.domain + '";') : '') + ' document.close();';
+            srcUrl = (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion < 12) ? 'javascript:void(function(){' + encodeURIComponent(srcUrl) + '}())' : '';
+            copycontent.src = srcUrl;
+            //
+
+            var strImemode = "";
+            if (KEDITORTOP.G_CURRKEDITOR._config.defaultImemode == "1") strImemode = "-ms-image-mode: active; ime-mode: active;";
+
+            var initHtml = '<!DOCTYPE html>\n';
+            initHtml += '<html>';
+            initHtml += '<head>';
+            initHtml += '<link href="css' + (KEDITORTOP.RAONKEDITOR.isRelease ? "" : "_dev") + '/popup.css?ver=' + KEDITORTOP.RAONKEDITOR.ReleaseVer + '" rel="stylesheet" type="text/css" />';
+            initHtml += '<style type="text/css">'
+            initHtml += 'body { cursor: text; font-family: ' + KEDITORTOP.G_CURRKEDITOR._setting['font_family'] + '; font-size: ' + KEDITORTOP.G_CURRKEDITOR._setting['font_size'] + '; ' + strImemode + ' word-break: ' + KEDITORTOP.G_CURRKEDITOR._setting['word_break_type'] + '; word-wrap: ' + KEDITORTOP.G_CURRKEDITOR._setting['word_wrap_type'] + '; } ';
+            initHtml += 'body p { line-height:' + KEDITORTOP.G_CURRKEDITOR._setting['line_height'] + '; margin-top:' + KEDITORTOP.G_CURRKEDITOR._config.defaultFontMarginTop + '; margin-bottom:' + KEDITORTOP.G_CURRKEDITOR._config.defaultFontMarginBottom + '; }';
+            initHtml += 'body li { line-height:' + KEDITORTOP.G_CURRKEDITOR._setting['line_height'] + '; margin-top:' + KEDITORTOP.G_CURRKEDITOR._config.defaultFontMarginTop + '; margin-bottom:' + KEDITORTOP.G_CURRKEDITOR._config.defaultFontMarginBottom + '; }';
+            initHtml += '</style>'
+            initHtml += '</head>';
+            initHtml += '<body>';
+            initHtml += LayerWin.KEDITORTOP.G_CURRKEDITOR._BODY.innerHTML;
+            initHtml += '</body>';
+            initHtml += '</html>';
+
+            copycontent.contentWindow.document.open('text/html', 'replace');
+            LayerWin.isCustomDomain(document) && (copycontent.contentWindow.document.domain = document.domain);
+            copycontent.contentWindow.document.write(initHtml);
+            copycontent.contentWindow.document.close();
+
+            set_page();
+
+            if (document.compatMode == "BackCompat") {
+                var inputs = document.getElementsByTagName('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == 'text') {
+                        inputs[i].style.height = '20px';
+                    }
+                }
+            }
+            
+            setCursorPos(copycontent, true, false);
+            LayerWin.setFocusFirstAndLast(document, copycontent);
+        }
+
+        function esc_close(event) {
+            if (event.keyCode == 27) {
+                setCursorPos(document.getElementById("copycontent"), true, false);
+                LayerWin.setFocusFirstAndLast(document, document.getElementById("copycontent"));
+                var con = confirm(LayerWin.RAONKEditor_lang.plugins["forbiddenword"].confirm);
+                if (con == false) {
+                    return;
+                } else if (con == true) {
+                    LayerWin.event_dialog_cancel(window.frameElement.parentNode.parentNode);
+
+                    if (popup_FrameStatus == "popup_full_size") {
+                        KEDITORTOP.KEDITORDOC.documentElement.style.margin = LayerWin.originfull.margin4;
+                        KEDITORTOP.KEDITORDOC.documentElement.style.padding = LayerWin.originfull.padding4;
+                        KEDITORTOP.KEDITORDOC.documentElement.style.border = LayerWin.originfull.border4;
+                        KEDITORTOP.KEDITORDOC.documentElement.style.height = LayerWin.originfull.height4;
+                        KEDITORTOP.KEDITORDOC.documentElement.style.overflow = LayerWin.originfull.overflow4;
+                        KEDITORTOP.KEDITORDOC.body.style.margin = LayerWin.originfull.margin5;
+                        KEDITORTOP.KEDITORDOC.body.style.padding = LayerWin.originfull.padding5;
+                        KEDITORTOP.KEDITORDOC.body.style.border = LayerWin.originfull.border5;
+                        KEDITORTOP.KEDITORDOC.body.style.height = LayerWin.originfull.height5;
+                        KEDITORTOP.KEDITORDOC.body.style.overflow = LayerWin.originfull.overflow5;
+                        //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                        //    parent.document.getElementById("keditor_dialog").children[1].children[0].style.margin = "0 0 0 0";
+                        //}
+                        LayerWin.setRestorreHiddenStyle();
+
+                        KEDITORTOP.KEDITORWIN.scroll(originScrollSize[0], originScrollSize[1]);
+                        popup_FrameStatus = "";
+                    }
+
+                    set_event("Cancel");
+
+                    KEDITORTOP.RAONKEDITOR.util.cancelEvent(event);
+                    KEDITORTOP.G_CURRKEDITOR._config.showDialogPosition = backup_showDialogPosition;
+                    LayerWin.G_KPlugin.forbiddenword.isProcess = false;
+                }
+            }
+        }
+
+        function click_close(event) {
+            setCursorPos(document.getElementById("copycontent"), true, false);
+            LayerWin.setFocusFirstAndLast(document, document.getElementById("copycontent"));
+
+            var con = confirm(LayerWin.RAONKEditor_lang.plugins["forbiddenword"].confirm);
+            if (con == false) {
+                return;
+            } else if (con == true) {
+                LayerWin.event_dialog_cancel(window.frameElement.parentNode.parentNode);
+
+                if (popup_FrameStatus == "popup_full_size") {
+                    KEDITORTOP.KEDITORDOC.documentElement.style.margin = LayerWin.originfull.margin4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.padding = LayerWin.originfull.padding4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.border = LayerWin.originfull.border4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.height = LayerWin.originfull.height4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.overflow = LayerWin.originfull.overflow4;
+                    KEDITORTOP.KEDITORDOC.body.style.margin = LayerWin.originfull.margin5;
+                    KEDITORTOP.KEDITORDOC.body.style.padding = LayerWin.originfull.padding5;
+                    KEDITORTOP.KEDITORDOC.body.style.border = LayerWin.originfull.border5;
+                    KEDITORTOP.KEDITORDOC.body.style.height = LayerWin.originfull.height5;
+                    KEDITORTOP.KEDITORDOC.body.style.overflow = LayerWin.originfull.overflow5;
+                    //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                    //    parent.document.getElementById("keditor_dialog").children[1].children[0].style.margin = "0 0 0 0";
+                    //}
+                    LayerWin.setRestorreHiddenStyle();
+
+                    KEDITORTOP.KEDITORWIN.scroll(originScrollSize[0], originScrollSize[1]);
+                    popup_FrameStatus = "";
+                }
+
+                set_event("Cancel");
+
+                KEDITORTOP.RAONKEDITOR.util.cancelEvent(event);
+                KEDITORTOP.G_CURRKEDITOR._config.showDialogPosition = backup_showDialogPosition;
+                LayerWin.G_KPlugin.forbiddenword.isProcess = false;
+            }
+        }
+
+        function set_page() {
+            var _skin_name = LayerWin._k_editor._config.style.skinName;
+            document.getElementById("editor_popup_forbidden_word").className = 'K_edITor_ED_Popup_Type01 K_edITor_PUi_' + _skin_name + ' editor_popup_forbidden_word';
+
+            document.getElementById("editor_popup_forbidden_word").style.width = G_Width + "px";
+            if (KEDITORTOP.RAONKEDITOR.browser.mobile) {
+                document.getElementById("wordlist").style.width = "120px";
+                document.getElementById("copycontent").style.width = "205px";
+            }
+            
+            document.title = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].title;
+            document.getElementById('span_title').innerHTML = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].title;
+            document.getElementById('btn_close').innerHTML = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].btn_close;
+            document.getElementById('full_screen').innerHTML = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].full_popup;
+            document.getElementById('apply').innerHTML = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].apply;
+            document.getElementById('batch_Delete').innerHTML = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].batch_Delete;
+
+            KEDITORTOP.RAONKEDITOR.util.addEvent(document, "keydown", esc_close);
+            KEDITORTOP.RAONKEDITOR.util.addEvent(copycontent.document, "keydown", esc_close);
+            KEDITORTOP.RAONKEDITOR.util.addEvent(parent.document.getElementById("keditor_dialog_close"), "click", click_close);
+
+            if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion <= 8) {
+                document.getElementById('full_popup').style.display = "none";
+            }
+            
+            LayerWin.G_KPlugin.forbiddenword.setPopup(LayerWin.G_KPlugin.forbiddenword.chkWordArr, true, this);
+
+            document.getElementById("wordlist").style.height = (G_Height - 60) + "px";
+            document.getElementById("copycontent").style.height = (G_Height - 60) + "px";
+        }
+
+        function forbidden_word_over(span) {
+            var listCnt = span.id.replace("cnt", "");
+
+            var list = document.getElementById("list" + listCnt);
+            if (list.style.backgroundColor != "rgb(222, 218, 218)") {
+                list.setAttribute("style", "background-color: #dedbdb;");
+            }
+
+            scrollTo(document.getElementById("wordlist"), list.offsetTop - 14, 150);
+        }
+
+        function forbidden_word_out(span) {
+            var listCnt = span.id.replace("cnt", "");
+
+            var list = document.getElementById("list" + listCnt);
+            if (list.style.backgroundColor == "rgb(222, 219, 219)" || list.style.backgroundColor == "#dedbdb") {
+                list.style.backgroundColor = "";
+            }
+        }
+
+        function scrollTo(element, to, duration) {
+            if (duration <= 0) return;
+            var difference = to - element.scrollTop;
+            var perTick = (difference / duration * 10);
+
+            setTimeout(function () {
+                element.scrollTop = element.scrollTop + perTick;
+                if (element.scrollTop === to) return;
+                scrollTo(element, to, duration - 10);
+            }, 10);
+        }
+
+        function delete_btn_click(btn) {
+            var contentDocument = document.getElementById("copycontent").contentWindow.document;
+
+            var span = copycontent.document.getElementById("cnt" + btn.parentElement.parentElement.parentElement.attributes.value.nodeValue);
+
+            if (btn.className == "forbiddenDBtn") {
+                btn.className = "forbiddenD_CBtn";
+                btn.innerText = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].cancel;
+
+                span.setAttribute("class", "word_delete");
+
+                btn.parentElement.parentElement.setAttribute("class", "dSelected");
+                btn.parentElement.parentElement.parentElement.setAttribute("style", "background-color: #dedada;");
+            } else{
+                btn.className = "forbiddenDBtn";
+                btn.innerText = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].word_delete;
+
+                span.setAttribute("class", "cnt");
+
+                btn.parentElement.parentElement.setAttribute("class", "forbiddenDiv");
+                btn.parentElement.parentElement.parentElement.style.backgroundColor = "";
+            }
+
+            scrollTo(contentDocument.documentElement, span.offsetTop - 14, 150);
+        }
+
+        function permit_btn_click(btn) {
+            var contentDocument = document.getElementById("copycontent").contentWindow.document;
+
+            var span = copycontent.document.getElementById("cnt" + btn.parentElement.parentElement.parentElement.attributes.value.nodeValue);
+            span.setAttribute("class", "word_permit");
+
+            btn.parentElement.parentElement.setAttribute("class", "pSelected");
+            btn.parentElement.parentElement.parentElement.setAttribute("style", "background-color: #dedada;");
+
+            scrollTo(contentDocument.documentElement, span.offsetTop - 14, 150);
+        }
+
+        function delete_all() {
+            for (var i = 0; i < document.getElementsByTagName("dl").length; i++) {
+                var span = copycontent.document.getElementById("cnt" + i);
+                span.setAttribute("class", "word_delete");
+
+                var forbiddenWordList = document.getElementById("list" + i);
+                forbiddenWordList.setAttribute("style", "background-color: #dedada;");
+                forbiddenWordList.firstChild.setAttribute("class", "dSelected");
+            }
+
+            for (var i = 0; i < document.getElementsByTagName("button").length; i++) {
+                if (document.getElementsByTagName("button")[i].className == "forbiddenDBtn") {
+                    document.getElementsByTagName("button")[i].className = "forbiddenD_CBtn";
+                    document.getElementsByTagName("button")[i].innerText = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].cancel;
+                }
+            }
+        }
+
+        function in_editor() {
+            var permitWordArr = [];
+            for (var idx = 0; idx < document.getElementsByTagName("dl").length; idx++) {
+                var span = copycontent.document.getElementById("cnt" + idx);
+                span.removeChild(span.childNodes[0]);
+
+                if (span.className.indexOf("word_delete") > -1) {
+                    span.parentElement.removeChild(span);
+                } else {
+                    permitWordArr.push(span.innerText);
+                    span.outerHTML = span.innerText;
+                }
+            }
+
+            KEDITORTOP.G_CURRKEDITOR.UndoManager.putUndo();
+            LayerWin.KEDITORTOP.G_CURRKEDITOR._BODY.innerHTML = KEDITORTOP.RAONKEDITOR.util.htmlRevision(copycontent.document.body.innerHTML);
+            if (popup_FrameStatus == "popup_full_size") {
+                full_popup();
+            }
+            event_popup_close();
+            KEDITORTOP.G_CURRKEDITOR._config.showDialogPosition = backup_showDialogPosition;
+            LayerWin.G_KPlugin.forbiddenword.isProcess = false;
+
+            var permitWordToDeduplicationArr = []
+
+            if (!Array.indexOf) {
+                Array.prototype.indexOf = function (obj) {
+                    for (var i = 0; i < this.length; i++) {
+                        if (this[i] == obj) {
+                            return i;
+                        }
+                    } return -1;
+                }
+            }
+
+            for (var i = 0; i < permitWordArr.length; i++) {
+                if (permitWordToDeduplicationArr.indexOf(permitWordArr[i]) == -1) {
+                    permitWordToDeduplicationArr.push(permitWordArr[i]);
+                }
+            }
+
+            var evtDataObj = {
+                permitWord: permitWordArr,
+                permitWordToDeduplication: permitWordToDeduplicationArr,
+                callbackType: LayerWin.G_KPlugin.forbiddenword.callbackType,
+                callbackStatus: "Apply"
+            };
+
+            try {
+                if (typeof KEDITORTOP.G_CURRKEDITOR._config.event.setForbiddenWordComplete == 'function') {
+                    KEDITORTOP.G_CURRKEDITOR._config.event.setForbiddenWordComplete(KEDITORTOP.G_CURRKEDITOR.ID, evtDataObj);
+                } else {
+                    KEDITORTOP.RAONKEDITOR_SetForbiddenWordComplete(KEDITORTOP.G_CURRKEDITOR.ID, evtDataObj);
+                }
+            } catch (e) { }
+        }
+
+        function full_popup() {
+            if (popup_FrameStatus == "") {
+                originScrollSize = LayerWin.getWindowScrollPos(KEDITORTOP.KEDITORWIN);
+
+                var whoObj = window.frameElement.offsetParent;
+
+                //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                //    LayerWin.originfull.backup_left = parent.document.getElementById("keditor_dialog").style.left;
+                //    LayerWin.originfull.backup_top = parent.document.getElementById("keditor_dialog").style.top;
+                //} else {
+                //    LayerWin.originfull.backup_left = whoObj.style.left;
+                //    LayerWin.originfull.backup_top = whoObj.style.top;
+                //}
+
+                LayerWin.originfull.backup_left = whoObj.style.left;
+                LayerWin.originfull.backup_top = whoObj.style.top;
+
+                LayerWin.originfull.margin4 = KEDITORTOP.KEDITORDOC.documentElement.style.margin;
+                LayerWin.originfull.padding4 = KEDITORTOP.KEDITORDOC.documentElement.style.padding;
+                LayerWin.originfull.border4 = KEDITORTOP.KEDITORDOC.documentElement.style.border;
+                LayerWin.originfull.height4 = KEDITORTOP.KEDITORDOC.documentElement.style.height;
+                LayerWin.originfull.overflow4 = KEDITORTOP.KEDITORDOC.documentElement.style.overflow;
+                LayerWin.originfull.margin5 = KEDITORTOP.KEDITORDOC.body.style.margin;
+                LayerWin.originfull.padding5 = KEDITORTOP.KEDITORDOC.body.style.padding;
+                LayerWin.originfull.border5 = KEDITORTOP.KEDITORDOC.body.style.border;
+                LayerWin.originfull.height5 = KEDITORTOP.KEDITORDOC.body.style.height;
+                LayerWin.originfull.overflow5 = KEDITORTOP.KEDITORDOC.body.style.overflow;
+
+                KEDITORTOP.KEDITORDOC.documentElement.style.overflow = "hidden";
+                KEDITORTOP.KEDITORDOC.documentElement.style.padding = "0";
+                KEDITORTOP.KEDITORDOC.documentElement.style.margin = "0";
+                KEDITORTOP.KEDITORDOC.documentElement.style.border = "0";
+                KEDITORTOP.KEDITORDOC.documentElement.style.height = "100%";
+                KEDITORTOP.KEDITORDOC.body.style.overflow = "hidden";
+                KEDITORTOP.KEDITORDOC.body.style.padding = "0";
+                KEDITORTOP.KEDITORDOC.body.style.margin = "0";
+                KEDITORTOP.KEDITORDOC.body.style.border = "0";
+                KEDITORTOP.KEDITORDOC.body.style.height = "100%";
+                parent.document.getElementById("ke_disabled").children[0].style.height = "100%";
+
+                parent.document.getElementById("keditor_dialog").children[1].style.width = "100%";
+                parent.document.getElementById("keditor_dialog").children[1].style.height = "100%";
+
+                LayerWin.originfull.overflow6 = whoObj.style.overflow;
+                LayerWin.originfull.position6 = whoObj.style.position;
+                LayerWin.originfull.zIndex = whoObj.style.zIndex;
+                whoObj.style.zIndex = "50000";
+
+                var sizeWindow = LayerWin.getWindowClientSize(KEDITORTOP.KEDITORWIN);
+                whoObj.style.width = sizeWindow[0] + "px";
+                whoObj.style.height = sizeWindow[1] + "px";
+
+                whoObj.style.left = "0px";
+                whoObj.style.top = "0px";
+
+                whoObj.style.overflow = "hidden";
+                whoObj.style.position = "absolute";
+
+                parent.document.getElementById("keditor_dialog").style.width = "100%";
+                parent.document.getElementById("keditor_dialog").style.height = "100%";
+
+                parent.document.getElementById("keditor_dialog").children[1].children[0].style.width = "100%";
+                parent.document.getElementById("keditor_dialog").children[1].children[0].style.height = "100%";
+                parent.document.getElementById("keditor_dialog").children[1].children[0].contentWindow.document.body.parentElement.style.height = "100%";
+                parent.document.getElementById("keditor_dialog").children[1].children[0].contentWindow.document.body.style.height = "100%";
+                //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                //    parent.document.getElementById("keditor_dialog").children[1].children[0].parentElement.style.width = "100%";
+                //    parent.document.getElementById("keditor_dialog").children[1].children[0].parentElement.style.height = "100%";
+                //}
+
+                document.body.style.width = "100%";
+                document.getElementById("editor_popup_forbidden_word").style.width = "100%";
+                document.getElementById("editor_popup_forbidden_word").style.height = "100%";
+                document.getElementById("copycontent").style.width = "84%";
+                //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[4].style.height = "93%";
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[4].childNodes[0].style.height = "100%";
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[4].childNodes[0].childNodes[0].style.height = "98.9%";
+                //    document.getElementById("copycontent").style.height = "99%";
+                //} else {
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[9].style.height = "93%";
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[9].childNodes[1].style.height = "99%";
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[9].childNodes[1].childNodes[1].style.height = "98.9%";
+                //    document.getElementById("copycontent").style.height = "100%";
+                //}
+
+                document.getElementById("editor_popup_forbidden_word").childNodes[9].style.height = "93%";
+                document.getElementById("editor_popup_forbidden_word").childNodes[9].childNodes[1].style.height = "99%";
+                document.getElementById("editor_popup_forbidden_word").childNodes[9].childNodes[1].childNodes[1].style.height = "98.9%";
+                document.getElementById("copycontent").style.height = "97%";
+                
+                document.getElementById("full_popup").parentNode.style.height = "40px";
+                document.getElementById("full_popup").parentNode.style.width = "100%";
+                document.getElementById("full_popup").parentNode.style.position = "absolute";
+                document.getElementById("full_popup").parentNode.style.bottom = "27px";
+
+                document.getElementById("wordlist").style.width = "15%";
+                document.getElementById("wordlist").style.height = "88.3%";
+                document.getElementById("full_screen").innerText = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].originally;
+
+                LayerWin.setBackupHiddenStyle(whoObj, KEDITORTOP.KEDITORWIN);
+
+                popup_FrameStatus = "popup_full_size";
+
+                //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                //    parent.document.getElementById("keditor_dialog").style.left = "0px";
+                //    parent.document.getElementById("keditor_dialog").style.top = "0px";
+                //    parent.document.getElementById("keditor_dialog").children[1].children[0].style.margin = "25px 0px 0px 0px";
+                //    parent.document.getElementById("ke_disabled").children[0].style.height = "100%"
+                //}
+            } else {
+                var whoObj = window.frameElement.offsetParent;
+
+                KEDITORTOP.KEDITORDOC.documentElement.style.margin = LayerWin.originfull.margin4;
+                KEDITORTOP.KEDITORDOC.documentElement.style.padding = LayerWin.originfull.padding4;
+                KEDITORTOP.KEDITORDOC.documentElement.style.border = LayerWin.originfull.border4;
+                KEDITORTOP.KEDITORDOC.documentElement.style.height = LayerWin.originfull.height4;
+                KEDITORTOP.KEDITORDOC.documentElement.style.overflow = LayerWin.originfull.overflow4;
+                KEDITORTOP.KEDITORDOC.body.style.margin = LayerWin.originfull.margin5;
+                KEDITORTOP.KEDITORDOC.body.style.padding = LayerWin.originfull.padding5;
+                KEDITORTOP.KEDITORDOC.body.style.border = LayerWin.originfull.border5;
+                KEDITORTOP.KEDITORDOC.body.style.height = LayerWin.originfull.height5;
+                KEDITORTOP.KEDITORDOC.body.style.overflow = LayerWin.originfull.overflow5;
+
+                parent.document.getElementById("ke_disabled").children[0].style.height = "1129px";
+
+                whoObj.style.overflow = LayerWin.originfull.overflow6;
+                whoObj.style.position = LayerWin.originfull.position6;
+
+                whoObj.style.width = G_Width + "px";
+                whoObj.style.height = G_Height + "px";
+                whoObj.style.overflow = "";
+                whoObj.style.position = "absolute";
+                whoObj.style.left = LayerWin.originfull.backup_left;
+                whoObj.style.top = LayerWin.originfull.backup_top;
+                parent.document.getElementById("keditor_dialog").style.width = G_Width + "px";
+                parent.document.getElementById("keditor_dialog").style.height = "";
+                parent.document.getElementById("keditor_dialog").children[1].children[0].style.width = G_Width + "px";
+                parent.document.getElementById("keditor_dialog").children[1].children[0].style.height = G_Height + "px";
+                document.body.style.width = G_Width + "px";
+                document.getElementById("editor_popup_forbidden_word").style.width = G_Width + "px";
+                document.getElementById("editor_popup_forbidden_word").style.height = G_Height + "px";
+                if (KEDITORTOP.RAONKEDITOR.browser.mobile) {
+                    document.getElementById("copycontent").style.width = "205px";
+                } else {
+                    document.getElementById("copycontent").style.width = "66%";
+                }
+                document.getElementById("copycontent").style.height = (G_Height - 60) + "px";
+                document.getElementById("wordlist").style.height = (G_Height - 60) + "px";
+                if (KEDITORTOP.RAONKEDITOR.browser.mobile) {
+                    document.getElementById("wordlist").style.width = "120px";
+                } else {
+                    document.getElementById("wordlist").style.width = "31%";
+                }
+                whoObj.style.zIndex = LayerWin.originfull.zIndex;
+                document.getElementById("full_popup").parentNode.style.height = "35px";
+
+
+                //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[4].childNodes[0].childNodes[0].style.height = "";
+                //} else {
+                //    document.getElementById("editor_popup_forbidden_word").childNodes[9].childNodes[1].childNodes[1].style.height = "";
+                //}
+
+                document.getElementById("editor_popup_forbidden_word").childNodes[9].childNodes[1].childNodes[1].style.height = "";
+                document.getElementById("editor_popup_forbidden_word").childNodes[9].style.height = "";
+
+                //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                //    parent.document.getElementById("keditor_dialog").style.left = LayerWin.originfull.backup_left;
+                //    parent.document.getElementById("keditor_dialog").style.top = LayerWin.originfull.backup_top;
+                //    parent.document.getElementById("ke_disabled").children[0].style.height = "1114px";
+                //    whoObj.style.height = "561px";
+                //    whoObj.style.overflow = "hidden"
+                //    whoObj.style.position = "relative";
+                //    whoObj.style.left = "0px";
+                //    whoObj.style.top = "0px";
+                //    parent.document.getElementById("keditor_dialog").style.height = "590px";
+                //    parent.document.getElementById("keditor_dialog").children[1].children[0].style.height = "561px";
+                //    parent.document.getElementById("keditor_dialog").children[1].children[0].style.margin = "0 0 0 0";
+                //}
+                document.getElementById("full_popup").parentNode.style.height = "";
+                document.getElementById("full_popup").parentNode.style.width = "";
+                document.getElementById("full_popup").parentNode.style.position = "";
+                document.getElementById("full_popup").parentNode.style.bottom = "";
+
+
+                document.getElementById("full_screen").innerText = LayerWin.RAONKEditor_lang.plugins["forbiddenword"].full_popup;
+
+                LayerWin.setRestorreHiddenStyle();
+
+                KEDITORTOP.KEDITORWIN.scroll(originScrollSize[0], originScrollSize[1]);
+                popup_FrameStatus = "";
+            }
+        }
+
+        function close_popup() {
+            setCursorPos(document.getElementById("copycontent"), true, false);
+            LayerWin.setFocusFirstAndLast(document, document.getElementById("copycontent"));
+
+            var con = confirm(LayerWin.RAONKEditor_lang.plugins["forbiddenword"].confirm);
+            if (con == false) {
+                return;
+            } else if (con == true) {
+                set_event("Cancel");
+
+                LayerWin.event_dialog_cancel(window.frameElement.parentNode.parentNode);
+                KEDITORTOP.G_CURRKEDITOR._config.showDialogPosition = backup_showDialogPosition;
+                if (popup_FrameStatus == "popup_full_size") {
+                    KEDITORTOP.KEDITORDOC.documentElement.style.margin = LayerWin.originfull.margin4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.padding = LayerWin.originfull.padding4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.border = LayerWin.originfull.border4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.height = LayerWin.originfull.height4;
+                    KEDITORTOP.KEDITORDOC.documentElement.style.overflow = LayerWin.originfull.overflow4;
+                    KEDITORTOP.KEDITORDOC.body.style.margin = LayerWin.originfull.margin5;
+                    KEDITORTOP.KEDITORDOC.body.style.padding = LayerWin.originfull.padding5;
+                    KEDITORTOP.KEDITORDOC.body.style.border = LayerWin.originfull.border5;
+                    KEDITORTOP.KEDITORDOC.body.style.height = LayerWin.originfull.height5;
+                    KEDITORTOP.KEDITORDOC.body.style.overflow = LayerWin.originfull.overflow5;
+                    //if (KEDITORTOP.RAONKEDITOR.browser.ie && KEDITORTOP.RAONKEDITOR.browser.ieVersion == 8) {
+                    //    parent.document.getElementById("keditor_dialog").children[1].children[0].style.margin = "0 0 0 0";
+                    //}
+
+                    LayerWin.setRestorreHiddenStyle();
+
+                    KEDITORTOP.KEDITORWIN.scroll(originScrollSize[0], originScrollSize[1]);
+                    popup_FrameStatus = "";
+                }
+                LayerWin.G_KPlugin.forbiddenword.isProcess = false;
+            }
+        }
+
+        function set_event(type) {
+            var permitWordArr = [];
+            for (var idx = 0; idx < document.getElementsByTagName("dl").length; idx++) {
+                var span = copycontent.document.getElementById("cnt" + idx);
+                permitWordArr.push(span.children[1].innerText);
+            }
+
+            var permitWordToDeduplicationArr = []
+
+            if (!Array.indexOf) {
+                Array.prototype.indexOf = function (obj) {
+                    for (var i = 0; i < this.length; i++) {
+                        if (this[i] == obj) {
+                            return i;
+                        }
+                    } return -1;
+                }
+            }
+
+            for (var i = 0; i < permitWordArr.length; i++) {
+                if (permitWordToDeduplicationArr.indexOf(permitWordArr[i]) == -1) {
+                    permitWordToDeduplicationArr.push(permitWordArr[i]);
+                }
+            }
+
+            var evtDataObj = {
+                permitWord: permitWordArr,
+                permitWordToDeduplication: permitWordToDeduplicationArr,
+                callbackType: LayerWin.G_KPlugin.forbiddenword.callbackType,
+                callbackStatus: type
+            };
+
+            try {
+                if (typeof KEDITORTOP.G_CURRKEDITOR._config.event.setForbiddenWordComplete == 'function') {
+                    KEDITORTOP.G_CURRKEDITOR._config.event.setForbiddenWordComplete(KEDITORTOP.G_CURRKEDITOR.ID, evtDataObj);
+                } else {
+                    KEDITORTOP.RAONKEDITOR_SetForbiddenWordComplete(KEDITORTOP.G_CURRKEDITOR.ID, evtDataObj);
+                }
+            } catch (e) { }
+        }
+
+        function scroll_to_text_click(text_area) {
+            var contentDocument = document.getElementById("copycontent").contentWindow.document;
+
+            var span = copycontent.document.getElementById("cnt" + text_area.parentElement.parentElement.attributes.value.nodeValue);
+
+            scrollTo(contentDocument.documentElement, span.offsetTop - 14, 150);
+        }
+
+    </script>
+</head>
+<body style="margin: 0px; padding: 0px; width: 800px;" onload="page_loaded_event();">
+    <div id="editor_popup_forbidden_word" class="editor_popup" style="width: 800px;">
+        <!-- Header -->
+        <div class="EdiTor_Popup_header">
+            <span class="subject" id="span_title"></span><span class="text">RAONKEDITOR Editor</span>
+            <div class="close">
+                <a href="javascript:event_popup_close();" title="close"></a>
+            </div>
+        </div>
+        <!-- // Header -->
+        <!-- Contents / general -->
+        <div class="EdiTor_Popup_contents">
+            <div class="contents">
+                <div class="con border">
+                    <iframe scrolling="yes" id="copycontent" class="copycontent" name="copycontent" contenteditable="false"></iframe>
+                    <div id="wordlist" class="wordlist"></div>
+                </div>
+            </div>
+        </div>
+        <!-- // Contents -->
+        <!-- Footer -->
+        <div class="EdiTor_Popup_footer">
+            <a id="full_popup" href="javascript:full_popup();" class="cancel" style="cursor: pointer; font-weight: bold; line-height: 22px; float:left; margin:5px 5px 0px 5px;"><span id="full_screen"></span></a>
+            <a href="javascript:delete_all();" class="cancel" style="cursor: pointer; font-weight: bold; line-height: 22px;"><span id="batch_Delete"></span></a>
+            <a href="javascript:in_editor();" class="confirm" style="cursor: pointer; font-weight: bold; line-height: 22px;"><span id="apply"></span></a>
+            <a href="javascript:close_popup();" class="cancel" style="cursor:pointer;"><span id="btn_close"></span></a>
+        </div>
+        <!-- // Footer -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Editor Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+    <div class="right_con">
+        <h3 class="title">K Editor :: UserFieldID,</h3>
+        <h3 class="title">K Editor :: UserFieldValue</h3>
+        <p class="ttl">Script : UserFieldID, Script : UserFieldValue</p>
+        <p class="txt">
+            파일 업로드에 사용되는 User 태그의 name과 value를 설정합니다.
+        </p>
+        <p class="mttl01">remarks</p>
+        <p class="txt">
+            User태그의 name은 UserFieldID로 설정합니다.<br />
+            기본값은 "Userdata" 로 설정됩니다.<br /><br />
+
+            User태그의 value는 UserFieldValue로 설정합니다.<br />
+            기본값은 빈값으로 필요 시 UserFieldValue: "newValue"로 설정합니다.
+        </p>
+        <p class="mttl01">sample code</p>
+        <div class="cord">
+            <pre class="pre">
+&#60;script type="text/javascript" src="raonkeditor/js/raonkeditor.js"&#62;&#60;/script&#62;	
+ 
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:900px;height:550px"&#62;  
+        &#60;script type="text/javascript"&#62;
+            
+        var raonkParam = {
+            .....
+            // 에디터 User 태그의 name을 raonkID로 변경합니다.
+            UserFieldID: 'raonkID'
+            // 에디터 User 태그의 value를 raonkVal로 변경합니다.
+            UserFieldValue: 'raonkVal'
+        }
+
+        new RAONKEditor(raonkParam);
+
+        &#60;/script&#62;       
+&#60;/div&#62;
+        </pre>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
