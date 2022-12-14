@@ -13,6 +13,7 @@ public class BOMTreeNode {
 	private String partNo;
 	private String itemName;
 	private double amount = 0D;
+	private String link;
 
 	private ArrayList<BOMTreeNode> children = new ArrayList<>();
 
@@ -75,4 +76,13 @@ public class BOMTreeNode {
 	public void setChildren(ArrayList<BOMTreeNode> children) {
 		this.children = children;
 	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+	
 }

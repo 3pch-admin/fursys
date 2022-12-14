@@ -16,12 +16,15 @@ import org.springframework.web.servlet.ModelAndView;
 import net.sf.json.JSONObject;
 import platform.code.entity.BaseCode;
 import platform.code.service.BaseCodeHelper;
+import platform.ebom.entity.EBOM;
+import platform.ebom.service.EBOMHelper;
 import platform.part.entity.PartColumns;
 import platform.part.entity.PartDTO;
 import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import wt.part.QuantityUnit;
 import wt.part.WTPart;
+import wt.part.WTPartMaster;
 
 @Controller
 @RequestMapping(value = "/part/**")
@@ -57,8 +60,19 @@ public class PartController {
 	@ResponseBody
 	public Map<String, Object> info(@RequestBody Map<String, Object> params) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
+		String oid = (String) params.get("oid");
 		List<PartColumns> list = new ArrayList<PartColumns>();
 		try {
+
+			WTPart part = (WTPart) CommonUtils.persistable(oid);
+			WTPartMaster master = part.getMaster();
+			EBOM header = EBOMHelper.manager.getHeader(master);
+			if (header != null) {
+				result.put("result", false);
+				result.put("msg", "이미 등록된 EBOM이 존재합니다.");
+				return result;
+			}
+
 			list = PartHelper.manager.info(params);
 			result.put("result", true);
 			result.put("info", list);

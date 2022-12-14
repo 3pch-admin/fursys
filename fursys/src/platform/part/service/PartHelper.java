@@ -17,7 +17,6 @@ import platform.util.IBAUtils;
 import platform.util.PageUtils;
 import platform.util.StringUtils;
 import platform.util.ThumbnailUtils;
-import wt.doc.WTDocument;
 import wt.enterprise.MadeFromLink;
 import wt.enterprise.RevisionControlled;
 import wt.epm.EPMDocument;
@@ -438,15 +437,13 @@ public class PartHelper {
 	}
 
 	public ArrayList<PartColumns> info(Map<String, Object> params) throws Exception {
-		ArrayList<String> list = (ArrayList<String>) params.get("list");
+		String oid = (String) params.get("oid");
 		ArrayList<PartColumns> data = new ArrayList<PartColumns>();
 		try {
-			for (String oid : list) {
-				// 부품번호 부품명칭 버전 작성자 작성일자
-				WTPart part = (WTPart) CommonUtils.persistable(oid);
-				PartColumns info = new PartColumns(part);
-				data.add(info);
-			}
+			// 부품번호 부품명칭 버전 작성자 작성일자
+			WTPart part = (WTPart) CommonUtils.persistable(oid);
+			PartColumns info = new PartColumns(part);
+			data.add(info);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -498,7 +495,7 @@ public class PartHelper {
 		rootNode.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 		rootNode.put("state", part.getLifeCycleState().getDisplay());
 		rootNode.put("oid", part.getPersistInfo().getObjectIdentifier().getStringValue());
-		rootNode.put("id", UUID.randomUUID());
+		rootNode.put("uid", UUID.randomUUID().toString());
 		rootNode.put("library", isLibrary(part));
 		JSONArray array = new JSONArray();
 		String viewName = part.getViewName();
@@ -532,8 +529,9 @@ public class PartHelper {
 			node.put("amount", link != null ? link.getQuantity().getAmount() : 1);
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("oid", childPart.getPersistInfo().getObjectIdentifier().getStringValue());
-			node.put("id", UUID.randomUUID());
+			node.put("uid", UUID.randomUUID().toString());
 			node.put("library", isLibrary(childPart));
+			node.put("link", link.getPersistInfo().getObjectIdentifier().getStringValue());
 			left(childPart, node);
 			array.add(node);
 		}
@@ -575,8 +573,9 @@ public class PartHelper {
 			node.put("amount", link != null ? link.getQuantity().getAmount() : 1);
 			node.put("oid", childPart.getPersistInfo().getObjectIdentifier().getStringValue());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
-			node.put("id", UUID.randomUUID());
+			node.put("uid", UUID.randomUUID().toString());
 			node.put("library", isLibrary(childPart));
+			node.put("link", link.getPersistInfo().getObjectIdentifier().getStringValue());
 			left(childPart, node);
 			jsonChildren.add(node);
 		}
@@ -633,7 +632,7 @@ public class PartHelper {
 		rootNode.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 		rootNode.put("oid", part.getPersistInfo().getObjectIdentifier().getStringValue());
 		rootNode.put("library", isLibrary(part));
-		rootNode.put("id", UUID.randomUUID());
+		rootNode.put("uid", UUID.randomUUID());
 		jsonArray.add(rootNode);
 		return jsonArray;
 	}

@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.logging.log4j.Logger;
+
+import com.ptc.windchill.uwgm.soap.uwgm.UwgmTransactionResult;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import platform.ebom.entity.EBOM;
@@ -92,7 +96,7 @@ public class EBOMHelper {
 		rootNode.put("amount", 1);
 		rootNode.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 		rootNode.put("state", part.getLifeCycleState().getDisplay());
-		rootNode.put("id", UUID.randomUUID());
+		rootNode.put("id", UUID.randomUUID().toString());
 		rootNode.put("library", PartHelper.manager.isLibrary(part));
 		JSONArray array = new JSONArray();
 
@@ -113,8 +117,9 @@ public class EBOMHelper {
 			node.put("partTypeCd", IBAUtils.getStringValue(childPart, "PART_TYPE"));
 			node.put("amount", link.getAmount());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
-			node.put("id", UUID.randomUUID());
+			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
+			node.put("link", link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue());
 			loadTree(child, node);
 			array.add(node);
 		}
@@ -142,15 +147,16 @@ public class EBOMHelper {
 			node.put("amount", link.getAmount());
 			node.put("oid", childPart.getPersistInfo().getObjectIdentifier().getStringValue());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
-			node.put("id", UUID.randomUUID());
+			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
+			node.put("link", link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue());
 			loadTree(child, node);
 			jsonChildren.add(node);
 		}
 		rootNode.put("children", jsonChildren);
 	}
 
-	public ArrayList<EBOM> getAllLinks(EBOM parent, ArrayList<EBOM> list) throws Exception {
+	public ArrayList<EBOM> getAllEBOM(EBOM parent, ArrayList<EBOM> list) throws Exception {
 		QuerySpec query = new QuerySpec();
 		int idx = query.appendClassList(EBOMLink.class, true);
 
@@ -163,7 +169,25 @@ public class EBOMHelper {
 			Object[] obj = (Object[]) result.nextElement();
 			EBOMLink link = (EBOMLink) obj[0];
 			list.add(link.getChild());
-			getAllLinks(link.getChild(), list);
+			getAllEBOM(link.getChild(), list);
+		}
+		return list;
+	}
+
+	public ArrayList<EBOMLink> getAllEBOMLink(EBOM parent, ArrayList<EBOMLink> list) throws Exception {
+		QuerySpec query = new QuerySpec();
+		int idx = query.appendClassList(EBOMLink.class, true);
+
+		SearchCondition sc = new SearchCondition(EBOMLink.class, "roleAObjectRef.key.id", "=",
+				parent.getPersistInfo().getObjectIdentifier().getId());
+		query.appendWhere(sc, new int[] { idx });
+
+		QueryResult result = PersistenceHelper.manager.find(query);
+		while (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			EBOMLink link = (EBOMLink) obj[0];
+			list.add(link);
+			getAllEBOMLink(link.getChild(), list);
 		}
 		return list;
 	}
@@ -196,4 +220,46 @@ public class EBOMHelper {
 		return null;
 	}
 
+	public EBOM getHeader(WTPartMaster master) throws Exception {
+		QuerySpec query = new QuerySpec();
+		int idx = query.appendClassList(EBOM.class, true);
+
+		SearchCondition sc = new SearchCondition(EBOM.class, "wtpartMasterReference.key.id", "=",
+				master.getPersistInfo().getObjectIdentifier().getId());
+		query.appendWhere(sc, new int[] { idx });
+		query.appendAnd();
+
+		sc = new SearchCondition(EBOM.class, EBOM.BOM_TYPE, "=", HEADER);
+		query.appendWhere(sc, new int[] { idx });
+
+		QueryResult result = PersistenceHelper.manager.find(query);
+		if (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			EBOM ebom = (EBOM) obj[0];
+			return ebom;
+		}
+		return null;
+	}
+
+	public EBOMLink getEBOMLink(EBOM parent, EBOM child) throws Exception {
+		QuerySpec query = new QuerySpec();
+		int idx = query.appendClassList(EBOMLink.class, true);
+
+		SearchCondition sc = new SearchCondition(EBOMLink.class, "roleAObjectRef.key.id", "=",
+				parent.getPersistInfo().getObjectIdentifier().getId());
+		query.appendWhere(sc, new int[] { idx });
+		query.appendAnd();
+
+		sc = new SearchCondition(EBOMLink.class, "roleBObjectRef.key.id", "=",
+				child.getPersistInfo().getObjectIdentifier().getId());
+		query.appendWhere(sc, new int[] { idx });
+
+		QueryResult result = PersistenceHelper.manager.find(query);
+		if (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			EBOMLink link = (EBOMLink) obj[0];
+			return link;
+		}
+		return null;
+	}
 }

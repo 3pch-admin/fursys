@@ -83,34 +83,34 @@ String ccode = CommonUtils.getSessionCompany();
 							<td>
 								<label>
 									<input type="radio" name="latest" value="true" checked="checked">
-									<span>최신버전</span>
+									최신버전
 								</label>
 								&nbsp;
 								<label>
 									<input type="radio" name="latest" value="false">
-									<span>모든버전</span>
+									모든버전
 								</label>
 							</td>
 							<th>부품유형</th>
 							<td colspan="3">
 								<label>
 									<input type="radio" name="partType" value="ALL" checked="checked">
-									<span>전체</span>
+									전체
 								</label>
 								&nbsp;
 								<label>
 									<input type="radio" name="partType" value="SET">
-									<span>세트</span>
+									세트
 								</label>
 								&nbsp;
 								<label>
 									<input type="radio" name="partType" value="ITEM">
-									<span>단품</span>
+									단품
 								</label>
 								&nbsp;
 								<label>
 									<input type="radio" name="partType" value="MAT">
-									<span>자재</span>
+									자재
 								</label>
 							</td>
 						</tr>
@@ -199,17 +199,17 @@ String ccode = CommonUtils.getSessionCompany();
 							<td>
 								<label>
 									<input type="radio" name="attr" value="true">
-									<span>자재속성</span>
+									자재속성
 								</label>
 								&nbsp;
 								<label>
 									<input type="radio" name="attr" value="false">
-									<span>설계속성(공통)</span>
+									설계속성(공통)
 								</label>
 								&nbsp;
 								<label>
 									<input type="radio" name="attr" value="hide">
-									<span>숨김</span>
+									숨김
 								</label>
 							</td>
 							<th>작성일자</th>
@@ -228,7 +228,6 @@ String ccode = CommonUtils.getSessionCompany();
 							</td>
 						</tr>
 					</table>
-
 					<br class="br">
 
 					<table class="search-table top-color" id=attrTable>
@@ -343,8 +342,8 @@ String ccode = CommonUtils.getSessionCompany();
 								},
 								onClick : function(event) {
 									var item = event.item;
-									
-									if(item._3d.indexOf("no-view.png") <= -1) {
+
+									if (item._3d.indexOf("no-view.png") <= -1) {
 										_openCreoView(item.eoid);
 									}
 								}
@@ -363,7 +362,7 @@ String ccode = CommonUtils.getSessionCompany();
 								},
 								onClick : function(event) {
 									var item = event.item;
-									if(item._2d.indexOf("no-view.png") <= -1) {
+									if (item._2d.indexOf("no-view.png") <= -1) {
 										_openCreoView(item.eoid2d);
 									}
 								}
@@ -447,32 +446,32 @@ String ccode = CommonUtils.getSessionCompany();
 							headerText : "단위",
 							dataType : "string",
 							width : 100
-// 						}, {
-	// 11 15 리뷰
-// 							dataField : "order",
-// 							headerText : "주문품여부",
-// 							dataType : "string",
-// 							width : 100
-// 						}, {
-// 							dataField : "use",
-// 							headerText : "사용여부",
-// 							dataType : "string",
-// 							width : 100
-// 						}, {
-// 							dataField : "w",
-// 							headerText : "규격가로(W)",
-// 							dataType : "string",
-// 							width : 100
-// 						}, {
-// 							dataField : "d",
-// 							headerText : "규격세로(D)",
-// 							dataType : "string",
-// 							width : 100
-// 						}, {
-// 							dataField : "h",
-// 							headerText : "사용높이(H)",
-// 							dataType : "string",
-// 							width : 100
+						// 						}, {
+						// 11 15 리뷰
+						// 							dataField : "order",
+						// 							headerText : "주문품여부",
+						// 							dataType : "string",
+						// 							width : 100
+						// 						}, {
+						// 							dataField : "use",
+						// 							headerText : "사용여부",
+						// 							dataType : "string",
+						// 							width : 100
+						// 						}, {
+						// 							dataField : "w",
+						// 							headerText : "규격가로(W)",
+						// 							dataType : "string",
+						// 							width : 100
+						// 						}, {
+						// 							dataField : "d",
+						// 							headerText : "규격세로(D)",
+						// 							dataType : "string",
+						// 							width : 100
+						// 						}, {
+						// 							dataField : "h",
+						// 							headerText : "사용높이(H)",
+						// 							dataType : "string",
+						// 							width : 100
 						}, {
 							dataField : "oid",
 							headerText : "oid",
@@ -609,11 +608,11 @@ String ccode = CommonUtils.getSessionCompany();
 							_selector("unit");
 							_between("endCreatedDate")
 							_between("endModifiedDate")
-							_check("latest");
-							_check("partType");
-							_check("latest");
-							_check("attr");
+							$("input[name=latest]").checks();
+							$("input[name=partType]").checks();
+							$("input[name=attr]").checks();
 							AUIGrid.resize("#grid_wrap");
+							$("input[name=name]").focus();
 						}).keypress(function(e) {
 							if (e.keyCode == 13) {
 								currentPage = 1;

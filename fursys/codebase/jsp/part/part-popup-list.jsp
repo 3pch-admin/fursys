@@ -644,9 +644,9 @@ String oid = (String) request.getParameter("oid");
 							alert("추가 할 부품을 선택하세요.");
 							return false;
 						}
-						var list = _array(items);
+// 						var list = _array(items);
 						var params = new Object();
-						params.list = list;
+						params.oid = items[0].item.oid;
 						var url = _url("/part/info");
 						_call(url, params, function(data) {
 							opener.part(data.info);

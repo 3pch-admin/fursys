@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style type="text/css">
+.library {
+	background-color: #fefbc0;
+}
+
 .aui-grid-tree-minus-icon {
 	display: inline-block;
 	width: 16px;
@@ -155,7 +159,7 @@
 		}
 	}, {
 		dataField : "number",
-		headerText : "부품번호",
+		headerText : "CREO 파일명",
 		dataType : "string",
 		style : "left indent10",
 		editable : false,
@@ -227,28 +231,33 @@
 		headerText : "oid",
 		dataType : "string",
 		visible : false
+	}, {
+		dataField : "uid",
+		headerText : "uid",
+		dataType : "string",
+		visible : false
 	}, ];
 
-// 	var footerLayout = [ {
-// 		labelText : "총 수량",
-// 		positionField : "state",
-// 		dataField : "state",
-// 	}, {
-// 		dataField : "amount",
-// 		positionField : "amount",
-// 		postfix : "개",
-// 		operation : "SUM",
-// 		formatString : "###0"
-// 	} ];
+	// 	var footerLayout = [ {
+	// 		labelText : "총 수량",
+	// 		positionField : "state",
+	// 		dataField : "state",
+	// 	}, {
+	// 		dataField : "amount",
+	// 		positionField : "amount",
+	// 		postfix : "개",
+	// 		operation : "SUM",
+	// 		formatString : "###0"
+	// 	} ];
 
 	var auiLeftProps = {
-		rowIdField : "id",
+		// 		rowIdField : "uid",
 		headerHeight : 30,
 		rowHeight : 30,
 		showRowNumColumn : false,
 		displayTreeOpen : true,
 		treeColumnIndex : 2,
-// 		showFooter : true,
+		// 		showFooter : true,
 		enableDrag : true,
 		enableDragByCellDrag : true,
 		enableDrop : false,
@@ -259,6 +268,12 @@
 		enableSorting : false,
 		showStateColumn : true,
 		softRemoveRowMode : true,
+		rowStyleFunction : function(rowIndex, item) {
+			if (item.library) {
+				return "library";
+			}
+			return "";
+		}
 	};
 
 	var auiRightProps = {
@@ -269,7 +284,7 @@
 		showRowNumColumn : false,
 		displayTreeOpen : true,
 		treeColumnIndex : 2,
-// 		showFooter : true,
+		// 		showFooter : true,
 		enableDrag : true,
 		enableDragByCellDrag : true,
 		enableDrop : true,
@@ -283,18 +298,18 @@
 		editableOnFixedCell : true,
 		enableSorting : false,
 		useContextMenu : true,
+		rowStyleFunction : function(rowIndex, item) {
+			if (item.library) {
+				return "library";
+			}
+			return "";
+		}
 	};
 
 	leftGridID = AUIGrid.create("#grid_left", columnLayout, auiLeftProps);
 	rightGridID = AUIGrid.create("#grid_right", columnLayout, auiRightProps);
-// 	AUIGrid.setFooter(leftGridID, footerLayout);
-// 	AUIGrid.setFooter(rightGridID, footerLayout);
-
-	// 	AUIGrid.bind(leftGridID, "dropEndBefore", function(event) {
-	// 		// 이벤트의 isMoveMode 속성을 false 설정하면 행(Row) 복사를 합니다.
-	// 		event.isMoveMode = false;
-	// 		return true;
-	// 	});
+	// 	AUIGrid.setFooter(leftGridID, footerLayout);
+	// 	AUIGrid.setFooter(rightGridID, footerLayout);
 
 	AUIGrid.bind(rightGridID, "keyDown", function(event) {
 		var keyCode = event.keyCode;
@@ -457,6 +472,17 @@
 			alert("ARTICLE 및 ZONE 이 포함 되어있습니다.");
 			return false;
 		}
+
+		var pidToDrop = event.pidToDrop;
+		console.log(item.uid);
+		var notHave = AUIGrid.isUniqueValue(pidToDrop, "uid", item.uid); // 이미 존재하는지 검사
+		if (!notHave) {
+			if (confirm("지금 드랍되는 행은 이미 이전에 드랍된 행입니다. 또 드랍하시겠습니까?")) {
+				return true;
+			} else {
+				return false; // 기본 행위 안함.
+			}
+		}
 		return true;
 	});
 
@@ -582,6 +608,7 @@
 		AUIGrid.showAjaxLoader(leftGridID);
 		var url = _url("/ebom/left", oid);
 		_call(url, params, function(data) {
+			console.log(data.list);
 			AUIGrid.removeAjaxLoader(leftGridID);
 			AUIGrid.setGridData(leftGridID, data.list);
 		}, "GET");

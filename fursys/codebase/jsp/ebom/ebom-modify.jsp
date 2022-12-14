@@ -69,7 +69,12 @@ WTPart part = (WTPart) request.getAttribute("part");
 }
 </style>
 <div class="header-title">
-	<img src="/Windchill/jsp/images/home.png" class="home"> <span>HOME</span> > <span>BOM관리</span> > <span>EBOM 등록</span>
+	<img src="/Windchill/jsp/images/home.png" class="home">
+	<span>HOME</span>
+	>
+	<span>BOM관리</span>
+	>
+	<span>EBOM 등록</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -80,10 +85,15 @@ WTPart part = (WTPart) request.getAttribute("part");
 	</colgroup>
 	<tr>
 		<th>부품명칭(단품, 세트)</th>
-		<td><input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" value="<%=part.getPersistInfo().getObjectIdentifier().getStringValue()%>"> <input type="hidden" name="eoid" class="AXInput w70p" readonly="readonly" value="<%=oid%>"> <input type="text" name="number"
-			class="AXInput w70p" readonly="readonly" value="<%=part.getNumber()%>"></td>
+		<td>
+			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" value="<%=part.getPersistInfo().getObjectIdentifier().getStringValue()%>">
+			<input type="hidden" name="eoid" class="AXInput w70p" readonly="readonly" value="<%=oid%>">
+			<input type="text" name="number" class="AXInput w70p" readonly="readonly" value="<%=part.getNumber()%>">
+		</td>
 		<th>유형</th>
-		<td><input type="text" name="partType" class="AXInput w30p" readonly="readonly" value="<%=IBAUtils.getStringValue(part, "PART_TYPE")%>"></td>
+		<td>
+			<input type="text" name="partType" class="AXInput w30p" readonly="readonly" value="<%=IBAUtils.getStringValue(part, "PART_TYPE")%>">
+		</td>
 	</tr>
 </table>
 
@@ -117,126 +127,120 @@ WTPart part = (WTPart) request.getAttribute("part");
 <script type="text/javascript">
 	var leftGridID;
 	var rightGridID;
-	var columnLayout = [
-			{
-				dataField : "",
-				headerText : "",
-				dataType : "string",
-				width : 40,
-				editable : false,
-				renderer : {
-					type : "IconRenderer",
-					iconWidth : 30,
-					iconHeight : 22,
-					iconFunction : function(rowIndex, columnIndex, value, item) {
-						return item.thumb;
-					},
-					onClick : function(event) {
-						var item = event.item;
+	var columnLayout = [ {
+		dataField : "",
+		headerText : "",
+		dataType : "string",
+		width : 40,
+		editable : false,
+		renderer : {
+			type : "IconRenderer",
+			iconWidth : 30,
+			iconHeight : 22,
+			iconFunction : function(rowIndex, columnIndex, value, item) {
+				return item.thumb;
+			},
+			onClick : function(event) {
+				var item = event.item;
 
-						if (item._3d.indexOf("no-view.png") <= -1) {
-							_openCreoView(item.eoid);
-						}
-					}
+				if (item._3d.indexOf("no-view.png") <= -1) {
+					_openCreoView(item.eoid);
 				}
-			},
-			{
-				dataField : "partType",
-				headerText : "부품유형",
-				dataType : "string",
-				width : 80,
-				editable : false,
-				styleFunction : function(rowIndex, columnIndex, value,
-						headerText, item, dataField) {
-					var style = "";
-					if (item.partType == "자재") {
-						style = "red";
-					} else if (item.partType == "단품") {
-						style = "blue";
-					} else {
-						style = "green";
-					}
-					// 로직 처리
-					return style;
+			}
+		}
+	}, {
+		dataField : "partType",
+		headerText : "부품유형",
+		dataType : "string",
+		width : 80,
+		editable : false,
+		styleFunction : function(rowIndex, columnIndex, value, headerText, item, dataField) {
+			var style = "";
+			if (item.partType == "자재") {
+				style = "red";
+			} else if (item.partType == "단품") {
+				style = "blue";
+			} else {
+				style = "green";
+			}
+			// 로직 처리
+			return style;
+		}
+	}, {
+		dataField : "number",
+		headerText : "CREO 파일명",
+		dataType : "string",
+		style : "left indent10",
+		editable : false,
+		width : 350,
+		styleFunction : function(rowIndex, columnIndex, value, headerText, item, dataField) {
+			var style = "";
+			if (item.number.indexOf("ARTICLE") > -1 || item.number.indexOf("ZONE") > -1) {
+				style = "red";
+			}
+			return style;
+		},
+	// 		headerTooltip : {
+	// 			show : true,
+	// 			tooltipHtml : "레벨 내리기 단축키 : Shift + Alt + -><br>레벨 올리기 단축키 : Shift + Alt + <-<br>행 삭제 단축키 : Ctrl + Delete"
+	// 		},
+	}, {
+		dataField : "itemName",
+		headerText : "ITEM_NAME",
+		dataType : "string",
+		width : 150,
+		editable : false,
+	}, {
+		dataField : "partNo",
+		headerText : "PART_NO",
+		dataType : "string",
+		editable : false,
+		width : 150
+	}, {
+		dataField : "partName",
+		headerText : "부품명",
+		dataType : "string",
+		editable : false,
+		width : 200
+	}, {
+		dataField : "version",
+		headerText : "버전",
+		dataType : "string",
+		editable : false,
+		width : 80
+	}, {
+		dataField : "state",
+		headerText : "상태",
+		dataType : "string",
+		editable : false,
+		width : 120
+	}, {
+		dataField : "amount",
+		headerText : "수량",
+		dataType : "string",
+		editable : true,
+		width : 80,
+		editRenderer : {
+			type : "InputEditRenderer",
+			onlyNumeric : true, // Input 에서 숫자만 가능케 설정
+			validator : function(oldValue, newValue, item) {
+				var isValid = false;
+				if (newValue && newValue.length > 0) {
+					isValid = true;
 				}
-			},
-			{
-				dataField : "number",
-				headerText : "부품번호",
-				dataType : "string",
-				style : "left indent10",
-				editable : false,
-				width : 350,
-				styleFunction : function(rowIndex, columnIndex, value,
-						headerText, item, dataField) {
-					var style = "";
-					if (item.number.indexOf("ARTICLE") > -1
-							|| item.number.indexOf("ZONE") > -1) {
-						style = "red";
-					}
-					return style;
-				},
-			// 		headerTooltip : {
-			// 			show : true,
-			// 			tooltipHtml : "레벨 내리기 단축키 : Shift + Alt + -><br>레벨 올리기 단축키 : Shift + Alt + <-<br>행 삭제 단축키 : Ctrl + Delete"
-			// 		},
-			}, {
-				dataField : "itemName",
-				headerText : "ITEM_NAME",
-				dataType : "string",
-				width : 150,
-				editable : false,
-			}, {
-				dataField : "partNo",
-				headerText : "PART_NO",
-				dataType : "string",
-				editable : false,
-				width : 150
-			}, {
-				dataField : "partName",
-				headerText : "부품명",
-				dataType : "string",
-				editable : false,
-				width : 200
-			}, {
-				dataField : "version",
-				headerText : "버전",
-				dataType : "string",
-				editable : false,
-				width : 80
-			}, {
-				dataField : "state",
-				headerText : "상태",
-				dataType : "string",
-				editable : false,
-				width : 120
-			}, {
-				dataField : "amount",
-				headerText : "수량",
-				dataType : "string",
-				editable : true,
-				width : 80,
-				editRenderer : {
-					type : "InputEditRenderer",
-					onlyNumeric : true, // Input 에서 숫자만 가능케 설정
-					validator : function(oldValue, newValue, item) {
-						var isValid = false;
-						if (newValue && newValue.length > 0) {
-							isValid = true;
-						}
-						// 리턴값은 Object 이며 validate 의 값이 true 라면 패스, false 라면 message 를 띄움
-						return {
-							"validate" : isValid,
-							"message" : "수량을 입력하세요."
-						};
-					}
-				},
-			}, {
-				dataField : "oid",
-				headerText : "oid",
-				dataType : "string",
-				visible : false
-			}, ];
+				// 리턴값은 Object 이며 validate 의 값이 true 라면 패스, false 라면 message 를 띄움
+				return {
+					"validate" : isValid,
+					"message" : "수량을 입력하세요."
+				};
+			}
+		},
+	}, {
+		dataField : "oid",
+		headerText : "oid",
+		dataType : "string",
+		visible : false
+	}, ];
 
 	// 	var footerLayout = [ {
 	// 		labelText : "총 수량",
@@ -368,8 +372,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 	// 	});
 
 	AUIGrid.bind(rightGridID, "contextMenu", function(event) {
-		AUIGrid.setSelectionByIndex(rightGridID, event.rowIndex,
-				event.columnIndex);
+		AUIGrid.setSelectionByIndex(rightGridID, event.rowIndex, event.columnIndex);
 		var menus = [ {
 			label : "최상위 추가",
 			callback : contextItemHandler
@@ -421,21 +424,15 @@ WTPart part = (WTPart) request.getAttribute("part");
 		switch (event.contextIndex) {
 		case 0:
 			var root = AUIGrid.getItemByRowIndex(rightGridID, 0);
-			var url = "/Windchill/platform/part/top?partTypeCd="
-					+ item.partTypeCd + "&rowId=" + root._$uid + "&poid="
-					+ root.oid + "&callBack=_top";
+			var url = "/Windchill/platform/part/top?partTypeCd=" + item.partTypeCd + "&rowId=" + root._$uid + "&poid=" + root.oid + "&callBack=_top";
 			_popup(url, 1100, 380, "n");
 			break;
 		case 1:
-			var url = "/Windchill/platform/part/append?partTypeCd="
-					+ item.partTypeCd + "&rowId=" + item._$uid + "&poid="
-					+ item.oid + "&callBack=_child";
+			var url = "/Windchill/platform/part/append?partTypeCd=" + item.partTypeCd + "&rowId=" + item._$uid + "&poid=" + item.oid + "&callBack=_child";
 			_popup(url, 1100, 380, "n");
 			break;
 		case 2:
-			var url = "/Windchill/platform/part/exist?partTypeCd="
-					+ item.partTypeCd + "&rowId=" + item._$uid + "&poid="
-					+ item.oid + "&box=1&callBack=_child";
+			var url = "/Windchill/platform/part/exist?partTypeCd=" + item.partTypeCd + "&rowId=" + item._$uid + "&poid=" + item.oid + "&box=1&callBack=_child";
 			_popup(url, "", "", "f");
 			break;
 		case 4:
@@ -444,8 +441,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 		case 5:
 			AUIGrid.indentTreeDepth(rightGridID);
 			console.log(item);
-			var parentItem = AUIGrid
-					.getParentItemByRowId(rightGridID, item.uid);
+			var parentItem = AUIGrid.getParentItemByRowId(rightGridID, item.uid);
 			console.log(parentItem);
 			break;
 		case 6:
@@ -521,8 +517,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 		var children = item.children;
 		for (var i = 0; i < children.length; i++) {
 			var dd = children[i];
-			if (dd.number.indexOf("ARTICLE") > -1
-					|| dd.number.indexOf("ZONE") > -1) {
+			if (dd.number.indexOf("ARTICLE") > -1 || dd.number.indexOf("ZONE") > -1) {
 				return false;
 			}
 			validate(dd);
@@ -545,43 +540,39 @@ WTPart part = (WTPart) request.getAttribute("part");
 			_popup(url, 1400, 650, "n");
 		})
 
-		$("#modifyBtn")
-				.click(
-						function() {
-							// 			var json = btoa(unescape(encodeURIComponent(JSON.stringify(list))));
-							var json = btoa(unescape(encodeURIComponent(JSON
-									.stringify(AUIGrid
-											.getTreeGridData(rightGridID)))));
-							var url = "/Windchill/platform/ebom/modify";
-							var params = new Object();
-							params.json = json;
-							params.oid = $("input[name=eoid]").val();
-							_call(
-									url,
-									params,
-									function(data) {
-										document.location.href = "/Windchill/platform/ebom/modify?oid="
-												+ data.oid;
-									}, "POST");
-						})
+		$("#modifyBtn").click(function() {
+			
+			if(!confirm("수정 하시겠습니까?")) {
+				return false;
+			}
+			
+			var gridData = AUIGrid.getTreeGridData(rightGridID);
+			console.log(gridData);
+			
+			var json = btoa(unescape(encodeURIComponent(JSON.stringify(AUIGrid.getTreeGridData(rightGridID)))));
+			var url = "/Windchill/platform/ebom/modify";
+			var params = new Object();
+			params.json = json;
+			params.oid = $("input[name=eoid]").val();
+			_call(url, params, function(data) {
+				document.location.href = "/Windchill/platform/ebom/modify?oid=" + data.oid;
+			}, "POST");
+		})
 
-		$("#compareBtn1").click(
-				function() {
-					var oid = $("input[name=oid]").val();
-					var url = "/Windchill/platform/ebom/compare?oid=" + oid;
-					var popW = 1400;
-					var popH = 800;
-					var left = (screen.width - popW) / 2;
-					var top = (screen.height - popH) / 2;
+		$("#compareBtn1").click(function() {
+			var oid = $("input[name=oid]").val();
+			var url = "/Windchill/platform/ebom/compare?oid=" + oid;
+			var popW = 1400;
+			var popH = 800;
+			var left = (screen.width - popW) / 2;
+			var top = (screen.height - popH) / 2;
 
-					opt = "scrollbars=yes resizable=yes";
+			opt = "scrollbars=yes resizable=yes";
 
-					var popup = window.open(url, "", opt + ", top="
-							+ (top - 50) + ", left=" + left + ", height="
-							+ popH + ", width=" + popW);
-					popup.cbom = AUIGrid.getGridData(leftGridID);
-					popup.ebom = AUIGrid.getGridData(rightGridID);
-				})
+			var popup = window.open(url, "", opt + ", top=" + (top - 50) + ", left=" + left + ", height=" + popH + ", width=" + popW);
+			popup.cbom = AUIGrid.getGridData(leftGridID);
+			popup.ebom = AUIGrid.getGridData(rightGridID);
+		})
 
 		$("input[name=number]").click(function() {
 			var url = "/Windchill/platform/part/popup?box=1";
@@ -592,40 +583,35 @@ WTPart part = (WTPart) request.getAttribute("part");
 			self.close();
 		})
 
-		$("#compareBtn")
-				.click(
-						function() {
+		$("#compareBtn").click(function() {
 
-							var d = AUIGrid.getGridData(rightGridID);
-							for (var i = 0; i < d.length; i++) {
-								var item = d[i];
-								var depth = item._$depth;
-								console.log(item);
-								// 				if(depth == 1) {
-								// 					alert(item.name + " 태스크가 템플릿의 레벨과 일치합니다.\n태스크는 템플릿과 같은 레벨에 존재 할 수 없습니다.");
-								// 					return false;
-								// 				}
-							}
+			var d = AUIGrid.getGridData(rightGridID);
+			for (var i = 0; i < d.length; i++) {
+				var item = d[i];
+				var depth = item._$depth;
+				console.log(item);
+				// 				if(depth == 1) {
+				// 					alert(item.name + " 태스크가 템플릿의 레벨과 일치합니다.\n태스크는 템플릿과 같은 레벨에 존재 할 수 없습니다.");
+				// 					return false;
+				// 				}
+			}
 
-							if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
-								return false;
-							}
+			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
+				return false;
+			}
 
-							// 			var json = btoa(unescape(encodeURIComponent(JSON.stringify(list))));
-							var json = btoa(unescape(encodeURIComponent(JSON
-									.stringify(AUIGrid
-											.getTreeGridData(rightGridID)))));
-							var url = "/Windchill/platform/ebom/create";
-							var params = new Object();
-							params.json = json;
-							params.oid = $("input[name=oid]").val();
-							console.log(params);
-							_call(url, params, function(data) {
-								var url = _url("/ebom/compare", $(
-										"input[name=oid]").val());
-								_popup(url, 1600, 800, "n");
-							}, "POST");
-						})
+			// 			var json = btoa(unescape(encodeURIComponent(JSON.stringify(list))));
+			var json = btoa(unescape(encodeURIComponent(JSON.stringify(AUIGrid.getTreeGridData(rightGridID)))));
+			var url = "/Windchill/platform/ebom/create";
+			var params = new Object();
+			params.json = json;
+			params.oid = $("input[name=oid]").val();
+			console.log(params);
+			_call(url, params, function(data) {
+				var url = _url("/ebom/compare", $("input[name=oid]").val());
+				_popup(url, 1600, 800, "n");
+			}, "POST");
+		})
 	})
 
 	loadLeftTree($("input[name=oid]").val());

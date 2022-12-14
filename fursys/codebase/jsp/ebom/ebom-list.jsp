@@ -327,6 +327,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 								if (!confirm("삭제 하시겠습니까?")) {
 									return false;
 								}
+								
 								var oid = items[0].item.oid;
 								var url = _url("/ebom/delete", oid);
 								_call(url, null, function(data) {

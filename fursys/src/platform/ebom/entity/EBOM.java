@@ -31,7 +31,10 @@ import wt.util.WTException;
 
 								constraints = @PropertyConstraints(required = true)),
 
-						myRole = @MyRole(name = "ebom", cardinality = Cardinality.ONE)), }
+						myRole = @MyRole(name = "ebom", cardinality = Cardinality.ONE)),
+				
+
+}
 
 )
 public class EBOM extends _EBOM {

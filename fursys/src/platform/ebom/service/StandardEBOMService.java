@@ -7,18 +7,24 @@ import java.util.Map;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ptc.windchill.uwgm.soap.uwgm.UwgmTransactionResult;
 
 import platform.ebom.entity.EBOM;
 import platform.ebom.entity.EBOMLink;
 import platform.ebom.vo.BOMTreeNode;
 import platform.util.CommonUtils;
 import wt.fc.PersistenceHelper;
+import wt.log4j.LogR;
 import wt.org.WTPrincipal;
 import wt.ownership.Ownership;
 import wt.part.WTPart;
 import wt.part.WTPartMaster;
+import wt.part.WTPartUsageLink;
 import wt.pom.Transaction;
 import wt.services.StandardManager;
 import wt.session.SessionHelper;
@@ -58,12 +64,19 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 				header = EBOMHelper.manager.getEBOM(master);
 				if (header == null) {
 					header = EBOM.newEBOM();
+					header.setWtpartMaster(master);
+					header.setBomType(EBOMHelper.HEADER);
+					header.setState(EBOMHelper.EBOM_TEMP);
+					header.setOwnership(Ownership.newOwnership(prin));
+					PersistenceHelper.manager.save(header);
+				} else {
+					header.setWtpartMaster(master);
+					header.setBomType(EBOMHelper.HEADER);
+					header.setState(EBOMHelper.EBOM_TEMP);
+					header.setOwnership(Ownership.newOwnership(prin));
+					PersistenceHelper.manager.modify(header);
 				}
-				header.setWtpartMaster(master);
-				header.setBomType(EBOMHelper.HEADER);
-				header.setState(EBOMHelper.EBOM_TEMP);
-				header.setOwnership(Ownership.newOwnership(prin));
-				PersistenceHelper.manager.save(header);
+
 				saveTree(header, node.getChildren());
 			}
 
@@ -92,17 +105,31 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 				EBOM header = EBOMHelper.manager.getEBOM(master);
 				if (header == null) {
 					header = EBOM.newEBOM();
+					header.setWtpartMaster(master);
+					header.setBomType(EBOMHelper.CHILD);
+					header.setState(EBOMHelper.EBOM_TEMP);
+					header.setOwnership(Ownership.newOwnership(prin));
+					PersistenceHelper.manager.save(header);
+				} else {
+					header.setWtpartMaster(master);
+					header.setBomType(EBOMHelper.CHILD);
+					header.setState(EBOMHelper.EBOM_TEMP);
+					header.setOwnership(Ownership.newOwnership(prin));
+					PersistenceHelper.manager.modify(header);
 				}
-				header.setWtpartMaster(master);
-				header.setBomType(EBOMHelper.CHILD);
-				header.setState(EBOMHelper.EBOM_TEMP);
-				header.setOwnership(Ownership.newOwnership(prin));
-				PersistenceHelper.manager.save(header);
 
-				EBOMLink link = EBOMLink.newEBOMLink(parent, header);
-				link.setAmount(node.getAmount());
-				PersistenceHelper.manager.save(link);
-
+				EBOMLink link = EBOMHelper.manager.getEBOMLink(parent, header);
+				WTPartUsageLink usageLink = (WTPartUsageLink) CommonUtils.persistable(node.getLink());
+				if (link == null) {
+					link = EBOMLink.newEBOMLink(parent, header);
+					link.setAmount(node.getAmount());
+					link.setUsageLink(usageLink);
+					PersistenceHelper.manager.save(link);
+				} else {
+					link.setAmount(node.getAmount());
+					link.setUsageLink(usageLink);
+					PersistenceHelper.manager.modify(link);
+				}
 				saveTree(header, node.getChildren());
 			}
 
@@ -134,7 +161,7 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 
 			ArrayList<EBOM> arr = new ArrayList<>();
 			arr.add(header);
-			ArrayList<EBOM> list = EBOMHelper.manager.getAllLinks(header, arr);
+			ArrayList<EBOM> list = EBOMHelper.manager.getAllEBOM(header, arr);
 			for (EBOM data : list) {
 				PersistenceHelper.manager.delete(data);
 			}
@@ -170,5 +197,42 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 				trs.rollback();
 		}
 		return newHeader;
+	}
+
+	@Override
+	public void delete(String oid) throws Exception {
+		EBOM header = null;
+		Transaction trs = new Transaction();
+		try {
+			trs.start();
+
+			header = (EBOM) CommonUtils.persistable(oid);
+
+			ArrayList<EBOMLink> list = new ArrayList<>();
+			ArrayList<EBOMLink> links = EBOMHelper.manager.getAllEBOMLink(header, list);
+
+			ArrayList<EBOM> arr = new ArrayList<>();
+			ArrayList<EBOM> data = EBOMHelper.manager.getAllEBOM(header, arr);
+
+			for (EBOMLink link : links) {
+				PersistenceHelper.manager.delete(link);
+			}
+
+			for (EBOM dd : data) {
+				PersistenceHelper.manager.delete(dd);
+			}
+
+			PersistenceHelper.manager.delete(header);
+
+			trs.commit();
+			trs = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			trs.rollback();
+			throw e;
+		} finally {
+			if (trs != null)
+				trs.rollback();
+		}
 	}
 }

@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.sf.json.JSONArray;
+import platform.doc.service.DocumentHelper;
 import platform.ebom.entity.EBOM;
 import platform.ebom.service.EBOMHelper;
 import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
+import wt.doc.WTDocument;
 import wt.part.WTPart;
 import wt.part.WTPartMaster;
 
@@ -122,7 +124,7 @@ public class EBOMController {
 		try {
 			EBOM header = EBOMHelper.service.modify(params);
 			result.put("oid", header.getPersistInfo().getObjectIdentifier().getStringValue());
-			result.put("save", "save");
+			result.put("msg", "EBOM이 수정 되었습니다.");
 			result.put("result", true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -155,4 +157,21 @@ public class EBOMController {
 		model.setViewName("popup:/ebom/ebom-verify");
 		return model;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public Map<String, Object> delete(@RequestParam String oid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			EBOMHelper.service.delete(oid);
+			result.put("result", true);
+			result.put("msg", "EBOM이 삭제 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+
 }
