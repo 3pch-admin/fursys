@@ -666,7 +666,9 @@ String oid = (String) request.getParameter("oid");
 // 					_check("partType");
 // 					_check("latest");
 // 					_check("attr");
-					$("input").checks();
+					$("input[name=latest]").checks();
+					$("input[name=partType]").checks();
+					$("input[name=attr]").checks();
 					load();
 				}).keypress(function(e) {
 					if (e.keyCode == 13) {					
