@@ -110,7 +110,7 @@ public class EBOMHelper {
 			node.put("version", childPart.getVersionIdentifier().getSeries().getValue());
 			node.put("partType", PartHelper.manager.partTypeToDisplay(childPart));
 			node.put("partTypeCd", IBAUtils.getStringValue(childPart, "PART_TYPE"));
-			node.put("amount", child.getAmount());
+			node.put("amount", link.getAmount());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
@@ -138,7 +138,7 @@ public class EBOMHelper {
 			node.put("partTypeCd", IBAUtils.getStringValue(childPart, "PART_TYPE"));
 			node.put("version", childPart.getVersionIdentifier().getSeries().getValue());
 			node.put("partType", PartHelper.manager.partTypeToDisplay(childPart));
-			node.put("amount", child.getAmount());
+			node.put("amount", link.getAmount());
 			node.put("oid", childPart.getPersistInfo().getObjectIdentifier().getStringValue());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID());
@@ -185,6 +185,5 @@ public class EBOMHelper {
 		}
 		return list;
 	}
-
 
 }

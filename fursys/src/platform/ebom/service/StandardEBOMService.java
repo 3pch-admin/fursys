@@ -56,7 +56,6 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 			for (BOMTreeNode node : nodes) {
 				header = EBOM.newEBOM();
 				header.setWtpartMaster(master);
-				header.setAmount(node.getAmount());
 				header.setBomType(EBOMHelper.HEADER);
 				header.setState(EBOMHelper.EBOM_TEMP);
 				header.setOwnership(Ownership.newOwnership(prin));
@@ -88,13 +87,13 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 				WTPartMaster master = part.getMaster();
 				EBOM header = EBOM.newEBOM();
 				header.setWtpartMaster(master);
-				header.setAmount(node.getAmount());
 				header.setBomType(EBOMHelper.CHILD);
 				header.setState(EBOMHelper.EBOM_TEMP);
 				header.setOwnership(Ownership.newOwnership(prin));
 				PersistenceHelper.manager.save(header);
 
 				EBOMLink link = EBOMLink.newEBOMLink(parent, header);
+				link.setAmount(node.getAmount());
 				PersistenceHelper.manager.save(link);
 
 				saveTree(header, node.getChildren());
@@ -142,13 +141,12 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 
 			for (BOMTreeNode node : nodes) {
 				newHeader = EBOM.newEBOM();
-				header.setWtpartMaster(master);
-				header.setAmount(node.getAmount());
-				header.setBomType(EBOMHelper.HEADER);
-				header.setState(EBOMHelper.EBOM_TEMP);
-				header.setOwnership(Ownership.newOwnership(prin));
-				PersistenceHelper.manager.save(header);
-				saveTree(header, node.getChildren());
+				newHeader.setWtpartMaster(master);
+				newHeader.setBomType(EBOMHelper.HEADER);
+				newHeader.setState(EBOMHelper.EBOM_TEMP);
+				newHeader.setOwnership(Ownership.newOwnership(prin));
+				PersistenceHelper.manager.save(newHeader);
+				saveTree(newHeader, node.getChildren());
 			}
 
 			trs.commit();

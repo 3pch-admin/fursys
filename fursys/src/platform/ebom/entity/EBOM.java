@@ -21,8 +21,6 @@ import wt.util.WTException;
 
 				@GeneratedProperty(name = "bomType", type = String.class),
 
-				@GeneratedProperty(name = "amount", type = Double.class)
-
 		},
 
 		foreignKeys = {
