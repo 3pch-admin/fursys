@@ -31,7 +31,7 @@ public class EventListener extends ServiceEventListenerAdapter {
 			if (POST_STORE.equals(type)) {
 				EPMDocument epm = (EPMDocument) target;
 				System.out.println("체크인(도면) 매개변수 입력...");
-				EventHelper.service.transferTo(epm);
+//				EventHelper.service.transferTo(epm);
 			}
 		}
 
@@ -39,7 +39,7 @@ public class EventListener extends ServiceEventListenerAdapter {
 			if (POST_STORE.equals(type)) {
 				WTPart part = (WTPart) target;
 				System.out.println("체크인(부품) 매개변수 입력...");
-				EventHelper.service.transferTo(part);
+//				EventHelper.service.transferTo(part);
 			}
 		}
 	}

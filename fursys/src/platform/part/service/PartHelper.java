@@ -499,6 +499,7 @@ public class PartHelper {
 		rootNode.put("state", part.getLifeCycleState().getDisplay());
 		rootNode.put("oid", part.getPersistInfo().getObjectIdentifier().getStringValue());
 		rootNode.put("id", UUID.randomUUID());
+		rootNode.put("library", isLibrary(part));
 		JSONArray array = new JSONArray();
 		String viewName = part.getViewName();
 		if (!StringUtils.isNotNull(viewName)) {
@@ -532,6 +533,7 @@ public class PartHelper {
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("oid", childPart.getPersistInfo().getObjectIdentifier().getStringValue());
 			node.put("id", UUID.randomUUID());
+			node.put("library", isLibrary(childPart));
 			left(childPart, node);
 			array.add(node);
 		}
@@ -574,6 +576,7 @@ public class PartHelper {
 			node.put("oid", childPart.getPersistInfo().getObjectIdentifier().getStringValue());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID());
+			node.put("library", isLibrary(childPart));
 			left(childPart, node);
 			jsonChildren.add(node);
 		}
@@ -629,6 +632,8 @@ public class PartHelper {
 		rootNode.put("amount", 1);
 		rootNode.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 		rootNode.put("oid", part.getPersistInfo().getObjectIdentifier().getStringValue());
+		rootNode.put("library", isLibrary(part));
+		rootNode.put("id", UUID.randomUUID());
 		jsonArray.add(rootNode);
 		return jsonArray;
 	}
@@ -754,4 +759,11 @@ public class PartHelper {
 
 		return link;
 	}
+
+	public boolean isLibrary(WTPart part) throws Exception {
+		String containerName = part.getContainerName();
+		if(containerName.equals(LIBRARY_CONTAINER)) {
+			return true;
+		}
+		return false;
 }
