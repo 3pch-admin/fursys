@@ -92,6 +92,7 @@ public class EBOMHelper {
 		rootNode.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 		rootNode.put("state", part.getLifeCycleState().getDisplay());
 		rootNode.put("id", UUID.randomUUID());
+		rootNode.put("library", PartHelper.manager.isLibrary(part));
 		JSONArray array = new JSONArray();
 
 		ArrayList<EBOMLink> result = getLinks(ebom);
@@ -112,6 +113,7 @@ public class EBOMHelper {
 			node.put("amount", child.getAmount());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID());
+			node.put("library", PartHelper.manager.isLibrary(childPart));
 			loadTree(child, node);
 			array.add(node);
 		}
@@ -140,6 +142,7 @@ public class EBOMHelper {
 			node.put("oid", childPart.getPersistInfo().getObjectIdentifier().getStringValue());
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID());
+			node.put("library", PartHelper.manager.isLibrary(childPart));
 			loadTree(child, node);
 			jsonChildren.add(node);
 		}

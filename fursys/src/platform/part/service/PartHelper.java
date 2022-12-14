@@ -762,8 +762,9 @@ public class PartHelper {
 
 	public boolean isLibrary(WTPart part) throws Exception {
 		String containerName = part.getContainerName();
-		if(containerName.equals(LIBRARY_CONTAINER)) {
+		if (containerName.equals(LIBRARY_CONTAINER)) {
 			return true;
 		}
 		return false;
+	}
 }
