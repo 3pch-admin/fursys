@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import platform.ebom.entity.EBOM;
 import platform.ebom.entity.EBOMColumns;
 import platform.ebom.entity.EBOMLink;
+import platform.ebom.entity.EBOMWTPartMasterLink;
 import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import platform.util.IBAUtils;
@@ -184,6 +185,15 @@ public class EBOMHelper {
 			list.add(link);
 		}
 		return list;
+	}
+
+	public EBOM getEBOM(WTPartMaster master) throws Exception {
+		QueryResult result = PersistenceHelper.manager.navigate(master, "ebom", EBOMWTPartMasterLink.class);
+		if (result.hasMoreElements()) {
+			EBOM ebom = (EBOM) result.nextElement();
+			return ebom;
+		}
+		return null;
 	}
 
 }

@@ -54,7 +54,11 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 			List<BOMTreeNode> nodes = gson.fromJson(jsonStr, listType);
 
 			for (BOMTreeNode node : nodes) {
-				header = EBOM.newEBOM();
+
+				header = EBOMHelper.manager.getEBOM(master);
+				if (header == null) {
+					header = EBOM.newEBOM();
+				}
 				header.setWtpartMaster(master);
 				header.setBomType(EBOMHelper.HEADER);
 				header.setState(EBOMHelper.EBOM_TEMP);
@@ -85,7 +89,10 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 			for (BOMTreeNode node : children) {
 				WTPart part = (WTPart) CommonUtils.persistable(node.getOid());
 				WTPartMaster master = part.getMaster();
-				EBOM header = EBOM.newEBOM();
+				EBOM header = EBOMHelper.manager.getEBOM(master);
+				if (header == null) {
+					header = EBOM.newEBOM();
+				}
 				header.setWtpartMaster(master);
 				header.setBomType(EBOMHelper.CHILD);
 				header.setState(EBOMHelper.EBOM_TEMP);
@@ -140,7 +147,10 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 			List<BOMTreeNode> nodes = gson.fromJson(jsonStr, listType);
 
 			for (BOMTreeNode node : nodes) {
-				newHeader = EBOM.newEBOM();
+				newHeader = EBOMHelper.manager.getEBOM(master);
+				if (newHeader == null) {
+					newHeader = EBOM.newEBOM();
+				}
 				newHeader.setWtpartMaster(master);
 				newHeader.setBomType(EBOMHelper.HEADER);
 				newHeader.setState(EBOMHelper.EBOM_TEMP);
