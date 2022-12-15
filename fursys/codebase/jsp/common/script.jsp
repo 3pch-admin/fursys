@@ -9,10 +9,10 @@
 <script type="text/javascript" src="/Windchill/jsp/js/tableHeadFixer.js"></script>
 <script type="text/javascript" src="/Windchill/jsp/asset/radio/jquery.checks.js"></script>
 <!-- AUIGrid -->
-<script type="text/javascript" src="/Windchill/jsp/asset/AUIGrid/AUIGridLicense.js"></script>
+<script type="text/javascript" src="/Windchill/jsp/asset/AUIGrid/AUIGridLicense.js?v=1"></script>
 <script type="text/javascript" src="/Windchill/jsp/asset/AUIGrid/pdfkit/AUIGrid.pdfkit.js"></script>
 <script type="text/javascript" src="/Windchill/jsp/asset/AUIGrid/pdfkit/FileSaver.min.js"></script>
-<script type="text/javascript" src="/Windchill/jsp/asset/AUIGrid/AUIGrid.js"></script>
+<script type="text/javascript" src="/Windchill/jsp/asset/AUIGrid/AUIGrid.js?v=1"></script>
 
 <!-- AUIGantt -->
 <script type="text/javascript" src="/Windchill/jsp/asset/AUIGantt/AUIGanttLicense.js"></script>

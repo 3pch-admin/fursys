@@ -82,7 +82,6 @@ boolean isAdmin = CommonUtils.isAdmin();
 							<td class="left">
 								<button type="button" id="createBtn">등록</button>
 								<button type="button" id="derivedBtn">파생</button>
-								<button type="button" id="partListBtn">PART LIST 등록</button>
 								<%
 								if (isAdmin) {
 								%>
@@ -287,30 +286,6 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 							$("input[name=number]").focus();
 
-							$("#partListBtn").click(function() {
-
-								var items = AUIGrid.getCheckedRowItems(myGridID);
-								if (items.length == 0) {
-									alert("PART LIST를 생성 할 EBOM을 선택하세요.");
-									return false;
-								}
-								var state = items[0].item.state;
-								if (state != "EBOM 작성중") {
-									alert("EBOM 작성중인 EBOM일 경우 PART LIST 생성이 가능합니다.");
-									return false;
-								}
-
-								if (!confirm("PART LIST를 생성 하시겠습니까?")) {
-									return false;
-								}
-
-								var url = "/Windchill/platform/ebom/partlist"
-								var params = new Object();
-								params.oid = items[0].item.oid;
-								_call(url, params, function(data) {
-									load();
-								}, "POST");
-							})
 
 							$("#createBtn").click(function() {
 								var url = "/Windchill/platform/ebom/create";

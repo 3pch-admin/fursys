@@ -1,5 +1,7 @@
 package platform.part.service;
 
+import java.util.UUID;
+
 import net.sf.json.JSONObject;
 import platform.doc.entity.DocumentColumns;
 import platform.doc.entity.WTDocumentWTPartLink;
@@ -212,10 +214,12 @@ public class StandardPartService extends StandardManager implements PartService 
 			node.put("partNo", IBAUtils.getStringValue(part, "PART_NO"));
 			node.put("version", part.getVersionIdentifier().getSeries().getValue());
 			node.put("partType", PartHelper.manager.partTypeToDisplay(part));
-			node.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
-			node.put("amount", 1);
 			node.put("state", part.getLifeCycleState().getDisplay());
+			node.put("amount", 1);
+			node.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 			node.put("oid", part.getPersistInfo().getObjectIdentifier().getStringValue());
+			node.put("library", PartHelper.manager.isLibrary(part));
+			node.put("uid", UUID.randomUUID());
 
 			trs.commit();
 			trs = null;

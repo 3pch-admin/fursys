@@ -92,7 +92,7 @@
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="compareBtn">검증 및 등록</button>
+			<button type="button" id="createBtn">검증 및 등록</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -311,24 +311,82 @@
 	// 	AUIGrid.setFooter(leftGridID, footerLayout);
 	// 	AUIGrid.setFooter(rightGridID, footerLayout);
 
-	AUIGrid.bind(rightGridID, "keyDown", function(event) {
-		var keyCode = event.keyCode;
-		// 		if (keyCode == 45) {
+	// 위
+	AUIGrid.bind(rightGridID, "indent", function(event) {
+		// 		if (event.items.length == 0) {
 		// 			return false;
 		// 		}
-		// 		var selectedItems = AUIGrid.getSelectedItems(event.pid);
-		// 		var rowIndex = selectedItems[0].rowIndex;
-		// 		console.log(rowIndex);
-		// 		if (rowIndex == 0) {
-		// // 			return false;
-		// 		}
-		// 		var shiftKey = event.shiftKey;
-		// 		var altKey = event.orgEvent.altKey;
-		// 		if ((shiftKey && altKey) && keyCode == 39) {
+		// 		var item = event.items[0];
+		// 		var cCd = item.partTypeCd; // 이동할 타입
+		// 		var parent = AUIGrid.getItemByRowId(rightGridID, item._$parent);
+		// 		if (parent != undefined) {
+		// 			var pCd = parent.partTypeCd; // 부모 타입
 
-		// 			console.log(selectedItems);
+		// 			// 단품일 경우
+		// 			if (cCd == "ITEM") {
+		// 				// 자재 아래로 이동 불가
+		// 				if (pCd == "MAT") {
+		// 					alert("단품은 자재 아래로 이동이 불가능 합니다.");
+		// // 					AUIGrid.undo(rightGridID);
+		// 					return false;
+		// 				}
+
+		// 				if (pCd == "ITEM") {
+		// 					alert("단품은 단품 아래로 이동이 불가능 합니다.");
+		// // 					AUIGrid.undo(rightGridID);
+		// 					return false;
+		// 				}
+		// 			}
 		// 		}
-		return true;
+	});
+
+	// 아래
+	AUIGrid.bind(rightGridID, "outdent", function(event) {
+		// 		var item = event.items[0];
+		// 		var cCd = item.partTypeCd; // 이동할 타입
+		// 		console.log(event.type + " 이벤트\r\n" + "\r\n적용된 행 개수 : " + event.items.length);
+		// 		console.log(item);
+		// 		if (event.items.length == 0) {
+		// 			return false;
+		// 		}
+
+		// 		if (item._$depth == 1) {
+		// 			alert("최하위 레벨로 이동은 불가능 합니다.");
+		// // 			AUIGrid.undo(rightGridID);
+		// 			return false;
+		// 		}
+		// 		console.log("A");
+		// 		var parent = AUIGrid.getItemByRowId(rightGridID, item._$parent);
+		// 		if (parent != undefined) {
+		// 			var pCd = parent.partTypeCd; // 부모 타입
+
+		// 			// 		// 자재일경우..
+		// 			if (cCd == "MAT") {
+		// 				// 세트 아래로 옴기기 불가능
+		// 				if (pCd == "SET") {
+		// // 					alert("자재는 세트 아래에 존재가 불가능 합니다.");
+		// // 					AUIGrid.undo(rightGridID);
+		// 					return;
+
+		// 				}
+		// 				console.log("C");
+		// 			}
+		// 			// 단품일 경우
+		// 			if (cCd == "ITEM") {
+		// 				// 자재 아래로 이동 불가
+		// 				if (pCd == "MAT") {
+		// 					alert("단품은 자재 아래로 이동이 불가능 합니다.");
+		// // 					AUIGrid.undo(rightGridID);
+		// 					return false;
+		// 				}
+
+		// 				if (pCd == "ITEM") {
+		// 					alert("단품은 단품 아래로 이동이 불가능 합니다.");
+		// // 					AUIGrid.undo(rightGridID);
+		// 					return false;
+		// 				}
+		// 			}
+		// 		}
 	});
 
 	// drag prevent
@@ -536,20 +594,6 @@
 
 	$(function() {
 
-		$("#compareBtn1").click(function() {
-			var oid = $("input[name=oid]").val();
-			var url = "/Windchill/platform/ebom/compare?oid=" + oid;
-			var popW = 1400;
-			var popH = 800;
-			var left = (screen.width - popW) / 2;
-			var top = (screen.height - popH) / 2;
-
-			opt = "scrollbars=yes resizable=yes";
-
-			var popup = window.open(url, "", opt + ", top=" + (top - 50) + ", left=" + left + ", height=" + popH + ", width=" + popW);
-			popup.cbom = AUIGrid.getGridData(leftGridID);
-			popup.ebom = AUIGrid.getGridData(rightGridID);
-		})
 
 		$("input[name=number]").click(function() {
 			var url = "/Windchill/platform/part/popup?box=1";
@@ -560,7 +604,7 @@
 			self.close();
 		})
 
-		$("#compareBtn").click(function() {
+		$("#createBtn").click(function() {
 
 			var d = AUIGrid.getGridData(rightGridID);
 			for (var i = 0; i < d.length; i++) {
@@ -573,7 +617,8 @@
 				// 				}
 			}
 
-			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
+// 			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
+			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.")) {
 				return false;
 			}
 
@@ -583,14 +628,14 @@
 			var params = new Object();
 			params.json = json;
 			params.oid = $("input[name=oid]").val();
-			console.log(params);
 			_call(url, params, function(data) {
-				var url = _url("/ebom/compare", $("input[name=oid]").val());
+				var url = _url("/ebom/verify", $("input[name=oid]").val());
 				_popup(url, 1600, 800, "n");
 			}, "POST");
 		})
 	})
 
+	
 	function part(info) {
 		// 		$("#input[name=number]").add("input[name=name]").off();
 		$("input[name=oid]").val(info[0].oid);

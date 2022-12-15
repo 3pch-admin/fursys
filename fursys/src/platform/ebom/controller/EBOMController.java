@@ -1,5 +1,6 @@
 package platform.ebom.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import net.sf.json.JSONArray;
 import platform.doc.service.DocumentHelper;
 import platform.ebom.entity.EBOM;
 import platform.ebom.service.EBOMHelper;
+import platform.ebom.vo.BOMCompareNode;
 import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import wt.doc.WTDocument;
@@ -51,6 +53,15 @@ public class EBOMController {
 	public ModelAndView create() {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("popup:/ebom/ebom-create");
+		return model;
+	}
+
+	@RequestMapping(value = "/verify", method = RequestMethod.GET)
+	public ModelAndView verify(@RequestParam String oid) throws Exception {
+		ModelAndView model = new ModelAndView();
+		ArrayList<BOMCompareNode> list = EBOMHelper.manager.compare(oid);
+		model.addObject("list", list);
+		model.setViewName("popup:/ebom/ebom-verify");
 		return model;
 	}
 
@@ -103,11 +114,16 @@ public class EBOMController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> create(@RequestBody Map<String, Object> params) {
+		String oid = (String) params.get("oid");
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			EBOM header = EBOMHelper.service.create(params);
+			WTPart part = (WTPart) CommonUtils.persistable(oid);
+			WTPartMaster master = part.getMaster();
+			EBOM header = EBOMHelper.manager.getHeader(master);
+			if (header == null) {
+				header = EBOMHelper.service.create(params);
+			}
 			result.put("oid", header.getPersistInfo().getObjectIdentifier().getStringValue());
-			result.put("save", "save");
 			result.put("result", true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,13 +167,6 @@ public class EBOMController {
 		return result;
 	}
 
-	@RequestMapping(value = "/verify", method = RequestMethod.GET)
-	public ModelAndView verify(@RequestParam String oid) {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("popup:/ebom/ebom-verify");
-		return model;
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public Map<String, Object> delete(@RequestParam String oid) throws Exception {

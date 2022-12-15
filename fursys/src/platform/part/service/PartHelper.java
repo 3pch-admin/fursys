@@ -587,27 +587,19 @@ public class PartHelper {
 		WTPart part = (WTPart) CommonUtils.persistable(oid);
 		JSONObject node = new JSONObject();
 		try {
-//			node.put("thumb", ThumbnailUtils.magnify(part));
 			node.put("thumb", ThumbnailUtils.thumbnails(part)[1]);
-			node.put("name", part.getName());
+			node.put("partName", IBAUtils.getStringValue(part, "PART_NAME"));
 			node.put("number", part.getNumber());
-			node.put("icon", "/Windchill/jsp/images/part.gif");
-			node.put("title", part.getNumber());
-			node.put("version", part.getVersionIdentifier().getSeries().getValue());
-			node.put("partType", PartHelper.manager.partTypeToDisplay(part));
-			node.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 			node.put("itemName", IBAUtils.getStringValue(part, "ITEM_NAME"));
+			node.put("partNo", IBAUtils.getStringValue(part, "PART_NO"));
+			node.put("version", part.getVersionIdentifier().getSeries().getValue());
+			node.put("partType", partTypeToDisplay(part));
 			node.put("state", part.getLifeCycleState().getDisplay());
 			node.put("amount", 1);
-			node.put("color", IBAUtils.getStringValue(part, "COLOR"));
-			node.put("ref", PartHelper.manager.getEPMDocument(part) != null ? "유" : "무");
-			node.put("erpCode", IBAUtils.getStringValue(part, "ERP_CODE"));
+			node.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 			node.put("oid", part.getPersistInfo().getObjectIdentifier().getStringValue());
-			node.put("poid", part.getPersistInfo().getObjectIdentifier().getStringValue());
-			node.put("library", part.getContainerName().equalsIgnoreCase(PartHelper.LIBRARY_CONTAINER));
-			node.put("isColorSet", false);
-			node.put("append", true);
-			node.put("isColor", false); // 기본적으로 무조건없음
+			node.put("library", isLibrary(part));
+			node.put("uid", UUID.randomUUID());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

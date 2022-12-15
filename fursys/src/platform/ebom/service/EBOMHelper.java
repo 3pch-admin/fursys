@@ -16,6 +16,7 @@ import platform.ebom.entity.EBOM;
 import platform.ebom.entity.EBOMColumns;
 import platform.ebom.entity.EBOMLink;
 import platform.ebom.entity.EBOMWTPartMasterLink;
+import platform.ebom.vo.BOMCompareNode;
 import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import platform.util.IBAUtils;
@@ -25,6 +26,7 @@ import wt.fc.PersistenceHelper;
 import wt.fc.QueryResult;
 import wt.part.WTPart;
 import wt.part.WTPartMaster;
+import wt.part.WTPartUsageLink;
 import wt.query.ClassAttribute;
 import wt.query.OrderBy;
 import wt.query.QuerySpec;
@@ -261,5 +263,41 @@ public class EBOMHelper {
 			return link;
 		}
 		return null;
+	}
+
+	public ArrayList<BOMCompareNode> compare(String oid) throws Exception {
+		ArrayList<BOMCompareNode> list = new ArrayList<>();
+		EBOM header = (EBOM) CommonUtils.persistable(oid);
+
+		WTPartMaster master = header.getWtpartMaster();
+		WTPart latest = PartHelper.manager.getLatest(master);
+		BOMCompareNode node = new BOMCompareNode(latest, 1, 1);
+		list.add(node);
+		ArrayList<EBOMLink> links = getLinks(header);
+		for (EBOMLink link : links) {
+			EBOM child = link.getChild();
+			WTPartUsageLink usageLink = link.getUsageLink();
+			WTPartMaster childMaster = child.getWtpartMaster();
+			WTPart childLatest = PartHelper.manager.getLatest(childMaster);
+			BOMCompareNode childNode = new BOMCompareNode(childLatest, usageLink.getQuantity().getAmount(),
+					link.getAmount());
+			list.add(childNode);
+			compare(child, list);
+		}
+		return list;
+	}
+
+	private void compare(EBOM parent, ArrayList<BOMCompareNode> list) throws Exception {
+		ArrayList<EBOMLink> links = getLinks(parent);
+		for (EBOMLink link : links) {
+			EBOM child = link.getChild();
+			WTPartUsageLink usageLink = link.getUsageLink();
+			WTPartMaster childMaster = child.getWtpartMaster();
+			WTPart childLatest = PartHelper.manager.getLatest(childMaster);
+			BOMCompareNode childNode = new BOMCompareNode(childLatest, usageLink.getQuantity().getAmount(),
+					link.getAmount());
+			list.add(childNode);
+			compare(child, list);
+		}
 	}
 }

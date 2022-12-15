@@ -130,13 +130,11 @@ JSONArray darr = JSONArray.fromObject(list);
 			return "";
 		}
 	};
-
+	console.log("<%=darr%>");
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiProps);
 	AUIGrid.setFooter(myGridID, footerLayout);
 	AUIGrid.setFooter(myGridID, footerLayout);
-	AUIGrid.setGridData(myGridID,
-<%=darr%>
-	);
+	AUIGrid.setGridData(myGridID,<%=darr%>);
 	$(window).resize(function() {
 		AUIGrid.resize("#grid_wrap");
 	})
