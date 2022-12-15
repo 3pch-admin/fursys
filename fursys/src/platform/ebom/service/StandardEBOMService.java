@@ -18,6 +18,7 @@ import platform.ebom.entity.EBOM;
 import platform.ebom.entity.EBOMLink;
 import platform.ebom.vo.BOMTreeNode;
 import platform.util.CommonUtils;
+import platform.util.StringUtils;
 import wt.fc.PersistenceHelper;
 import wt.log4j.LogR;
 import wt.org.WTPrincipal;
@@ -119,7 +120,10 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 				}
 
 				EBOMLink link = EBOMHelper.manager.getEBOMLink(parent, header);
-				WTPartUsageLink usageLink = (WTPartUsageLink) CommonUtils.persistable(node.getLink());
+				WTPartUsageLink usageLink = null;
+				if (StringUtils.isNotNull(node.getLink())) {
+					usageLink = (WTPartUsageLink) CommonUtils.persistable(node.getLink());
+				}
 				if (link == null) {
 					link = EBOMLink.newEBOMLink(parent, header);
 					link.setAmount(node.getAmount());

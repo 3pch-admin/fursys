@@ -31,7 +31,7 @@ import wt.util.WTException;
 
 						foreignKeyRole = @ForeignKeyRole(name = "usageLink", type = WTPartUsageLink.class,
 
-								constraints = @PropertyConstraints(required = true)),
+								constraints = @PropertyConstraints(required = false)),
 
 						myRole = @MyRole(name = "ebomLink", cardinality = Cardinality.ONE)), }
 

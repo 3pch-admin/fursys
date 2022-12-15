@@ -629,7 +629,7 @@
 			params.json = json;
 			params.oid = $("input[name=oid]").val();
 			_call(url, params, function(data) {
-				var url = _url("/ebom/verify", $("input[name=oid]").val());
+				var url = _url("/ebom/verify", data.oid);
 				_popup(url, 1600, 800, "n");
 			}, "POST");
 		})
