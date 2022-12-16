@@ -41,7 +41,7 @@ public class EBOMHelper {
 	public static final String HEADER = "HEADER";
 	public static final String CHILD = "CHILD";
 
-	public static final String EBOM_CREATE = "EBOM 작성중";
+	public static final String EBOM_CREATE = "EBOM 작성중(검증완료)";
 	public static final String EBOM_TEMP = "EBOM 임시저장";
 	public static final String EBOM_APPROVAL = "EBOM 승인됨";
 
@@ -281,8 +281,11 @@ public class EBOMHelper {
 			WTPartUsageLink usageLink = link.getUsageLink();
 			WTPartMaster childMaster = child.getWtpartMaster();
 			WTPart childLatest = PartHelper.manager.getLatest(childMaster);
-			BOMCompareNode childNode = new BOMCompareNode(childLatest, usageLink.getQuantity().getAmount(),
-					link.getAmount());
+
+			double cqty = usageLink != null ? usageLink.getQuantity().getAmount() : 1D;
+			double eqty = link.getAmount();
+
+			BOMCompareNode childNode = new BOMCompareNode(childLatest, cqty, eqty);
 			list.add(childNode);
 			compare(child, list);
 		}
@@ -296,8 +299,9 @@ public class EBOMHelper {
 			WTPartUsageLink usageLink = link.getUsageLink();
 			WTPartMaster childMaster = child.getWtpartMaster();
 			WTPart childLatest = PartHelper.manager.getLatest(childMaster);
-			BOMCompareNode childNode = new BOMCompareNode(childLatest, usageLink.getQuantity().getAmount(),
-					link.getAmount());
+			double cqty = usageLink != null ? usageLink.getQuantity().getAmount() : 1D;
+			double eqty = link.getAmount();
+			BOMCompareNode childNode = new BOMCompareNode(childLatest, cqty, eqty);
 			list.add(childNode);
 			compare(child, list);
 		}

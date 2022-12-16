@@ -240,4 +240,26 @@ public class StandardEBOMService extends StandardManager implements EBOMService 
 				trs.rollback();
 		}
 	}
+
+	@Override
+	public void confirm(String oid) throws Exception {
+		EBOM header = null;
+		Transaction trs = new Transaction();
+		try {
+			trs.start();
+
+			header = (EBOM) CommonUtils.persistable(oid);
+			header.setState(EBOMHelper.EBOM_CREATE);
+			PersistenceHelper.manager.modify(header);
+
+			trs.commit();
+			trs = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			trs.rollback();
+		} finally {
+			if (trs != null)
+				trs.rollback();
+		}
+	}
 }

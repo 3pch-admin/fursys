@@ -61,9 +61,27 @@ public class EBOMController {
 		ModelAndView model = new ModelAndView();
 		ArrayList<BOMCompareNode> list = EBOMHelper.manager.compare(oid);
 		model.addObject("list", list);
+		model.addObject("oid", oid);
 		model.setViewName("popup:/ebom/ebom-verify");
 		return model;
 	}
+	
+	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> confirm(@RequestParam String oid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			EBOMHelper.service.confirm(oid);
+			result.put("msg", "검증 완료 하였습니다.");
+			result.put("result", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public ModelAndView modify(@RequestParam String oid) throws Exception {

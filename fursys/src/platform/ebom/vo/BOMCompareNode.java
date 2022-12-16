@@ -1,5 +1,7 @@
 package platform.ebom.vo;
 
+import org.mozilla.universalchardet.UnicodeBOMInputStream.BOM;
+
 import lombok.Getter;
 import lombok.Setter;
 import platform.part.service.PartHelper;
@@ -30,5 +32,14 @@ public class BOMCompareNode {
 		setPartName(IBAUtils.getStringValue(part, "PART_NAME"));
 		setCqty(cqty);
 		setEqty(eqty);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		BOMCompareNode node = (BOMCompareNode) obj;
+		if (this.number.equals(node.getNumber())) {
+			return true;
+		}
+		return false;
 	}
 }

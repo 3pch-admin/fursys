@@ -5,6 +5,7 @@
 <%
 ArrayList<Map<String, Object>> list = (ArrayList<Map<String, Object>>) request.getAttribute("list");
 JSONArray darr = JSONArray.fromObject(list);
+String oid = (String)request.getAttribute("oid");
 %>
 <style type="text/css">
 .compare {
@@ -34,7 +35,7 @@ JSONArray darr = JSONArray.fromObject(list);
 <script type="text/javascript">
 	var myGridID;
 	var columnLayout = [ {
-		dataField : "cadName",
+		dataField : "number",
 		headerText : "CAD 파일명",
 		dataType : "string",
 		style : "left indent10",
@@ -67,24 +68,24 @@ JSONArray darr = JSONArray.fromObject(list);
 		editable : false,
 		width : 250
 	}, {
-		dataField : "camount",
+		dataField : "cqty",
 		headerText : "CBOM 수량",
 		dataType : "string",
-		postFix : "개",
+		postfix : "개",
 		editable : false,
 		width : 100
 	}, {
-		dataField : "eamount",
+		dataField : "eqty",
 		headerText : "EBOM 수량",
 		dataType : "string",
-		postFix : "개",
+		postfix : "개",
 		editable : false,
 		width : 100
 	}, {
 		dataField : "compare",
 		headerText : "수량",
 		dataType : "string",
-		postFix : "개",
+		postfix : "개",
 		editable : false,
 		width : 100
 	}, {
@@ -130,12 +131,27 @@ JSONArray darr = JSONArray.fromObject(list);
 			return "";
 		}
 	};
-	console.log("<%=darr%>");
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiProps);
 	AUIGrid.setFooter(myGridID, footerLayout);
 	AUIGrid.setFooter(myGridID, footerLayout);
 	AUIGrid.setGridData(myGridID,<%=darr%>);
 	$(window).resize(function() {
 		AUIGrid.resize("#grid_wrap");
+	})
+	
+	$(function() {
+		$("#confirmBtn").click(function() {
+			
+			if(!confirm("확인시 EBOM 최종검증완료 상태로 더 이상 수량비교 페이지는 확인 할 수 없습니다.\n진행 하시겠습니까?")) {
+				return false;
+			}
+			
+			var url = _url("/ebom/confirm", "<%=oid%>");
+			var params = new Object();
+			_call(url, params, function(data) {
+				opener.closeAndLoad();
+				self.close();
+			}, "GET");
+		})
 	})
 </script>

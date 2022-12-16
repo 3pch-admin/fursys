@@ -268,6 +268,7 @@
 		enableSorting : false,
 		showStateColumn : true,
 		softRemoveRowMode : true,
+		showTooltip : true,
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
@@ -298,6 +299,7 @@
 		editableOnFixedCell : true,
 		enableSorting : false,
 		useContextMenu : true,
+		showTooltip : true,
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
@@ -594,7 +596,6 @@
 
 	$(function() {
 
-
 		$("input[name=number]").click(function() {
 			var url = "/Windchill/platform/part/popup?box=1";
 			_popup(url, "", "", "f");
@@ -617,7 +618,7 @@
 				// 				}
 			}
 
-// 			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
+			// 			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
 			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.")) {
 				return false;
 			}
@@ -635,7 +636,6 @@
 		})
 	})
 
-	
 	function part(info) {
 		// 		$("#input[name=number]").add("input[name=name]").off();
 		$("input[name=oid]").val(info[0].oid);

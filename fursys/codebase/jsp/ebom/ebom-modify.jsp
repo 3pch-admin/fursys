@@ -272,6 +272,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 		enableSorting : false,
 		showStateColumn : true,
 		softRemoveRowMode : true,
+		showTooltip : true,
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
@@ -302,6 +303,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 		editableOnFixedCell : true,
 		enableSorting : false,
 		useContextMenu : true,
+		showTooltip : true,
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
@@ -537,7 +539,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 
 		$("#verifyBtn").click(function() {
 			var url = _url("/ebom/verify", $("input[name=eoid]").val());
-			_popup(url, 1400, 650, "n");
+			_popup(url, 1400, 800, "n");
 		})
 
 		$("#modifyBtn").click(function() {
@@ -645,5 +647,10 @@ WTPart part = (WTPart) request.getAttribute("part");
 				AUIGrid.setGridData(rightGridID, data.list);
 			},
 		});
+	}
+	
+	function closeAndLoad() {
+		opener.load();
+		self.close();
 	}
 </script>

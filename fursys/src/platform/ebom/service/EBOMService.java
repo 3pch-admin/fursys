@@ -17,4 +17,6 @@ public interface EBOMService {
 	public EBOM modify(Map<String, Object> params) throws Exception;
 
 	public void delete(String oid) throws Exception;
+
+	public void confirm(String oid) throws Exception;
 }
