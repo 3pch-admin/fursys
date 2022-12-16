@@ -124,6 +124,7 @@ public class EBOMHelper {
 			node.put("link",
 					link != null ? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue() : "");
 			loadTree(child, node);
+			
 			array.add(node);
 		}
 		rootNode.put("children", array);
@@ -155,6 +156,7 @@ public class EBOMHelper {
 			node.put("link",
 					link != null ? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue() : "");
 			loadTree(child, node);
+			
 			jsonChildren.add(node);
 		}
 		rootNode.put("children", jsonChildren);
