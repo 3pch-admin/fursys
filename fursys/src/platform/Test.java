@@ -17,7 +17,7 @@ public class Test {
 	public static void main(String[] args) throws Exception {
 
 		String s = "wt.doc.WTDocument:189202";
-//테스트
+//테스트11
 		WTDocument d = (WTDocument) CommonUtils.persistable(s);
 
 		File f = new File("C:" + File.separator + "AUIGrid_style.css");
