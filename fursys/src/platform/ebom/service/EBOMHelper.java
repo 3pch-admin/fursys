@@ -128,6 +128,7 @@ public class EBOMHelper {
 			node.put("link", link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue());
 >>>>>>> .merge_file_SDEHtE
 			loadTree(child, node);
+			
 			array.add(node);
 		}
 		rootNode.put("children", array);
@@ -163,6 +164,7 @@ public class EBOMHelper {
 			node.put("link", link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue());
 >>>>>>> .merge_file_SDEHtE
 			loadTree(child, node);
+			
 			jsonChildren.add(node);
 		}
 		rootNode.put("children", jsonChildren);
