@@ -139,8 +139,15 @@ public class StandardDistService extends StandardManager implements DistService 
 				link.setPdf(map.isPdf());
 				link.setDwg(map.isDwg());
 				link.setStep(map.isStep());
+				
+				DistributorUser user=(DistributorUser) CommonUtils.persistable(map.getUoid());
+				link.setDistributorType(user.getType());
+				link.setDistributorUserName(user.getUserName());
+				link.setDistributorName(user.getName());
+				
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
 //				Vector<String> distUsers = map.getDistributorUser();
+				
 				
 				String uoid = map.getUoid();
 				if (StringUtils.isNotNull(uoid)) {
@@ -307,6 +314,8 @@ public class StandardDistService extends StandardManager implements DistService 
 				link.setPdf(map.isPdf());
 				link.setDwg(map.isDwg());
 				link.setStep(map.isStep());
+				
+				
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
 //				Vector<DistributorUser> distUsers = map.getDistributorUser();
 				String uoid = map.getUoid();
