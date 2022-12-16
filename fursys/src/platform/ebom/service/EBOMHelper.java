@@ -121,7 +121,8 @@ public class EBOMHelper {
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
-			node.put("link", link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue());
+			node.put("link",
+					link != null ? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue() : "");
 			loadTree(child, node);
 			array.add(node);
 		}
@@ -151,7 +152,8 @@ public class EBOMHelper {
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
-			node.put("link", link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue());
+			node.put("link",
+					link != null ? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue() : "");
 			loadTree(child, node);
 			jsonChildren.add(node);
 		}
