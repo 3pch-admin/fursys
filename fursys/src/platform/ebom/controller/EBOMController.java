@@ -65,7 +65,7 @@ public class EBOMController {
 		model.setViewName("popup:/ebom/ebom-verify");
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> confirm(@RequestParam String oid) throws Exception {
@@ -81,7 +81,6 @@ public class EBOMController {
 		}
 		return result;
 	}
-
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
 	public ModelAndView modify(@RequestParam String oid) throws Exception {
@@ -199,6 +198,19 @@ public class EBOMController {
 			result.put("msg", e.toString());
 		}
 		return result;
+	}
+
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public ModelAndView view(@RequestParam String oid) throws Exception {
+		ModelAndView model = new ModelAndView();
+		EBOM ebom = (EBOM) CommonUtils.persistable(oid);
+		WTPartMaster master = ebom.getWtpartMaster();
+		WTPart part = PartHelper.manager.getLatest(master);
+		model.addObject("oid", oid);
+		model.addObject("part", part);
+		model.addObject("ebom", ebom);
+		model.setViewName("popup:/ebom/ebom-view");
+		return model;
 	}
 
 }

@@ -266,6 +266,9 @@ boolean isAdmin = CommonUtils.isAdmin();
 								if (state == "EBOM 임시저장") {
 									var url = _url("/ebom/modify", rowItem.oid);
 									_popup(url, "", "", "f");
+								} else if(state == "EBOM 작성중(검증완료)") {
+									var url = _url("/ebom/view", rowItem.oid);
+									_popup(url, "", "", "f");
 								}
 							} else if (event.dataField == "thumb") {
 								_openCreoView(event.item.toid);

@@ -5,11 +5,11 @@
 <%
 ArrayList<Map<String, Object>> list = (ArrayList<Map<String, Object>>) request.getAttribute("list");
 JSONArray darr = JSONArray.fromObject(list);
-String oid = (String)request.getAttribute("oid");
+String oid = (String) request.getAttribute("oid");
 %>
 <style type="text/css">
 .compare {
-	background-color: #e3ed8b;
+	background-color: #e4edf5;
 }
 </style>
 <div class="header-title">
@@ -73,17 +73,27 @@ String oid = (String)request.getAttribute("oid");
 		dataType : "string",
 		postfix : "개",
 		editable : false,
-		width : 100
+		width : 100,
 	}, {
 		dataField : "eqty",
 		headerText : "EBOM 수량",
 		dataType : "string",
-		postfix : "개",
+// 		postfix : "개",
 		editable : false,
-		width : 100
+		width : 100,
+	     renderer : {
+	            type : "TemplateRenderer",
+	     },		
+		labelFunction : function(rowIndex, columnIndex, value, headerText, item, dataField, cItem) {
+			   var str = value + "개";
+			   if(item.cqty != item.eqty) {
+				   str = "<font color=red><b>" + value + "개</b></font>";
+			   }
+			   return str;
+			}
 	}, {
 		dataField : "compare",
-		headerText : "수량",
+		headerText : "수량차이",
 		dataType : "string",
 		postfix : "개",
 		editable : false,
@@ -125,7 +135,7 @@ String oid = (String)request.getAttribute("oid");
 		enableFilter : true,
 		rowNumHeaderText : "번호",
 		rowStyleFunction : function(rowIndex, item) {
-			if (item.eamount != item.camount) {
+			if (item.eqty != item.cqty) {
 				return "compare";
 			}
 			return "";

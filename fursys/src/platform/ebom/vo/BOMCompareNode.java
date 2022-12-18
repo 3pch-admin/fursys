@@ -19,6 +19,7 @@ public class BOMCompareNode {
 	private String partNo;
 	private double cqty = 0D;
 	private double eqty = 0D;
+	private double compare = 0D;
 
 	public BOMCompareNode() {
 
@@ -32,14 +33,11 @@ public class BOMCompareNode {
 		setPartName(IBAUtils.getStringValue(part, "PART_NAME"));
 		setCqty(cqty);
 		setEqty(eqty);
+		setCompare(cqty - eqty);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		BOMCompareNode node = (BOMCompareNode) obj;
-		if (this.number.equals(node.getNumber())) {
-			return true;
-		}
-		return false;
+	public void add(double eqty, double cqty) {
+		setEqty(getEqty() + eqty);
+		setCqty(getCqty() + cqty);
 	}
 }

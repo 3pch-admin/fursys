@@ -21,17 +21,22 @@ import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import platform.util.IBAUtils;
 import platform.util.PageUtils;
+import platform.util.StringUtils;
 import platform.util.ThumbnailUtils;
 import wt.fc.PersistenceHelper;
 import wt.fc.QueryResult;
 import wt.part.WTPart;
+import wt.part.WTPartHelper;
 import wt.part.WTPartMaster;
+import wt.part.WTPartStandardConfigSpec;
 import wt.part.WTPartUsageLink;
 import wt.query.ClassAttribute;
 import wt.query.OrderBy;
 import wt.query.QuerySpec;
 import wt.query.SearchCondition;
 import wt.services.ServiceFactory;
+import wt.vc.views.View;
+import wt.vc.views.ViewHelper;
 
 public class EBOMHelper {
 
@@ -122,7 +127,9 @@ public class EBOMHelper {
 			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
 			node.put("link",
-					link != null ? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue() : "");
+					link.getUsageLink() != null
+							? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue()
+							: "");
 			loadTree(child, node);
 			array.add(node);
 		}
@@ -153,7 +160,9 @@ public class EBOMHelper {
 			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
 			node.put("link",
-					link != null ? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue() : "");
+					link.getUsageLink() != null
+							? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue()
+							: "");
 			loadTree(child, node);
 			jsonChildren.add(node);
 		}
@@ -270,40 +279,98 @@ public class EBOMHelper {
 	public ArrayList<BOMCompareNode> compare(String oid) throws Exception {
 		ArrayList<BOMCompareNode> list = new ArrayList<>();
 		EBOM header = (EBOM) CommonUtils.persistable(oid);
-
 		WTPartMaster master = header.getWtpartMaster();
 		WTPart latest = PartHelper.manager.getLatest(master);
+
+		// 전체 수량 비교 위한 파트 리스트..
+
 		BOMCompareNode node = new BOMCompareNode(latest, 1, 1);
 		list.add(node);
-		ArrayList<EBOMLink> links = getLinks(header);
-		for (EBOMLink link : links) {
-			EBOM child = link.getChild();
-			WTPartUsageLink usageLink = link.getUsageLink();
-			WTPartMaster childMaster = child.getWtpartMaster();
-			WTPart childLatest = PartHelper.manager.getLatest(childMaster);
 
+		String viewName = latest.getViewName();
+		if (!StringUtils.isNotNull(viewName)) {
+			viewName = "Design";
+		}
+		View view = ViewHelper.service.getView(viewName);
+		WTPartStandardConfigSpec configSpec = WTPartStandardConfigSpec.newWTPartStandardConfigSpec(view, null);
+		QueryResult result = WTPartHelper.service.getUsesWTParts(latest, configSpec);
+		while (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			if (!(obj[1] instanceof WTPart)) {
+				continue;
+			}
+			WTPart child = (WTPart) obj[1];
+			WTPartUsageLink usageLink = (WTPartUsageLink) obj[0];
+			EBOMLink link = getEBOMLink(usageLink);
 			double cqty = usageLink != null ? usageLink.getQuantity().getAmount() : 1D;
-			double eqty = link.getAmount();
-
-			BOMCompareNode childNode = new BOMCompareNode(childLatest, cqty, eqty);
+			double eqty = link != null ? link.getAmount() : 0D;
+			BOMCompareNode childNode = new BOMCompareNode(child, cqty, eqty);
 			list.add(childNode);
 			compare(child, list);
 		}
+		calculation(list);
 		return list;
 	}
 
-	private void compare(EBOM parent, ArrayList<BOMCompareNode> list) throws Exception {
-		ArrayList<EBOMLink> links = getLinks(parent);
-		for (EBOMLink link : links) {
-			EBOM child = link.getChild();
-			WTPartUsageLink usageLink = link.getUsageLink();
-			WTPartMaster childMaster = child.getWtpartMaster();
-			WTPart childLatest = PartHelper.manager.getLatest(childMaster);
+	private void calculation(ArrayList<BOMCompareNode> list) throws Exception {
+		for (int i = 0; i < list.size(); i++) {
+			BOMCompareNode node1 = (BOMCompareNode) list.get(i);
+			String number1 = node1.getNumber();
+			for (int j = 0; j < list.size(); j++) {
+				if (i == j) {
+					continue;
+				}
+				BOMCompareNode node2 = (BOMCompareNode) list.get(j);
+				String number2 = node2.getNumber();
+				double eqty = node2.getEqty();
+				double cqty = node2.getCqty();
+				if (number1.equals(number2)) {
+					list.remove(node2);
+					node1.add(eqty, cqty);
+				}
+			}
+		}
+	}
+
+	private void compare(WTPart parent, ArrayList<BOMCompareNode> list) throws Exception {
+		String viewName = parent.getViewName();
+		if (!StringUtils.isNotNull(viewName)) {
+			viewName = "Design";
+		}
+		View view = ViewHelper.service.getView(viewName);
+		WTPartStandardConfigSpec configSpec = WTPartStandardConfigSpec.newWTPartStandardConfigSpec(view, null);
+		QueryResult result = WTPartHelper.service.getUsesWTParts(parent, configSpec);
+		while (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			if (!(obj[1] instanceof WTPart)) {
+				continue;
+			}
+			WTPart child = (WTPart) obj[1];
+			WTPartUsageLink usageLink = (WTPartUsageLink) obj[0];
+			EBOMLink link = getEBOMLink(usageLink);
 			double cqty = usageLink != null ? usageLink.getQuantity().getAmount() : 1D;
-			double eqty = link.getAmount();
-			BOMCompareNode childNode = new BOMCompareNode(childLatest, cqty, eqty);
+			double eqty = link != null ? link.getAmount() : 0D;
+			BOMCompareNode childNode = new BOMCompareNode(child, cqty, eqty);
 			list.add(childNode);
 			compare(child, list);
 		}
 	}
+
+	private EBOMLink getEBOMLink(WTPartUsageLink usageLink) throws Exception {
+
+		QuerySpec query = new QuerySpec();
+		int idx = query.appendClassList(EBOMLink.class, true);
+		SearchCondition sc = new SearchCondition(EBOMLink.class, "usageLinkReference.key.id", "=",
+				usageLink.getPersistInfo().getObjectIdentifier().getId());
+		query.appendWhere(sc, new int[] { idx });
+
+		QueryResult result = PersistenceHelper.manager.find(query);
+		if (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			EBOMLink link = (EBOMLink) obj[0];
+			return link;
+		}
+		return null;
+	}
+
 }
