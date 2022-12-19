@@ -39,5 +39,6 @@ public class BOMCompareNode {
 	public void add(double eqty, double cqty) {
 		setEqty(getEqty() + eqty);
 		setCqty(getCqty() + cqty);
+		setCompare(getCqty() - getEqty());
 	}
 }

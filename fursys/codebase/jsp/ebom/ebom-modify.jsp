@@ -84,7 +84,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 		<col width="580">
 	</colgroup>
 	<tr>
-		<th>부품명칭(단품, 세트)</th>
+		<th>부품명칭</th>
 		<td>
 			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" value="<%=part.getPersistInfo().getObjectIdentifier().getStringValue()%>">
 			<input type="hidden" name="eoid" class="AXInput w70p" readonly="readonly" value="<%=oid%>">

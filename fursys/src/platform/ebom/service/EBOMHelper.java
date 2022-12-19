@@ -101,9 +101,11 @@ public class EBOMHelper {
 		rootNode.put("version", part.getVersionIdentifier().getSeries().getValue());
 		rootNode.put("partType", PartHelper.manager.partTypeToDisplay(part));
 		rootNode.put("amount", 1);
+		rootNode.put("unit", part.getDefaultUnit().getDisplay());
 		rootNode.put("partTypeCd", IBAUtils.getStringValue(part, "PART_TYPE"));
 		rootNode.put("state", part.getLifeCycleState().getDisplay());
 		rootNode.put("id", UUID.randomUUID().toString());
+		rootNode.put("erpCode", IBAUtils.getStringValue(part, "ERP_CODE"));
 		rootNode.put("library", PartHelper.manager.isLibrary(part));
 		JSONArray array = new JSONArray();
 
@@ -126,6 +128,8 @@ public class EBOMHelper {
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
+			node.put("unit", childPart.getDefaultUnit().getDisplay());
+			node.put("erpCode", IBAUtils.getStringValue(part, "ERP_CODE"));
 			node.put("link",
 					link.getUsageLink() != null
 							? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue()
@@ -159,6 +163,8 @@ public class EBOMHelper {
 			node.put("state", childPart.getLifeCycleState().getDisplay());
 			node.put("id", UUID.randomUUID().toString());
 			node.put("library", PartHelper.manager.isLibrary(childPart));
+			node.put("unit", childPart.getDefaultUnit().getDisplay());
+			node.put("erpCode", IBAUtils.getStringValue(childPart, "ERP_CODE"));
 			node.put("link",
 					link.getUsageLink() != null
 							? link.getUsageLink().getPersistInfo().getObjectIdentifier().getStringValue()
@@ -301,9 +307,9 @@ public class EBOMHelper {
 			}
 			WTPart child = (WTPart) obj[1];
 			WTPartUsageLink usageLink = (WTPartUsageLink) obj[0];
-			EBOMLink link = getEBOMLink(usageLink);
+//			EBOMLink link = getEBOMLink(usageLink);
 			double cqty = usageLink != null ? usageLink.getQuantity().getAmount() : 1D;
-			double eqty = link != null ? link.getAmount() : 0D;
+			double eqty = getEqty(usageLink);
 			BOMCompareNode childNode = new BOMCompareNode(child, cqty, eqty);
 			list.add(childNode);
 			compare(child, list);
@@ -326,6 +332,9 @@ public class EBOMHelper {
 				double cqty = node2.getCqty();
 				if (number1.equals(number2)) {
 					list.remove(node2);
+//					System.out.println("number2=" + number2);
+//					System.out.println("eqty = " + eqty);
+//					System.out.println("eqty1 = " + node1.getEqty());
 					node1.add(eqty, cqty);
 				}
 			}
@@ -347,17 +356,17 @@ public class EBOMHelper {
 			}
 			WTPart child = (WTPart) obj[1];
 			WTPartUsageLink usageLink = (WTPartUsageLink) obj[0];
-			EBOMLink link = getEBOMLink(usageLink);
+//			EBOMLink link = getEBOMLink(usageLink);
 			double cqty = usageLink != null ? usageLink.getQuantity().getAmount() : 1D;
-			double eqty = link != null ? link.getAmount() : 0D;
+			double eqty = getEqty(usageLink);
 			BOMCompareNode childNode = new BOMCompareNode(child, cqty, eqty);
 			list.add(childNode);
 			compare(child, list);
 		}
 	}
 
-	private EBOMLink getEBOMLink(WTPartUsageLink usageLink) throws Exception {
-
+	private double getEqty(WTPartUsageLink usageLink) throws Exception {
+		double eqty = 0D;
 		QuerySpec query = new QuerySpec();
 		int idx = query.appendClassList(EBOMLink.class, true);
 		SearchCondition sc = new SearchCondition(EBOMLink.class, "usageLinkReference.key.id", "=",
@@ -365,12 +374,30 @@ public class EBOMHelper {
 		query.appendWhere(sc, new int[] { idx });
 
 		QueryResult result = PersistenceHelper.manager.find(query);
-		if (result.hasMoreElements()) {
+		System.out.println("result=" + result.size());
+		while (result.hasMoreElements()) {
 			Object[] obj = (Object[]) result.nextElement();
 			EBOMLink link = (EBOMLink) obj[0];
-			return link;
+			eqty += link.getAmount();
 		}
-		return null;
+		return eqty;
 	}
+//
+//	private EBOMLink getEBOMLink(WTPartUsageLink usageLink) throws Exception {
+//
+//		QuerySpec query = new QuerySpec();
+//		int idx = query.appendClassList(EBOMLink.class, true);
+//		SearchCondition sc = new SearchCondition(EBOMLink.class, "usageLinkReference.key.id", "=",
+//				usageLink.getPersistInfo().getObjectIdentifier().getId());
+//		query.appendWhere(sc, new int[] { idx });
+//
+//		QueryResult result = PersistenceHelper.manager.find(query);
+//		if (result.hasMoreElements()) {
+//			Object[] obj = (Object[]) result.nextElement();
+//			EBOMLink link = (EBOMLink) obj[0];
+//			return link;
+//		}
+//		return null;
+//	}
 
 }

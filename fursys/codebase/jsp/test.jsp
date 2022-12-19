@@ -15,32 +15,21 @@
 <%@page import="wt.part.WTPartMaster"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-String oid = "wt.part.WTPartMaster:1373901";
-WTPartMaster m = (WTPartMaster) CommonUtils.persistable(oid);
-WTPart p = PartHelper.manager.getLatest(m);
+String s = "wt.doc.WTDocument:189202";
+//테스트11 병합용1
+WTDocument d = (WTDocument) CommonUtils.persistable(s);
 
-ArrayList<WTPart> list = PartHelper.manager.getter(p);
-System.out.println("list=" + list.size());
-for (WTPart pp : list) {
-
-	EPMDocument e = PartHelper.manager.getEPMDocument(pp);
-	QueryResult qr = ContentHelper.service.getContentsByRole(e, ContentRoleType.PRIMARY);
-	if (qr.hasMoreElements()) {
-		ContentItem item = (ContentItem) qr.nextElement();
-		if (item instanceof ApplicationData) {
-	ApplicationData data = (ApplicationData) item;
-	byte[] buffer = new byte[10240];
-	InputStream is = ContentServerHelper.service.findLocalContentStream(data);
-	String name = new String(e.getCADName().getBytes("EUC-KR"), "8859_1");
-	File file = new File("C:" + File.separator + "sample" + File.separator + name);
-	FileOutputStream fos = new FileOutputStream(file);
-	int j = 0;
-	while ((j = is.read(buffer, 0, 10240)) > 0) {
-		fos.write(buffer, 0, j);
-	}
-	fos.close();
-	is.close();
-		}
-	}
+File f = new File("C:" + File.separator + "AUIGrid_style1.css");
+QueryResult result = ContentHelper.service.getContentsByRole(d, ContentRoleType.PRIMARY);
+if (result.hasMoreElements()) {
+	ApplicationData dd = (ApplicationData) result.nextElement();
+	PersistenceHelper.manager.delete(dd);
 }
+
+ApplicationData data = ApplicationData.newApplicationData(d);
+data.setRole(ContentRoleType.PRIMARY);
+data.setCreatedBy(SessionHelper.manager.getPrincipalReference());
+data = (ApplicationData) ContentServerHelper.service.updateContent(d, data, f.getAbsolutePath());
+data.setFileName(f.getName());
+PersistenceHelper.manager.modify(data);
 %>

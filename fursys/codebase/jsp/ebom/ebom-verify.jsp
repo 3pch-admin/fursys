@@ -150,6 +150,10 @@ String oid = (String) request.getAttribute("oid");
 	})
 	
 	$(function() {
+		$("#closeBtn").click(function() {
+			self.close();
+		})
+		
 		$("#confirmBtn").click(function() {
 			
 			if(!confirm("확인시 EBOM 최종검증완료 상태로 더 이상 수량비교 페이지는 확인 할 수 없습니다.\n진행 하시겠습니까?")) {

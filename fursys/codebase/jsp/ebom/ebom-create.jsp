@@ -77,7 +77,7 @@
 		<col width="580">
 	</colgroup>
 	<tr>
-		<th>부품명칭(단품, 세트)</th>
+		<th>부품명칭</th>
 		<td>
 			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly">
 			<input type="text" name="number" class="AXInput w70p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요.">
@@ -677,5 +677,10 @@
 				AUIGrid.setGridData(rightGridID, data.list);
 			},
 		});
+	}
+	
+	function closeAndLoad() {
+		opener.load();
+		self.close();
 	}
 </script>

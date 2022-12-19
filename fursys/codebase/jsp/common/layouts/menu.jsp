@@ -232,13 +232,13 @@ int rtnCount = (int) request.getAttribute("rtnCount");
 				</a>
 				<ul class="sub-menu collapse" data-menu-title="BOM 관리">
 					<li>
-						<a href="javascript:_page('/ebomMaster/list');">
+						<a href="javascript:_page('/ebom/list');">
 							<i class="icon icon-inline fa fa-circle-thin"></i>
 							<span class="title">EBOM 조회</span>
 						</a>
 					</li>
 					<li>
-						<a href="javascript:_page('/ebomMaster/plist');">
+						<a href="javascript:_page('/partlist/list');">
 							<i class="icon icon-inline fa fa-circle-thin"></i>
 							<span class="title">PARTLIST 조회</span>
 						</a>
