@@ -285,6 +285,7 @@ public class StandardUserService extends StandardManager implements UserService 
 						user.setDisabled(false);
 						user.setRepairNeeded(false);
 					}
+					user = (WTUser) PersistenceHelper.manager.refresh(user);
 					PersistenceHelper.manager.modify(user);
 
 					QueryResult result = PersistenceHelper.manager.navigate(user, "user", UserWTUserLink.class);
