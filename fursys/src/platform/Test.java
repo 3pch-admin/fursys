@@ -26,7 +26,7 @@ public class Test {
 			ApplicationData dd = (ApplicationData) result.nextElement();
 			PersistenceHelper.manager.delete(dd);
 		}
-
+		InputStream is = ContentServerHelper.service.findContentStream(data);
 		ApplicationData data = ApplicationData.newApplicationData(d);
 		data.setRole(ContentRoleType.PRIMARY);
 		data.setCreatedBy(SessionHelper.manager.getPrincipalReference());
