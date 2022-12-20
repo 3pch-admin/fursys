@@ -295,7 +295,6 @@ public class StandardDistService extends StandardManager implements DistService 
 		Transaction trs = new Transaction();
 		try {
 			trs.start();
-
 			dist = (Dist) CommonUtils.persistable(params.getOid());
 			dist.setOwnership(CommonUtils.ownership());
 			dist.setName(params.getName());
@@ -315,6 +314,11 @@ public class StandardDistService extends StandardManager implements DistService 
 				link.setDwg(map.isDwg());
 				link.setStep(map.isStep());
 				
+				System.out.println("DType : " + map.getDistributorType());
+				System.out.println("LType : " + link.getDistributorType());
+				link.setDistributorType(link.getDistributorType());
+				link.setDistributorName(link.getDistributorName());
+				link.setDistributorUserName(link.getDistributorUserName());
 				
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
 //				Vector<DistributorUser> distUsers = map.getDistributorUser();

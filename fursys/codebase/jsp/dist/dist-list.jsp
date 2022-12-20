@@ -97,7 +97,7 @@
 						</tr>
 					</table>
 
-					<div id="grid_wrap" style="height: 680px;"></div>
+					<div id="grid_wrap" style="height: 530px;"></div>
 					<div id="grid_paging" class="aui-grid-paging-panel my-grid-paging-panel"></div>
 					<script type="text/javascript">
 						var myGridID;

@@ -275,7 +275,7 @@ public class StandardUserService extends StandardManager implements UserService 
 						}
 					}
 				} else {
-
+					
 					user.setName(id);
 					user.setFullName(fullName);
 					user.setEMail(email);

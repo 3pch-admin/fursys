@@ -13,7 +13,7 @@
 		<table style="width: 100%;">
 			<tr>
 				<td style="text-align: center;" valign="center">
-					<img src="/Windchill/jsp/images/inform.png" width="1500px;">
+					<img src="/Windchill/jsp/images/inform.png" width="1300px;">
 				</td>
 			</tr>
 		</table>
