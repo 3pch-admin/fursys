@@ -48,6 +48,7 @@ public class DistPartColumns {
 		
 		DistributorUser user = null;
 		user = DistributorUser.newDistributorUser();
+		setUoid(CommonUtils.oid(user));
 		setDistributorType(user.getType());
 		setDistributorName(user.getName());
 		setDistributorUserName(user.getUserName());

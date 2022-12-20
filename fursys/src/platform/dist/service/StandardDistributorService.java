@@ -61,7 +61,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 
 			distributor = (Distributor) PersistenceHelper.manager.save(distributor);
 
-			send(distributor); // 배포처
+//			send(distributor); // 배포처
 //			_send(distributor); // 로그인 유저
 //			__send(distributor); // 배포사용자
 
@@ -156,7 +156,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 	public DistributorUser userCreate(Map<String, Object> params) throws Exception {
 		DistributorUser distributor = null;
 
-		String name = (String) params.get("names"); // 업체명
+		String name = (String) params.get("distributor"); // 업체명
 		String plant = (String) params.get("factory");
 		String description = (String) params.get("description");
 		String enable = (String) params.get("enable");
@@ -336,11 +336,12 @@ public class StandardDistributorService extends StandardManager implements Distr
 			}
 
 			// SITE_CD
-			if (distributor.getType().equals("OUT")) {
-				sql.append("'" + distributor.getNumber() + "', ");
-			} else {
-				sql.append("'" + distributor.getName() + "', ");
-			}
+//			if (distributor.getType().equals("OUT")) {
+//				sql.append("'" + distributor.getNumber() + "', ");
+//			} else {
+//				sql.append("'" + distributor.getNumber() + "', ");
+//			}
+			sql.append("'" + distributor.getNumber() + "', ");
 
 			// SITE_NM
 			sql.append("'" + distributor.getName() + "', ");
@@ -411,19 +412,31 @@ public class StandardDistributorService extends StandardManager implements Distr
 			sql.append(
 					"IS_FROM_ERP, CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
 			sql.append(") VALUES(");
-
+			//SITE_CD
 			sql.append("'" + distributor.getNumber() + "', ");
+			//USER_INFO_ID
 			sql.append("'" + distributor.getUserId() + "', ");
+			//USER_NAME
 			sql.append("'" + distributor.getUserName() + "', ");
+			//EMAIL
 			sql.append("'" + distributor.getEmail() + "', ");
+			//PASSWORD
 			sql.append("'', "); // password
+			//USE_YN
 			sql.append("'Y', ");
+			//IS_FROM_ERP
 			sql.append("'N', ");
+			//CREATE_DATE
 			sql.append("SYSDATE, ");
+			//UPDATE_DATE
 			sql.append("SYSDATE, ");
+			//CREATE_USER_ID
 			sql.append("'" + user.getName() + "', ");
+			//CREATE_USER_NM
 			sql.append("'" + user.getFullName() + "', ");
+			//UPDATE_USER_ID
 			sql.append("'" + user.getName() + "', ");
+			//UPDATE_USER_NM
 			sql.append("'" + user.getFullName() + "')");
 
 			st.execute(sql.toString());

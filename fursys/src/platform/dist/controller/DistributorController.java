@@ -123,7 +123,7 @@ public class DistributorController {
 
 			String reMsg = "[" + distUser.getName() + "] " + distUser.getUserName() + " 배포처 사용자가 등록 되었습니다.";
 			if ("OUT".equals(distUser.getType())) {
-				reMsg = "[" + distUser.getDistributor().getName() + "] " + distUser.getUserName()
+				reMsg = "[" + distUser.getName() + "] " + distUser.getUserName()
 						+ " 배포처 사용자가 등록 되었습니다.";
 			}
 

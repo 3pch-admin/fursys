@@ -383,9 +383,9 @@ public class DistributorHelper {
 			DistributorUser distributorUser = (DistributorUser) obj[0];
 			Map<String, Object> map = new HashMap<String, Object>();
 
-			map.put("name", distributorUser.getDistributor().getName());
-			map.put("type", distributorUser.getDistributor().getType());
-			map.put("userName", distributorUser.getName());
+			map.put("name", distributorUser.getName());
+			map.put("type", distributorUser.getType());
+			map.put("userName", distributorUser.getUserName());
 			map.put("oid", distributorUser.getPersistInfo().getObjectIdentifier().getStringValue());
 			list.add(map);
 		}

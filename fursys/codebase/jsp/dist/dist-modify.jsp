@@ -14,6 +14,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 %>
 <!-- hidden value -->
 <input type="hidden" name="content" id="content">
+<input type="hidden" name="oid" id="oid" value="<%=dto.getOid() %>">
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
 	<span>HOME</span>
@@ -262,7 +263,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 	// 			}
 	// 		}
 	}, {
-		dataField : "user",
+		dataField : "distributorUserName",
 		headerText : "배포처 수신자",
 		dataType : "string",
 		width : 250
@@ -283,7 +284,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 		rowHeight : 30,
 		showRowNumColumn : true,
 		showRowCheckColumn : true,
-		rowCheckToRadio : true,
+// 		rowCheckToRadio : true,
 		rowNumHeaderText : "번호",
 		softRemoveRowMode : false,
 		showAutoNoDataMessage : false,
@@ -317,7 +318,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 	});
 
 	AUIGrid.bind(myGridID, "cellClick", function(event) {
-		if (event.dataField == "user") {
+		if (event.dataField == "distributorUserName") {
 			var rowItem = event.item;
 			var url = _url("/distributor/popupUser", rowItem.oid);
 			_popup(url, 900, 600, "n");
@@ -415,10 +416,10 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 			
 			if (i == 0) {
 				var selItem = selectedItems[0].item;
-				selItem.user = userName;
-				selItem.distributor = name;
-				selItem.uoid = uoid;
 				selItem.type = type;
+				selItem.distributor = name;
+				selItem.distributorUserName = userName;
+				selItem.uoid = uoid;
 				AUIGrid.updateRowsById(myGridID, selItem, selItem.rowId);
 			} else {
 				var selItem = selectedItems[0].item;
