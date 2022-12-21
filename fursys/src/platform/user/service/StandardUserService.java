@@ -55,9 +55,9 @@ public class StandardUserService extends StandardManager implements UserService 
 			// root department create
 			System.out.println("User Load..!");
 
-//			Department department = DepartmentHelper.service.make();
+			Department department = DepartmentHelper.service.make();
 //
-//			inspectUser(department);
+			inspectUser(department);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -275,7 +275,7 @@ public class StandardUserService extends StandardManager implements UserService 
 						}
 					}
 				} else {
-					
+
 					user.setName(id);
 					user.setFullName(fullName);
 					user.setEMail(email);

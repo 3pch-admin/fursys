@@ -26,8 +26,8 @@ String oid = (String) request.getAttribute("oid");
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="confirmBtn">확인</button>
 			<button type="button" id="closeBtn">닫기</button>
+			<button type="button" id="confirmBtn">저장</button>
 		</td>
 	</tr>
 </table>

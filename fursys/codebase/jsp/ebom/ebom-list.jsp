@@ -79,7 +79,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 					<table class="button-table">
 						<tr>
-							<td class="left">
+							<td class="right">
 								<button type="button" id="createBtn">등록</button>
 								<button type="button" id="derivedBtn">파생</button>
 								<%
@@ -89,8 +89,6 @@ boolean isAdmin = CommonUtils.isAdmin();
 								<%
 								}
 								%>
-							</td>
-							<td class="right">
 								<button type="button" id="searchBtn">조회</button>
 							</td>
 						</tr>

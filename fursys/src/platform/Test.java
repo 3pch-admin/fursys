@@ -20,6 +20,8 @@ public class Test {
 //테스트11 병합용1
 		WTDocument d = (WTDocument) CommonUtils.persistable(s);
 
+		ContentServerHelper.service.checkPropAndDispatchReadContentEvent(null);
+		
 		File f = new File("C:" + File.separator + "AUIGrid_style1.css");
 		QueryResult result = ContentHelper.service.getContentsByRole(d, ContentRoleType.PRIMARY);
 		if (result.hasMoreElements()) {

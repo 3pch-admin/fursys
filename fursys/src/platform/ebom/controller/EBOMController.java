@@ -174,6 +174,7 @@ public class EBOMController {
 		JSONArray list = new JSONArray();
 		try {
 			list = EBOMHelper.manager.loadTree(oid);
+			System.out.println(list);
 			result.put("result", true);
 			result.put("list", list);
 		} catch (Exception e) {

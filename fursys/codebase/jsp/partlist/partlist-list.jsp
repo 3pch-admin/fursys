@@ -81,7 +81,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						<tr>
 							<td class="right">
 								<button type="button" id="createBtn">등록</button>
-								<button type="button" id="derivedBtn">DTMG 전송</button>
+								<button type="button" id="derivedBtn">DTMG 전송(확인용)</button>
 								<button type="button" id="derivedBtn">추정원가</button>
 								<button type="button" id="derivedBtn">삭제</button>
 								<button type="button" id="searchBtn">조회</button>
@@ -184,7 +184,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 							visible : false
 						}, ];
 						var auiGridProps = {
-							rowIdField : "oid",
+// 							rowIdField : "oid",
 							headerHeight : 30,
 							rowHeight : 30,
 							fillColumnSizeMode : true,
@@ -231,19 +231,51 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 							document.getElementById("grid_paging").innerHTML = retStr;
 						}
+
 						function load() {
-							var params = _data($("#form"));
-							var url = _url("/ebom/list");
-							AUIGrid.showAjaxLoader(myGridID);
-							_call(url, params, function(data) {
-								totalRowCount = data.total;
-								totalPage = Math.ceil(totalRowCount / data.pageSize);
-								$("input[name=sessionid").val(data.sessionid);
-								createPagingNavigator(data.curPage);
-								AUIGrid.removeAjaxLoader(myGridID);
-								AUIGrid.setGridData(myGridID, data.list);
-							}, "POST");
+							requestData("/Windchill/jsp/partlist/mockup/partlist-list.json");
 						}
+
+						function requestData(url) {
+
+							// ajax 요청 전 그리드에 로더 표시
+							AUIGrid.showAjaxLoader(myGridID);
+
+							// ajax (XMLHttpRequest) 로 그리드 데이터 요청
+							ajax({
+								url : url,
+								onSuccess : function(data) {
+
+									//console.log(data);
+
+									// 그리드에 데이터 세팅
+									// data 는 JSON 을 파싱한 Array-Object 입니다.
+									AUIGrid.setGridData(myGridID, data);
+
+									// 로더 제거
+									AUIGrid.removeAjaxLoader(myGridID);
+								},
+								onError : function(status, e) {
+									alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
+									// 로더 제거
+									AUIGrid.removeAjaxLoader(myGridID);
+								}
+							});
+						};
+
+						// 						function load() {
+						// 							var params = _data($("#form"));
+						// 							var url = _url("/ebom/list");
+						// 							AUIGrid.showAjaxLoader(myGridID);
+						// 							_call(url, params, function(data) {
+						// 								totalRowCount = data.total;
+						// 								totalPage = Math.ceil(totalRowCount / data.pageSize);
+						// 								$("input[name=sessionid").val(data.sessionid);
+						// 								createPagingNavigator(data.curPage);
+						// 								AUIGrid.removeAjaxLoader(myGridID);
+						// 								AUIGrid.setGridData(myGridID, data.list);
+						// 							}, "POST");
+						// 						}
 
 						function moveToPage(goPage) {
 							createPagingNavigator(goPage);
@@ -266,31 +298,29 @@ boolean isAdmin = CommonUtils.isAdmin();
 							} else if (event.dataField == "thumb") {
 								_openCreoView(event.item.toid);
 							}
+							AUIGrid.setCheckedRowsByIds(myGridID, rowItem._$uid);
 						});
+						
 						$(function() {
-
-							$("#derivedBtn").click(function() {
-								var items = AUIGrid.getCheckedRowItems(myGridID);
-								if (items.length == 0) {
-									alert("파생할 EBOM을 선택하세요.");
-									return false;
-								}
-								var oid = items[0].item.oid;
-								var url = _url("/part/popup?box=1&callBack=derived&oid=" + oid);
-								_popup(url, "", "", "f");
-							})
 
 							$("input[name=number]").focus();
 
 							$("#createBtn").click(function() {
-								var url = "/Windchill/platform/ebom/create";
+
+								var items = AUIGrid.getCheckedRowItems(myGridID);
+								if (items.length == 0) {
+									alert("PART LIST를 등록할 할 EBOM을 선택하세요.");
+									return false;
+								}
+
+								var url = "/Windchill/platform/partlist/create";
 								_popup(url, "", "", "f");
 							})
 
 							$("#deleteBtn").click(function() {
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if (items.length == 0) {
-									alert("삭제 할 EBOM을 선택하세요.");
+									alert("삭제 할 PART LIST를 선택하세요.");
 									return false;
 								}
 

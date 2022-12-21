@@ -24,6 +24,27 @@ public class PartlistController {
 		return model;
 	}
 
+	@RequestMapping(value = "/color", method = RequestMethod.GET)
+	public ModelAndView color() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-color");
+		return model;
+	}
+
+	@RequestMapping(value = "/seprate", method = RequestMethod.GET)
+	public ModelAndView seprate() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-seprate");
+		return model;
+	}
+
+	@RequestMapping(value = "/batch", method = RequestMethod.GET)
+	public ModelAndView batch() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-batch");
+		return model;
+	}
+
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> list(@RequestBody Map<String, Object> params) throws Exception {
@@ -37,5 +58,12 @@ public class PartlistController {
 			result.put("msg", e.toString());
 		}
 		return result;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public ModelAndView create() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-create");
+		return model;
 	}
 }
