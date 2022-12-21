@@ -3,7 +3,7 @@
 		"no": "1",
 		"p": "/Windchill/netmarkets/images/part.gif",
 		"t": "/Windchill/jsp/images/no-view.png",
-		"manager": "관리자",
+		"manager": "김기훈",
 		"color": "BK",
 		"partType": "ITEM",
 		"name": "AAABBBCCC",
@@ -52,7 +52,7 @@
 		"version": "A",
 		"ecoNumber": "ECO-2022122104",
 		"state": "mBOM 작성중",
-		"creator": "관리자",
+		"creator": "김기훈",
 		"createdDate": "2022/12/21"
 	}
 ]
