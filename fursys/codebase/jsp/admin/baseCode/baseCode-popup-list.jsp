@@ -12,6 +12,7 @@ JSONArray codeTypes = (JSONArray) request.getAttribute("codeTypes");
 String codeType = (String) request.getAttribute("codeType");
 BaseCodeType c = BaseCodeType.toBaseCodeType(codeType);
 String box = (String) request.getParameter("box");
+String fun = request.getParameter("fun");
 %>
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
@@ -219,7 +220,7 @@ String box = (String) request.getParameter("box");
 // 							return false;
 // 						}
 
-						opener.color(items);
+						opener.<%=fun%>(items);
 						if (apply == "a") {
 							self.close();
 						}

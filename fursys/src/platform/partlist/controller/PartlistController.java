@@ -24,6 +24,20 @@ public class PartlistController {
 		return model;
 	}
 
+	@RequestMapping(value = "/estimate", method = RequestMethod.GET)
+	public ModelAndView estimate() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-estimate");
+		return model;
+	}
+
+	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
+	public ModelAndView confirm() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-confirm");
+		return model;
+	}
+
 	@RequestMapping(value = "/color", method = RequestMethod.GET)
 	public ModelAndView color() throws Exception {
 		ModelAndView model = new ModelAndView();

@@ -184,7 +184,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 							visible : false
 						}, ];
 						var auiGridProps = {
-// 							rowIdField : "oid",
+							// 							rowIdField : "oid",
 							headerHeight : 30,
 							rowHeight : 30,
 							fillColumnSizeMode : true,
@@ -300,7 +300,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 							}
 							AUIGrid.setCheckedRowsByIds(myGridID, rowItem._$uid);
 						});
-						
+
 						$(function() {
 
 							$("input[name=number]").focus();
@@ -310,6 +310,12 @@ boolean isAdmin = CommonUtils.isAdmin();
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if (items.length == 0) {
 									alert("PART LIST를 등록할 할 EBOM을 선택하세요.");
+									return false;
+								}
+
+								var state = items[0].item.state;
+								if (state != "EBOM 작성완료") {
+									alert("EBOM 작성완료 상태의 EBOM만 PART LIST등록이 가능합니다.");
 									return false;
 								}
 
