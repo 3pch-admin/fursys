@@ -335,7 +335,7 @@
 							$("#derivedBtn").click(function() {
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if (items.length == 0) {
-									alert("파생할 EBOM을 선택하세요.");
+									alert("파생할 MBOM을 선택하세요.");
 									return false;
 								}
 								var oid = items[0].item.oid;

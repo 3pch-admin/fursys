@@ -32,7 +32,7 @@ public class DistributorUserDTO {
 		if ("IN".equals(distUser.getType())) {
 			setName(BaseCodeHelper.manager.getNameByCodeTypeAndCode("FACTORY_CODE", distUser.getName()));
 		} else {
-			setName(distUser.getDistributor().getName());
+			setName(distUser.getName());
 		}
 
 		setDescription(distUser.getDescription());
