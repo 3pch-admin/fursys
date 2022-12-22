@@ -11,6 +11,10 @@
 .library {
 	background-color: #fefbc0;
 }
+/* 엑스트라 체크박스 사용자 선택 못하는 표시 스타일 */
+.disable-check-style {
+	color: #d3825c;
+}
 
 .aui-grid-tree-minus-icon {
 	display: inline-block;
@@ -225,9 +229,11 @@
 		visible : false
 	}, ];
 	var auiGridProps = {
+		rowIdField : "oid",
 		headerHeight : 30,
 		rowHeight : 30,
-		showStateColumn : true,
+		rowCheckToRadio : true,
+		showRowCheckColumn : true,
 		showRowNumColumn : false,
 		displayTreeOpen : true,
 		treeColumnIndex : 3,
@@ -245,12 +251,20 @@
 		useContextMenu : true,
 		showTooltip : true,
 		fillColumnSizeMode : true,
+		independentAllCheckBox : true,
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
 			}
 			return "";
-		}
+		},
+		rowCheckVisibleFunction : function(rowIndex, isChecked, item) {
+			if (item.partType != "단품") { // 이름이 Anna 인 경우 사용자 체크 못하게 함.
+				return false;
+			}
+			return true;
+		},
+
 	};
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
 
@@ -386,6 +400,10 @@
 			}
 		});
 	};
+	AUIGrid.bind(myGridID, "cellClick", function(event) {
+		var rowItem = event.item;
+		AUIGrid.setCheckedRowsByIds(myGridID, rowItem.oid);
+	});
 
 	function manager() {
 		var url = "/Windchill/platform/user/popup?target=1";
@@ -409,6 +427,11 @@
 		})
 
 		$("#seprateBtn").click(function() {
+			var items = AUIGrid.getCheckedRowItems(myGridID);
+			if (items.length == 0) {
+				alert("개별등록할 단품을 선택하세요.");
+				return false;
+			}
 			var url = _url("/partlist/seprate");
 			_popup(url, 1300, 500, "n");
 		})
@@ -417,7 +440,8 @@
 			_popup(url, 1300, 500, "n");
 		})
 		$("#confirmBtn").click(function() {
-
+			var url = _url("/partlist/confirm");
+			_popup(url, 1300, 500, "n");
 		})
 	})
 </script>
