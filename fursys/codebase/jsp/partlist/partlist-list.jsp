@@ -82,7 +82,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 							<td class="right">
 								<button type="button" id="createBtn">등록</button>
 								<button type="button" id="derivedBtn">DTMG 전송(확인용)</button>
-								<button type="button" id="derivedBtn">추정원가</button>
+								<button type="button" id="estimateBtn">추정원가</button>
 								<button type="button" id="derivedBtn">삭제</button>
 								<button type="button" id="searchBtn">조회</button>
 							</td>
@@ -340,6 +340,12 @@ boolean isAdmin = CommonUtils.isAdmin();
 									load();
 								}, "GET");
 							})
+							
+							$("#estimateBtn").click(function() {
+								var url = _url("/partlist/estimate");
+								_popup(url, 1500, 500, "n");
+							})
+							
 
 							$("#searchBtn").click(function() {
 								currentPage = 1;

@@ -25,7 +25,7 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="addBtn">원부자재 추가</button>
-			<button type="button" id="searchBtn">추정원가 조회</button>
+<!-- 			<button type="button" id="searchBtn">추정원가 조회</button> -->
 		</td>
 	</tr>
 </table>
@@ -63,6 +63,12 @@
 		headerText : "품목명",
 		dataType : "string",
 		width : 250,
+		editable : false
+	}, {
+		dataField : "state",
+		headerText : "상태",
+		dataType : "string",
+		width : 200,
 		editable : false
 	}, {
 		headerText : "파생색상",
@@ -172,10 +178,10 @@
 		$("#saveBtn").click(function() {
 		})
 
-		$("#searchBtn").click(function() {
-			var url = _url("/partlist/estimate");
-			_popup(url, 1500, 500, "n");
-		})
+// 		$("#searchBtn").click(function() {
+// 			var url = _url("/partlist/estimate");
+// 			_popup(url, 1500, 500, "n");
+// 		})
 	})
 </script>
 <table class="button-table">

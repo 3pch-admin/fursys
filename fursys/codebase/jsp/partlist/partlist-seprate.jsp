@@ -26,7 +26,7 @@
 		<th>품목코드(ERP CODE)</th>
 		<td>CCC0054PN</td>
 		<th>PLM 임시코드</th>
-		<td>SET-202212-0002</td>
+		<td>ITEM-2212-0003</td>
 	</tr>
 </table>
 <table class="button-table">

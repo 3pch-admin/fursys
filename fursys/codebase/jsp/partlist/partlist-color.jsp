@@ -16,7 +16,7 @@
 	</colgroup>
 	<tr>
 		<th>품목코드(ERP CODE)</th>
-		<td>CCC0054PN</td>
+		<td>CCC0054B</td>
 		<th>PLM 임시코드</th>
 		<td>SET-202212-0002</td>
 	</tr>
@@ -24,8 +24,8 @@
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="searchBtn">ERP 조회</button>
-			<button type="button" id="applyBtn">ERP 적용</button>
+			<button type="button" id="searchBtn">ERP 조회/적용</button>
+<!-- 			<button type="button" id="applyBtn">ERP 적용</button> -->
 		</td>
 	</tr>
 </table>

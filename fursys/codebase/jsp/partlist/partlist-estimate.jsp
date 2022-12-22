@@ -26,7 +26,7 @@
 		<td class="right">
 			<button type="button" id="searchBtn">조회</button>
 			<button type="button" id="estimateBtn">추정원가</button>
-			<button type="button" id="excelBtn">엑셀출력</button>
+			<button type="button" id="excelBtn">엑셀내보내기</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>

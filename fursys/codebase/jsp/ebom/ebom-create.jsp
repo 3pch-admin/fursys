@@ -92,6 +92,7 @@
 <table class="button-table">
 	<tr>
 		<td class="right">
+			<button type="button" id="createBtn">등록</button>
 			<button type="button" id="createBtn">수량검증</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
@@ -194,17 +195,17 @@
 		editable : false,
 		width : 200
 	}, {
-		dataField : "version",
-		headerText : "버전",
-		dataType : "string",
-		editable : false,
-		width : 80
-	}, {
 		dataField : "state",
 		headerText : "상태",
 		dataType : "string",
 		editable : false,
 		width : 120
+	}, {
+		dataField : "version",
+		headerText : "버전",
+		dataType : "string",
+		editable : false,
+		width : 80
 	}, {
 		dataField : "amount",
 		headerText : "수량",

@@ -25,7 +25,7 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="excelBtn">엑셀출력</button>
-			<button type="button" id="searchBtn">조회</button>
+			<button type="button" id="searchBtn">ERP조회/적용</button>
 		</td>
 	</tr>
 </table>
@@ -63,6 +63,12 @@
 		headerText : "품목명",
 		dataType : "string",
 		width : 250,
+		editable : false
+	}, {
+		dataField : "state",
+		headerText : "상태",
+		dataType : "string",
+		width : 200,
 		editable : false
 	// 	}, {
 	// 		headerText : "파생색상",
