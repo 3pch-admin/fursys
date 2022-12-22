@@ -1,0 +1,58 @@
+[
+	{
+		"no": "1",
+		"p": "/Windchill/netmarkets/images/part.gif",
+		"t": "/Windchill/jsp/images/no-view.png",
+		"manager": "관리자",
+		"color": "BK",
+		"partType": "ITEM",
+		"name": "AAABBBCCC",
+		"version": "B",
+		"ecoNumber": "ECO-2022122101",
+		"state": "mBOM 작성중",
+		"creator": "김준호",
+		"createdDate": "2022/12/21"
+	},
+	{
+		"no": "2",
+		"p": "/Windchill/netmarkets/images/part.gif",
+		"t": "/Windchill/jsp/images/no-view.png",
+		"manager": "김준호",
+		"color": "CR",
+		"partType": "ITEM",
+		"name": "ABCD",
+		"version": "A",
+		"ecoNumber": "ECO-2022122102",
+		"state": "mBOM 작성중",
+		"creator": "황영민",
+		"createdDate": "2022/12/21"
+	},
+	{
+		"no": "3",
+		"p": "/Windchill/netmarkets/images/part.gif",
+		"t": "/Windchill/jsp/images/no-view.png",
+		"manager": "황영민",
+		"color": "BK",
+		"partType": "MAT",
+		"name": "ABCD2",
+		"version": "A",
+		"ecoNumber": "ECO-2022122103",
+		"state": "mBOM 작성중",
+		"creator": "황영민",
+		"createdDate": "2022/12/21"
+	},
+	{
+		"no": "4",
+		"p": "/Windchill/netmarkets/images/part.gif",
+		"t": "/Windchill/jsp/images/no-view.png",
+		"manager": "황영민",
+		"color": "WW",
+		"partType": "ITEM",
+		"name": "ABCD3",
+		"version": "A",
+		"ecoNumber": "ECO-2022122104",
+		"state": "mBOM 작성중",
+		"creator": "관리자",
+		"createdDate": "2022/12/21"
+	}
+]

@@ -48,6 +48,8 @@ public class MBOMHelper {
 	public static final String MBOM_CREATE = "MBOM 작성중";
 	public static final String MBOM_APPROVAL = "MBOM 승인중";
 	public static final String MBOM_APPROVED = "MBOM 승인됨";
+	public static final String MBOM_FINISH = "MBOM 작성완료";
+	public static final String MBOM_DERIVE = "MBOM 파생중";
 
 	public static final String MBOM_SET_TYPE = "MBOM_SET";
 	public static final String MBOM_ITEM_TYPE = "MBOM_ITEM";
@@ -56,9 +58,10 @@ public class MBOMHelper {
 	public Map<String, Object> list(Map<String, Object> params) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<MBOMColumns> list = new ArrayList<MBOMColumns>();
-		String state = (String) params.get("state");
-		String number = (String) params.get("number");
-		String ecoNumber = (String) params.get("ecoNumber");
+		String number = (String) params.get("number");//부품번호
+		String ecoNumber = (String) params.get("ecoNumber");//ECO번호
+		String state = (String) params.get("state"); //상태
+		String erpCode = (String) params.get("erpCode");//ERP CODE
 		String creatorOid = (String) params.get("creatorOid");
 		String startCreatedDate = (String) params.get("startCreatedDate");
 		String endCreatedDate = (String) params.get("endCreatedDate");
@@ -66,7 +69,6 @@ public class MBOMHelper {
 		int idx = query.appendClassList(MBOM.class, true);
 
 		WTUser manager = (WTUser) SessionHelper.manager.getPrincipal();
-
 		SearchCondition sc = null;
 		ClassAttribute ca = null;
 
@@ -122,6 +124,12 @@ public class MBOMHelper {
 			sc = new SearchCondition(MBOM.class, MBOM.STATE, "=", state);
 			query.appendWhere(sc, new int[] { idx });
 		}
+		
+		//ERPCODE
+		if(StringUtils.isNotNull(erpCode)) {
+			IBAUtils.equals(query, MBOM.class, idx, "ERP_CODE", erpCode);
+		}
+		
 		// 작성일자
 		if (StringUtils.isNotNull(startCreatedDate)) {
 			if (query.getConditionCount() > 0) {

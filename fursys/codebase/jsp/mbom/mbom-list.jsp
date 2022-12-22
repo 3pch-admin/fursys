@@ -21,7 +21,7 @@
 			<img src="/Windchill/jsp/images/home.png" class="home">
 			<span>HOME</span>
 			>
-			<span>MBOM 관리</span>
+			<span>BOM 관리</span>
 			>
 			<span>MBOM 조회</span>
 		</div>
@@ -50,10 +50,10 @@
 							<td>
 								<select name="state" id="state" class="AXSelect w200px">
 									<option value="">선택</option>
-									<option value="EBOM 작성중">EBOM 작성중</option>
-									<option value="PART LIST 작성중">PART LIST 작성중</option>
-									<option value="EBOM 승인중">EBOM 승인중</option>
-									<option value="EBOM 승인됨">EBOM 승인됨</option>
+									<option value="MBOM 작성중">mBOM 작성중</option>
+									<option value="MBOM 작성완료">mBOM 작성완료</option>
+									<option value="MBOM 승인됨">mBOM 승인됨</option>
+									<option value="MBOM 파생중">mBOM 파생중</option>
 								</select>
 							</td>
 							<th>ERP CODE</th>
@@ -79,7 +79,7 @@
 
 					<table class="button-table">
 						<tr>
-							<td class="left">
+							<%-- <td class="left">
 								<%
 									if(isAdmin) {
 								%>
@@ -87,14 +87,16 @@
 								<%
 									}
 								%>
-							</td>
+							</td> --%>
 							<td class="right">
+								<button type="button" id="derivedBtn">파생</button>
+								<button type="button" id="modifyBtn">수정</button>
 								<button type="button" id="searchBtn">조회</button>
 							</td>
 						</tr>
 					</table>
 
-					<div id="grid_wrap" style="height: 640px;"></div>
+					<div id="grid_wrap" style="height: 490px;"></div>
 					<div id="grid_paging" class="aui-grid-paging-panel my-grid-paging-panel"></div>
 					<script type="text/javascript">
 						var myGridID;
@@ -199,12 +201,13 @@
 							visible : false
 						}, ];
 						var auiGridProps = {
-							rowIdField : "oid",
+// 							rowIdField : "oid",
 							headerHeight : 30,
 							rowHeight : 30,
 							fillColumnSizeMode : true,
 							rowCheckToRadio : true,
 							showRowCheckColumn : true,
+							showRowNumColumn : false,
 							rowNumHeaderText : "번호",
 						};
 						myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
@@ -246,20 +249,54 @@
 
 							document.getElementById("grid_paging").innerHTML = retStr;
 						}
-
+						
 						function load() {
-							var params = _data($("#form"));
-							var url = _url("/mbom/list");
-							AUIGrid.showAjaxLoader(myGridID);
-							_call(url, params, function(data) {
-								totalRowCount = data.total;
-								totalPage = Math.ceil(totalRowCount / data.pageSize);
-								$("input[name=sessionid").val(data.sessionid);
-								createPagingNavigator(data.curPage);
-								AUIGrid.removeAjaxLoader(myGridID);
-								AUIGrid.setGridData(myGridID, data.list);
-							}, "POST");
+							requestData("/Windchill/jsp/mbom/mockup/mbom-list.json");
 						}
+						
+						function requestData(url) {
+							// ajax 요청 전 그리드에 로더 표시
+							AUIGrid.showAjaxLoader(myGridID);
+							console.log(url);
+
+							// ajax (XMLHttpRequest) 로 그리드 데이터 요청
+							ajax({
+								url : url,
+								onSuccess : function(data) {
+
+									console.log(data);
+
+									// 그리드에 데이터 세팅
+									// data 는 JSON 을 파싱한 Array-Object 입니다.
+									AUIGrid.setGridData(myGridID, data);
+
+									// 로더 제거
+									AUIGrid.removeAjaxLoader(myGridID);
+								},
+								onError : function(status, e) {
+									alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
+									// 로더 제거
+									AUIGrid.removeAjaxLoader(myGridID);
+								}
+							});
+						};
+
+// 						function load() {
+// 							var params = _data($("#form"));
+// 							var url = _url("/mbom/list");
+// 							AUIGrid.showAjaxLoader(myGridID);
+// 							_call(url, params, function(data) {
+// 								totalRowCount = data.total;
+// 								totalPage = Math.ceil(totalRowCount / data.pageSize);
+// 								$("input[name=sessionid").val(data.sessionid);
+// 								createPagingNavigator(data.curPage);
+// 								AUIGrid.removeAjaxLoader(myGridID);
+// 								AUIGrid.setGridData(myGridID, data.list);
+
+// 							}, "POST");
+// 						}
+						
+						
 
 						function moveToPage(goPage) {
 							createPagingNavigator(goPage);
@@ -284,11 +321,32 @@
 
 						});
 						$(function() {
+							$("#modifyBtn").click(function() {
+								var items = AUIGrid.getCheckedRowItems(myGridID);
+								if(items.length == 0 ){
+									alert("수정 할 배포를 선택하세요.");
+									return false;
+								}
+								var oid = items[0].item.oid;
+								var url = _url("/mbom/modify", oid);
+								_popup(url, "", "", "f");
+							})
+							
+							$("#derivedBtn").click(function() {
+								var items = AUIGrid.getCheckedRowItems(myGridID);
+								if (items.length == 0) {
+									alert("파생할 EBOM을 선택하세요.");
+									return false;
+								}
+								var oid = items[0].item.oid;
+								var url = _url("/part/popup?box=1&callBack=derived&oid=" + oid);
+								_popup(url, "", "", "f");
+							})
 
 							$("#deleteBtn").click(function() {
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if (items.length == 0) {
-									alert("삭제 할 EBOM을 선택하세요.");
+									alert("삭제 할 MBOM을 선택하세요.");
 									return false;
 								}
 
