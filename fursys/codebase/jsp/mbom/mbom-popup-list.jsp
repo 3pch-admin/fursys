@@ -66,7 +66,8 @@ String callBack = (String) request.getParameter("callBack");
 			<table class="button-table">
 				<tr>
 					<td class="right">
-						<button type="button" id="addBtn">추가</button>
+<!-- 						<button type="button" id="addBtn">추가</button> -->
+						<button type="button" id="derivedBtn">파생</button>
 						<button type="button" id="searchBtn">조회</button>
 						<button type="button" id="closeBtn">닫기</button>
 					</td>
@@ -184,6 +185,7 @@ String callBack = (String) request.getParameter("callBack");
 					fillColumnSizeMode : true,
 					rowCheckToRadio : true,
 					showRowCheckColumn : true,
+					showRowNumColumn : false,
 					rowNumHeaderText : "번호",
 				};
 				myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
@@ -227,18 +229,54 @@ String callBack = (String) request.getParameter("callBack");
 				}
 
 				function load() {
-					var params = _data($("#form"));
-					var url = _url("/mbom/list");
-					AUIGrid.showAjaxLoader(myGridID);
-					_call(url, params, function(data) {
-						totalRowCount = data.total;
-						totalPage = Math.ceil(totalRowCount / data.pageSize);
-						$("input[name=sessionid").val(data.sessionid);
-						createPagingNavigator(data.curPage);
-						AUIGrid.removeAjaxLoader(myGridID);
-						AUIGrid.setGridData(myGridID, data.list);
-					}, "POST");
+					requestData("/Windchill/jsp/mbom/mockup/mbom-list.json");
 				}
+				
+				function requestData(url) {
+					// ajax 요청 전 그리드에 로더 표시
+					AUIGrid.showAjaxLoader(myGridID);
+					console.log(url);
+
+					// ajax (XMLHttpRequest) 로 그리드 데이터 요청
+					ajax({
+						url : url,
+						onSuccess : function(data) {
+
+							console.log(data);
+
+							// 그리드에 데이터 세팅
+							// data 는 JSON 을 파싱한 Array-Object 입니다.
+							AUIGrid.setGridData(myGridID, data);
+
+							// 로더 제거
+							AUIGrid.removeAjaxLoader(myGridID);
+						},
+						onError : function(status, e) {
+							alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
+							// 로더 제거
+							AUIGrid.removeAjaxLoader(myGridID);
+						}
+					});
+				};
+				
+				AUIGrid.bind(myGridID, "cellClick", function(event){
+					var rowItem = event.item;
+					AUIGrid.setCheckedRowsByIds(myGridID, rowItem.oid);
+				});
+				
+// 				function load() {
+// 					var params = _data($("#form"));
+// 					var url = _url("/mbom/list");
+// 					AUIGrid.showAjaxLoader(myGridID);
+// 					_call(url, params, function(data) {
+// 						totalRowCount = data.total;
+// 						totalPage = Math.ceil(totalRowCount / data.pageSize);
+// 						$("input[name=sessionid").val(data.sessionid);
+// 						createPagingNavigator(data.curPage);
+// 						AUIGrid.removeAjaxLoader(myGridID);
+// 						AUIGrid.setGridData(myGridID, data.list);
+// 					}, "POST");
+// 				}
 
 				function moveToPage(goPage) {
 					createPagingNavigator(goPage);
@@ -254,6 +292,17 @@ String callBack = (String) request.getParameter("callBack");
 
 				$(function() {
 					load();
+					
+			
+					$("#derivedBtn").click(function() {
+						var items = AUIGrid.getCheckedRowItems(myGridID);
+						if (items.length == 0) {
+							alert("추가 할 단품을 선택하세요.");
+							return false;
+						}
+						var url = "Windchill/platform/mbom/derived";
+						_popup(url, "", "", "f");
+					})
 
 					$("#addBtn").click(function() {
 						var items = AUIGrid.getCheckedRowItems(myGridID);
@@ -261,17 +310,17 @@ String callBack = (String) request.getParameter("callBack");
 							alert("추가 할 단품을 선택하세요.");
 							return false;
 						}
-// 						var state = items[0].item.state;
-// 						if (state != "MBOM 작성중") {
-// 							alert("MBOM 작성중인 MBOM만 추가 할 수 있습니다.");
-// 							return false;
-// 						}
+						// 						var state = items[0].item.state;
+						// 						if (state != "MBOM 작성중") {
+						// 							alert("MBOM 작성중인 MBOM만 추가 할 수 있습니다.");
+						// 							return false;
+						// 						}
 						var params = new Object();
 						params.poid = items[0].item.poid;
 						params.oid = items[0].item.oid;
 						var url = _url("/mbom/info");
 						_call(url, params, function(data) {
-							opener.<%=callBack%>(data.list);
+							opener.	<%=callBack%>(data.list);
 							self.close();
 						}, "POST");
 					})

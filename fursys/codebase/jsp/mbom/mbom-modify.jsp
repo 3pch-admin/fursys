@@ -5,36 +5,103 @@
 <%@page import="platform.util.CommonUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-String oid = (String) request.getAttribute("oid");
-MBOM header = (MBOM) CommonUtils.persistable(oid);
-WTPart headerPart = header.getPart();
 %>
+
+<style type="text/css">
+.library {
+	background-color: #fefbc0;
+}
+/* 엑스트라 체크박스 사용자 선택 못하는 표시 스타일 */
+.disable-check-style {
+	color: #d3825c;
+}
+
+.aui-grid-tree-minus-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: none;
+	background: url(/Windchill/jsp/asset/AUIGrid/images/arrow-downright.png) 50% 50% no-repeat;
+	background-size: 16px;
+	vertical-align: bottom;
+	margin: 0 2px 0 0;
+}
+
+.aui-grid-tree-plus-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: none;
+	background: url(/Windchill/jsp/asset/AUIGrid/images/arrow-right.png) 50% 50% no-repeat;
+	background-size: 16px;
+	vertical-align: bottom;
+	margin: 0 2px 0 0;
+}
+
+.aui-grid-tree-branch-icon {
+	display: inline-block;
+	width: 18px;
+	height: 16px;
+	background: url(/Windchill/jsp/images/part.gif) 50% 50% no-repeat;
+	background-size: 16px;
+	vertical-align: bottom;
+	margin: 0 2px 0 0;
+}
+
+.aui-grid-tree-leaf-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url(/Windchill/jsp/images/part.gif) 50% 50% no-repeat;
+	vertical-align: bottom;
+	margin: 0 2px 0 4px;
+}
+
+.aui-grid-tree-branch-open-icon {
+	display: inline-block;
+	width: 18px;
+	height: 16px;
+	background: url(/Windchill/jsp/images/part.gif) 50% 50% no-repeat;
+	background-size: 16px;
+	vertical-align: bottom;
+	margin: 0 2px 0 0;
+}
+
+.move {
+	background: #9FC93C;
+	font-weight: bold;
+	color: #22741C;
+}
+</style>
+
 <div class="header-title">
-	<img src="/Windchill/jsp/images/home.png" class="home"> <span>HOME</span> > <span>BOM관리</span> > <span>MBOM 정보</span>
+	<img src="/Windchill/jsp/images/home.png" class="home"> 
+	<span>HOME</span> > 
+	<span>BOM관리</span> > 
+	<span>MBOM 정보</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
 		<col width="180">
 		<col width="530">
-<!-- 		<col width="180"> -->
-<!-- 		<col width="530"> -->
+		<!-- 		<col width="180"> -->
+		<!-- 		<col width="530"> -->
 		<col width="180">
 		<col width="530">
 	</colgroup>
 	<tr>
 		<th>부품명칭(단품, 세트)</th>
-		<td><input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" value="<%=oid%>"> <%=headerPart.getName()%> / <%=headerPart.getNumber()%> / <%=headerPart.getVersionIdentifier().getSeries().getValue()%>.<%=headerPart.getIterationIdentifier().getSeries().getValue()%>
-		</td>
+		<td>DT_H37_800_TOTAL.ASM</td>
 		<th>유형</th>
-		<td><%=PartHelper.manager.partTypeToDisplay(headerPart)%></td>
+		<td>단품</td>
 	</tr>
 	<tr>
 		<th>조회</th>
 		<td><input type="text" name="search" class="AXInput w70p"></td>
-<!-- 		<th>색상(CAD 매개변수)</th> -->
-<%-- 		<td><%=IBAUtils.getStringValue(headerPart, "COLOR")%></td> --%>
+		<!-- 		<th>색상(CAD 매개변수)</th> -->
+		<%-- 		<td><%=IBAUtils.getStringValue(headerPart, "COLOR")%></td> --%>
 		<th>파생색상</th>
-		<td><%=header.getColor()%></td>
+		<td>AGNWW</td>
 	</tr>
 </table>
 
@@ -52,499 +119,354 @@ WTPart headerPart = header.getPart();
 				<option value="7">전체확장</option>
 		</select></td>
 		<td class="right">
+			<button type="button" id="standardCostBtn">표준원가 조회</button>
+			<button type="button" id="matBatchBtn">자재 일괄 등록</button>
 			<button type="button" id="modifyBtn">수정</button>
+			<button type="button" id="searchBtn">조회</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
 </table>
 
-
-<table class="create-table" id="tree">
-	<colgroup>
-		<col width="40">
-		<col width="80">
-		<col width="60">
-		<col width="*">
-		<col width="250">
-		<col width="100">
-		<col width="80">
-		<col width="200">
-		<col width="250">
-		<col width="100">
-		<col width="100">
-		<col width="100">
-		<col width="100">
-	</colgroup>
-	<thead>
-		<tr>
-			<th>&nbsp;</th>
-			<th>부품유형</th>
-			<th>접수자</th>
-			<th>품목코드(ERP CODE)</th>
-			<th>품목명(PART_NAME)</th>
-			<th>수량</th>
-			<th>단위</th>
-			<th>재질(MATERIAL)</th>
-			<th>PART_NO</th>
-			<th>버전</th>
-			<th>적용색상</th>
-			<th>규격가로(W)</th>
-			<th>규격세로(D)</th>
-			<th>사용높이(H)</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td></td>
-			<td class="center"></td>
-			<td class="right pad10"></td>
-			<td class="center"></td>
-			<td class="left indent10"></td>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td class="center"></td>
-		</tr>
-	</tbody>
-</table>
+<div id="grid_wrap" style="height: 800px;"></div>
 <script type="text/javascript">
-	$(function() {
-		var oid = "<%=oid%>";
+var myGridID;
+var columnLayout = [ {
+	dataField : "",
+	headerText : "",
+	dataType : "string",
+	width : 40,
+	editable : false,
+	renderer : {
+		type : "IconRenderer",
+		iconWidth : 30,
+		iconHeight : 22,
+		iconFunction : function(rowIndex, columnIndex, value, item) {
+			return item.thumb;
+		},
+		onClick : function(event) {
+			var item = event.item;
 
-		loadMTree(oid);
-
-		$("#closeBtn").click(function() {
-			self.close();
-		})
-
-		$("#modifyBtn").click(function() {
-			if (!confirm("수정 하시겠습니까?")) {
-				return false;
-			}
-
-			var tree = $.ui.fancytree.getTree("#tree");
-			var rootNode = tree.getRootNode();
-			var array = rootNode.getChildren();
-			var list = [];
-			toJsonArray(array, list);
-			var json = btoa(unescape(encodeURIComponent(JSON.stringify(list))));
-			var url = "/Windchill/platform/mbom/modify";
-			var color = "<%=header.getColor() %>";
-			var params = new Object();
-			params.json = json;
-			params.oid = $("input[name=oid]").val();
-			params.color = color;
-			_call(url, params, function(data) {
-				var tree = $.ui.fancytree.getTree("#tree");
-				$("#color").unbindSelect();
-				tree.clear();
-				reload(tree, oid, color);
-			}, "POST");
-		})
-
-		$("input[name=search]").on("keyup", function(e) {
-			var _n, treeLeft = $.ui.fancytree.getTree("#tree");
-			var _opts = {};
-			var filterFunc = treeLeft.filterNodes;
-			var match = $(this).val();
-			_n = filterFunc.call(treeLeft, match, _opts);
-		});
-
-		$("#level").change(function() {
-			var level = $(this).val();
-			var tree = $.ui.fancytree.getTree("#tree");
-			var root = tree.getRootNode();
-			if (level == "0") {
-				tree.expandAll(false);
-			} else if (level == "1") {
-				expands(root, 1);
-			} else if (level == "2") {
-				expands(root, 2);
-			} else if (level == "3") {
-				expands(root, 3);
-			} else if (level == "4") {
-				expands(root, 4);
-			} else if (level == "5") {
-				expands(root, 5);
-			} else if (level == "6") {
-				expands(root, 6);
-			} else if (level == "7") {
-				tree.expandAll(true);
-			}
-		})
-
-	})
-
-	function getter(array, list) {
-		for (var i = 0; array != null && i < array.length; i++) {
-			list.push(array[i].data.poid);
-			if (array[i].children !== undefined) {
-				getter(array[i].children, list);
+			if (item._3d.indexOf("no-view.png") <= -1) {
+				_openCreoView(item.eoid);
 			}
 		}
 	}
-
-	function toJsonArray(array, list) {
-		for (var i = 0; array != null && i < array.length; i++) {
-			array[i].data.key = array[i].key;
-			list.push(array[i].data);
-			if (array[i].children !== undefined) {
-				array[i].data.parent = array[i].parent.data.poid;
-				toJsonArray(array[i].children, list);
-			}
+}, {
+	dataField : "partType",
+	headerText : "부품유형",
+	dataType : "string",
+	width : 80,
+	editable : false,
+	styleFunction : function(rowIndex, columnIndex, value, headerText, item, dataField) {
+		var style = "";
+		if (item.partType == "자재") {
+			style = "red";
+		} else if (item.partType == "단품") {
+			style = "blue";
+		} else {
+			style = "green";
 		}
+		// 로직 처리
+		return style;
 	}
-
-	function isDescendantOf(target, node) {
-		if (target.children == null) {
-			return true;
+}, {
+	dataField : "",
+	headerText : "접수자",
+	dataType : "string",
+	width : 100,
+	editable : false,
+	renderer : { // HTML 템플릿 렌더러 사용
+		type : "TemplateRenderer"
+	},
+	tooltip : {
+		show : false
+	},
+	// dataField 로 정의된 필드 값이 HTML 이라면 labelFunction 으로 처리할 필요 없음.
+	labelFunction : function(rowIndex, columnIndex, value, headerText, item, dataField, cItem) { // HTML 템플릿 작성
+		// 			if (!value) return "";
+		if (item.partType != "단품") {
+			return "";
 		}
-
-		var nodes = target.children;
-		for (var i = 0; i < nodes.length; i++) {
-			if (nodes[i].data.number == node.number) {
-				return false;
-			}
-		}
-		return true;
+		var width = (cItem.width - 12); // 좌우 여백 생각하여 12 빼줌.
+		var template = '<input onclick="manager();" type="text" readonly="readonly" class="AXInput" value="' + item.manager + '" size="10"';
+		// 			template += ' onkeydown="if(event.keyCode == 9) event.preventDefault();"' //탭 키를 누르면 브라우저에서 자동으로 다음 input 을 찾는데 이를 방지.
+		template += '>';
+		return template; // HTML 템플릿 반환..그대도 innerHTML 속성값으로 처리됨
 	}
-
-	function append(newNode) {
-		var tree = $.ui.fancytree.getTree("#tree");
-		var node = tree.getActiveNode();
-		if (!isDescendantOf(node, newNode)) {
-			alert("중복된 부품을 추가 할 수 없습니다.");
+}, {
+	dataField : "erpCode",
+	headerText : "품목코드(ERPCODE)",
+	dataType : "string",
+	style : "left indent10",
+	editable : false,
+	width : 350,
+}, {
+	dataField : "partName",
+	headerText : "품목명(PART_NAME)",
+	dataType : "string",
+	editable : false,
+	width : 250
+}, {
+	dataField : "amount",
+	headerText : "수량",
+	dataType : "string",
+	editable : false,
+	postfix : "개",
+	width : 100
+}, {
+	dataField : "unit",
+	headerText : "단위",
+	dataType : "string",
+	editable : false,
+	width : 80
+}, {
+	dataFiled : "material",
+	headerText : "재질(MATERIAL)",
+	dataType : "string",
+	editable : false,
+	width : 200
+}, {
+	dataFiled : "partNo",
+	headerText : "PART_NO",
+	dataType : "string",
+	editable : false,
+	width : 200
+}, {
+	dataField : "version",
+	headerText : "버전",
+	dataType : "string",
+	editable : false,
+	width : 80
+}, {
+	dataField : "color",
+	headerText : "적용색상",
+	dataType : "string",
+	editable : true,
+	width : 80,
+}, {
+	dataField : "part_width",
+	headerText : "규격가로(W)",
+	dataType : "string",
+	postfix : "(mm)",
+	editable : true,
+	width : 80,
+}, {
+	dataField : "part_depth",
+	headerText : "규격세로(D)",
+	dataType : "string",
+	postfix : "(mm)",
+	editable : true,
+	width : 80,
+}, {
+	dataField : "part_height",
+	headerText : "규격높이(H)",
+	dataType : "string",
+	postfix : "(mm)",
+	editable : true,
+	width : 80,
+}, {
+	dataField : "oid",
+	headerText : "oid",
+	dataType : "string",
+	visible : false
+}, ];
+var auiGridProps = {
+	rowIdField : "oid",
+	headerHeight : 30,
+	rowHeight : 30,
+	rowCheckToRadio : true,
+	showRowCheckColumn : true,
+	showRowNumColumn : false,
+	displayTreeOpen : true,
+	treeColumnIndex : 3,
+	enableDrag : true,
+	enableDragByCellDrag : true,
+	enableDrop : true,
+	selectionMode : "multipleRows",
+	enableUndoRedo : true,
+	softRemoveRowMode : false,
+	// 		fixedColumnCount : 2,
+	treeLevelIndent : 20,
+	editable : false,
+	editableOnFixedCell : false,
+	enableSorting : false,
+	useContextMenu : true,
+	showTooltip : true,
+	fillColumnSizeMode : true,
+	independentAllCheckBox : true,
+	rowStyleFunction : function(rowIndex, item) {
+		if (item.library) {
+			return "library";
+		}
+		return "";
+	},
+	rowCheckVisibleFunction : function(rowIndex, isChecked, item) {
+		if (item.partType != "단품") { // 이름이 Anna 인 경우 사용자 체크 못하게 함.
 			return false;
 		}
+		return true;
+	},
 
-		if (node.isRootNode()) {
-			newNode.level = 0;
-			var refNode = tree.getFirstChild();
-			refNode.addChildren(newNode);
-			newNode.moveTo(tree.getFirstChild(), "firstChild");
-		} else {
-			newNode.parent = node.data.oid;
-			newNode.level = node.data.level + 1;
-			node.addChildren(newNode);
+};
+myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
+
+AUIGrid.bind(myGridID, "contextMenu", function(event) {
+	AUIGrid.setSelectionByIndex(myGridID, event.rowIndex, event.columnIndex);
+	var menus = [ {
+		label : "최상위 추가",
+		callback : contextItemHandler
+	}, {
+		label : "하위 추가",
+		callback : contextItemHandler
+	}, {
+		label : "기존부품 추가",
+		callback : contextItemHandler
+	}, {
+		label : "_$line"
+	}, {
+		label : "레벨 올리기 (Shift + Alt + ←)",
+		callback : contextItemHandler
+	}, {
+		label : "레벨 내리기 (Shift + Alt + →)",
+		callback : contextItemHandler
+	}, {
+		label : "위로 (Shift + Alt + ↑)",
+		callback : contextItemHandler
+	}, {
+		label : "아래로 (Shift + Alt + ↓)",
+		callback : contextItemHandler
+	}, {
+		label : "_$line"
+	}, {
+		label : "작업취소 Undo (Ctrl + z)",
+		callback : contextItemHandler
+	}, {
+		label : "작업취소 Redo (Ctrl + y)",
+		callback : contextItemHandler
+	}, {
+		label : "삭제 (Ctrl + Delete)",
+		callback : contextItemHandler
+	}, ]
+	if (event.dataField == "number") {
+		var item = event.item;
+		// 			if (item.state == "릴리즈됨") {
+		// 				return false;
+		// 			}
+		return menus;
+	}
+	return false;
+});
+
+function contextItemHandler(event) {
+	var item = event.item;
+	var rowIndex = event.rowIndex;
+	switch (event.contextIndex) {
+	case 0:
+		var root = AUIGrid.getItemByRowIndex(myGridID, 0);
+		var url = "/Windchill/platform/part/top?partTypeCd=" + item.partTypeCd + "&rowId=" + root._$uid + "&poid=" + root.oid + "&callBack=_top";
+		_popup(url, 1100, 380, "n");
+		break;
+	case 1:
+		var url = "/Windchill/platform/part/append?partTypeCd=" + item.partTypeCd + "&rowId=" + item._$uid + "&poid=" + item.oid + "&callBack=_child";
+		_popup(url, 1100, 380, "n");
+		break;
+	case 2:
+		var url = "/Windchill/platform/part/exist?partTypeCd=" + item.partTypeCd + "&rowId=" + item._$uid + "&poid=" + item.oid + "&box=1&callBack=_child";
+		_popup(url, "", "", "f");
+		break;
+	case 4:
+		AUIGrid.outdentTreeDepth(myGridID);
+		break;
+	case 5:
+		AUIGrid.indentTreeDepth(myGridID);
+		console.log(item);
+		var parentItem = AUIGrid.getParentItemByRowId(myGridID, item.uid);
+		console.log(parentItem);
+		break;
+	case 6:
+		AUIGrid.moveRowsToUp(myGridID);
+		break;
+	case 7:
+		AUIGrid.moveRowsToDown(myGridID);
+		break;
+	case 9:
+		AUIGrid.undo(myGridID);
+		break;
+	case 10:
+		AUIGrid.redo(myGridID);
+		break;
+	case 11:
+		AUIGrid.removeRow(myGridID, "selectedIndex");
+		break;
+	}
+};
+
+// 	function loadTree() {
+// 		var params = new Object();
+// 		var oid = $("input[name=eoid]").val();
+// 		AUIGrid.showAjaxLoader(myGridID);
+// 		var url = "/Windchill/platform/ebom/loadTree?oid=" + oid;
+// 		_call(url, params, function(data) {
+// 			AUIGrid.removeAjaxLoader(myGridID);
+// 			AUIGrid.setGridData(myGridID, data.list);
+// 		}, "GET");
+// 	}
+
+function loadTree() {
+	requestData("/Windchill/jsp/mbom/mockup/mbom-modify.json");
+}
+
+function requestData(url) {
+
+	// ajax 요청 전 그리드에 로더 표시
+	AUIGrid.showAjaxLoader(myGridID);
+
+	// ajax (XMLHttpRequest) 로 그리드 데이터 요청
+	ajax({
+		url : url,
+		onSuccess : function(data) {
+
+			//console.log(data);
+
+			// 그리드에 데이터 세팅
+			// data 는 JSON 을 파싱한 Array-Object 입니다.
+			AUIGrid.setGridData(myGridID, data);
+
+			// 로더 제거
+			AUIGrid.removeAjaxLoader(myGridID);
+		},
+		onError : function(status, e) {
+			alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
+			// 로더 제거
+			AUIGrid.removeAjaxLoader(myGridID);
 		}
-	}
+	});
+};
+AUIGrid.bind(myGridID, "cellClick", function(event) {
+	var rowItem = event.item;
+	AUIGrid.setCheckedRowsByIds(myGridID, rowItem.oid);
+});
 
-	function expands(rootNode, level) {
-		rootNode.visit(function(subNode) {
-			subNode.setExpanded(false);
+function manager() {
+	var url = "/Windchill/platform/user/popup?target=1";
+	_popup(url, 1400, 650, "n");
+}
 
-		});
-		rootNode.visit(function(subNode) {
-			if (subNode.getLevel() <= level) {
-				subNode.setExpanded(true);
-			}
-		});
-	}
+$(window).resize(function() {
+	AUIGrid.resize("#grid_wrap");
+})
 
-	function loadMTree(oid) {
-		var tree = $.ui.fancytree.getTree("#tree");
-		$("#tree").fancytree({
-			extensions : [ "table", "dnd5", "filter", "gridnav", "multi", "contextMenu" ],
-			quicksearch : true,
-			source : {
-				url : "/Windchill/platform/mbom/loadMTree?oid=" + oid
-			},
-			filter : {
-				autoApply : true, // Re-apply last filter if lazy data is loaded
-				autoExpand : true, // Expand all branches that contain matches while filtered
-				counter : true, // Show a badge with number of matching child nodes near parent icons
-				fuzzy : false, // Match single characters in order, e.g. 'fb' will match 'FooBar'
-				hideExpandedCounter : true, // Hide counter badge if parent is expanded
-				hideExpanders : false, // Hide expanders if all child nodes are hidden by filter
-				highlight : true, // Highlight matches by wrapping inside <mark> tags
-				leavesOnly : false, // Match end nodes only
-				nodata : false, // Display a 'no data' status node if result is empty
-				mode : "dimm" // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
-			},
-			table : {
-				indentation : 10,
-				nodeColumnIdx : 3,
-			},
-			tooltip : function(event, data) {
-				return data.node.title;
-			},
-			dnd5 : {
-				multiSource : true,
+$(function() {
+	loadTree();
 
-				dragStart : function(node, data) {
-					data.effectAllowed = "all";
-					data.dropEffect = data.dropEffectSuggested; // "link";
-					return true;
-				},
+	$("#closeBtn").click(function() {
+		self.close();
+	})
 
-				dragEnter : function(node, data) {
-					return true;
-				},
-				dragOver : function(node, data) {
-					data.dropEffect = data.dropEffectSuggested;
-					return true;
-				},
-				dragDrop : function(node, data) {
-					var newNode;
-					var transfer = data.dataTransfer;
-					var sourceNodes = data.otherNodeList;
-					var mode = data.dropEffect;
-					var copyMode = data.dropEffect !== "move";
-					var sameTree = (data.otherNode.tree === data.tree);
-
-					if (data.hitMode === "after") {
-						sourceNodes.reverse();
-					}
-
-					if (copyMode) {
-						newNode = data.otherNode.copyTo(node, data.hitMode);
-					}
-
-					if (!sameTree) {
-						// 						$(data.otherNode.tr).css("background-color", "#feedf0");
-						// 						data.otherNode.data.move = true;
-						// 						move(data.otherNode.children);
-					} else {
-						if (data.otherNode) {
-							if (data.hitMode == "over") {
-								var sameNode = data.otherNode.data.number === data.node.data.number;
-								if (!sameNode) {
-									$.each(sourceNodes, function(i, o) {
-										o.moveTo(node, data.hitMode);
-									});
-								} else {
-									// 같은 것일 경우 수량 업데이트 기존 노드 삭제??
-									$.each(sourceNodes, function(i, o) {
-										var t = node.data.amount + o.data.amount;
-										node.data.amount = t;
-										node.renderTitle();
-										o.remove();
-									});
-								}
-							} else {
-								$.each(sourceNodes, function(i, o) {
-									o.moveTo(node, data.hitMode);
-								});
-							}
-						}
-					}
-					node.setExpanded();
-				},
-			},
-			renderColumns : function(event, data) {
-				var node = data.node, $tdList = $(node.tr).find(">td");
-				var isLib = node.data.library;
-				var partType = node.data.partType;
-				if (isLib) {
-					$(node.tr).css("background-color", "#fdedc4");
-				} else {
-					if (partType == "단품") {
-						$(node.tr).css("background-color", "#d1fcd5");
-					} else if (partType == "세트") {
-						$(node.tr).css("background-color", "#ffe6e6");
-					}
-				}
-
-				$tdList.eq(0).html("<img src='" + node.data.thumb + "' onclick=_openCreoView('" + node.data.eoid + "');>");
-				var colors = "red";
-				if (node.data.partType == "단품") {
-					colors = "red";
-				} else if (node.data.partType == "세트") {
-					colors = "blue";
-				} else if (node.data.partType == "자재") {
-					colors = "#009300";
-				}
-				$tdList.eq(1).html("<b><font color='" + colors + "'>" + node.data.partType + "</font></b>");
-				$tdList.eq(2).text(node.data.managerName);
-				$tdList.eq(4).text(node.data.name);
-				$tdList.eq(5).text(node.data.amount);
-				$tdList.eq(6).text(node.data.unit);
-				$tdList.eq(7).text(node.data.material);
-				$tdList.eq(8).text(node.data.partNo);
-				$tdList.eq(9).text(node.data.version);
-				$tdList.eq(10).text(node.data.applyColor);
-				$tdList.eq(11).text(node.data.width);
-				$tdList.eq(12).text(node.data.height);
-				$tdList.eq(13).text(node.data.depth);
-			},
-			init : function() {
-				_selector("level");
-				mask.close();
-				$("#loading_layer").hide();
-			},
-			preInit : function() {
-				mask.open();
-				$("#loading_layer").show();
-			},
-			contextMenu : {
-				menu : {
-					"fold3" : {
-						"name" : "추가",
-						"items" : {
-							"top" : {
-								"name" : "최상위부품추가"
-							},
-							"append" : {
-								"name" : "신규부품추가"
-							},
-							"exist" : {
-								"name" : "기존부품추가"
-							},
-						},
-					},
-					"sep3" : "---------",
-					"fold2" : {
-						"name" : "구조변경",
-						"items" : {
-							"root" : {
-								"name" : "최상위"
-							},
-							"moveUp" : {
-								"name" : "위로"
-							},
-							"moveDown" : {
-								"name" : "아래로"
-							},
-							"outdent" : {
-								"name" : "왼쪽"
-							},
-							"indent" : {
-								"name" : "오른쪽"
-							},
-						},
-					},
-				},
-				actions : function(node, action, options) {
-					var tree = $.ui.fancytree.getTree("#tree");
-					var node = tree.getActiveNode();
-					var rootNode = tree.getRootNode();
-					if (action == "expands") {
-						tree.expandAll(true);
-					} else if (action == "collapse") {
-						tree.expandAll(false);
-					} else if (action == "l1expands") {
-						expands(rootNode, 1);
-					} else if (action == "l2expands") {
-						expands(rootNode, 2);
-					} else if (action == "l3expands") {
-						expands(rootNode, 3);
-					} else if (action == "l4expands") {
-						expands(rootNode, 4);
-					} else if (action == "l5expands") {
-						expands(rootNode, 5);
-					} else if (action == "moveUp" || action == "moveDown" || action == "indent" || action == "outdent") {
-						tree.applyCommand(action, node);
-					} else if (action == "root") {
-						node.moveTo(tree.getFirstChild(), "firstChild");
-					} else if (action == "append") {
-						var url = "/Windchill/platform/mbom/append?partTypeCd=" + node.data.partTypeCd;
-						_popup(url, 1200, 450, "n");
-					} else if (action == "top") {
-						var url = "/Windchill/platform/part/top?partTypeCd=" + node.data.partTypeCd;
-						_popup(url, 1200, 450, "n");
-					} else if (action == "exist") {
-						var url = "/Windchill/platform/part/exist?box=1&partTypeCd=" + node.data.partTypeCd;
-						_popup(url, "", "", "f");
-					}
-				}
-			}
-		}).on("nodeCommand", function(event, data) {
-			var refNode, moveMode;
-			var tree = $.ui.fancytree.getTree(this);
-			var node = tree.getActiveNode();
-			var rootNode = tree.getRootNode();
-			var key = node.key;
-			var rkey = rootNode.key;
-			switch (data.cmd) {
-			case "indent":
-			case "moveDown":
-			case "moveUp":
-			case "outdent":
-				tree.applyCommand(data.cmd, node);
-				break;
-			case "remove":
-				if (!confirm("삭제 하시겠습니까?")) {
-					return false;
-				}
-				tree.applyCommand(data.cmd, node);
-				break
-			case "l1expands":
-				expands(rootNode, 1);
-				break;
-			case "l2expands":
-				expands(rootNode, 2);
-				break;
-			case "l3expands":
-				expands(rootNode, 3);
-				break;
-			case "l4expands":
-				expands(rootNode, 4);
-				break;
-			case "l5expands":
-				expands(rootNode, 5);
-				break;
-			case "l6expands":
-				expands(rootNode, 6);
-				break;
-			default:
-				return;
-			}
-		}).on("keydown", function(e) {
-			var cmd = null;
-			switch ($.ui.fancytree.eventToString(e)) {
-			case "1":
-				cmd = "l1expands";
-				break;
-			case "2":
-				cmd = "l2expands";
-				break;
-			case "3":
-				cmd = "l3expands";
-				break;
-			case "4":
-				cmd = "l4expands";
-				break;
-			case "5":
-				cmd = "l5expands";
-				break;
-			case "6":
-				cmd = "l6expands";
-				break;
-			case "ctrl+up":
-				cmd = "moveUp";
-				break;
-			case "ctrl+down":
-				cmd = "moveDown";
-				break;
-			case "ctrl+right":
-				cmd = "indent";
-				break;
-			case "ctrl+left":
-				cmd = "outdent";
-				break;
-			case "del":
-				cmd = "remove";
-				break;
-			}
-			if (cmd) {
-				$(this).trigger("nodeCommand", {
-					cmd : cmd
-				});
-				return false;
-			}
-		});
-	}
-	
-	function reload(tree, oid, color) {
-		var url = "/Windchill/platform/mbom/reloadMTree?oid=" + oid + "&color=" + color;
-		var params = new Object();
-		_call(url, params, function(data) {
-			tree.reload(data.data);
-		}, "GET");
-	}
+	$("#matBatchBtn").click(function() {
+		var url = _url("/mbom/matBatch");
+		_popup(url, 1300, 500, "n");
+	})
+})
 </script>

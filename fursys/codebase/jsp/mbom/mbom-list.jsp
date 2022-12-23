@@ -324,7 +324,7 @@
 							$("#modifyBtn").click(function() {
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if(items.length == 0 ){
-									alert("수정 할 배포를 선택하세요.");
+									alert("수정 할 MBOM을 선택하세요.");
 									return false;
 								}
 								var oid = items[0].item.oid;
@@ -332,19 +332,22 @@
 								_popup(url, "", "", "f");
 							})
 							
-							$("#derivedBtn").click(function() {
+							
+						$("#derivedBtn").click(function() {
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if (items.length == 0) {
 									alert("파생할 MBOM을 선택하세요.");
 									return false;
 								}
-							var state = items[0].item.state;
-							if(state != "MBOM 작성중" || state != "MBOM 승인됨"){
-								alert("MBOM 작성중, MBOM 승인됨 상태의 MBOM만 파생이 가능합니다.")
-								return false;
+								var state = items[0].item.state;
+								if (state != "MBOM 작성중" ) {
+									alert("MBOM 작성중, MBOM 승인됨 상태의 MBOM만 파생이 가능합니다.")
+									return false;
 								}
-							var url = "/Windchill/platform/mbom/derived";
-							_popup(url, "", "", "f");
+								var oid = items[0].item.oid;
+// 								var url = _url("/mbom/derived", oid);
+								var url = _url("/mbom/popup?box=1&callBack=derived&oid=" + oid);
+								_popup(url, "", "", "f");
 							})
 
 							$("#deleteBtn").click(function() {

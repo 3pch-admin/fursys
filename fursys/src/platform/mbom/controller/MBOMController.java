@@ -31,6 +31,12 @@ public class MBOMController {
 		model.setViewName("popup:/mbom/mbom-derived");
 		return model;
 	}
+	@RequestMapping(value = "/matBatch", method = RequestMethod.GET)
+	public ModelAndView matBatch() throws Exception{
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/mbom/mbom-matBatch");
+		return model;
+	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	@ResponseBody
@@ -87,7 +93,7 @@ public class MBOMController {
 //	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public ModelAndView modify(@RequestParam String oid) throws Exception {
+	public ModelAndView modify() throws Exception {
 		ModelAndView model = new ModelAndView();
 //		model.addObject("oid", oid);
 		model.setViewName("popup:/mbom/mbom-modify");
