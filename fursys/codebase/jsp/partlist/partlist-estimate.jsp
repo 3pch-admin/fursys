@@ -75,23 +75,26 @@
 		dataField : "",
 		headerText : "상세보기",
 		width : 100,
-		editable : false,
 		colSpan : 2,
+		editable : false,
 		renderer : {
 			type : "ButtonRenderer",
 			labelText : "자재비",
 			onClick : function(event) {
-				alert("( " + event.rowIndex + ", " + event.columnIndex + " ) " + event.item.name + " 상세보기 클릭");
+				var url = _url("/partlist/material");
+				_popup(url, 1700, 600, "n");
 			},
 		}
 	}, {
 		dataField : "",
 		width : 100,
+		editable : false,
 		renderer : {
 			type : "ButtonRenderer",
 			labelText : "가공비",
 			onClick : function(event) {
-				alert("( " + event.rowIndex + ", " + event.columnIndex + " ) " + event.item.name + " 상세보기 클릭");
+				var url = _url("/partlist/process");
+				_popup(url, 1700, 600, "n");
 			},
 		}
 	}, {

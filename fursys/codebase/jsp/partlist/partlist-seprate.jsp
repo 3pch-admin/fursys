@@ -92,11 +92,15 @@
 		editable : true,
 		fillColumnSizeMode : true,
 		// 		rowCheckToRadio : true,
+		selectionMode : "multipleCells",
 		showRowCheckColumn : true,
 		showRowNumColumn : false,
 		independentAllCheckBox : true,
-		rowCheckVisibleFunction : function(rowIndex, isChecked, item) {
+		rowCheckDisabledFunction : function(rowIndex, isChecked, item) {
 			if (item.state == "릴리즈됨") { // 이름이 Anna 인 경우 사용자 체크 못하게 함.
+				return false;
+			}
+			if (item.set) {
 				return false;
 			}
 			return true;
@@ -118,7 +122,7 @@
 	}
 
 	AUIGrid.bind(myGridID, "cellEditBegin", function(event) {
-		if (event.isClipboard) {
+		if (event.isClipboard && !event.item.set) {
 			if (event.item.state == "릴리즈됨") {
 				return false;
 			}
@@ -162,29 +166,54 @@
 		// 이미 체크 선택되었는지 검사
 		if (AUIGrid.isCheckedRowById(event.pid, rowId)) {
 			// 엑스트라 체크박스 체크해제 추가
-			AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
+			if (item.state != "릴리즈됨" && !item.set) {
+				AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
+			}
 		} else {
 			// 엑스트라 체크박스 체크 추가
-			AUIGrid.addCheckedRowsByIds(event.pid, rowId);
+			if (item.state != "릴리즈됨" && !item.set) {
+				AUIGrid.addCheckedRowsByIds(event.pid, rowId);
+			}
 		}
 	});
+
+	function set(item) {
+		var applyColor = item.applyColor;
+		var items = [ {
+			color : applyColor,
+			set : true
+		}, {
+			color : applyColor,
+			set : true
+		}, {
+			color : applyColor,
+			set : true
+		} ];
+		var indexs = [ 3, 6, 7 ]
+		AUIGrid.updateRows(myGridID, items, indexs);
+		AUIGrid.update(myGridID);
+	}
 
 	$(function() {
 		$("#closeBtn").click(function() {
 			self.close();
 		})
 
-		$("#colorBtn").click(function() {
-			var items = [ {
-				color : "BK/WW/009"
-			}, {
-				color : "BK/WW/009"
-			}, {
-				color : "BK/WW/009"
-			} ];
-			var indexs = [ 3, 6, 7 ]
-			AUIGrid.updateRows(myGridID, items, indexs);
-		})
+		// 		$("#colorBtn").click(function() {
+		// 			var items = [ {
+		// 				color : "BK",
+		// 				set : true
+		// 			}, {
+		// 				color : "WW",
+		// 				set : true
+		// 			}, {
+		// 				color : "009B",
+		// 				set : true
+		// 			} ];
+		// 			var indexs = [ 3, 6, 7 ]
+		// 			AUIGrid.updateRows(myGridID, items, indexs);
+		// 			AUIGrid.update(myGridID);
+		// 		})
 
 		$("#seprateBtn").click(function() {
 			var items = AUIGrid.getCheckedRowItems(myGridID);
@@ -194,6 +223,11 @@
 			}
 			var url = _url("/baseCode/popup?codeType=COLOR&fun=color&box=2");
 			_popup(url, 1200, 720, "n");
+		})
+
+		$("#colorBtn").click(function() {
+			var url = _url("/partlist/set");
+			_popup(url, 1200, 500, "n");
 		})
 	})
 </script>

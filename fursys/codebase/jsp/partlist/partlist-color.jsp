@@ -77,14 +77,22 @@
 		visible : false
 	}, ];
 	var auiGridProps = {
-// 		rowIdField : "oid",
+		// 		rowIdField : "oid",
 		headerHeight : 30,
 		rowHeight : 30,
 		editable : true,
 		fillColumnSizeMode : true,
 		// 		rowCheckToRadio : true,
 		showRowCheckColumn : true,
-		showRowNumColumn : false
+		showRowNumColumn : false,
+		independentAllCheckBox : true,
+		selectionMode : "multipleCells",
+		rowCheckDisabledFunction : function(rowIndex, isChecked, item) {
+			if (item.erp) { // 이름이 Anna 인 경우 사용자 체크 못하게 함.
+				return false;
+			}
+			return true;
+		},
 	};
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
 	function load() {
@@ -118,10 +126,6 @@
 			}
 		});
 	};
-	AUIGrid.bind(myGridID, "cellClick", function(event) {
-		var rowItem = event.item;
-		AUIGrid.setCheckedRowsByIds(myGridID, rowItem.oid);
-	});
 
 	function color(items) {
 		var item = items[0].item;
@@ -133,8 +137,8 @@
 		}
 	}
 
-	AUIGrid.bind(myGridID, "cellEditBegin", function( event ) {
-		if(event.isClipboard) {
+	AUIGrid.bind(myGridID, "cellEditBegin", function(event) {
+		if (event.isClipboard && !event.item.erp) {
 			return true;
 		}
 		return false;
@@ -148,23 +152,43 @@
 		// 이미 체크 선택되었는지 검사
 		if (AUIGrid.isCheckedRowById(event.pid, rowId)) {
 			// 엑스트라 체크박스 체크해제 추가
-			AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
+			if (!item.erp) {
+				AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
+			}
 		} else {
 			// 엑스트라 체크박스 체크 추가
-			AUIGrid.addCheckedRowsByIds(event.pid, rowId);
+			if (!item.erp) {
+				AUIGrid.addCheckedRowsByIds(event.pid, rowId);
+			}
 		}
 	});
 
 	$(function() {
+
+		$("#saveBtn").click(function() {
+			if (!confirm("저장 하시겠습니까?")) {
+				return false;
+			}
+		})
+
 		$("#closeBtn").click(function() {
 			self.close();
 		})
 
 		$("#searchBtn").click(function() {
 			var item = {
-				color : "BK/WW/009"
+				color : "BK",
+				erp : true
 			};
+			
+			var items = AUIGrid.getCheckedRowItems(myGridID);
+			for(var i=0; i<items.length; i++) {
+				var rowId = items[i].item._$uid;
+				AUIGrid.addUncheckedRowsByIds("#grid_wrap", rowId);
+			}
+			
 			AUIGrid.updateRow(myGridID, item, 1);
+			AUIGrid.update(myGridID);
 		})
 
 		$("#seprateBtn").click(function() {
