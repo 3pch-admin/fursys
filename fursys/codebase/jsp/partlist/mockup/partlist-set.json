@@ -1,0 +1,72 @@
+[
+	{
+		"thumb": "/Windchill/jsp/images/no-view.png",
+		"type": "Fitting",
+		"oid": "wt.part.WTPart:189274",
+		"partName": "Hafele Rafix 20",
+		"number": "hafele_rafix_20_15.prt",
+		"itemName": "체결부품",
+		"color": "BK, WHT",
+		"amount": 1,
+		"id": "95364861-c97d-4c43-9b5c-7fc606a083b2",
+		"erpCode": "CCC0054PN",
+		"applyColor": "CC",
+		"parentColor": "ARL"
+	},
+	{
+		"thumb": "/Windchill/jsp/images/no-view.png",
+		"type": "Fitting",
+		"oid": "wt.part.WTPart:189274",
+		"partName": "Hafele Rafix 20",
+		"number": "hafele_rafix_20_15.prt",
+		"itemName": "체결부품",
+		"color": "BK, WHT",
+		"amount": 1,
+		"id": "95364861-c97d-4c43-9b5c-7fc606a083b2",
+		"erpCode": "CCC0054PN",
+		"applyColor": "002B",
+		"parentColor": "AWM"
+	},
+	{
+		"thumb": "/Windchill/jsp/images/no-view.png",
+		"type": "Fitting",
+		"oid": "wt.part.WTPart:189274",
+		"partName": "Hafele Rafix 20",
+		"number": "hafele_rafix_20_15.prt",
+		"itemName": "체결부품",
+		"color": "BK, WHT",
+		"amount": 1,
+		"id": "95364861-c97d-4c43-9b5c-7fc606a083b2",
+		"erpCode": "CCC0054PN",
+		"applyColor": "BK",
+		"parentColor": "BGM"
+	},
+	{
+		"thumb": "/Windchill/jsp/images/no-view.png",
+		"type": "Fitting",
+		"oid": "wt.part.WTPart:189274",
+		"partName": "Hafele Rafix 20",
+		"number": "hafele_rafix_20_15.prt",
+		"itemName": "체결부품",
+		"color": "BK, WHT",
+		"amount": 1,
+		"id": "95364861-c97d-4c43-9b5c-7fc606a083b2",
+		"erpCode": "CCC0054PN",
+		"applyColor": "WHT",
+		"parentColor": "009B"
+	},
+	{
+		"thumb": "/Windchill/jsp/images/no-view.png",
+		"type": "Fitting",
+		"oid": "wt.part.WTPart:189274",
+		"partName": "Hafele Rafix 20",
+		"number": "hafele_rafix_20_15.prt",
+		"itemName": "체결부품",
+		"color": "BK, WHT",
+		"amount": 1,
+		"id": "95364861-c97d-4c43-9b5c-7fc606a083b2",
+		"erpCode": "CCC0054PN",
+		"applyColor": "CC",
+		"parentColor": "002C"
+	}
+]
