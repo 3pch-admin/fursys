@@ -122,7 +122,6 @@
 			<button type="button" id="standardCostBtn">표준원가 조회</button>
 			<button type="button" id="matBatchBtn">자재 일괄 등록</button>
 			<button type="button" id="modifyBtn">수정</button>
-			<button type="button" id="searchBtn">조회</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -459,6 +458,17 @@ $(window).resize(function() {
 
 $(function() {
 	loadTree();
+	
+	$("input[name='search']").on("keyup", function(e) {
+		var match = $(this).val().toUpperCase();
+		console.log(match);
+// 		$("#grid_wrap").filter(function() {
+// 			$(this).toggle($(this).text().toUpperCase().indexOf(match)>-1);
+// 		});
+	$("#grid_wrap > tbody > tr").hide();
+	  var temp = $("#myTable > tbody > tr > td:nth-child(14n+4):contains('" + match + "')");
+	$(temp).parent().show();
+	})
 
 	$("#closeBtn").click(function() {
 		self.close();

@@ -92,7 +92,6 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="createBtn">등록</button>
-			<button type="button" id="createBtn">수량검증</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
