@@ -33,7 +33,7 @@
 	</tbody>
 </table>
 <script type="text/javascript">
-	function loadRightTree(oid) {
+	function loadLeftTree(oid) {
 		$("#treeRight").fancytree({
 			extensions : [ "table", "dnd5", "filter", "gridnav", "multi", "contextMenu" ],
 			quicksearch : true,

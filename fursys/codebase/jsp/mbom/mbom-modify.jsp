@@ -171,7 +171,7 @@ var columnLayout = [ {
 		return style;
 	}
 }, {
-	dataField : "",
+	dataField : "partNo",
 	headerText : "접수자",
 	dataType : "string",
 	width : 100,
