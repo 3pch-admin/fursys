@@ -86,6 +86,12 @@
 		단품
 		</td>
 	</tr>
+	<tr>
+		<th>조회</th>
+		<td colspan="3">
+			<input type="text" name="search" class="AXInput w40p">
+		</td>
+	</tr>
 </table>
 
 <table class="button-table">

@@ -465,9 +465,10 @@ $(function() {
 // 		$("#grid_wrap").filter(function() {
 // 			$(this).toggle($(this).text().toUpperCase().indexOf(match)>-1);
 // 		});
-	$("#grid_wrap > tbody > tr").hide();
-	  var temp = $("#myTable > tbody > tr > td:nth-child(14n+4):contains('" + match + "')");
-	$(temp).parent().show();
+		$("#grid_wrap > tbody > tr").hide();
+        var temp = $("#grid_wrap > tbody > tr > td:nth-child(14n+4):contains('" + match + "')");
+
+        $(temp).parent().show();
 	})
 
 	$("#closeBtn").click(function() {
