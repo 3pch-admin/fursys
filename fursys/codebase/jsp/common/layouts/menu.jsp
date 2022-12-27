@@ -282,6 +282,12 @@ int rtnCount = (int) request.getAttribute("rtnCount");
 							<span class="title">ECN 조회</span>
 						</a>
 					</li>
+					<li>
+						<a href="javascript:_page('/dtmg/list');">
+							<i class="icon icon-inline fa fa-circle-thin"></i>
+							<span class="title">DTMG 전송</span>
+						</a>
+					</li>
 				</ul>
 			</li>
 
@@ -290,14 +296,14 @@ int rtnCount = (int) request.getAttribute("rtnCount");
 					<i class="icon icon-inline fa fa-diamond"></i>
 					<span class="title">도면 조회 및 배포</span>
 				</a>
-<!-- 				<ul class="sub-menu collapse" data-menu-title="검색 도면 조회"> -->
-<!-- 					<li> -->
-<!-- 						<a href="javascript:_page('/epm/list')"> -->
-<!-- 							<i class="icon icon-inline fa fa-circle-thin"></i> -->
-<!-- 							<span class="title">검색 도면 조회</span> -->
-<!-- 						</a> -->
-<!-- 					</li> -->
-<!-- 				</ul> -->
+				<!-- 				<ul class="sub-menu collapse" data-menu-title="검색 도면 조회"> -->
+				<!-- 					<li> -->
+				<!-- 						<a href="javascript:_page('/epm/list')"> -->
+				<!-- 							<i class="icon icon-inline fa fa-circle-thin"></i> -->
+				<!-- 							<span class="title">검색 도면 조회</span> -->
+				<!-- 						</a> -->
+				<!-- 					</li> -->
+				<!-- 				</ul> -->
 				<ul class="sub-menu collapse" data-menu-title="배포 관리">
 					<li>
 						<a href="javascript:_page('/distributor/list')">
