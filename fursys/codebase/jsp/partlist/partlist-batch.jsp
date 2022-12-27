@@ -7,6 +7,7 @@
 	>
 	<span>PART LIST 일괄 등록</span>
 </div>
+<input type="hidden" name="check" value="">
 <table class="search-table top-color">
 	<colgroup>
 		<col width="150">
@@ -26,6 +27,7 @@
 		<td class="right">
 			<button type="button" id="excelBtn">엑셀출력</button>
 			<button type="button" id="searchBtn">ERP조회/적용</button>
+			<button type="button" id="searchBtn">ERP 조회</button>
 		</td>
 	</tr>
 </table>
@@ -94,6 +96,7 @@
 		showRowNumColumn : false,
 		enableCellMerge : true,
 		cellMergePolicy : "withNull",
+		selectionMode : "multipleCells",
 	};
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
 	function load() {
@@ -131,7 +134,6 @@
 			url : url,
 			onSuccess : function(data) {
 
-
 				// 그리드에 데이터 세팅
 				// data 는 JSON 을 파싱한 Array-Object 입니다.
 				AUIGrid.setGridData(myGridID, data);
@@ -165,7 +167,7 @@
 
 		// 이미 체크 선택되었는지 검사
 		if (AUIGrid.isCheckedRowById(event.pid, rowId)) {
-			// 엑스트라 체크박스 체크해제 추가
+			// 엑스트라 체크박스 
 			AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
 		} else {
 			// 엑스트라 체크박스 체크 추가
@@ -179,6 +181,10 @@
 		}
 		return false;
 	});
+	
+	function set(items) {
+		
+	}
 
 	$(function() {
 		$("#closeBtn").click(function() {
@@ -186,13 +192,39 @@
 		})
 
 		$("#searchBtn").click(function() {
-			var item = {
-				color : "BK/WW/009"
-			};
-			AUIGrid.updateRow(myGridID, item, 1);
+			var columnArray = [ {
+				headerText : "파생색상",
+				children : [ {
+					dataField : "color_" + idx,
+					headerText : "BK",
+					width : 80,
+					dataType : "string",
+					editable : true
+				}, {
+					dataField : "color_" + idx,
+					headerText : "WW",
+					width : 80,
+					dataType : "string",
+					editable : true
+				}, {
+					dataField : "color_" + idx,
+					headerText : "002",
+					width : 80,
+					dataType : "string",
+					editable : true
+				} ]
+			} ]
+			AUIGrid.addColumn(myGridID, columnArray, "last");
+			idx++;
+			$("input[name=check]").val("check");
 		})
 
 		$("#seprateBtn").click(function() {
+			var check = $("input[name=check]").val();
+			if (check == "") {
+				alert("ERP 조회를 먼저 해주세요.");
+				return false;
+			}
 			var items = AUIGrid.getCheckedRowItems(myGridID);
 			if (items.length == 0) {
 				alert("색상 선택할 품목을 선택하세요.");
@@ -203,13 +235,24 @@
 		})
 
 		$("#derivedBtn").click(function() {
+			var check = $("input[name=check]").val();
+			if (check == "") {
+				alert("ERP 조회를 먼저 해주세요.");
+				return false;
+			}
 			var url = _url("/baseCode/popup?codeType=COLOR&fun=addColumn");
 			_popup(url, 1200, 720, "n");
 		})
 
-		// 		$("#saveBtn").click(function() {
-		// 			addColumn();
-		// 		})
+		$("#colorBtn").click(function() {
+			var check = $("input[name=check]").val();
+			if (check == "") {
+				alert("ERP 조회를 먼저 해주세요.");
+				return false;
+			}
+			var url = _url("/partlist/set?fun=set");
+			_popup(url, 1200, 720, "n");
+		})
 	})
 </script>
 <table class="button-table">

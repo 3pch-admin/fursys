@@ -21,9 +21,9 @@ boolean isAdmin = CommonUtils.isAdmin();
 			<img src="/Windchill/jsp/images/home.png" class="home">
 			<span>HOME</span>
 			>
-			<span>BOM 관리</span>
+			<span>설계변경</span>
 			>
-			<span>PARTLIST 조회</span>
+			<span>DTMG 전송 조회</span>
 		</div>
 		<table id="wrap-table">
 			<tr>
@@ -80,9 +80,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 					<table class="button-table">
 						<tr>
 							<td class="right">
-								<button type="button" id="createBtn">등록</button>
-								<button type="button" id="derivedBtn">DTMG 전송(확인용)</button>
-								<button type="button" id="estimateBtn">추정원가</button>
+								<button type="button" id="createBtn">DTMG 전송 등록</button>
 								<button type="button" id="derivedBtn">삭제</button>
 								<button type="button" id="searchBtn">조회</button>
 							</td>
@@ -104,68 +102,25 @@ boolean isAdmin = CommonUtils.isAdmin();
 							dataType : "string",
 							width : 40
 						}, {
-							headerText : "P",
-							dataType : "string",
-							width : 40,
-							renderer : {
-								type : "IconRenderer",
-								iconWidth : 16,
-								iconHeight : 16,
-								iconFunction : function(rowIndex, columnIndex, value, item) {
-									return item.p;
-								}
-							}
-						}, {
-							dataField : "thumb",
-							headerText : "T",
-							dataType : "string",
-							width : 40,
-							renderer : {
-								type : "IconRenderer",
-								iconWidth : 30,
-								iconHeight : 22,
-								iconFunction : function(rowIndex, columnIndex, value, item) {
-									return item.t;
-								}
-							}
-						}, {
 							dataField : "number",
-							// 							headerText : "부품번호",
-							headerText : "CREO 파일명",
+							headerText : "DTMG 번호",
 							dataType : "string",
-							// 							width : 250,
-							style : "left indent10"
+							width : 150
 						}, {
-							dataField : "partType",
-							headerText : "부품유형",
+							dataField : "name",
+							headerText : "DTMG 명",
 							dataType : "string",
-							width : 90
+							width : 150
 						}, {
 							dataField : "erpCode",
-							headerText : "세트/단품코드",
+							headerText : "ERP CODE",
 							dataType : "string",
-							style : "center",
-							width : 200
+							width : 150
 						}, {
-							dataField : "version",
-							headerText : "버전",
+							dataField : "asm",
+							headerText : "CAD Total Ass’y",
 							dataType : "string",
-							width : 80
-						// 						}, {
-						// 							dataField : "ecoNumber",
-						// 							headerText : "ECO 번호",
-						// 							dataType : "string",
-						// 							width : 150
-						// 						}, {
-						// 							dataField : "erpCode",
-						// 							headerText : "ERP CODE",
-						// 							dataType : "string",
-						// 							width : 150
-						}, {
-							dataField : "state",
-							headerText : "BOM 상태",
-							dataType : "string",
-							width : 130
+							width : 150
 						}, {
 							dataField : "creator",
 							headerText : "작성자",
@@ -177,6 +132,11 @@ boolean isAdmin = CommonUtils.isAdmin();
 							dataType : "date",
 							formatString : "yyyy/mm/dd",
 							width : 100
+						}, {
+							dataField : "state",
+							headerText : "상태",
+							dataType : "string",
+							width : 120
 						}, {
 							dataField : "oid",
 							headerText : "oid",
@@ -233,7 +193,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						}
 
 						function load() {
-							requestData("/Windchill/jsp/partlist/mockup/partlist-list.json");
+							requestData("/Windchill/jsp/dtmg/mockup/dtmg-list.json");
 						}
 
 						function requestData(url) {
@@ -306,21 +266,8 @@ boolean isAdmin = CommonUtils.isAdmin();
 							$("input[name=number]").focus();
 
 							$("#createBtn").click(function() {
-
-								var items = AUIGrid.getCheckedRowItems(myGridID);
-								if (items.length == 0) {
-									alert("PART LIST를 등록할 할 EBOM을 선택하세요.");
-									return false;
-								}
-
-								var state = items[0].item.state;
-								if (state != "EBOM 작성완료") {
-									alert("EBOM 작성완료 상태의 EBOM만 PART LIST등록이 가능합니다.");
-									return false;
-								}
-
-								var url = "/Windchill/platform/partlist/create";
-								_popup(url, "", "", "f");
+								var url = "/Windchill/platform/dtmg/create";
+								_popup(url, 1400, 600, "n");
 							})
 
 							$("#deleteBtn").click(function() {
@@ -340,12 +287,6 @@ boolean isAdmin = CommonUtils.isAdmin();
 									load();
 								}, "GET");
 							})
-							
-							$("#estimateBtn").click(function() {
-								var url = _url("/partlist/estimate");
-								_popup(url, 1500, 500, "n");
-							})
-							
 
 							$("#searchBtn").click(function() {
 								currentPage = 1;
