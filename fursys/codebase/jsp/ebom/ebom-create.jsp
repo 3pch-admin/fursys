@@ -79,7 +79,7 @@
 	<tr>
 		<th>부품명칭</th>
 		<td>
-			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly">
+			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" >
 			<input type="text" name="number" class="AXInput w70p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요.">
 		</td>
 		<th>유형</th>
@@ -93,7 +93,7 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="createBtn">등록</button>
-			<button type="button" id="createBtn">수량검증</button>
+			<button type="button" id="verifyBtn">수량검증</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -595,7 +595,13 @@
 		AUIGrid.addTreeRow(rightGridID, node, rowId, "first");
 	}
 
+	
 	$(function() {
+
+		$("#verifyBtn").click(function() {
+			var url = _url("/ebom/verify", $("input[name=oid]").val());
+			_popup(url, 1400, 800, "n");
+		})
 
 		$("input[name=number]").click(function() {
 			var url = "/Windchill/platform/part/popup?box=1";
@@ -679,7 +685,7 @@
 			},
 		});
 	}
-	
+
 	function closeAndLoad() {
 		opener.load();
 		self.close();

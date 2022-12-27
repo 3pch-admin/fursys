@@ -100,7 +100,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="verifyBtn">검증</button>
+			<button type="button" id="verifyBtn">수량검증</button>
 			<button type="button" id="modifyBtn">수정</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>

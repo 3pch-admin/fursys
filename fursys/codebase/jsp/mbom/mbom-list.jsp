@@ -340,14 +340,16 @@
 									return false;
 								}
 								var state = items[0].item.state;
-								if (state != "MBOM 작성중" ) {
-									alert("MBOM 작성중, MBOM 승인됨 상태의 MBOM만 파생이 가능합니다.")
-									return false;
-								}
 								var oid = items[0].item.oid;
 // 								var url = _url("/mbom/derived", oid);
 								var url = _url("/mbom/popup?box=1&callBack=derived&oid=" + oid);
-								_popup(url, "", "", "f");
+								if(state == "MBOM 작성중") {
+									_popup(url, "", "" ,"f");
+								} else if( state =="MBOM 승인됨"){
+									_popup(url, "", "", "f");
+								} else {
+									alert("MBOM 작성중, MBOM 승인됨 상태의 MBOM만 파생이 가능합니다.");
+								}
 							})
 
 							$("#deleteBtn").click(function() {

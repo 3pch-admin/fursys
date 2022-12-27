@@ -4,7 +4,6 @@
 <%@page import="wt.fc.QueryResult"%>
 <%@page import="wt.fc.Persistable"%>
 <%@page import="platform.echange.eco.entity.ECO"%>
-<%@page import="platform.ebom.entity.EBOMMaster"%>
 <%@page import="platform.util.StringUtils"%>
 <%@page import="platform.util.CommonUtils"%>
 <%@page import="platform.approval.service.ApprovalHelper"%>
@@ -124,17 +123,16 @@ ArrayList<LatestApprovalLine> lines = ApprovalHelper.manager.getLatestLine();
 				</tr>
 			</table>
 			<br>
-			<table>
-				<tr>
-					<td>
-						<label>
-							<input type="checkbox" id="me" name="me">
-							내가 승인자입니다.
-						</label>
-					</td>
-				</tr>
-			</table>
-		</td>
+<!-- 			<table> -->
+<!-- 				<tr> -->
+<!-- 					<td> -->
+<!-- 						<label> -->
+<!-- 							<input type="checkbox" id="me" name="me"> -->
+<!-- 							내가 승인자입니다. -->
+<!-- 						</label> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 			</table> -->
 		<td valign="top">&nbsp;</td>
 		<td valign="top">
 			<table>

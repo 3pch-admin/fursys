@@ -45,7 +45,24 @@
 		dataType : "string",
 		style : "center",
 		width : 100,
-		editable : false
+		editable : false,
+		renderer : { // HTML 템플릿 렌더러 사용
+			type : "TemplateRenderer"
+		},
+		tooltip : {
+			show : false
+		},
+		labelFunction : function(rowIndex, columnIndex, value, headerText, item, dataField, cItem) { // HTML 템플릿 작성
+			// 			if (!value) return "";
+			if (item.partType != "단품") {
+				return "";
+			}
+			var width = (cItem.width - 12); // 좌우 여백 생각하여 12 빼줌.
+			var template = '<input onclick="manager();" type="text" readonly="readonly" class="AXInput" size="10"';
+			// 			template += ' onkeydown="if(event.keyCode == 9) event.preventDefault();"' //탭 키를 누르면 브라우저에서 자동으로 다음 input 을 찾는데 이를 방지.
+			template += '>';
+			return template; // HTML 템플릿 반환..그대도 innerHTML 속성값으로 처리됨
+		}
 	}, {
 		dataField : "erpCode",
 		headerText : "품목코드(ERP CODE)",
@@ -163,6 +180,11 @@
 		}
 	});
 
+	function manager() {
+		var url = "/Windchill/platform/user/popup?target=1";
+		_popup(url, 1400, 650, "n");
+	}
+	
 	$(function() {
 
 		$("#saveBtn").click(function() {

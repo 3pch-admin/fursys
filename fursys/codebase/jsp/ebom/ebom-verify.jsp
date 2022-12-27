@@ -156,6 +156,16 @@ String oid = (String) request.getAttribute("oid");
 		
 		$("#confirmBtn").click(function() {
 			
+// 			var items = AUIGrid.getCheckedRowItems(myGridID);
+// 			var compare = items[0].item.compare;
+// 			if(compare == 0){
+// 				if(!confirm("CAD와 eBOM의 수량이 일치합니다. \n저장하시겠습니까?"))
+// 					return false;
+// 			} else {
+// 				if(!confirm("CAD와 eBOM의 수량차이가 있습니다.\n저장하시겠습니까?"))
+// 					return false;
+// 			}
+			
 			if(!confirm("확인시 EBOM 최종검증완료 상태로 더 이상 수량비교 페이지는 확인 할 수 없습니다.\n진행 하시겠습니까?")) {
 				return false;
 			}
