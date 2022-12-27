@@ -13,7 +13,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 <%@include file="/jsp/common/script.jsp"%>
 </head>
 <!-- <body> -->
-<body id="container">
+<body id="container" onload="load();">
 	<form id="form">
 		<input type="hidden" name="sessionid" id="sessionid">
 		<input type="hidden" name="tpage" id="tpage">

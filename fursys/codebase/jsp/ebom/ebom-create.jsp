@@ -1,7 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-String oid = (String) request.getAttribute("oid");
-%>
 <style type="text/css">
 .library {
 	background-color: #fefbc0;
@@ -82,7 +79,7 @@ String oid = (String) request.getAttribute("oid");
 	<tr>
 		<th>부품명칭</th>
 		<td>
-			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" value="<%=oid %>">
+			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" >
 			<input type="text" name="number" class="AXInput w70p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요.">
 		</td>
 		<th>유형</th>
@@ -598,13 +595,14 @@ String oid = (String) request.getAttribute("oid");
 		AUIGrid.addTreeRow(rightGridID, node, rowId, "first");
 	}
 
+	
 	$(function() {
 
 		$("#verifyBtn").click(function() {
 			var url = _url("/ebom/verify", $("input[name=oid]").val());
 			_popup(url, 1400, 800, "n");
 		})
-		
+
 		$("input[name=number]").click(function() {
 			var url = "/Windchill/platform/part/popup?box=1";
 			_popup(url, "", "", "f");
@@ -687,7 +685,7 @@ String oid = (String) request.getAttribute("oid");
 			},
 		});
 	}
-	
+
 	function closeAndLoad() {
 		opener.load();
 		self.close();
