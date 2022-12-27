@@ -170,7 +170,7 @@ var columnLayout = [ {
 		return style;
 	}
 }, {
-	dataField : "partNo",
+	dataField : "manager",
 	headerText : "접수자",
 	dataType : "string",
 	width : 100,
