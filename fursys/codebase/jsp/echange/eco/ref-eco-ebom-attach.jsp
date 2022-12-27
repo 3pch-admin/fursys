@@ -5,9 +5,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <table class="button-table part-button close">
 	<tr>
-		<td class="left">
+		<td class="right">
 			<!-- 			<input type="hidden" name="header"> -->
-			<button type="button" id="selectBom">세트/단품 추가</button>
+			<button type="button" id="selectBom">단품(품목) 추가</button>
 			<!-- 			<button type="button" id="selectPartBtn">자재 추가</button> -->
 			<button type="button" id="deletePartBtn">삭제</button>
 		</td>

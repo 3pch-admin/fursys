@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <table class="button-table doc-button close">
 	<tr>
-		<td class="left">
+		<td class="right">
 			<button type="button" id="selectDocBtn">추가</button>
 			<button type="button" id="deleteDocBtn">삭제</button>
 		</td>

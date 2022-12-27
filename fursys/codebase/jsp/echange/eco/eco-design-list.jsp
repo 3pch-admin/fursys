@@ -157,21 +157,16 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 		<table class="button-table">
 			<tr>
-				<td class="left">
-					<button type="button" class="create" data-l="설계">설계 ECO 등록</button>
-					<%
-						if(isAdmin) {
-					%>
-					<button type="button" id="deleteBtn">삭제</button>
-					<%
-						}
-					%>
-					<button type="button" id="approvalBtn">결재</button>
-				</td>
 				<td class="right">
-					<button type="button" id="excelBtn">엑셀</button>
 					<button type="button" id="searchBtn">조회</button>
-					<button type="button" id="">초기화</button>
+					<button type="button" id="">조회 초기화</button>
+				</td>
+			</tr>
+			<tr>
+				<td class="right">
+					<button type="button" class="create" data-l="설계">설계 ECO 등록</button>
+					<button type="button" id="modifyBtn">수정</button>
+					<button type="button" id="approvalBtn">결재</button>
 				</td>
 			</tr>
 		</table>

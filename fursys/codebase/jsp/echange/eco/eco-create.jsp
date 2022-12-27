@@ -27,7 +27,15 @@ String ccode = CommonUtils.getSessionCompany();
 </div>
 
 <div id="tabs"></div>
-<br class="ebr">
+<!-- <br class="ebr"> -->
+<table class="button-table">
+	<tr>
+		<td class="right">
+			<button type="button" id="createBtn">등록</button>
+			<button type="button" id="closeBtn">닫기</button>
+		</td>
+	</tr>
+</table>
 <table class="create-table">
 	<colgroup>
 		<col width="120">
@@ -260,14 +268,7 @@ String ccode = CommonUtils.getSessionCompany();
 	<%-- 	<jsp:include page="/jsp/approval/register-app.jsp"></jsp:include> --%>
 </table>
 
-<table class="button-table">
-	<tr>
-		<td class="right">
-			<button type="button" id="createBtn">등록</button>
-			<button type="button" id="closeBtn">닫기</button>
-		</td>
-	</tr>
-</table>
+
 <script type="text/javascript">
 	$(function() {
 
@@ -402,6 +403,7 @@ String ccode = CommonUtils.getSessionCompany();
 					// 기본
 					$(".create-table").hide();
 					$(".ebr").hide();
+					$(".button-table").hide();
 					// 부품
 					$("#part_grid_wrap").show();
 					AUIGrid.resize("#part_grid_wrap");
@@ -416,6 +418,7 @@ String ccode = CommonUtils.getSessionCompany();
 					// 기본
 					$(".create-table").hide();
 					$(".ebr").hide();
+					$(".button-table").hide();
 					// 부품
 					$("#part_grid_wrap").hide();
 					$(".part-button").hide();
