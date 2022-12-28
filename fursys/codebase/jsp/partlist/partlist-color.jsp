@@ -25,7 +25,7 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="searchBtn">ERP 조회/적용</button>
-<!-- 			<button type="button" id="applyBtn">ERP 적용</button> -->
+			<!-- 			<button type="button" id="applyBtn">ERP 적용</button> -->
 		</td>
 	</tr>
 </table>
@@ -105,7 +105,7 @@
 		independentAllCheckBox : true,
 		selectionMode : "multipleCells",
 		rowCheckDisabledFunction : function(rowIndex, isChecked, item) {
-			if (item.erp) { // 이름이 Anna 인 경우 사용자 체크 못하게 함.
+			if (item.erp || item.partType == "단품") { // 이름이 Anna 인 경우 사용자 체크 못하게 함.
 				return false;
 			}
 			return true;
@@ -184,7 +184,24 @@
 		var url = "/Windchill/platform/user/popup?target=1";
 		_popup(url, 1400, 650, "n");
 	}
-	
+
+	function set(item) {
+		var applyColor = item.applyColor;
+		var items = [ {
+			color : applyColor,
+			set : true
+		}, {
+			color : applyColor,
+			set : true
+		}, {
+			color : applyColor,
+			set : true
+		} ];
+		var indexs = [ 3, 6, 7 ]
+		AUIGrid.updateRows(myGridID, items, indexs);
+		AUIGrid.update(myGridID);
+	}
+
 	$(function() {
 
 		$("#saveBtn").click(function() {
@@ -202,13 +219,13 @@
 				color : "BK",
 				erp : true
 			};
-			
+
 			var items = AUIGrid.getCheckedRowItems(myGridID);
-			for(var i=0; i<items.length; i++) {
+			for (var i = 0; i < items.length; i++) {
 				var rowId = items[i].item._$uid;
 				AUIGrid.addUncheckedRowsByIds("#grid_wrap", rowId);
 			}
-			
+
 			AUIGrid.updateRow(myGridID, item, 1);
 			AUIGrid.update(myGridID);
 		})
@@ -222,12 +239,18 @@
 			var url = _url("/baseCode/popup?codeType=COLOR&fun=color&box=2");
 			_popup(url, 1200, 720, "n");
 		})
+
+		$("#colorBtn").click(function() {
+			var url = _url("/partlist/set");
+			_popup(url, 1200, 500, "n");
+		})
 	})
 </script>
 <table class="button-table">
 	<tr>
 		<td class="right">
 			<button type="button" id="seprateBtn">개별 색상 지정</button>
+			<button type="button" id="colorBtn">컬러셋 지정</button>
 			<button type="button" id="searchBtn">저장</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>

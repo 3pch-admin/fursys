@@ -3,16 +3,16 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("company");
-ArrayList<BaseCode> brand = (ArrayList<BaseCode>) request.getAttribute("brand");
-ArrayList<BaseCode> notiTypes = (ArrayList<BaseCode>) request.getAttribute("notiTypes");
-ArrayList<BaseCode> applyTimes = (ArrayList<BaseCode>) request.getAttribute("applyTimes");
-ArrayList<BaseCode> lots = (ArrayList<BaseCode>) request.getAttribute("lots");
-ArrayList<BaseCode> ecoTypes = (ArrayList<BaseCode>) request.getAttribute("ecoTypes");
-ArrayList<BaseCode> devTypes = (ArrayList<BaseCode>) request.getAttribute("devTypes");
-String ecoType = (String) request.getAttribute("ecoType");
-String code = CommonUtils.getSessionBrand();
-String ccode = CommonUtils.getSessionCompany();
+	ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("company");
+	ArrayList<BaseCode> brand = (ArrayList<BaseCode>) request.getAttribute("brand");
+	ArrayList<BaseCode> notiTypes = (ArrayList<BaseCode>) request.getAttribute("notiTypes");
+	ArrayList<BaseCode> applyTimes = (ArrayList<BaseCode>) request.getAttribute("applyTimes");
+	ArrayList<BaseCode> lots = (ArrayList<BaseCode>) request.getAttribute("lots");
+	ArrayList<BaseCode> ecoTypes = (ArrayList<BaseCode>) request.getAttribute("ecoTypes");
+	ArrayList<BaseCode> devTypes = (ArrayList<BaseCode>) request.getAttribute("devTypes");
+	String ecoType = (String) request.getAttribute("ecoType");
+	String code = CommonUtils.getSessionBrand();
+	String ccode = CommonUtils.getSessionCompany();
 %>
 <!-- hidden value -->
 <div class="header-title">
@@ -385,6 +385,7 @@ String ccode = CommonUtils.getSessionCompany();
 					// 부품
 					$("#part_grid_wrap").hide();
 					$(".part-button").hide();
+					$(".search-table").hide();
 					//문서
 					$("#doc_grid_wrap").hide();
 					$(".doc-button").hide();
@@ -408,6 +409,7 @@ String ccode = CommonUtils.getSessionCompany();
 					$("#part_grid_wrap").show();
 					AUIGrid.resize("#part_grid_wrap");
 					$(".part-button").show();
+					$(".search-table").show();
 					// 					AUIGrid.resize("#part_grid_wrap");
 					_selector("color");
 					//문서
@@ -422,6 +424,7 @@ String ccode = CommonUtils.getSessionCompany();
 					// 부품
 					$("#part_grid_wrap").hide();
 					$(".part-button").hide();
+					$(".search-table").hide();
 					//문서
 					$("#doc_grid_wrap").show();
 					$(".doc-button").show();

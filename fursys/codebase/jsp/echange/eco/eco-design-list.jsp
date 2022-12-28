@@ -80,19 +80,19 @@ boolean isAdmin = CommonUtils.isAdmin();
 				</td>
 			</tr>
 			<tr>
-<!-- 				<th>ECO 유형</th> -->
-<!-- 				<td> -->
-<!-- 					<select name="ecoType" class="AXSelect w200px" id="ecoType" > -->
-<!-- 						<option value="">선택</option> -->
-						<%
-						for (BaseCode ecoType : ecoTypes) {
-						%>
-<%-- 						<option value="<%=ecoType.getCode()%>"><%=ecoType.getName()%></option> --%>
-						<%
-						}
-						%>
-<!-- 					</select> -->
-<!-- 				</td> -->
+				<!-- 				<th>ECO 유형</th> -->
+				<!-- 				<td> -->
+				<!-- 					<select name="ecoType" class="AXSelect w200px" id="ecoType" > -->
+				<!-- 						<option value="">선택</option> -->
+				<%
+				for (BaseCode ecoType : ecoTypes) {
+				%>
+				<%-- 						<option value="<%=ecoType.getCode()%>"><%=ecoType.getName()%></option> --%>
+				<%
+				}
+				%>
+				<!-- 					</select> -->
+				<!-- 				</td> -->
 				<th>개발구분</th>
 				<td>
 					<select name="devType" class="AXSelect w200px" id="devType">
@@ -123,7 +123,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 				<td>
 					<input type="text" class="AXInput w100px" name="expectationTime" id="expectationTime">
 					<i class="axi axi-close2 axicon"></i>
-				</td>				
+				</td>
 			</tr>
 			<tr>
 				<th>제품LOT관리</th>
@@ -157,16 +157,14 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 		<table class="button-table">
 			<tr>
-				<td class="right">
-					<button type="button" id="searchBtn">조회</button>
-					<button type="button" id="">조회 초기화</button>
-				</td>
-			</tr>
-			<tr>
-				<td class="right">
+				<td class="left">
 					<button type="button" class="create" data-l="설계">설계 ECO 등록</button>
 					<button type="button" id="modifyBtn">수정</button>
 					<button type="button" id="approvalBtn">결재</button>
+				</td>
+				<td class="right">
+					<button type="button" id="searchBtn">조회</button>
+					<button type="button" id="">조회 초기화</button>
 				</td>
 			</tr>
 		</table>
@@ -195,11 +193,11 @@ boolean isAdmin = CommonUtils.isAdmin();
 				headerText : "ECO 명",
 				dataType : "string",
 				style : "left indent10"
-// 			}, {
-// 				dataField : "ecoTypeNm",
-// 				headerText : "ECO유형",
-// 				dataType : "string",
-// 				width : 80
+			// 			}, {
+			// 				dataField : "ecoTypeNm",
+			// 				headerText : "ECO유형",
+			// 				dataType : "string",
+			// 				width : 80
 			}, {
 				dataField : "devTypeNm",
 				headerText : "개발유형",
@@ -220,12 +218,12 @@ boolean isAdmin = CommonUtils.isAdmin();
 				headerText : "적용시점",
 				dataType : "string",
 				width : 80
-// 			}, {
-// 				dataField : "expectationTime",
-// 				headerText : "예상적용일",
-// 				dataType : "date",
-// 				width : 100,
-// 				formatString : "yyyy/mm/dd"
+			// 			}, {
+			// 				dataField : "expectationTime",
+			// 				headerText : "예상적용일",
+			// 				dataType : "date",
+			// 				width : 100,
+			// 				formatString : "yyyy/mm/dd"
 			}, {
 				dataField : "creator",
 				headerText : "작성자",
@@ -331,19 +329,14 @@ boolean isAdmin = CommonUtils.isAdmin();
 						alert("삭제 할 ECO을 선택하세요.");
 						return false;
 					}
-					<%
-						if(!CommonUtils.isAdmin()) {
-					%>
-					var state = items[0].item.state;
+		<%if (!CommonUtils.isAdmin()) {%>
+			var state = items[0].item.state;
 					if (state != "작업중") {
 						alert("작업중 상태의 ECO만 삭제가 가능합니다.");
 						return false;
 					}
-					<%
-						}
-					%>
-
-					if (!confirm("삭제 하시겠습니까?")) {
+		<%}%>
+			if (!confirm("삭제 하시겠습니까?")) {
 						return false;
 					}
 					var oid = items[0].item.oid;
