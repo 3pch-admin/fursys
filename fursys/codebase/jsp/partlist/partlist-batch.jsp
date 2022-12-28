@@ -10,14 +10,18 @@
 <input type="hidden" name="check" value="">
 <table class="search-table top-color">
 	<colgroup>
-		<col width="150">
-		<col width="580">
-		<col width="150">
-		<col width="580">
+		<col width="120">
+		<col width="400">
+		<col width="120">
+		<col width="400">
+		<col width="120">
+		<col width="400">
 	</colgroup>
 	<tr>
 		<th>품목코드(ERP CODE)</th>
 		<td>CCC0054PN</td>
+		<th>기준색상</th>
+		<td>BK</td>
 		<th>PLM 임시코드</th>
 		<td>SET-202212-0002</td>
 	</tr>
@@ -183,10 +187,23 @@
 		return false;
 	});
 	
-	function set(items) {
-		
+	function set(item) {
+		var applyColor = item.applyColor;
+		var items = [ {
+			color : applyColor,
+			set : true
+		}, {
+			color : applyColor,
+			set : true
+		}, {
+			color : applyColor,
+			set : true
+		} ];
+		var indexs = [ 3, 6, 7 ]
+		AUIGrid.updateRows(myGridID, items, indexs);
+		AUIGrid.update(myGridID);
 	}
-
+	
 	$(function() {
 		$("#closeBtn").click(function() {
 			self.close();

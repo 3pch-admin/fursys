@@ -88,16 +88,19 @@
 	}, {
 		headerText : "규격",
 		children : [ {
-			dataField : "",
+			dataField : "width",
 			headerText : "W",
+			postfix : "W",
 			width : 70
 		}, {
-			dataField : "",
+			dataField : "height",
 			headerText : "H",
+			postfix : "H",
 			width : 70
 		}, {
-			dataField : "",
+			dataField : "depth",
 			headerText : "D",
+			postfix : "D",
 			width : 70
 		} ]
 	}, {
@@ -114,18 +117,23 @@
 	}, {
 		dataField : "price",
 		headerText : "단가 (ERP)",
-		dataType : "string",
+		dataType : "numeric",
+		postfix : "원",
+		formatString : "#,##0",
 		width : 100,
 	}, {
 		dataField : "estimate",
 		headerText : "예상단가",
-		dataType : "string",
+		dataType : "numeric",
+		postfix : "원",
+		formatString : "#,##0",
 		width : 120,
-		editable : true
 	}, {
 		dataField : "price",
 		headerText : "금액",
-		dataType : "string",
+		dataType : "numeric",
+		postfix : "원",
+		formatString : "#,##0",
 	}, {
 		dataField : "oid",
 		headerText : "oid",
@@ -147,7 +155,7 @@
 	};
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
 	function load() {
-		requestData("/Windchill/jsp/partlist/mockup/partlist-seprate.json");
+		requestData("/Windchill/jsp/partlist/mockup/partlist-material.json");
 	}
 
 	var idx = 0;

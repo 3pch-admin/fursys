@@ -17,6 +17,13 @@ import platform.partlist.service.PartlistHelper;
 @RequestMapping(value = "/partlist/**")
 public class PartlistController {
 
+	@RequestMapping(value = "/set", method = RequestMethod.GET)
+	public ModelAndView set() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-set");
+		return model;
+	}
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() throws Exception {
 		ModelAndView model = new ModelAndView();
@@ -35,6 +42,20 @@ public class PartlistController {
 	public ModelAndView confirm() throws Exception {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("popup:/partlist/partlist-confirm");
+		return model;
+	}
+
+	@RequestMapping(value = "/material", method = RequestMethod.GET)
+	public ModelAndView material() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-material");
+		return model;
+	}
+
+	@RequestMapping(value = "/process", method = RequestMethod.GET)
+	public ModelAndView process() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/partlist/partlist-process");
 		return model;
 	}
 

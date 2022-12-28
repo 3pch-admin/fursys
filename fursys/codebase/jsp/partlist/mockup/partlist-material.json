@@ -15,12 +15,11 @@
 		"id": "95364861-c97d-4c43-9b5c-7fc606a083b2",
 		"library": false,
 		"unit": "낱개",
-		"color": "RED",
+		"width": "31",
+		"height": "51",
+		"depth": "12",
 		"erpCode": "CCC0054PN",
-		"link": "",
-		"estimate": "1234",
-		"material": "482",
-		"process": "2304"
+		"link": ""
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",
@@ -32,18 +31,16 @@
 		"version": "0",
 		"partType": "자재",
 		"amount": 1,
-		"color": "WW",
 		"oid": "wt.part.WTPart:170828",
 		"state": "릴리즈됨",
 		"id": "b1800b55-9b0d-4124-b3b0-249e6514f71b",
 		"library": false,
 		"unit": "낱개",
+		"width": "11",
+		"height": "24",
+		"depth": "32",
 		"erpCode": "CCC0054SN",
-		"link": "wt.part.WTPartUsageLink:171994",
-		"color_2": "BLUE",
-		"estimate": "44123",
-		"material": "31344",
-		"process": "1233421"
+		"link": "wt.part.WTPartUsageLink:171994"
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",
@@ -55,19 +52,16 @@
 		"version": "0",
 		"partType": "자재",
 		"amount": 1,
-		"color": "CC",
 		"oid": "wt.part.WTPart:170857",
 		"state": "작업 중",
 		"id": "a5a8de1f-636b-4e9d-8c92-1a1cf1561432",
 		"library": false,
 		"unit": "낱개",
+		"width": "22",
+		"height": "30",
+		"depth": "50",
 		"erpCode": "CCC0104B",
-		"link": "wt.part.WTPartUsageLink:171962",
-		"color_1": "BK",
-		"color_3": "BLUE",
-		"estimate": "55552",
-		"material": "123435",
-		"process": "4576467"
+		"link": "wt.part.WTPartUsageLink:171962"
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",
@@ -84,12 +78,15 @@
 		"id": "aad522c7-9a13-454d-9565-3100df95a0a1",
 		"library": false,
 		"unit": "낱개",
+		"qty": "4",
+		"price": "542",
+		"estimate": "123434",
+		"width": "44",
+		"height": "22",
+		"depth": "11",
 		"erpCode": "CCC0104PN",
 		"link": "wt.part.WTPartUsageLink:171977",
-		"estimate": "8965",
-		"material": "65631",
-		"color": "007B",
-		"process": "85564"
+		"children": []
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",
@@ -105,14 +102,15 @@
 		"state": "작업 중",
 		"id": "5c091cd5-6162-494b-a737-7ffe179f1ad5",
 		"library": false,
+		"qty": "2",
+		"price": "31242",
+		"estimate": "4324",
 		"unit": "낱개",
+		"width": "62",
+		"height": "33",
+		"depth": "54",
 		"erpCode": "CCC0104SN",
-		"link": "wt.part.WTPartUsageLink:172001",
-		"color_5": "008A",
-		"estimate": "75785",
-		"material": "34234",
-		"color": "BK",
-		"process": "546223"
+		"link": "wt.part.WTPartUsageLink:172001"
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",
@@ -129,13 +127,11 @@
 		"id": "6a9e5cb3-8f9f-445d-bd1a-f0bf3862777d",
 		"library": true,
 		"unit": "낱개",
-		"color": "002W",
+		"qty": "6",
+		"price": "75634",
+		"estimate": "32332",
 		"erpCode": "CCCR2211009",
-		"link": "wt.part.WTPartUsageLink:172012",
-		"color_4": "006",
-		"estimate": "646246",
-		"material": "12231",
-		"process": "44435"
+		"link": "wt.part.WTPartUsageLink:172012"
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",
@@ -147,17 +143,13 @@
 		"version": "0",
 		"partType": "자재",
 		"amount": 1,
-		"color": "004C",
 		"oid": "wt.part.WTPart:170859",
 		"state": "작업 중",
 		"id": "4e107442-c270-44b3-95f5-fad9efa6b3e9",
 		"library": false,
 		"unit": "낱개",
 		"erpCode": "CCCX1912001",
-		"link": "wt.part.WTPartUsageLink:171973",
-		"estimate": "674674",
-		"material": "1212",
-		"process": "45543256"
+		"link": "wt.part.WTPartUsageLink:171973"
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",
@@ -211,8 +203,7 @@
 		"library": false,
 		"unit": "낱개",
 		"erpCode": "CCCX2005003",
-		"link": "wt.part.WTPartUsageLink:171999",
-		"color_3": "YS"
+		"link": "wt.part.WTPartUsageLink:171999"
 	},
 	{
 		"thumb": "/Windchill/jsp/images/no-view.png",

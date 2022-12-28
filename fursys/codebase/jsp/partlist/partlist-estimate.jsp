@@ -24,9 +24,15 @@
 <table class="button-table">
 	<tr>
 		<td class="right">
+<<<<<<< HEAD
 			<button type="button" id="searchBtn">ERP조회</button>
 			<button type="button" id="estimateBtn">추정원가</button>
 			<button type="button" id="excelBtn">엑셀출력</button>
+=======
+			<button type="button" id="searchBtn">조회</button>
+			<!-- 			<button type="button" id="estimateBtn">추정원가</button> -->
+			<button type="button" id="excelBtn">엑셀내보내기</button>
+>>>>>>> master
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -54,21 +60,27 @@
 		width : 250,
 		editable : false
 	}, {
-		dataField : "total",
+		dataField : "estimate",
 		headerText : "추정원가(원)",
-		dataType : "string",
+		dataType : "numeric",
+		formatString : "#,##0",
+		postfix : "원",
 		width : 150,
 		editable : false
 	}, {
-		dataField : "color",
+		dataField : "material",
 		headerText : "자재비(원)",
-		dataType : "string",
+		dataType : "numeric",
+		postfix : "원",
+		formatString : "#,##0",
 		width : 150,
 		editable : false
 	}, {
-		dataField : "color",
+		dataField : "process",
 		headerText : "가공비(원)",
-		dataType : "string",
+		dataType : "numeric",
+		formatString : "#,##0",
+		postfix : "원",
 		width : 150,
 		editable : false
 	}, {
@@ -117,7 +129,7 @@
 	};
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
 	function load() {
-		requestData("/Windchill/jsp/partlist/mockup/partlist-confirm.json");
+		requestData("/Windchill/jsp/partlist/mockup/partlist-estimate.json");
 	}
 
 	load();

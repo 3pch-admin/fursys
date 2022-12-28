@@ -4,6 +4,10 @@
 	background-color: #fefbc0;
 }
 
+.released {
+	background-color: #dbdbfd;
+}
+
 .aui-grid-tree-minus-icon {
 	display: inline-block;
 	width: 16px;
@@ -273,6 +277,8 @@
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
+			} else if(item.state == "릴리즈됨") {
+				return "released";
 			}
 			return "";
 		}

@@ -149,6 +149,36 @@ String oid = (String) request.getAttribute("oid");
 		AUIGrid.resize("#grid_wrap");
 	})
 	
+	requestData("/Windchill/jsp/ebom/mockup/ebom-verify.json");
+	
+	
+	function requestData(url) {
+
+		// ajax 요청 전 그리드에 로더 표시
+		AUIGrid.showAjaxLoader(myGridID);
+
+		// ajax (XMLHttpRequest) 로 그리드 데이터 요청
+		ajax({
+			url : url,
+			onSuccess : function(data) {
+
+				//console.log(data);
+
+				// 그리드에 데이터 세팅
+				// data 는 JSON 을 파싱한 Array-Object 입니다.
+				AUIGrid.setGridData(myGridID, data);
+
+				// 로더 제거
+				AUIGrid.removeAjaxLoader(myGridID);
+			},
+			onError : function(status, e) {
+				alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
+				// 로더 제거
+				AUIGrid.removeAjaxLoader(myGridID);
+			}
+		});
+	};
+	
 	$(function() {
 		$("#closeBtn").click(function() {
 			self.close();
@@ -156,26 +186,26 @@ String oid = (String) request.getAttribute("oid");
 		
 		$("#confirmBtn").click(function() {
 			
-// 			var items = AUIGrid.getCheckedRowItems(myGridID);
-// 			var compare = items[0].item.compare;
-// 			if(compare == 0){
-// 				if(!confirm("CAD와 eBOM의 수량이 일치합니다. \n저장하시겠습니까?"))
-// 					return false;
-// 			} else {
-// 				if(!confirm("CAD와 eBOM의 수량차이가 있습니다.\n저장하시겠습니까?"))
-// 					return false;
-// 			}
-			
-			if(!confirm("확인시 EBOM 최종검증완료 상태로 더 이상 수량비교 페이지는 확인 할 수 없습니다.\n진행 하시겠습니까?")) {
-				return false;
+			var compare = 0;
+			if(compare == 0){
+				if(confirm("CAD와 EBOM의 수량이 일치합니다. \n저장하시겠습니까?")) {
+					var url = _url("/ebom/confirm", "<%=oid%>");
+					var params = new Object();
+					_call(url, params, function(data) {
+						opener.closeAndLoad();
+						self.close();
+					}, "GET");
+				}
+			} else {
+				if(confirm("CAD와 EBOM의 수량차이가 있습니다.\n저장하시겠습니까?")) {
+					var url = _url("/ebom/confirm", "<%=oid%>");
+					var params = new Object();
+					_call(url, params, function(data) {
+						opener.closeAndLoad();
+						self.close();
+					}, "GET");
+				}
 			}
-			
-			var url = _url("/ebom/confirm", "<%=oid%>");
-			var params = new Object();
-			_call(url, params, function(data) {
-				opener.closeAndLoad();
-				self.close();
-			}, "GET");
 		})
 	})
 </script>

@@ -3,6 +3,20 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<table class="search-table top-color close">
+	<colgroup>
+		<col width="150">
+		<col width="600">
+		<col width="150">
+		<col width="600">
+	</colgroup>
+	<tr>
+		<th>CAD Total Ass'y</th>
+		<td>DT-H37-5-800-T</td>
+		<th>ERP CODE</th>
+		<td>CCC0054PN</td>
+	</tr>
+</table>
 <table class="button-table part-button close">
 	<tr>
 		<td class="right">

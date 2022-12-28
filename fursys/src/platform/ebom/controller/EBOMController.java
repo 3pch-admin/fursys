@@ -20,6 +20,8 @@ import platform.ebom.vo.BOMCompareNode;
 import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import wt.doc.WTDocument;
+import wt.federation.PrincipalManager.DirContext;
+import wt.federation.PrincipalManager.PrincipalManagerResource;
 import wt.part.WTPart;
 import wt.part.WTPartMaster;
 
