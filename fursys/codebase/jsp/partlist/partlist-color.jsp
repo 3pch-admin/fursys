@@ -58,7 +58,7 @@
 				return "";
 			}
 			var width = (cItem.width - 12); // 좌우 여백 생각하여 12 빼줌.
-			var template = '<input onclick="manager();" type="text" readonly="readonly" class="AXInput" size="10"';
+			var template = '<input onclick="manager();" type="text" readonly="readonly" class="AXInput" size="8"';
 			// 			template += ' onkeydown="if(event.keyCode == 9) event.preventDefault();"' //탭 키를 누르면 브라우저에서 자동으로 다음 input 을 찾는데 이를 방지.
 			template += '>';
 			return template; // HTML 템플릿 반환..그대도 innerHTML 속성값으로 처리됨
@@ -160,11 +160,15 @@
 		}
 		return false;
 	});
-
+	
 	AUIGrid.bind(myGridID, "cellClick", function(event) {
 		var item = event.item, rowIdField, rowId;
-		rowIdField = AUIGrid.getProp(event.pid, "rowIdField"); // rowIdField 얻기
-		rowId = item[rowIdField];
+		var dataField = event.dataField;
+
+		if (dataField != "manager") {
+			rowIdField = AUIGrid.getProp(event.pid, "rowIdField"); // rowIdField 얻기
+			rowId = item[rowIdField];
+		}
 
 		// 이미 체크 선택되었는지 검사
 		if (AUIGrid.isCheckedRowById(event.pid, rowId)) {
@@ -184,7 +188,7 @@
 		var url = "/Windchill/platform/user/popup?target=1";
 		_popup(url, 1400, 650, "n");
 	}
-	
+
 	$(function() {
 
 		$("#saveBtn").click(function() {
@@ -202,15 +206,19 @@
 				color : "BK",
 				erp : true
 			};
-			
+
 			var items = AUIGrid.getCheckedRowItems(myGridID);
-			for(var i=0; i<items.length; i++) {
+			for (var i = 0; i < items.length; i++) {
 				var rowId = items[i].item._$uid;
 				AUIGrid.addUncheckedRowsByIds("#grid_wrap", rowId);
 			}
-			
+
 			AUIGrid.updateRow(myGridID, item, 1);
+			AUIGrid.updateRow(myGridID, item, 2);
+			AUIGrid.updateRow(myGridID, item, 5);
 			AUIGrid.update(myGridID);
+			
+			alert("ERP 적용되었습니다.");
 		})
 
 		$("#seprateBtn").click(function() {
@@ -228,7 +236,7 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="seprateBtn">개별 색상 지정</button>
-			<button type="button" id="searchBtn">저장</button>
+			<button type="button" id="saveBtn">저장</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>

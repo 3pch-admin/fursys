@@ -36,6 +36,7 @@
 		<td class="right">
 			<button type="button" id="addBtn">단품(품목)추가</button>
 			<button type="button" id="deleteBtn">삭제</button>
+			<button type="button" id="saveBtn">저장</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>

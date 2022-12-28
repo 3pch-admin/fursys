@@ -81,7 +81,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						<tr>
 							<td class="right">
 								<button type="button" id="createBtn">등록</button>
-								<button type="button" id="derivedBtn">DTMG 전송(확인용)</button>
+<!-- 								<button type="button" id="derivedBtn">DTMG 전송(확인용)</button> -->
 								<button type="button" id="estimateBtn">추정원가</button>
 								<button type="button" id="derivedBtn">삭제</button>
 								<button type="button" id="searchBtn">조회</button>

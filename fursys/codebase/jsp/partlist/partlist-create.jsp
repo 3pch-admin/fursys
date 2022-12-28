@@ -105,7 +105,7 @@
 			<button type="button" id="colorBtn">단품 색상</button>
 			<button type="button" id="seprateBtn">개별 등록</button>
 			<button type="button" id="batchBtn">일괄 등록</button>
-			<button type="button" id="confirmBtn">확정</button>
+			<button type="button" id="confirmBtn">자재추가</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -441,7 +441,7 @@
 		})
 		$("#confirmBtn").click(function() {
 			var url = _url("/partlist/confirm");
-			_popup(url, 1300, 500, "n");
+			_popup(url, 1600, 600, "n");
 		})
 	})
 </script>

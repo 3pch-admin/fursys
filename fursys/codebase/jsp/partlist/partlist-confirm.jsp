@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div class="header-title">
-	<img src="/Windchill/jsp/images/home.png" class="home">
-	<span>HOME</span>
-	>
-	<span>BOM관리</span>
-	>
-	<span>PART LIST 확정</span>
+	<img src="/Windchill/jsp/images/home.png" class="home"> <span>HOME</span> > <span>BOM관리</span> > <span>PART LIST 확정</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -24,8 +19,8 @@
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="addBtn">원부자재 추가</button>
-<!-- 			<button type="button" id="searchBtn">추정원가 조회</button> -->
+			<button type="button" id=excelBtn>엑셀 출력</button>
+			<button type="button" id="addBtn">원부자재 추가</button> <!-- 			<button type="button" id="searchBtn">추정원가 조회</button> -->
 		</td>
 	</tr>
 </table>
@@ -130,6 +125,7 @@
 		headerHeight : 30,
 		rowHeight : 30,
 		editable : true,
+		fixedColumnCount : 5,
 		// 		fillColumnSizeMode : true,
 		// 		rowCheckToRadio : true,
 		showRowCheckColumn : false,
@@ -178,10 +174,10 @@
 		$("#saveBtn").click(function() {
 		})
 
-// 		$("#searchBtn").click(function() {
-// 			var url = _url("/partlist/estimate");
-// 			_popup(url, 1500, 500, "n");
-// 		})
+		// 		$("#searchBtn").click(function() {
+		// 			var url = _url("/partlist/estimate");
+		// 			_popup(url, 1500, 500, "n");
+		// 		})
 	})
 </script>
 <table class="button-table">

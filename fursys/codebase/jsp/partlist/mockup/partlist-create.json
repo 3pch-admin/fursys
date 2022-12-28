@@ -9,7 +9,7 @@
 		"version": "0",
 		"partType": "세트",
 		"amount": 1,
-		"unit": "낱개",
+		"unit": "EA",
 		"partTypeCd": "SET",
 		"state": "작업 중",
 		"id": "be67cfbf-593d-4e69-b882-c28983874c1b",
@@ -31,7 +31,7 @@
 				"state": "작업 중",
 				"id": "95364861-c97d-4c43-9b5c-7fc606a083b2",
 				"library": false,
-				"unit": "낱개",
+				"unit": "EA",
 				"erpCode": "CCC0054PN",
 				"link": "",
 				"children": [
@@ -49,7 +49,7 @@
 						"state": "작업 중",
 						"id": "b1800b55-9b0d-4124-b3b0-249e6514f71b",
 						"library": false,
-						"unit": "낱개",
+						"unit": "EA",
 						"erpCode": "CCC0054SN",
 						"link": "wt.part.WTPartUsageLink:171994",
 						"children": [
@@ -67,7 +67,7 @@
 								"state": "작 업 중",
 								"id": "a5a8de1f-636b-4e9d-8c92-1a1cf1561432",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCC0104B",
 								"link": "wt.part.WTPartUsageLink:171962",
 								"children": []
@@ -86,7 +86,7 @@
 								"state": "작업 중",
 								"id": "aad522c7-9a13-454d-9565-3100df95a0a1",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCC0104PN",
 								"link": "wt.part.WTPartUsageLink:171977",
 								"children": []
@@ -105,7 +105,7 @@
 								"state": "작업 중",
 								"id": "5c091cd5-6162-494b-a737-7ffe179f1ad5",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCC0104SN",
 								"link": "wt.part.WTPartUsageLink:172001",
 								"children": []
@@ -124,7 +124,7 @@
 								"state": "작업 중",
 								"id": "6a9e5cb3-8f9f-445d-bd1a-f0bf3862777d",
 								"library": true,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCR2211009",
 								"link": "wt.part.WTPartUsageLink:172012",
 								"children": []
@@ -145,7 +145,7 @@
 						"state": "작업 중",
 						"id": "4e107442-c270-44b3-95f5-fad9efa6b3e9",
 						"library": false,
-						"unit": "낱개",
+						"unit": "EA",
 						"erpCode": "CCCX1912001",
 						"link": "wt.part.WTPartUsageLink:171973",
 						"children": [
@@ -163,7 +163,7 @@
 								"state": "작업 중",
 								"id": "a2e700bf-0b1d-4a67-9ac4-742da9f8449c",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2005001",
 								"link": "wt.part.WTPartUsageLink:171981",
 								"children": []
@@ -182,7 +182,7 @@
 								"state": "작업  중",
 								"id": "e3d13a86-0955-4bb1-aa33-6eba6606e357",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2005002",
 								"link": "wt.part.WTPartUsageLink:172039",
 								"children": []
@@ -201,7 +201,7 @@
 								"state": "작업 중",
 								"id": "4852c391-d760-4614-9f45-bdd99d5202af",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2005003",
 								"link": "wt.part.WTPartUsageLink:171999",
 								"children": []
@@ -220,7 +220,7 @@
 								"state": "작업 중",
 								"id": "f216175b-74df-4e30-bf0f-6363c7873e6c",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2005004",
 								"link": "wt.part.WTPartUsageLink:171967",
 								"children": []
@@ -239,7 +239,7 @@
 								"state": "작업 중",
 								"id": "7b0bc4cb-59a6-4501-950b-b0490e1d3b36",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2007001",
 								"link": "wt.part.WTPartUsageLink:171989",
 								"children": []
@@ -263,7 +263,7 @@
 				"state": "작업 중",
 				"id": "d22d6840-b7f0-403b-9f44-dc5b779cae33",
 				"library": false,
-				"unit": "낱개",
+				"unit": "EA",
 				"erpCode": "CCCX2007002",
 				"link": "",
 				"children": [
@@ -281,7 +281,7 @@
 						"state": "작업 중",
 						"id": "d23a605f-65d6-4526-972f-cefb4aa057a4",
 						"library": false,
-						"unit": "낱개",
+						"unit": "EA",
 						"erpCode": "CCCX2007003",
 						"link": "wt.part.WTPartUsageLink:172034",
 						"children": [
@@ -299,7 +299,7 @@
 								"state": "작업 중",
 								"id": "34f79664-f2f8-4c83-9e3a-41f4b0e40350",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2007004",
 								"link": "wt.part.WTPartUsageLink:172005",
 								"children": []
@@ -318,7 +318,7 @@
 								"state": "작업 중",
 								"id": "5cbd4d8b-78f2-40a4-841d-212b4b74e7ab",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2007005",
 								"link": "wt.part.WTPartUsageLink:171991",
 								"children": []
@@ -337,7 +337,7 @@
 								"state": "작업 중",
 								"id": "2731b6be-ba18-4f7a-9856-6aab7d94f1df",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2007006",
 								"link": "wt.part.WTPartUsageLink:172003",
 								"children": []
@@ -356,7 +356,7 @@
 								"state": "작업 중",
 								"id": "86cd3dfa-e840-4cb6-b7cf-1de607c7f03a",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2008001",
 								"link": "wt.part.WTPartUsageLink:172040",
 								"children": []
@@ -377,7 +377,7 @@
 						"state": "작업 중",
 						"id": "3fec65f2-73ca-45bb-966e-492b7ced5f8a",
 						"library": false,
-						"unit": "낱개",
+						"unit": "EA",
 						"erpCode": "CCCX2008002",
 						"link": "wt.part.WTPartUsageLink:172016",
 						"children": [
@@ -395,7 +395,7 @@
 								"state": "작업 중",
 								"id": "0b096761-c2f4-452c-bf56-29b7395c3a72",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2008003",
 								"link": "wt.part.WTPartUsageLink:171987",
 								"children": []
@@ -414,7 +414,7 @@
 								"state": "작업 중",
 								"id": "b9e59c7b-b94e-4977-af4b-6bde9c06ee3b",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2010001",
 								"link": "wt.part.WTPartUsageLink:171954",
 								"children": []
@@ -433,7 +433,7 @@
 								"state": "작업 중",
 								"id": "514cd1b8-4e1e-4108-b6bb-623fa233b9aa",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2010002",
 								"link": "wt.part.WTPartUsageLink:172000",
 								"children": []
@@ -452,7 +452,7 @@
 								"state": "작업 중",
 								"id": "462cc8ec-35b8-4407-bb1c-f721a9d8f8bf",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2010003",
 								"link": "wt.part.WTPartUsageLink:172009",
 								"children": []
@@ -476,7 +476,7 @@
 				"state": "작업 중",
 				"id": "de692230-6de0-4067-b3bf-df43cdd02962",
 				"library": false,
-				"unit": "낱개",
+				"unit": "EA",
 				"erpCode": "CCCX2010004",
 				"link": "",
 				"children": [
@@ -494,7 +494,7 @@
 						"state": "작업 중",
 						"id": "a6d1125d-59d3-4f47-8063-68e4185b75b1",
 						"library": false,
-						"unit": "낱개",
+						"unit": "EA",
 						"erpCode": "CCCX2010005",
 						"link": "wt.part.WTPartUsageLink:171963",
 						"children": [
@@ -512,7 +512,7 @@
 								"state": "작업 중",
 								"id": "a56d6958-1a7e-45bd-8e04-3d5cb2337dec",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2010006",
 								"link": "wt.part.WTPartUsageLink:172021",
 								"children": []
@@ -531,7 +531,7 @@
 								"state": "작업 중",
 								"id": "a3d67715-ad3b-4d38-be6f-5f78f5a6a715",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2010007",
 								"link": "wt.part.WTPartUsageLink:172004",
 								"children": []
@@ -550,7 +550,7 @@
 								"state": "작업 중",
 								"id": "4e5e6074-1c47-4cc9-87e7-e756562dfcfa",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2010008",
 								"link": "wt.part.WTPartUsageLink:172033",
 								"children": []
@@ -571,7 +571,7 @@
 						"state": "작업 중",
 						"id": "bcabf8ba-4e66-491e-bb09-562e9548fe03",
 						"library": false,
-						"unit": "낱개",
+						"unit": "EA",
 						"erpCode": "CCCX2010009",
 						"link": "wt.part.WTPartUsageLink:171972",
 						"children": [
@@ -589,7 +589,7 @@
 								"state": "작업 중",
 								"id": "29344ce4-f1fd-4377-a34b-b98371f75c08",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2012001",
 								"link": "wt.part.WTPartUsageLink:171975",
 								"children": []
@@ -608,7 +608,7 @@
 								"state": "작업 중",
 								"id": "32f3f4a0-5514-4b5d-a538-03d7ec04290f",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2012002",
 								"link": "wt.part.WTPartUsageLink:171966",
 								"children": []
@@ -627,7 +627,7 @@
 								"state": "작업 중",
 								"id": "153f29ed-8c97-42c2-a425-88013c9776c0",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2012003",
 								"link": "wt.part.WTPartUsageLink:172015",
 								"children": []
@@ -646,7 +646,7 @@
 								"state": "작업 중",
 								"id": "c9bc794d-5a5b-4082-b81b-05f68f25e4f7",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2012004",
 								"link": "wt.part.WTPartUsageLink:171959",
 								"children": []
@@ -665,7 +665,7 @@
 								"state": "작업 중",
 								"id": "9a04541f-331a-418d-adfc-8d55db92a7b0",
 								"library": false,
-								"unit": "낱개",
+								"unit": "EA",
 								"erpCode": "CCCX2012001",
 								"link": "wt.part.WTPartUsageLink:172024",
 								"children": []

@@ -27,7 +27,7 @@
 		<td class="right">
 			<button type="button" id="excelBtn">엑셀출력</button>
 			<button type="button" id="searchBtn">ERP조회/적용</button>
-			<button type="button" id="searchBtn">ERP 조회</button>
+<!-- 			<button type="button" id="searchBtn">ERP 조회</button> -->
 		</td>
 	</tr>
 </table>
@@ -109,7 +109,8 @@
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i].item;
 			var columnArray = [ {
-				headerText : "파생색상",
+				dataField : "manager",
+				headerText : "접수자",
 				children : [ {
 					dataField : "color_" + idx,
 					headerText : item.code,
@@ -190,23 +191,32 @@
 		$("#closeBtn").click(function() {
 			self.close();
 		})
-
-		$("#searchBtn").click(function() {
+		
+	$("#searchBtn").click(function() {
 			var columnArray = [ {
-				headerText : "파생색상",
+				dataField : "manager",
+				headerText : "접수자",
 				children : [ {
 					dataField : "color_" + idx,
 					headerText : "BK",
 					width : 80,
 					dataType : "string",
 					editable : true
-				}, {
+				} ]
+			}, {
+				dataField : "manager",
+				headerText : "접수자",
+				children : [ {
 					dataField : "color_" + idx,
 					headerText : "WW",
 					width : 80,
 					dataType : "string",
 					editable : true
-				}, {
+				} ]
+			}, {
+				dataField : "manager",
+				headerText : "접수자",
+				children : [ {
 					dataField : "color_" + idx,
 					headerText : "002",
 					width : 80,
