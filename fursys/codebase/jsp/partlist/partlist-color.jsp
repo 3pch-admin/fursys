@@ -189,8 +189,6 @@
 		_popup(url, 1400, 650, "n");
 	}
 
-<<<<<<< HEAD
-=======
 	function set(item) {
 		var applyColor = item.applyColor;
 		var items = [ {
