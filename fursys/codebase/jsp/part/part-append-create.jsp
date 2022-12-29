@@ -142,6 +142,18 @@ String callBack = (String)request.getParameter("callBack");
 		</td>
 	</tr>
 	<%
+		if("SET".equals(partTypeCd)) {
+	%>
+	<tr>
+		<th>PLM 임시코드</th>
+		<td colspan="3">
+			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber">
+		</td>
+	</tr>
+	<%
+		}
+	%>
+	<%
 		if("ITEM".equals(partTypeCd) || "MAT".equals(partTypeCd)) {
 	%>
 	<tr class="material">

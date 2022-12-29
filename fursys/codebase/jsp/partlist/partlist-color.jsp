@@ -206,7 +206,6 @@
 		AUIGrid.update(myGridID);
 	}
 
->>>>>>> master
 	$(function() {
 
 		$("#saveBtn").click(function() {
@@ -259,12 +258,8 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="seprateBtn">개별 색상 지정</button>
-<<<<<<< HEAD
-			<button type="button" id="saveBtn">저장</button>
-=======
-			<button type="button" id="colorBtn">컬러셋 지정</button>
+<!-- 			<button type="button" id="colorBtn">컬러셋 지정</button> -->
 			<button type="button" id="searchBtn">저장</button>
->>>>>>> master
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>

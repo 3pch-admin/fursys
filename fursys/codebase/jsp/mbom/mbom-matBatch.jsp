@@ -69,7 +69,9 @@
 	>
 	<span>BOM관리</span>
 	>
-	<span>PART LIST 일괄 등록</span>
+	<span>MBOM정보</span>
+	>
+	<span>자재 일괄 등록</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -79,8 +81,8 @@
 		<col width="580">
 	</colgroup>
 	<tr>
-		<th>품목코드(ERP CODE)</th>
-		<td>CCC0054PN</td>
+		<th>품목코드(ERP CODE)</th> 
+		<td>CCC0054PN</td><!-- 팝업창 열어서 선택해야함 -->
 		<th>PLM 임시코드</th>
 		<td>ITEM-2212-0002</td>
 	</tr>
@@ -246,7 +248,7 @@
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="saveBtn">저장</button>
+			<button type="button" id="saveBtn">일괄등록</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>

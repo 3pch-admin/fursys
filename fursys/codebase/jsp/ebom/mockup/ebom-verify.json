@@ -21,7 +21,7 @@
 	},
 	{
 		"number": "DT_H37_800_ARTICLE_GROUP_1.ASM",
-		"compare": 1,
+		"compare": "+1",
 		"itemName": "",
 		"cqty": 1,
 		"eqty": 0,
@@ -33,8 +33,8 @@
 		"number": "DT_H37_800_BACK_2_7_B_1_ASSY_7.ASM",
 		"compare": "-1",
 		"itemName": "-",
-		"cqty": 1,
-		"eqty": 0,
+		"cqty": 0,
+		"eqty": 1,
 		"partName": "뒤판",
 		"partType": "자재",
 		"partNo": ""
@@ -43,15 +43,15 @@
 		"number": "DT_H37_800_BACK_2_7_B_1_7.PRT",
 		"compare": "-1",
 		"itemName": "-",
-		"cqty": 1,
-		"eqty": 0,
+		"cqty": 0,
+		"eqty": 1,
 		"partName": "-",
 		"partType": "자재",
 		"partNo": ""
 	},
 	{
 		"number": "CD_H37_SIDE_R_ASSY_2.ASM",
-		"compare": 1,
+		"compare": "+1",
 		"itemName": "-",
 		"cqty": 1,
 		"eqty": 0,
@@ -81,7 +81,7 @@
 	},
 	{
 		"number": "LK-WIRECAP-COVER.PRT",
-		"compare": 4,
+		"compare": "+4",
 		"itemName": "-",
 		"cqty": 4,
 		"eqty": 0,
@@ -201,10 +201,10 @@
 	},
 	{
 		"number": "DT_H37_800_TOP_F_SHELF_ASSY_18.ASM",
-		"compare": 1,
+		"compare": 0,
 		"itemName": "-",
 		"cqty": 1,
-		"eqty": 0,
+		"eqty": 1,
 		"partName": "윗판",
 		"partType": "자재",
 		"partNo": ""

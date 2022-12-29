@@ -89,6 +89,7 @@
 								%>
 							</td> --%>
 							<td class="right">
+								<button type="button" id="">일괄 대체(관리자모드)</button>
 								<button type="button" id="derivedBtn">파생</button>
 								<button type="button" id="modifyBtn">수정</button>
 								<button type="button" id="searchBtn">조회</button>

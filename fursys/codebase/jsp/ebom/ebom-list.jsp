@@ -280,8 +280,8 @@ boolean isAdmin = CommonUtils.isAdmin();
 									alert("파생할 EBOM을 선택하세요.");
 									return false;
 								}
-								var oid = items[0].item.oid;
-								var url = _url("/part/popup?box=1&callBack=derived&oid=" + oid);
+                                var oid = items[0].item.oid;
+                                var url = _url("/part/popup?box=1&callBack=derived&oid=" + oid);
 								_popup(url, "", "", "f");
 							})
 

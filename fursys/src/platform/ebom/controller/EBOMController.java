@@ -28,6 +28,13 @@ import wt.part.WTPartMaster;
 @Controller
 @RequestMapping(value = "/ebom/**")
 public class EBOMController {
+	
+	@RequestMapping(value="/derived", method = RequestMethod.GET)
+	public ModelAndView derived() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/ebom/ebom-derivedMockup");
+		return model;
+	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() throws Exception {
@@ -61,8 +68,8 @@ public class EBOMController {
 	@RequestMapping(value = "/verify", method = RequestMethod.GET)
 	public ModelAndView verify(@RequestParam String oid) throws Exception {
 		ModelAndView model = new ModelAndView();
-		ArrayList<BOMCompareNode> list = EBOMHelper.manager.compare(oid);
-		model.addObject("list", list);
+//		ArrayList<BOMCompareNode> list = EBOMHelper.manager.compare(oid);
+//		model.addObject("list", list);
 		model.addObject("oid", oid);
 		model.setViewName("popup:/ebom/ebom-verify");
 		return model;

@@ -140,7 +140,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 					</select>
 				</td>
 				<th>적용시점</th>
-				<td colspan="3">
+				<td>
 					<select name="applyTime" class="AXSelect w200px" id="applyTime">
 						<option value="">선택</option>
 						<%
@@ -152,16 +152,14 @@ boolean isAdmin = CommonUtils.isAdmin();
 						%>
 					</select>
 				</td>
-			</tr>
-		</table>
-
-		<table class="button-table">
-			<tr>
-				<td class="right">
+				<td class="right" colspan="2">
 					<button type="button" id="searchBtn">조회</button>
 					<button type="button" id="">조회 초기화</button>
 				</td>
 			</tr>
+		</table>
+
+		<table class="button-table">
 			<tr>
 				<td class="right">
 					<button type="button" class="create" data-l="생산">생산 ECO 등록</button>

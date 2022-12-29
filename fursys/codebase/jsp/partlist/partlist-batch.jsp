@@ -76,6 +76,17 @@
 		dataType : "string",
 		width : 200,
 		editable : false
+	}, {
+		headerText : "기준색상",
+		dataType : "string",
+		width : 80,
+		children : [ {
+			dataField : "color",
+			headerText : "BK",
+			width : 80,
+			dataType : "string",
+			editable : true
+		} ]
 	// 	}, {
 	// 		headerText : "파생색상",
 	// 		children : [ {
@@ -215,7 +226,7 @@
 				headerText : "접수자",
 				children : [ {
 					dataField : "color_" + idx,
-					headerText : "BK",
+					headerText : "CR",
 					width : 80,
 					dataType : "string",
 					editable : true
@@ -235,7 +246,7 @@
 				headerText : "접수자",
 				children : [ {
 					dataField : "color_" + idx,
-					headerText : "002",
+					headerText : "BL",
 					width : 80,
 					dataType : "string",
 					editable : true

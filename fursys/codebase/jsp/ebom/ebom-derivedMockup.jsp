@@ -1,18 +1,7 @@
-<%@page import="platform.util.IBAUtils"%>
-<%@page import="platform.util.CommonUtils"%>
-<%@ page import="wt.part.WTPart" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-String oid = (String) request.getAttribute("oid");
-WTPart part = (WTPart) request.getAttribute("part");
-%>
 <style type="text/css">
 .library {
 	background-color: #fefbc0;
-}
-
-.released {
-	background-color: #dbdbfd;
 }
 
 .aui-grid-tree-minus-icon {
@@ -78,7 +67,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 	>
 	<span>BOM관리</span>
 	>
-	<span>EBOM 등록</span>
+	<span>EBOM 파생</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -90,12 +79,17 @@ WTPart part = (WTPart) request.getAttribute("part");
 	<tr>
 		<th>부품명칭</th>
 		<td>
-			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly">
-			<input type="text" name="number" class="AXInput w70p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요.">
+		DT-H37-SIDE.ASSM
 		</td>
 		<th>유형</th>
 		<td>
-			<input type="text" name="partType" class="AXInput w30p" readonly="readonly">
+		단품
+		</td>
+	</tr>
+	<tr>
+		<th>조회</th>
+		<td colspan="3">
+			<input type="text" name="search" class="AXInput w40p">
 		</td>
 	</tr>
 </table>
@@ -104,7 +98,6 @@ WTPart part = (WTPart) request.getAttribute("part");
 	<tr>
 		<td class="right">
 			<button type="button" id="createBtn">등록</button>
-			<button type="button" id="verifyBtn">수량검증</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -284,8 +277,6 @@ WTPart part = (WTPart) request.getAttribute("part");
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
-			} else if(item.state == "릴리즈됨") {
-				return "released";
 			}
 			return "";
 		}
@@ -608,18 +599,13 @@ WTPart part = (WTPart) request.getAttribute("part");
 		AUIGrid.addTreeRow(rightGridID, node, rowId, "first");
 	}
 
-	
 	$(function() {
-
-		$("#verifyBtn").click(function() {
-			var url = _url("/ebom/verify", $("input[name=oid]").val());
-			_popup(url, 1400, 800, "n");
-		})
-
-		$("input[name=number]").click(function() {
-			var url = "/Windchill/platform/part/popup?box=1";
-			_popup(url, "", "", "f");
-		})
+		loadLeft();
+		loadRight();
+// 		$("input[name=number]").click(function() {
+// 			var url = "/Windchill/platform/part/popup?box=1";
+// 			_popup(url, "", "", "f");
+// 		})
 
 		$("#closeBtn").click(function() {
 			self.close();
@@ -668,36 +654,87 @@ WTPart part = (WTPart) request.getAttribute("part");
 		loadRightTree(info[0].oid);
 	}
 
-	function loadLeftTree(oid) {
-		var params = new Object();
-		AUIGrid.showAjaxLoader(leftGridID);
-		var url = _url("/ebom/left", oid);
-		_call(url, params, function(data) {
-			console.log(data.list);
-			AUIGrid.removeAjaxLoader(leftGridID);
-			AUIGrid.setGridData(leftGridID, data.list);
-		}, "GET");
+	function loadLeft() {
+		loadLeftTree("/Windchill/jsp/ebom/mockup/ebom-derived-left.json");
 	}
+	function loadRight() {
+		loadRightTree("/Windchill/jsp/ebom/mockup/ebom-derived-right.json");
+	}
+	
+	function loadLeftTree(oid) {
+// 		var params = new Object();
+// 		AUIGrid.showAjaxLoader(leftGridID);
+// 		var url = _url("/mbom/left", oid);
+// 		_call(url, params, function(data) {
+// 			console.log(data.list);
+// 			AUIGrid.removeAjaxLoader(leftGridID);
+// 			AUIGrid.setGridData(leftGridID, data.list);
+// 		}, "GET");
+		// ajax 요청 전 그리드에 로더 표시
+		AUIGrid.showAjaxLoader(leftGridID);
+		console.log(oid);
 
-	function loadRightTree(oid) {
-		var params = new Object();
-		AUIGrid.showAjaxLoader(rightGridID);
-		params = JSON.stringify(params);
-		var url = "/Windchill/platform/ebom/right?oid=" + oid;
-		$.ajax({
-			type : "GET",
-			url : url,
-			dataType : "JSON",
-			crossDomain : true,
-			data : params,
-			async : true, //동기처리를 해야만 펑션리턴이 가능함
-			contentType : "application/json; charset=UTF-8",
-			success : function(data) {
-				AUIGrid.removeAjaxLoader(rightGridID);
-				AUIGrid.setGridData(rightGridID, data.list);
+		// ajax (XMLHttpRequest) 로 그리드 데이터 요청
+		ajax({
+			url : oid,
+			onSuccess : function(data) {
+
+				console.log(data);
+
+				// 그리드에 데이터 세팅
+				// data 는 JSON 을 파싱한 Array-Object 입니다.
+				AUIGrid.setGridData(leftGridID, data);
+
+				// 로더 제거
+				AUIGrid.removeAjaxLoader(leftGridID);
 			},
+			onError : function(status, e) {
+				alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
+				// 로더 제거
+				AUIGrid.removeAjaxLoader(leftGridID);
+			}
 		});
 	}
+
+	
+	function loadRightTree(url) {
+		AUIGrid.showAjaxLoader(rightGridID);
+		console.log(url);
+
+		ajax({
+			url : url,
+			onSuccess : function(data) {
+				console.log(data);
+				AUIGrid.setGridData(rightGridID, data);
+				AUIGrid.removeAjaxLoader(rightGridID);
+			},
+			onError : function(status, e) {
+				alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS로 사용하는 경우 json 확장자가 web.config의 handler에 등록되었는지 확인하십시오.");
+				AUIGrid.removeAjaxLoader(rightGridID);
+			}
+		});
+	};
+	
+	// 	function loadRightTree(oid) {
+	// 		var params = new Object();
+	// 		AUIGrid.showAjaxLoader(rightGridID);
+	// 		params = JSON.stringify(params);
+	// // 		var url = "/Windchill/platform/mbom/right?oid=" + oid;
+	// 		var url = "/Windchill/jsp/mbom/mockup/mbom-derived-right.json";
+	// 		$.ajax({
+	// 			type : "GET",
+	// 			url : url,
+	// 			dataType : "JSON",
+	// 			crossDomain : true,
+	// 			data : params,
+	// 			async : true, //동기처리를 해야만 펑션리턴이 가능함
+	// 			contentType : "application/json; charset=UTF-8",
+	// 			success : function(data) {
+	// 				AUIGrid.removeAjaxLoader(rightGridID);
+	// 				AUIGrid.setGridData(rightGridID, data.list);
+	// 			},
+	// 		});
+	// 	}
 
 	function closeAndLoad() {
 		opener.load();

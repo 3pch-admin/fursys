@@ -110,6 +110,12 @@ String callBack = (String)request.getParameter("callBack");
 		</td>
 	</tr>
 	<tr>
+		<th>PLM 임시코드</th>
+		<td colspan="3">
+			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber">
+		</td>
+	</tr>
+	<tr>
 		<th>주문품여부</th>
 		<td>
 			<select name="purchase_yn" id="purchase_yn" class="AXSelect w200px">

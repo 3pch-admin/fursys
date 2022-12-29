@@ -382,6 +382,7 @@
 					// 기본
 					$(".create-table").show();
 					$(".ebr").show();
+					$(".button-table").show();
 					// 부품
 					$("#part_grid_wrap").hide();
 					$(".part-button").hide();

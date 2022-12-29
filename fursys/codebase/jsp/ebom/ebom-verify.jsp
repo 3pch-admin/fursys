@@ -110,13 +110,13 @@ String oid = (String) request.getAttribute("oid");
 		positionField : "partNo",
 		labelText : "총 수량",
 	}, {
-		dataField : "camount",
-		positionField : "camount",
+		dataField : "cqty",
+		positionField : "cqty",
 		postfix : "개",
 		operation : "SUM",
 	}, {
-		dataField : "eamount",
-		positionField : "eamount",
+		dataField : "eqty",
+		positionField : "eqty",
 		postfix : "개",
 		operation : "SUM",
 	}, {
@@ -144,7 +144,7 @@ String oid = (String) request.getAttribute("oid");
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiProps);
 	AUIGrid.setFooter(myGridID, footerLayout);
 	AUIGrid.setFooter(myGridID, footerLayout);
-	AUIGrid.setGridData(myGridID,<%=darr%>);
+<%-- 	AUIGrid.setGridData(myGridID,<%=darr%>); --%>
 	$(window).resize(function() {
 		AUIGrid.resize("#grid_wrap");
 	})

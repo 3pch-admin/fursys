@@ -275,8 +275,9 @@ var auiGridProps = {
 	headerHeight : 30,
 	rowHeight : 30,
 	rowCheckToRadio : true,
-	showRowCheckColumn : true,
+	showRowCheckColumn : false,
 	showRowNumColumn : false,
+	showStateColumn : true,
 	displayTreeOpen : true,
 	treeColumnIndex : 3,
 	enableDrag : true,
@@ -287,8 +288,8 @@ var auiGridProps = {
 	softRemoveRowMode : false,
 	// 		fixedColumnCount : 2,
 	treeLevelIndent : 20,
-	editable : false,
-	editableOnFixedCell : false,
+	editable : true,
+	editableOnFixedCell : true,
 	enableSorting : false,
 	useContextMenu : true,
 	showTooltip : true,
@@ -299,6 +300,7 @@ var auiGridProps = {
 			return "library";
 		}
 		return "";
+		
 	},
 	rowCheckVisibleFunction : function(rowIndex, isChecked, item) {
 		if (item.partType != "단품") { // 이름이 Anna 인 경우 사용자 체크 못하게 함.
@@ -347,7 +349,7 @@ AUIGrid.bind(myGridID, "contextMenu", function(event) {
 		label : "삭제 (Ctrl + Delete)",
 		callback : contextItemHandler
 	}, ]
-	if (event.dataField == "number") {
+	if (event.dataField == "erpCode") {
 		var item = event.item;
 		// 			if (item.state == "릴리즈됨") {
 		// 				return false;
@@ -465,10 +467,10 @@ $(function() {
 // 		$("#grid_wrap").filter(function() {
 // 			$(this).toggle($(this).text().toUpperCase().indexOf(match)>-1);
 // 		});
-		$("#grid_wrap > tbody > tr").hide();
-        var temp = $("#grid_wrap > tbody > tr > td:nth-child(14n+4):contains('" + match + "')");
+// 		$("#grid_wrap > tbody > tr").hide();
+//         var temp = $("#grid_wrap > tbody > tr > td:nth-child(14n+4):contains('" + match + "')");
 
-        $(temp).parent().show();
+//         $(temp).parent().show();
 	})
 
 	$("#closeBtn").click(function() {

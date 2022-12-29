@@ -590,20 +590,29 @@ String oid = (String) request.getParameter("oid");
 							alert("파생할 EBOM을 선택하세요.");
 							return false;
 						}
-						
-						if(!confirm("선택한 부품으로 파생 하시겠습니까?")) {
-							return false;
-						}
-						
-						var url = "/Windchill/platform/ebomMaster/derived";
-						var params = new Object();
-						params.oid = "<%=oid%>";
-						params.poid = items[0].item.oid;
-						_call(url, params, function(data) {
-							opener.load();
-							self.close();
-						}, "POST");
+						var url = "/Windchill/platform/ebom/derived";
+						_popup(url, "", "", "f");
 					})
+					
+// 						var items = AUIGrid.getCheckedRowItems(myGridID);
+// 						if (items.length == 0) {
+// 							alert("파생할 EBOM을 선택하세요.");
+// 							return false;
+// 						}
+						
+// 						if(!confirm("선택한 부품으로 파생 하시겠습니까?")) {
+// 							return false;
+// 						}
+						
+// 						var url = "/Windchill/platform/ebomMaster/derived";
+// 						var params = new Object();
+<%-- 						params.oid = "<%=oid%>"; --%>
+// 						params.poid = items[0].item.oid;
+// 						_call(url, params, function(data) {
+// 							opener.load();
+// 							self.close();
+// 						}, "POST");
+// 					})
 					
 					
 					$(".br").hide();
