@@ -5,7 +5,7 @@
 	>
 	<span>설계변경</span>
 	>
-	<span>DTMG 전송 등록</span>
+	<span>DTMG 전송(확인용)</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -13,18 +13,8 @@
 		<col width="300">
 		<col width="120">
 		<col width="300">
-		<col width="120">
-		<col width="300">
-		<col width="120">
-		<col width="300">
 	</colgroup>
 	<tr>
-		<th>DTMG 번호</th>
-		<td>DTMG-1226-001</td>
-		<th>DTMG 명</th>
-		<td>
-			<input type="text" class="AXInput">
-		</td>
 		<th>CAD Total Ass’y</th>
 		<td>DT-H-37-500-T.ASM</td>
 		<th>ERP CODE</th>
@@ -36,7 +26,7 @@
 		<td class="right">
 			<button type="button" id="addBtn">단품(품목)추가</button>
 			<button type="button" id="deleteBtn">제거</button>
-			<button type="button" id="saveBtn">저장</button>
+			<button type="button" id="sendBtn">DTMG 전송</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>

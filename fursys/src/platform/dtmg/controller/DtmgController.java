@@ -22,4 +22,11 @@ public class DtmgController {
 		model.setViewName("popup:/dtmg/dtmg-create");
 		return model;
 	}
+	
+	@RequestMapping(value = "/send", method = RequestMethod.GET)
+	public ModelAndView send() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/dtmg/dtmg-send");
+		return model;
+	}
 }

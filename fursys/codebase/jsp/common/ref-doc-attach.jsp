@@ -3,7 +3,7 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="selectDocBtn">추가</button>
-			<button type="button" id="deleteDocBtn">삭제</button>
+			<button type="button" id="deleteDocBtn">제거</button>
 		</td>
 	</tr>
 </table>

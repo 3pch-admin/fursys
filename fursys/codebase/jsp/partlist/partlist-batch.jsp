@@ -297,7 +297,8 @@
 	<tr>
 		<td class="right">
 			<button type="button" id="derivedBtn">파생 색상 지정</button>
-			<button type="button" id="colorBtn">컬러셋 지정</button>
+			<button type="button" id="">컬러셋 지정</button>
+<!-- 			<button type="button" id="colorBtn">컬러셋 지정</button> -->
 			<button type="button" id="seprateBtn">개별 색상 지정</button>
 			<button type="button" id="saveBtn">저장</button>
 			<button type="button" id="closeBtn">닫기</button>

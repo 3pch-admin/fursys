@@ -12,7 +12,7 @@
 	</colgroup>
 	<tr>
 		<th>CAD Total Ass'y</th>
-		<td>DT-H37-5-800-T</td>
+		<td>DT-H37-5-800-T.ASM</td>
 		<th>ERP CODE</th>
 		<td>CCC0054PN</td>
 	</tr>
@@ -23,7 +23,7 @@
 			<!-- 			<input type="hidden" name="header"> -->
 			<button type="button" id="selectBom">단품(품목) 추가</button>
 			<!-- 			<button type="button" id="selectPartBtn">자재 추가</button> -->
-			<button type="button" id="deletePartBtn">삭제</button>
+			<button type="button" id="deletePartBtn">제거</button>
 		</td>
 </table>
 <div id="part_grid_wrap" style="height: 830px;" class="close"></div>

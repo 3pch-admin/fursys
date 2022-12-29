@@ -147,6 +147,11 @@ boolean isAdmin = CommonUtils.isAdmin();
 							style : "center",
 							width : 200
 						}, {
+							dataField : "",
+							headerText : "PLM 임시코드",
+							dataType : "string",
+							width : 200
+						}, {
 							dataField : "version",
 							headerText : "버전",
 							dataType : "string",

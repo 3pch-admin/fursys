@@ -105,7 +105,7 @@
 			<button type="button" id="colorBtn">단품 색상</button>
 			<button type="button" id="seprateBtn">개별 등록</button>
 			<button type="button" id="batchBtn">일괄 등록</button>
-			<button type="button" id="confirmBtn">자재추가</button>
+			<button type="button" id="confirmBtn">원부자재추가</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
