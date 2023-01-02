@@ -24,11 +24,6 @@ public class DistPartColumns {
 	private String s;
 	private String t;
 	private String distributor;
-	private String uoid;
-	
-	private String distributorType;
-	private String distributorName;
-	private String distributorUserName;
 
 	public DistPartColumns() {
 
@@ -45,13 +40,6 @@ public class DistPartColumns {
 		setPdf(true);
 		setDwg(true);
 		setStep(true);
-		
-		DistributorUser user = null;
-		user = DistributorUser.newDistributorUser();
-		setUoid(CommonUtils.oid(user));
-		setDistributorType(user.getType());
-		setDistributorName(user.getName());
-		setDistributorUserName(user.getUserName());
 		
 //		if (this.docType.equals("CADDRAWING")) {
 //			setPdf(true);

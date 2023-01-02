@@ -5,6 +5,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 boolean isAdmin = CommonUtils.isAdmin();
+
+String box = request.getParameter("box");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -79,6 +82,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						<td class="right">
 							<button type="button" id="addBtn">추가</button>
 							<button type="button" id="searchBtn">조회</button>
+							<button type="button" id="closeBtn">닫기</button>
 						</td>
 					</tr>
 				</table>
@@ -128,6 +132,11 @@ boolean isAdmin = CommonUtils.isAdmin();
 						dataType : "date",
 						formatString : "yyyy/mm/dd",
 						width : 150
+					}, {
+						dataField : "oid2",
+						headerText : "oid2",
+						dataType : "string",
+						visible : false
 					}, {
 						dataField : "oid",
 						headerText : "oid",
@@ -217,6 +226,9 @@ boolean isAdmin = CommonUtils.isAdmin();
 					});
 
 					$(function() {
+						$("#closeBtn").click(function() {
+							self.close();
+						})
 
 						$("#addBtn").click(function() {
 							var items = AUIGrid.getCheckedRowItems(myGridID);
@@ -224,10 +236,20 @@ boolean isAdmin = CommonUtils.isAdmin();
 								alert("배포처를 선택하세요.");
 								return false;
 							}
+							<%
+							if("3".equals(box)){
+							%>
+							
+							<%
+							}else{
+							%>
 							var oid = items[0].item.oid;
 							var name = items[0].item.name;
 								opener.dist(name);
 								self.close();
+							<%
+							}
+							%>
 						})
 
 						$("#createBtn").click(function() {

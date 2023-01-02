@@ -26,7 +26,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 			>
 			<span>배포 관리</span>
 			>
-			<span>배포처 관리</span>
+			<span>배포처 사용자 관리</span>
 		</div>
 		<table id="wrap-table">
 			<tr>

@@ -23,7 +23,7 @@
 			>
 			<span>배포 관리</span>
 			>
-			<span>도면 배포(단품)</span>
+			<span>도면 배포</span>
 		</div>
 		<table id="wrap-table">
 			<tr>
@@ -289,7 +289,7 @@
 
 							$("#createBtn").click(function() {
 								var url = "/Windchill/platform/dist/create";
-								_popup(url, "", "", "f");
+								_popup(url, "1024", "600", "n");
 							})
 
 							$("#modifyBtn").click(function() {

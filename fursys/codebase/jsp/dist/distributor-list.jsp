@@ -33,7 +33,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 				<table class="search-table top-color">
 					<colgroup>
 						<col width="150">
-						<col width="650">
+						<col width="*">
 						<col width="150">
 						<col width="*">
 					</colgroup>
@@ -67,7 +67,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 							<input type="text" class="AXInput w30p" name="creator" id="creator">
 						</td>
 						<th>작성일자</th>
-						<td colspan="3">
+						<td>
 							<input type="text" class="AXInput w100px" name="startCreatedDate" id="startCreatedDate" maxlength="8">
 							~
 							<input type="text" class="AXInput w100px" name="endCreatedDate" id="endCreatedDate" data-start="startCreatedDate" maxlength="8">
@@ -230,7 +230,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 						$("#createBtn").click(function() {
 							var url = "/Windchill/platform/distributor/create";
-							_popup(url, 800, 430, "n");
+							_popup(url, 800, 1250, "n");
 						})
 
 						$("#modifyBtn").click(function() {

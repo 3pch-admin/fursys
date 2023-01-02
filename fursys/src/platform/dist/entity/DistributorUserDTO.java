@@ -19,7 +19,7 @@ public class DistributorUserDTO {
 	private String number;
 	private Boolean enable;
 	private String type;
-
+	private String enableString;
 	public DistributorUserDTO() {
 
 	}
@@ -37,6 +37,11 @@ public class DistributorUserDTO {
 
 		setDescription(distUser.getDescription());
 		setNumber(distUser.getNumber());
+		if( distUser.getEnable()) {
+			setEnableString("사용");
+		}else {
+			setEnableString("사용안함");
+		}
 		setEnable(distUser.getEnable());
 		setType("IN".equals(distUser.getType()) == true ? "사내" : "사외");
 	}

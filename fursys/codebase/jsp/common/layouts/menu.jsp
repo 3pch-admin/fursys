@@ -318,18 +318,18 @@ int rtnCount = (int) request.getAttribute("rtnCount");
 					<li>
 						<a href="javascript:_page('/dist/list')">
 							<i class="icon icon-inline fa fa-circle-thin"></i>
-							<span class="title">도면 배포(단품)</span>
+							<span class="title">도면 배포</span>
 						</a>
 					</li>
 				</ul>
-				<ul class="sub-menu collapse" data-menu-title="배포 관리">
-					<li>
-						<a href="javascript:_page('/dist/matList')">
-							<i class="icon icon-inline fa fa-circle-thin"></i>
-							<span class="title">도면 배포(자재)</span>
-						</a>
-					</li>
-				</ul>
+<!-- 				<ul class="sub-menu collapse" data-menu-title="배포 관리"> -->
+<!-- 						<li> -->
+<!-- 						<a href="javascript:_page('/dist/matList')"> -->
+<!-- 						<i class="icon icon-inline fa fa-circle-thin"></i> -->
+<!-- 					<span class="title">도면 배포(자재)</span> -->
+<!-- 			</a> -->
+<!-- 				</li> -->
+<!-- 		</ul> -->
 			</li>
 
 			<li class="sub">

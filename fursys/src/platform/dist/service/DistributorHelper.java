@@ -298,8 +298,8 @@ public class DistributorHelper {
 		QuerySpec query = new QuerySpec();
 		int idx = query.appendClassList(Distributor.class, true);
 
-		SearchCondition sc = new SearchCondition(Distributor.class, Distributor.NUMBER, "LIKE",
-				"DISTRIBUTOR-" + number.toUpperCase() + "%");
+		SearchCondition sc = new SearchCondition(Distributor.class, Distributor.NUMBER, SearchCondition.LIKE, 
+				"COMPANY-" + number.toUpperCase() + "%");
 		query.appendWhere(sc, new int[] { idx });
 
 		ClassAttribute attr = new ClassAttribute(Distributor.class, Distributor.NUMBER);
@@ -321,7 +321,7 @@ public class DistributorHelper {
 			number += "01";
 		}
 
-		return "DISTRIBUTOR-" + number;
+		return "COMPANY-" + number;
 	}
 
 	public ArrayList<Map<String, Object>> getDistributor() throws Exception {
@@ -480,4 +480,41 @@ public class DistributorHelper {
 		}
 		return list;
 	}
+	
+	public ArrayList<DistributorUser> getDistributorUser(Distributor di) throws Exception {
+		ArrayList<DistributorUser> list = new ArrayList<DistributorUser>();
+
+		QuerySpec qs = new QuerySpec();
+		int idx = qs.appendClassList(DistributorUser.class, true);
+
+		qs.appendWhere(new SearchCondition(DistributorUser.class, Distributor.ENABLE, SearchCondition.IS_TRUE), new int[] { idx });
+		
+		qs.appendAnd();
+		
+		qs.appendWhere(new SearchCondition(DistributorUser.class, "distributorReference.key.id", "=", CommonUtils.longValue(di)), new int[] { idx });
+
+		ClassAttribute ca = new ClassAttribute(DistributorUser.class, Distributor.NAME);
+		OrderBy by = new OrderBy(ca, true);
+		qs.appendOrderBy(by, new int[] { idx });
+
+		QueryResult result = PersistenceHelper.manager.find(qs);
+
+		while (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			DistributorUser distributorUser = (DistributorUser) obj[0];
+
+			list.add(distributorUser);
+		}
+
+		return list;
+	}
+	
+	public ArrayList<DistributorUser> getDistributorUser(String diOid) throws Exception {
+		Distributor di = (Distributor)CommonUtils.persistable(diOid);
+		return getDistributorUser(di);
+	}
+	
+	
+	
+	
 }
