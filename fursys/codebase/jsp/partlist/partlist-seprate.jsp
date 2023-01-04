@@ -13,7 +13,7 @@
 	>
 	<span>BOM관리</span>
 	>
-	<span>PART LIST 단품 색상</span>
+	<span>PART LIST 개별 등록</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -29,6 +29,8 @@
 		<td>ITEM-2212-0003</td>
 	</tr>
 </table>
+<br>
+<div id="grid_wrap" style="height: 440px;"></div>
 <table class="button-table">
 	<tr>
 		<td class="right">
@@ -40,7 +42,6 @@
 		</td>
 	</tr>
 </table>
-<div id="grid_wrap" style="height: 360px;"></div>
 <script type="text/javascript">
 	var colorList = [ "WW", "BK", "007B", "009", "009W", "021A" ];
 	var myGridID;

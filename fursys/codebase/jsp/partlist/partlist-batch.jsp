@@ -35,7 +35,7 @@
 		</td>
 	</tr>
 </table>
-<div id="grid_wrap" style="height: 320px;"></div>
+<div id="grid_wrap" style="height: 420px;"></div>
 <script type="text/javascript">
 	var colorList = [ "WW", "BK", "007B", "009", "009W", "021A" ];
 	var myGridID;

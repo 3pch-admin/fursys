@@ -106,6 +106,7 @@
 			<button type="button" id="seprateBtn">개별 등록</button>
 			<button type="button" id="batchBtn">일괄 등록</button>
 			<button type="button" id="confirmBtn">원부자재추가</button>
+			<button type="button" id="createBtn">등록</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -420,10 +421,19 @@
 		$("#closeBtn").click(function() {
 			self.close();
 		})
+		
+		$("#createBtn").click(function() {
+			var url = _url("/partlist/create");
+			
+			_call(url, params, function(data) {
+				opener.load();
+				self.close();
+			}, "POST");
+		})
 
 		$("#colorBtn").click(function() {
 			var url = _url("/partlist/color");
-			_popup(url, 1300, 500, "n");
+			_popup(url, 1300, 600, "n");
 		})
 
 		$("#seprateBtn").click(function() {
@@ -433,11 +443,11 @@
 				return false;
 			}
 			var url = _url("/partlist/seprate");
-			_popup(url, 1300, 500, "n");
+			_popup(url, 1300, 600, "n");
 		})
 		$("#batchBtn").click(function() {
 			var url = _url("/partlist/batch");
-			_popup(url, 1300, 500, "n");
+			_popup(url, 1300, 600, "n");
 		})
 		$("#confirmBtn").click(function() {
 			var url = _url("/partlist/confirm");
