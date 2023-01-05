@@ -45,7 +45,7 @@ if (t.getTemplate() != null) {
 			<span class="imp">*</span>
 		</th>
 		<td>
-			<input type="text" class="AXInput w60p" name="name">
+			<input type="text" class="AXInput w60p" name="name" autofocus="autofocus">
 		</td>
 	</tr>
 	<tr>

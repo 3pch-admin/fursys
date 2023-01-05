@@ -22,7 +22,7 @@ boolean isLast = (boolean) request.getAttribute("isLast");
 	>
 	<span>프로젝트 관리</span>
 	>
-	<span>태스트 수정</span>
+	<span>태스크 수정</span>
 </div>
 
 <table class="create-table">

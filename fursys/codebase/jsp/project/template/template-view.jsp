@@ -75,11 +75,11 @@ boolean isAdmin = CommonUtils.isAdmin();
 	</colgroup>
 	<tr>
 		<td class="center none" valign="top">
-			<div id="grid_wrap" style="height: 845px;"></div>
+			<div id="grid_wrap" style="height: 800px;"></div>
 		</td>
 		<td class="none" valign="top">&nbsp;</td>
 		<td class="center none" valign="top">
-			<iframe id="right" style="height: 820px;" src="/Windchill/platform/template/templateView?oid=<%=oid%>"></iframe>
+			<iframe id="right" style="height: 800px;" src="/Windchill/platform/template/templateView?oid=<%=oid%>"></iframe>
 		</td>
 	</tr>
 </table>
