@@ -222,7 +222,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						if (event.dataField == "name" || event.dataField == "number") {
 							var rowItem = event.item;
 							var url = _url("/distributor/view", rowItem.oid);
-							_popup(url, 700, 300, "n");
+							_popup(url, 800, 800, "n");
 						}
 					});
 

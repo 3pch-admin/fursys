@@ -85,6 +85,8 @@ DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 <table class="button-table">
 	<tr>
 		<td class="right">
+			<button type="button" id="sendBtn">전송</button>
+			<button type="button" id="sendHistoryBtn">전송이력</button>
 			<button type="button" id="closeBtn">사용여부 변경</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
@@ -133,6 +135,27 @@ DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 				self.close();
 			}, "POST");
 		})
+		
+		$("#sendBtn").click(function() {
+
+			if (!confirm("전송 하시겠습니까?")) {
+				return false;
+			}
+
+			var params = _data($("#form"));
+			var url = _url("/distributor/sendDistributor");
+			console.log(params);
+			_call(url, params, function(data) {
+				opener.load();
+				self.close();
+			}, "POST");
+		})
+		
+		$("#sendHistoryBtn").click(function() {
+
+
+		})
+		
 	})
 
 	function distributor(userId, userName, email) {

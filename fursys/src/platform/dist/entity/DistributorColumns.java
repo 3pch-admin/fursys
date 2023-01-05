@@ -27,7 +27,7 @@ public class DistributorColumns {
 	private String createdDate;
 	private String type;
 	private String enable;
-	//private ArrayList<DistributorUser> diUsers;
+	private ArrayList<DistributorUserColumns> diUsers;
 	private String diUserOids;
 	
 	public DistributorColumns() {
@@ -52,13 +52,13 @@ public class DistributorColumns {
 		String asd = "";
 		
 		for(DistributorUser diu : users) {
-			asd += CommonUtils.oid(diu)+";";
+			asd += CommonUtils.oid(diu)+"▒";
 		}
 		
 		setDiUserOids(asd);
 		
 		
-		//setDiUsers(DistributorHelper.manager.getDistributorUser(distributor));
+		setDiUsers(DistributorHelper.manager.getDistributorUserColumns2(distributor));
 		
 	}
 }

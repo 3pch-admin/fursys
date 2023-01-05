@@ -113,7 +113,7 @@
 							width : 40
 						}, {
 							dataField : "name",
-							headerText : "배포제목",
+							headerText : "배포명",
 							dataType : "string",
 							style : "left indent10",
 // 							width : 300,
@@ -123,15 +123,20 @@
 							headerText : "상태",
 							dataType : "string",
 							width : 80,
-							cellMerge : true,
+							//cellMerge : true,
 							mergeRef : "number",
 							mergePolicy : "restrict"
+						}, {
+							dataField : "duration",
+							headerText : "다운로드 기간",
+							dataType : "string",
+							width : 150,
 						}, {
 							dataField : "creator",
 							headerText : "작성자",
 							dataType : "string",
 							width : 100,
-							cellMerge : true,
+							//cellMerge : true,
 							mergeRef : "number",
 							mergePolicy : "restrict"
 						}, {
@@ -139,65 +144,11 @@
 							headerText : "작성일자",
 							dataType : "string",
 							width : 100,
-							cellMerge : true,
+							//cellMerge : true,
 							mergeRef : "number",
 							mergePolicy : "restrict"
 						}, {
-							dataField : "pdf",
-							headerText : "PDF",
-							dataType : "string",
-							width : 60,
-							editable : true,
-							renderer : {
-								type : "CheckBoxEditRenderer",
-								showLabel : false,
-								checkValue : "true", // true, false 인 경우가 기본
-								unCheckValue : "false",
-							}
-						}, {
-							dataField : "step",
-							headerText : "STEP",
-							dataType : "string",
-							width : 60,
-							renderer : {
-								type : "CheckBoxEditRenderer",
-								showLabel : false,
-								checkValue : "true", // true, false 인 경우가 기본
-								unCheckValue : "false",
-							}
-						}, {
-							dataField : "dwg",
-							headerText : "DWG",
-							dataType : "string",
-							width : 60,
-							renderer : {
-								type : "CheckBoxEditRenderer",
-								showLabel : false,
-								checkValue : "true", // true, false 인 경우가 기본
-								unCheckValue : "false",
-							}
-						}, {
-							dataField : "types",
-							headerText : "배포처구분",
-							dataType : "string",
-							width : 130
-						}, {
-							dataField : "distributor",
-							headerText : "배포처",
-							dataType : "string",
-							width : 200
-						}, {
-							dataField : "user",
-							headerText : "배포처 수신자",
-							dataType : "string",
-							width : 250,
-							style : "left indent10"
-						}, {
-							dataField : "duration",
-							headerText : "다운로드 기간",
-							dataType : "string",
-							width : 150,
-						}, {
+							
 							dataField : "oid",
 							headerText : "oid",
 							dataType : "string",
@@ -207,11 +158,11 @@
 							rowIdField : "oid",
 							headerHeight : 30,
 							rowHeight : 30,
-														fillColumnSizeMode : true,
+							fillColumnSizeMode : true,
 							rowCheckToRadio : true,
 							showRowCheckColumn : true,
 							showRowNumColumn : false,
-							enableCellMerge : true,
+							enableCellMerge : false,
 							cellMergePolicy : "withNull",
 						};
 						myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
@@ -280,8 +231,8 @@
 							if (event.dataField == "name" || event.dataField == "fileName") {
 								var rowItem = event.item;
 								var url = _url("/dist/view", rowItem.oid);
-								_popup(url, "", "", "f");
-								// 								_popup(url, 1400, 560, "n");
+								//_popup(url, "", "", "f");
+								_popup(url, 1400, 960, "n");
 							}
 						});
 

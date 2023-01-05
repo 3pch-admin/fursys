@@ -19,7 +19,7 @@ public interface DistributorService {
 
 	public DistributorUser userDelete(String oid) throws Exception;
 
-	public void sendDistributor(Distributor distributor) throws Exception;
+	public int sendDistributor(Map<String, Object> params) throws Exception;
 	
 	public void sendDistributorUser(DistributorUser distUser) throws Exception;
 	

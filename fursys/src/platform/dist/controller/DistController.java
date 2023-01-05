@@ -18,6 +18,7 @@ import platform.code.service.BaseCodeHelper;
 import platform.dist.entity.Dist;
 import platform.dist.entity.DistDTO;
 import platform.dist.entity.DistPartColumns;
+import platform.dist.entity.DistributorUserColumns;
 import platform.dist.service.DistHelper;
 import platform.dist.service.DistributorHelper;
 import platform.epm.entity.EpmColumns;
@@ -94,9 +95,9 @@ public class DistController {
 
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public Map<String, Object> create(@RequestBody DistDTO params) {
+	public Map<String, Object> create(@RequestBody Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		try {
+		try {	
 			Dist dist = DistHelper.service.create(params);
 			result.put("result", true);
 			result.put("msg", dist.getName() + " 배포(단품)가 등록 되었습니다.");
@@ -266,5 +267,49 @@ public class DistController {
 		System.out.println("list=" + list.size());
 		model.setViewName("popup:/dist/dist-detail-view");
 		return model;
+	}
+	
+	@RequestMapping(value = "/partList", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> partList(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<DistPartColumns> list = new ArrayList<DistPartColumns>();
+		try {
+			
+			String oid = (String) params.get("oid");
+			
+			Dist di = (Dist)CommonUtils.persistable(oid);
+			
+			list = DistHelper.manager.getPartColumnLinks(di);
+			result.put("result", true);
+			result.put("list", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/distributortList", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> distributortList(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<DistributorUserColumns> list = new ArrayList<DistributorUserColumns>();
+		try {
+			
+			String oid = (String) params.get("oid");
+			
+			Dist di = (Dist)CommonUtils.persistable(oid);
+			
+			list = DistHelper.manager.getDistributorUserColumnLinks(di);
+			result.put("result", true);
+			result.put("list", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
 	}
 }

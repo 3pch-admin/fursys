@@ -31,7 +31,7 @@
 	<tr>
 		<th>배포명<font color="red"><b>*</b></font></th>
 		<td>
-			<input type="text" class="AXInput w60p" name="name">
+			<input type="text" class="AXInput w60p" name="distName" id="distName">
 		</td>
 		<th>다운로드 기간<font color="red"><b>*</b></font>
 		</th>
@@ -66,6 +66,7 @@
 			</div>
 		</td>
 	</tr>
+	<!-- 
 	<tr>
 		<th>첨부파일</th>
 		<td colspan="3">
@@ -76,6 +77,7 @@
 			</script>
 		</td>
 	</tr>
+	 -->
 	<tr style="height: 300px;">
 		<th>배포처</th>
 		<td colspan="3"    >
@@ -140,13 +142,13 @@
 		dataType : "string",
 		width : 200
 	}, {
-		dataField : "oid",
-		headerText : "oid",
+		dataField : "distributorUser_oid",
+		headerText : "distributorUser_oid",
 		dataType : "string",
 		visible : false
 	}, ];
 	var dist_auiGridProps = {
-			rowIdField : "oid",
+			rowIdField : "distributorUser_oid",
 			headerHeight : 30,
 			rowHeight : 30,
 			fillColumnSizeMode : true,
@@ -402,7 +404,10 @@
 			var params = _data($("#form"));
 			var url = _url("/dist/create");
 			var partList = AUIGrid.getGridData(myGridID);
+			var distributorList = AUIGrid.getGridData(dist_GridID);
 			params.partList = partList;
+			console.log(distributorList);
+			params.distributorList = distributorList;
 			console.log(params);
 			_call(url, params, function(data) {
 				opener.load();

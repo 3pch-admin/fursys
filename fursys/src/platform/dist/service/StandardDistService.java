@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -13,6 +14,7 @@ import org.apache.commons.io.FileDeleteStrategy;
 
 import platform.dist.entity.Dist;
 import platform.dist.entity.DistDTO;
+import platform.dist.entity.DistDistributorUserLink;
 import platform.dist.entity.DistPartColumns;
 import platform.dist.entity.DistPartDistributorUserLink;
 import platform.dist.entity.DistPartLink;
@@ -49,52 +51,52 @@ public class StandardDistService extends StandardManager implements DistService 
 	}
 
 	@Override
-	public Dist create(DistDTO params) throws Exception {
-		ArrayList<String> secondary = params.getSecondary();
+	public Dist create(Map<String, Object> params) throws Exception {
+		//ArrayList<String> secondary = params.getSecondary();
 		Dist dist = null;
 		Transaction trs = new Transaction();
 		try {
 			trs.start();
 
+			String distName = (String) params.get("distName"); 
+			String description = (String) params.get("description");
+			String duration = (String) params.get("duration");
+			
+			
 			dist = Dist.newDist();
 			dist.setOwnership(CommonUtils.ownership());
-			dist.setName(params.getName());
-			dist.setDescription(params.getDescription());
+			dist.setName(distName);
+			dist.setDescription(description);
 			dist.setNumber(DistHelper.manager.getNextNumber());
 			dist.setState("작업중");
-			dist.setDuration(params.getDuration());
+			dist.setDuration(Integer.parseInt(duration));
 			dist.setMaterial_type("ITEM");
 
 			PersistenceHelper.manager.save(dist);
 
-			ContentUtils.updateSecondary(secondary, dist);
+			//ContentUtils.updateSecondary(secondary, dist);
 
-			System.out.println("머냐.");
-
-			for (DistPartColumns map : params.getPartList()) {
-				WTPart part = (WTPart) CommonUtils.persistable(map.getOid());
+			ArrayList<Map<String, String>> partList = (ArrayList<Map<String, String>>) params.get("partList");
+			
+			for (Map<String, String> partMap : partList) {
+				
+				String oid  = (String)partMap.get("oid");
+				
+				WTPart part = (WTPart) CommonUtils.persistable(oid);
 				DistPartLink link = DistPartLink.newDistPartLink(dist, part);
-				link.setPdf(map.isPdf());
-				link.setDwg(map.isDwg());
-				link.setStep(map.isStep());
-				
-				DistributorUser user=(DistributorUser) CommonUtils.persistable(map.getUoid());
-				link.setDistributorType(user.getType());
-				link.setDistributorUserName(user.getUserName());
-				System.out.println("distributor : " + user.getDistributor());
-				System.out.println("Name : " + user.getName());
-				System.out.println("email : " + user.getEmail());
-				link.setDistributorName(user.getName());
-				
+//				link.setPdf(map.isPdf());
+//				link.setDwg(map.isDwg());
+//				link.setStep(map.isStep());
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
-//				Vector<String> distUsers = map.getDistributorUser();
-
-				String uoid = map.getUoid();
-				if (StringUtils.isNotNull(uoid)) {
-					DistributorUser distUser = (DistributorUser) CommonUtils.persistable(uoid);
-					DistPartDistributorUserLink ddLink = DistPartDistributorUserLink.newDistPartLink(link, distUser);
-					PersistenceHelper.manager.save(ddLink);
-				}
+			}
+			
+			ArrayList<Map<String, String>> userList = (ArrayList<Map<String, String>>) params.get("distributorList");
+			
+			for (Map<String, String> userMap : userList) {
+				String uoid  = (String)userMap.get("uoid");
+				DistributorUser diUser = (DistributorUser) CommonUtils.persistable(uoid);
+				DistDistributorUserLink link = DistDistributorUserLink.newDistDistributorUserLink(dist, diUser);
+				PersistenceHelper.manager.save(link);
 			}
 
 			trs.commit();
@@ -140,21 +142,21 @@ public class StandardDistService extends StandardManager implements DistService 
 				link.setDwg(map.isDwg());
 				link.setStep(map.isStep());
 				
-				DistributorUser user=(DistributorUser) CommonUtils.persistable(map.getUoid());
-				link.setDistributorType(user.getType());
-				link.setDistributorUserName(user.getUserName());
-				link.setDistributorName(user.getName());
-				
-				link = (DistPartLink) PersistenceHelper.manager.save(link);
-//				Vector<String> distUsers = map.getDistributorUser();
-				
-				
-				String uoid = map.getUoid();
-				if (StringUtils.isNotNull(uoid)) {
-					DistributorUser distUser = (DistributorUser) CommonUtils.persistable(uoid);
-					DistPartDistributorUserLink ddLink = DistPartDistributorUserLink.newDistPartLink(link, distUser);
-					PersistenceHelper.manager.save(ddLink);
-				}
+//				DistributorUser user=(DistributorUser) CommonUtils.persistable(map.getUoid());
+//				link.setDistributorType(user.getType());
+//				link.setDistributorUserName(user.getUserName());
+//				link.setDistributorName(user.getName());
+//				
+//				link = (DistPartLink) PersistenceHelper.manager.save(link);
+////				Vector<String> distUsers = map.getDistributorUser();
+//				
+//				
+//				String uoid = map.getUoid();
+//				if (StringUtils.isNotNull(uoid)) {
+//					DistributorUser distUser = (DistributorUser) CommonUtils.persistable(uoid);
+//					DistPartDistributorUserLink ddLink = DistPartDistributorUserLink.newDistPartLink(link, distUser);
+//					PersistenceHelper.manager.save(ddLink);
+//				}
 			}
 			
 			trs.commit();
@@ -314,20 +316,20 @@ public class StandardDistService extends StandardManager implements DistService 
 				link.setDwg(map.isDwg());
 				link.setStep(map.isStep());
 				
-				System.out.println("DType : " + map.getDistributorType());
-				System.out.println("LType : " + link.getDistributorType());
-				link.setDistributorType(link.getDistributorType());
-				link.setDistributorName(link.getDistributorName());
-				link.setDistributorUserName(link.getDistributorUserName());
-				
-				link = (DistPartLink) PersistenceHelper.manager.save(link);
-//				Vector<DistributorUser> distUsers = map.getDistributorUser();
-				String uoid = map.getUoid();
-				if (StringUtils.isNotNull(uoid)) {
-					DistributorUser distUser = (DistributorUser) CommonUtils.persistable(uoid);
-					DistPartDistributorUserLink ddLink = DistPartDistributorUserLink.newDistPartLink(link, distUser);
-					PersistenceHelper.manager.save(ddLink);
-				}
+//				System.out.println("DType : " + map.getDistributorType());
+//				System.out.println("LType : " + link.getDistributorType());
+//				link.setDistributorType(link.getDistributorType());
+//				link.setDistributorName(link.getDistributorName());
+//				link.setDistributorUserName(link.getDistributorUserName());
+//				
+//				link = (DistPartLink) PersistenceHelper.manager.save(link);
+////				Vector<DistributorUser> distUsers = map.getDistributorUser();
+//				String uoid = map.getUoid();
+//				if (StringUtils.isNotNull(uoid)) {
+//					DistributorUser distUser = (DistributorUser) CommonUtils.persistable(uoid);
+//					DistPartDistributorUserLink ddLink = DistPartDistributorUserLink.newDistPartLink(link, distUser);
+//					PersistenceHelper.manager.save(ddLink);
+//				}
 			}
 
 			trs.commit();

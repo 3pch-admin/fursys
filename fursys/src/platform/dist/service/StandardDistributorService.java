@@ -311,78 +311,88 @@ public class StandardDistributorService extends StandardManager implements Distr
 	}
 
 	@Override
-	public void sendDistributor(Distributor distributor) throws Exception {
+	public int sendDistributor(Map<String, Object> params) throws Exception {
+		int reValue = 0;
 		Statement st = null;
 		Connection con = null;
 		ResultSet rs = null;
 		Transaction trs = new Transaction();
 		try {
 			trs.start();
-
-			con = DBCPManager.getConnection("dist"); // 운영 dist..
-			st = con.createStatement();
+			
+			String oid = (String)params.get("oid");
+			
+			Distributor di = (Distributor)CommonUtils.persistable(oid);
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
 
-			/// 배포처
-			StringBuffer sql = new StringBuffer();
-			sql.append("INSERT INTO SITE_INFO (");
-			sql.append("SITE_TYPE_CD, SITE_CD, SITE_NM, USE_YN, IS_FROM_ERP, IS_ADM_SITE");
-			sql.append(", CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
-			sql.append(") VALUES(");
-
-			// SITE_TYPE_CD
-			if (distributor.getType().equals("OUT")) {
-				sql.append("'O', ");
-			} else {
-				sql.append("'I', ");
-			}
-
-			// SITE_CD
-//			if (distributor.getType().equals("OUT")) {
-//				sql.append("'" + distributor.getNumber() + "', ");
-//			} else {
-//				sql.append("'" + distributor.getNumber() + "', ");
-//			}
-			sql.append("'" + distributor.getNumber() + "', ");
-
-			// SITE_NM
-			sql.append("'" + distributor.getName() + "', ");
-
-			// USE_YN
-			if (distributor.getEnable()) {
-				sql.append("'Y', ");
-			} else {
-				sql.append("'N', ");
-			}
-			// IS_FROM_ERP
-			sql.append("'Y', "); // ??
-
-			// IS_ADM_SITE
-			sql.append("'N', ");
-
-			// CREATE_DATE
-			sql.append("SYSDATE, ");
-
-			// UPDATE_DATE
-			sql.append("SYSDATE, ");
-
-			// CREATE_USER_ID
-			sql.append("'" + user.getName() + "', ");
-
-			// CREATE_USER_NM
-			sql.append("'" + user.getFullName() + "', ");
-
-			// UPDATE_USER_ID
-			sql.append("'" + user.getName() + "', ");
-
-			// UPDATE_USER_NM
-			sql.append("'" + user.getFullName() + "'");
-			sql.append(")");
-			st.execute(sql.toString());
-
-			CPCHistoryHelper.createCPCHistory(CommonUtils.oid(distributor), CPCHistoryHelper.company, sql.toString());
 			
+			boolean duChk = DistributorHelper.service.duplicateDistributor(di);
+			
+			if( duChk) {
+				con = DBCPManager.getConnection("dist"); // 운영 dist..
+				st = con.createStatement();
+				/// 배포처
+				StringBuffer sql = new StringBuffer();
+				sql.append("INSERT INTO SITE_INFO (");
+				sql.append("SITE_TYPE_CD, SITE_CD, SITE_NM, USE_YN, IS_FROM_ERP, IS_ADM_SITE");
+				sql.append(", CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
+				sql.append(") VALUES(");
+	
+				// SITE_TYPE_CD
+				if (di.getType().equals("OUT")) {
+					sql.append("'O', ");
+				} else {
+					sql.append("'I', ");
+				}
+	
+				// SITE_CD
+	//			if (distributor.getType().equals("OUT")) {
+	//				sql.append("'" + distributor.getNumber() + "', ");
+	//			} else {
+	//				sql.append("'" + distributor.getNumber() + "', ");
+	//			}
+				sql.append("'" + di.getNumber() + "', ");
+	
+				// SITE_NM
+				sql.append("'" + di.getName() + "', ");
+	
+				// USE_YN
+				if (di.getEnable()) {
+					sql.append("'Y', ");
+				} else {
+					sql.append("'N', ");
+				}
+				// IS_FROM_ERP
+				sql.append("'Y', "); // ??
+	
+				// IS_ADM_SITE
+				sql.append("'N', ");
+	
+				// CREATE_DATE
+				sql.append("SYSDATE, ");
+	
+				// UPDATE_DATE
+				sql.append("SYSDATE, ");
+	
+				// CREATE_USER_ID
+				sql.append("'" + user.getName() + "', ");
+	
+				// CREATE_USER_NM
+				sql.append("'" + user.getFullName() + "', ");
+	
+				// UPDATE_USER_ID
+				sql.append("'" + user.getName() + "', ");
+	
+				// UPDATE_USER_NM
+				sql.append("'" + user.getFullName() + "'");
+				sql.append(")");
+				st.execute(sql.toString());
+	
+				CPCHistoryHelper.createCPCHistory(CommonUtils.oid(di), CPCHistoryHelper.company, sql.toString());
+			}else {
+				
+			}
 			trs.commit();
 			trs = null;
 		} catch (Exception e) {
@@ -394,6 +404,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 			if (trs != null)
 				trs.rollback();
 		}
+		return reValue;
 	}
 
 	@Override
@@ -563,7 +574,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 	}
 	
 	@Override
-	public boolean duplicateDistributor(Distributor distributor) throws Exception {
+	public boolean duplicateDistributor(Distributor di) throws Exception {
 		
 		boolean reValue = false;
 		
@@ -574,6 +585,12 @@ public class StandardDistributorService extends StandardManager implements Distr
 		try {
 			trs.start();
 
+			
+			String diName = di.getName();
+			String diNumber = di.getNumber();
+			
+			
+			
 			con = DBCPManager.getConnection("dist"); // 운영 dist..
 			st = con.createStatement();
 
@@ -586,13 +603,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 			sql.append("CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
 			sql.append(") VALUES(");
 
-			sql.append("'" + UUID.randomUUID().toString().replace("-", "") + "', ");
-			if (distributor.getType().equals("IN")) {
-				sql.append("'" + distributor.getName() + "', ");
-			} else {
-				sql.append("'" + distributor.getNumber() + "', ");
-			}
-			sql.append("'" + distributor.getUserId() + "', ");
+			
 			sql.append("'Y', ");
 			sql.append("SYSDATE, ");
 			sql.append("SYSDATE, ");

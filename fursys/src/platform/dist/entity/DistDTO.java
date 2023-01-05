@@ -21,14 +21,17 @@ public class DistDTO {
 	private String createdDate;
 	private String material_type;
 	private ArrayList<DistPartColumns> partList = new ArrayList<DistPartColumns>();
+	private ArrayList<DistributorUserColumns> distributorUserList = new ArrayList<DistributorUserColumns>();
 	private ArrayList<String> secondary = new ArrayList<String>();
 	private JSONArray partJson = new JSONArray();
-
+	private JSONArray distributorUserJson = new JSONArray();
+	
 	public DistDTO() {
 
 	}
 
 	public DistDTO(Dist dist) throws Exception {
+		System.out.println("#####DIST_DTO_########");
 		setOid(CommonUtils.oid(dist));
 		setName(dist.getName());
 		setNumber(dist.getNumber());
@@ -39,5 +42,8 @@ public class DistDTO {
 		setCreator(dist.getOwnership().getOwner().getFullName());
 		setMaterial_type(dist.getMaterial_type());
 		setPartJson(JSONArray.fromObject(DistHelper.manager.getParts(dist)));
+		setDistributorUserJson(JSONArray.fromObject(DistHelper.manager.getDistributorUserColumnLinks(dist)));
+		setPartList(DistHelper.manager.getParts(dist)); 
+		setDistributorUserList(DistHelper.manager.getDistributorUserColumnLinks(dist));
 	}
 }

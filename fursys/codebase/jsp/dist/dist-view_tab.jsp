@@ -1,5 +1,3 @@
-<%@page import="platform.dist.entity.DistPartColumns"%>
-<%@page import="platform.dist.entity.DistributorUserColumns"%>
 <%@page import="platform.util.CommonUtils"%>
 <%@page import="wt.fc.PersistenceHelper"%>
 <%@page import="wt.fc.QueryResult"%>
@@ -8,7 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 DistDTO dto = (DistDTO) request.getAttribute("dto");
-
+// ECO eco = (ECO)CommonUtils.persistable(dto.getOid());
 %>
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
@@ -24,9 +22,9 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 <table class="view-table info-view">
 	<colgroup>
 		<col width="100">
-		<col width="*">
+		<col width="800">
 		<col width="100">
-		<col width="*">
+		<col width="800">
 	</colgroup>
 	<tr>
 		<th>배포 번호</th>
@@ -35,11 +33,10 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 		<td><%=dto.getDuration()%>&nbsp;주</td>
 	</tr>
 	<tr>
-		<th>배포명</th>
-		<td><%=dto.getName() %></td>
 		<th>작성자</th>
 		<td><%=dto.getCreator()%></td>
-		
+		<th>-</th>
+		<td>-</td>
 	</tr>
 		<tr>
 		<th>내용</th>
@@ -58,71 +55,22 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 			</div>
 		</td>
 	</tr>
-	
-	<tr>
-		<th>배포처</th>
-		<td colspan="3"    >
-			<table class="view-table info-view">
-				<tr>
-					<th>배포처</th>
-					<th>사용자 아이디(이메일)</th>
-					<th>사용자명</th>
-				</tr>
-				<%
-				for(DistributorUserColumns diUser : dto.getDistributorUserList()){
-				%>
-				<tr>
-					<td><%=diUser.getName() %></td>
-					<td><%=diUser.getUserId() %></td>
-					<td><%=diUser.getUserName() %></td>
-				</tr>
-				<%
-				}
-				%>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<th>배포 도면</th>
-		<td colspan="3">
-			<table class="view-table info-view">
-				<tr>
-					<th>-</th>
-					<th>부품번호</th>
-					<th>부품명칭</th>
-					<th>버전</th>
-					<th>PDF</th>
-					<th>STEP</th>
-					<th>DWG</th>
-				</tr>
-				<%
-				for(DistPartColumns di_part : dto.getPartList()){
-				%>
-				<tr>
-					<td><%=di_part.getThum_2d() %></td>
-					<td><%=di_part.getNumber() %></td>
-					<td><%=di_part.getName() %></td>
-					<td><%=di_part.getVersion() %></td>
-					<td><%=di_part.isPdf()?"O":"X" %></td>
-					<td><%=di_part.isStep()?"O":"X" %></td>
-					<td><%=di_part.isDwg()?"O":"X" %></td>
-				</tr>
-				<%
-				}
-				%>
-			</table>
-		
-		</td>
-	</tr>
-	
 </table>
 
+<!-- 배포처 -->
+<jsp:include page="/jsp/dist/ref-dist-distributor-view.jsp">
+	<jsp:param value="<%=dto.getOid()%>" name="oid" />
+</jsp:include>
 
 <!-- 결재 이력 -->
 <jsp:include page="/jsp/approval/approval-history.jsp">
 	<jsp:param value="<%=dto.getOid()%>" name="oid" />
 </jsp:include>
 
+<!-- 배포 정보  -->
+<jsp:include page="/jsp/dist/ref-dist-part-view.jsp">
+	<jsp:param value="<%=dto.getOid()%>" name="oid" />
+</jsp:include>
 
 <table class="button-table">
 	<tr>
@@ -154,6 +102,13 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 				optionValue : "1",
 				optionText : "기본정보",
 			}, {
+				optionValue : "2",
+				optionText : "배포처",
+			}, 
+			{
+				optionValue : "3",
+				optionText : "배포도면",
+			}, {
 				optionValue : "4",
 				optionText : "결재이력"
 			} ],
@@ -171,6 +126,35 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 					$(".app-view").hide();
 					$(".dist-part-view").hide();
 					$(".ref_dist_distributor_grid_wrap").hide();
+				} else if (value == "2") {
+					$(".info-view").hide();
+					$(".file-view").show();
+					$("#part_grid_wrap").hide();
+					$(".ebom").hide();
+					$(".ebom-search").hide();
+					$(".ebr").hide();
+					$(".mbom").hide();
+					$(".mbom-search").hide();
+					$("#doc_grid_wrap").hide();
+					$(".app-view").hide();
+					$(".dist-part-view").hide();
+					$(".ref_dist_distributor_grid_wrap").show();
+					AUIGrid.resize("#ref_dist_distributor_grid_wrap");
+				} else if (value == "3") {
+					$(".info-view").hide();
+					$(".file-view").hide();
+					$("#part_grid_wrap").show();
+					AUIGrid.resize("#part_grid_wrap");
+					$(".ebom").hide();
+					$(".ebom-search").hide();
+					$(".ebr").hide();
+					$(".mbom").hide();
+					$(".mbom-search").hide();
+					$("#doc_grid_wrap").hide();
+					$(".app-view").hide();
+					$(".ref_dist_distributor_grid_wrap").hide();
+					$(".dist-part-view").show();
+					AUIGrid.resize("#ref_dist_part_grid_wrap");
 				} else if (value == "4") {
 					$(".info-view").hide();
 					$(".file-view").hide();
@@ -190,6 +174,10 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 		
 		
 		$(window).resize(function() {
+			AUIGrid.resize("#doc_grid_wrap");
+			AUIGrid.resize("#part_grid_wrap");
+			AUIGrid.resize("#ref_dist_part_grid_wrap");
+			AUIGrid.resize("#ref_dist_distributor_grid_wrap");
 			
 		})
 		RAONKEDITOR.SetHtmlContents(decodeURIComponent(escape(window.atob("<%=dto.getDescription()%>"))), "description");

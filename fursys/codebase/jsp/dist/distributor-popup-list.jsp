@@ -133,8 +133,13 @@ String box = request.getParameter("box");
 						formatString : "yyyy/mm/dd",
 						width : 150
 					}, {
-						dataField : "oid2",
-						headerText : "oid2",
+						dataField : "diUsers",
+						headerText : "diUsers",
+						dataType : "array",
+						visible : false
+					}, {
+						dataField : "diUserOids",
+						headerText : "diUserOids",
 						dataType : "string",
 						visible : false
 					}, {
@@ -202,6 +207,7 @@ String box = request.getParameter("box");
 							$("input[name=sessionid").val(data.sessionid);
 							createPagingNavigator(data.curPage);
 							AUIGrid.removeAjaxLoader(myGridID);
+							console.log(data.list);
 							AUIGrid.setGridData(myGridID, data.list);
 						}, "POST");
 					}
@@ -239,7 +245,14 @@ String box = request.getParameter("box");
 							<%
 							if("3".equals(box)){
 							%>
-							
+							var list = _array(items);
+							var params = new Object();
+							params.list = list;
+							var url = _url("/distributor/userInfoList");
+							_call(url, params, function(data) {
+								opener.info(data.list);
+								self.close();
+							}, "POST");
 							<%
 							}else{
 							%>

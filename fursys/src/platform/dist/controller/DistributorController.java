@@ -22,6 +22,7 @@ import platform.dist.entity.DistributorUserDTO;
 import platform.dist.service.DistributorHelper;
 import platform.user.service.UserHelper;
 import platform.util.CommonUtils;
+import platform.util.service.CPCHistoryHelper;
 import wt.part.QuantityUnit;
 
 @Controller
@@ -313,5 +314,40 @@ public class DistributorController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/userInfoList")
+	@ResponseBody
+	public Map<String, Object> userInfoList(@RequestBody Map<String, Object> params) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			ArrayList<String> list = (ArrayList<String>) params.get("list");
+			ArrayList<Map<String, Object>> reList = DistributorHelper.manager.getDistributorUserColumns(list);
+			result.put("list", reList);		
+			result.put("result", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/sendDistributor", method = RequestMethod.POST)
+	public Map<String, Object> sendDistributor(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			int sendResult = DistributorHelper.service.sendDistributor(params);
+			result.put("result", true);
+			result.put("msg", " 전송 등록 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
 
 }
