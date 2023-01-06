@@ -73,7 +73,6 @@ if (t.getTemplate() != null) {
 		})
 
 		$("#saveBtn").click(function() {
-
 			
 			var location = $("input[name=location]");
 			var name = $("input[name=name]");
@@ -104,6 +103,19 @@ if (t.getTemplate() != null) {
 				self.close();
 			}, "POST");
 		})
+		
+		$("input[name=name]").keydown(function(e){
+			if(e.keyCode ==13 ){
+				$("#saveBtn").click();
+			}
+		});
+		$("textarea[name=description]").keydown(function(e){
+			if(e.keyCode ==13){
+				$("#saveBtn").click();
+			}
+		});
+		
+		
 		$("input").checks();
 		_folder("location", "/Default/문서", "DOCUMENT");
 	})
