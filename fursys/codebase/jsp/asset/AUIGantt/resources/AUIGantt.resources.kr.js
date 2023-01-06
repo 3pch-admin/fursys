@@ -85,7 +85,7 @@ AUIGanttMessages = {
 			filterItemMoreMessage: "Too many items...Search words",
 			filterNumberOperatorList: ["같다(=)", "크다(>)", "크거나 같다(>=)", "작다(<)", "작거나 같다(<=)", "같지 않다(!=)"],
 			thousandSeparator : ",",
-			rowNumHeaderText: "번호",
+			rowNumHeaderText: "No.",
 			remoterPlaceholder: "검색어를 입력하세요.",
 			calendar : {
 				titles : ["일", "월", "화", "수", "목", "금", "토"],
@@ -201,7 +201,7 @@ if(typeof AUIGantt != "undefined") {
 		// 작업 이름 필드
 		"name" : {
 			dataField : "name",
-			headerText : "태스크 명",
+			headerText : "작업 이름",
 			width: 280,
 			showHeaderMenu:true,
 			style : "aui-gantt-default-left-style"
@@ -232,10 +232,10 @@ if(typeof AUIGantt != "undefined") {
 					return "";
 				}
 				
-				var postfix = " 일";
-				//if(item.isFixedPeriod) {
-				//	postfix = " 일";
-				//}
+				var postfix = " 일?";
+				if(item.isFixedPeriod) {
+					postfix = " 일";
+				}
 				
 				return Math.ceil(value)+ postfix;
 			} // end of labelFunction
@@ -244,7 +244,7 @@ if(typeof AUIGantt != "undefined") {
 		// 시작 날짜 필드
 		"start" : {
 			dataField : "start",
-			headerText : "계획 시작 날짜",
+			headerText : "시작 날짜",
 			width : 120,
 			dataType : "date",
 			formatString : "yyyy-mm-dd (ddd)",
@@ -277,7 +277,7 @@ if(typeof AUIGantt != "undefined") {
 		// 종료 날짜 필드
 		"end" : {
 			dataField : "end",
-			headerText : "계획 완료 날짜",
+			headerText : "완료 날짜",
 			width : 120,
 			dataType : "date",
 			formatString : "yyyy-mm-dd (ddd)",
@@ -391,8 +391,8 @@ if(typeof AUIGantt != "undefined") {
 		// 자원 이름 필드
 		"resource" : {
 			dataField : "resource",
-			headerText : "담당자",
-			width:120,
+			headerText : "자원 이름",
+			width:80,
 			filter : {
 				showIcon :true
 			},

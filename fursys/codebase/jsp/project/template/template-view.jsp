@@ -69,9 +69,9 @@ boolean isAdmin = CommonUtils.isAdmin();
 </table>
 <table class="">
 	<colgroup>
-		<col width="50%">
+		<col width="70%">
 		<col width="30">
-		<col width="49%">
+		<col width="29%">
 	</colgroup>
 	<tr>
 		<td class="center none" valign="top">
@@ -94,9 +94,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 	</tr>
 </table>
 <script type="text/javascript">
-	var roles =
-<%=arr%>
-	;
+	var roles =<%=arr%>;
 	var columnLayout = [ {
 		dataField : "name",
 		headerText : "태스크 명",

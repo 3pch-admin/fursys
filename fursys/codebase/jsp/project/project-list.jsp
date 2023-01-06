@@ -16,15 +16,9 @@ boolean isAdmin = CommonUtils.isAdmin();
 </head>
 <body onload="load();" id="container">
 	<form id="form">
-		<input type="hidden" name="sessionid" id="sessionid">
-		<input type="hidden" name="tpage" id="tpage">
+		<input type="hidden" name="sessionid" id="sessionid"> <input type="hidden" name="tpage" id="tpage">
 		<div class="header-title">
-			<img src="/Windchill/jsp/images/home.png" class="home">
-			<span>HOME</span>
-			>
-			<span>프로젝트 관리</span>
-			>
-			<span>프로젝트 조회</span>
+			<img src="/Windchill/jsp/images/home.png" class="home"> <span>HOME</span> > <span>프로젝트 관리</span> > <span>프로젝트 조회</span>
 		</div>
 		<table class="search-table top-color">
 			<colgroup>
@@ -32,21 +26,25 @@ boolean isAdmin = CommonUtils.isAdmin();
 				<col width="*">
 				<col width="130">
 				<col width="*">
+				<col width="130">
+				<col width="*">
 			</colgroup>
 			<tr>
-				<th>템플릿 명</th>
+				<th>프로젝트 번호</th>
+				<td><input type="text" class="AXInput w80p" name="number"></td>
+				<th>프로젝트 명</th>
+				<td><input type="text" name="name" id="name" class="AXInput w80p"></td>
+				<th>진행상태</th>
+				<td><select name="state" id="state" class="AXSelect w200px"></select></td>
+			</tr>
+			<tr>
+				<th>PM</th>
 				<td>
-					<input type="text" name="name" id="name" class="AXInput w70p">
+				<input type="text" class="AXInput w200px" name="manager" id="manager" readonly="readonly"> 
+				<i class="axi axi-close2 axicon clearUser" data-target="manager"></i>
 				</td>
-				<!-- 				<th>템플릿 번호</th> -->
-				<!-- 				<td> -->
-				<!-- 					<input type="text" class="AXInput w200px" name="number"> -->
-				<!-- 				</td> -->
-				<!-- 			</tr> -->
-				<!-- 			<tr> -->
 				<th>회사</th>
-				<td>
-					<select name="company" id="company" class="AXSelect w200px">
+				<td><select name="company" id="company" class="AXSelect w100px">
 						<option value="">선택</option>
 						<%
 						for (BaseCode c : company) {
@@ -55,30 +53,32 @@ boolean isAdmin = CommonUtils.isAdmin();
 						<%
 						}
 						%>
-					</select>
-				</td>
-				<th>사용여부</th>
-				<td>
-					<select id="enable" name="enable" class="AXSelect w100px">
-						<option value="">선택</option>
-						<option value="">예</option>
-						<option value="">아니오</option>
-					</select>
-				</td>
+				</select></td>
+				<th>부서</th>
+				<td><select id="department" name="department" class="AXSelect w200px">
+				</select></td>
+			</tr>
+			<tr>
+				<th>계획시작일자</th>
+				<td><input type="text" class="AXInput w100px" name="startPlanDate" id="startPlanDate" maxlength="8"> ~ 
+				<input type="text" class="AXInput w100px" name="endPlanDate" id="endPlanDate" data-start="startPlanDate" maxlength="8"> 
+				<i	class="axi axi-close2 axicon clearBetween" data-target="PlanDate"></i></td>
+				<th>계획종료일자</th>
+				<td colspan="3"><input type="text" class="AXInput w100px" name="startPlanEndDate" id="startPlanEndDate" maxlength="8"> ~ 
+				<input type="text" class="AXInput w100px" name="endPlanEndDate" id="endPlanEndDate" data-start="startPlanEndDate" maxlength="8"> 
+				<i	class="axi axi-close2 axicon clearBetween" data-target="PlanEndDate"></i></td>
 			</tr>
 		</table>
 
 		<table class="button-table">
 			<tr>
 				<td class="left">
-					<button type="button" id="createBtn">등록</button>
-					<%
-					if (isAdmin) {
-					%>
-					<button type="button" id="deleteBtn">삭제</button>
-					<%
-					}
-					%>
+					<button type="button" id="createBtn">등록</button> <%
+ if (isAdmin) {
+ %>
+					<button type="button" id="deleteBtn">삭제</button> <%
+ }
+ %>
 				</td>
 				<td class="right">
 					<button type="button" id="excelBtn">엑셀</button>
@@ -88,7 +88,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 			</tr>
 		</table>
 
-		<div id="grid_wrap" style="height: 725px;"></div>
+		<div id="grid_wrap" style="height: 490px;"></div>
 		<div id="grid_paging" class="aui-grid-paging-panel my-grid-paging-panel"></div>
 		<script type="text/javascript">
 			var myGridID;
@@ -308,8 +308,14 @@ boolean isAdmin = CommonUtils.isAdmin();
 					load();
 				}
 			})
-			_selector("enable");
+			_user("manager");
+			_selector("state");
 			_selector("company");
+			_selector("department");
+			_between("endPlanDate");
+			_between("endPlanEndDate");
+			_clearUser("manager");
+			_clearBetween("clearBetween");
 			$("input[name=name]").focus();
 			$(window).resize(function() {
 				AUIGrid.resize("#grid_wrap");
