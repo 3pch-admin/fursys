@@ -109,12 +109,6 @@ if (t.getTemplate() != null) {
 				$("#saveBtn").click();
 			}
 		});
-		$("textarea[name=description]").keydown(function(e){
-			if(e.keyCode ==13){
-				$("#saveBtn").click();
-			}
-		});
-		
 		
 		$("input").checks();
 		_folder("location", "/Default/문서", "DOCUMENT");
