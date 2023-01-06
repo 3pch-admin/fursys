@@ -32,15 +32,13 @@ boolean isAdmin = CommonUtils.isAdmin();
 				<col width="500">
 				<col width="140">
 				<col width="500">
-				<col width="140">
-				<col width="500">
 			</colgroup>
 			<tr>
 				<th>프로젝트 명</th>
-				<td colspan="3">
+				<td>
 					<input type="text" name="name" id="name" class="AXInput w50p">
 				</td>
-				<th>상태</th>
+				<th>진행상태</th>
 				<td>
 					<select name="pjtState" id="pjtState" class="AXSelect w100px">
 						<option value="">선택</option>
@@ -52,12 +50,6 @@ boolean isAdmin = CommonUtils.isAdmin();
 				</td>
 			</tr>
 			<tr>
-				<th>진행상태</th>
-				<td>
-					<select id="state" name="state" class="AXSelect w100px">
-						<option value="">선택</option>
-					</select>
-				</td>
 				<th>계획 시작일자</th>
 				<td>
 					<input type="text" class="AXInput w100px" name="startProjectDate" id="startProjectDate" maxlength="8">
