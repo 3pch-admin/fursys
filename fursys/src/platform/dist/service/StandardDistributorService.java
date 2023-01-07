@@ -23,6 +23,8 @@ import wt.util.WTException;
 
 public class StandardDistributorService extends StandardManager implements DistributorService {
 
+	private String cpcHost = "distlocal";
+	
 	public static StandardDistributorService newStandardDistributorService() throws WTException {
 		StandardDistributorService instance = new StandardDistributorService();
 		instance.initialize();
@@ -330,7 +332,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 			boolean duChk = DistributorHelper.service.duplicateDistributor(di);
 			
 			if( duChk) {
-				con = DBCPManager.getConnection("dist"); // 운영 dist..
+				con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 				st = con.createStatement();
 				/// 배포처
 				StringBuffer sql = new StringBuffer();
@@ -416,7 +418,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 		try {
 			trs.start();
 
-			con = DBCPManager.getConnection("dist"); // 운영 dist..
+			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 			st = con.createStatement();
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
@@ -479,7 +481,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 		try {
 			trs.start();
 
-			con = DBCPManager.getConnection("dist"); // 운영 dist..
+			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 			st = con.createStatement();
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
@@ -531,7 +533,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 		try {
 			trs.start();
 
-			con = DBCPManager.getConnection("dist"); // 운영 dist..
+			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 			st = con.createStatement();
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
@@ -591,7 +593,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 			
 			
 			
-			con = DBCPManager.getConnection("dist"); // 운영 dist..
+			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 			st = con.createStatement();
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
@@ -640,7 +642,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 		try {
 			trs.start();
 
-			con = DBCPManager.getConnection("dist"); // 운영 dist..
+			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 			st = con.createStatement();
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();

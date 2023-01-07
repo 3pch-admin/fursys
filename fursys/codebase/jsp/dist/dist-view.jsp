@@ -10,6 +10,7 @@
 DistDTO dto = (DistDTO) request.getAttribute("dto");
 
 %>
+<input type="hidden" name="oid" id="oid" value="<%=dto.getOid() %>">
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
 	<span>HOME</span>
@@ -127,6 +128,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 <table class="button-table">
 	<tr>
 		<td class="right">
+			<button type="button" id="sendEpBtn">ep_send</button>
 			<button type="button" id="modifyBtn">수정</button>
 			<button type="button" id="deleteBtn">삭제</button>
 			<button type="button" id="closeBtn">닫기</button>
@@ -137,6 +139,20 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 <script type="text/javascript">
 	$(function() {
 
+		$("#sendEpBtn").click(function() {
+			if (!confirm("ep 전송 하시겠습니까?")) {
+				return false;
+			}
+	
+			var params = _data($("#form"));
+			var url = _url("/dist/sendEp2");
+			console.log(params);
+			_call(url, params, function(data) {
+				opener.load();
+				//self.close();
+			}, "POST");
+		})
+		
 		$("#modifyBtn").click(function() {
 			var url = _url("/dist/modify", "<%=dto.getOid()%>");
 			document.location.href = url;

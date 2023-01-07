@@ -24,7 +24,7 @@
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/jviews-chart-all.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/jviews-framework-all.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/jviews-gantt-all.jar"/>
-	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/lombok.jar"/>
+	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/lombok.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1672501174943/source/lombok-1.18.24-sources.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/mksapi.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/mylyn-integration.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/odataWeb.jar"/>

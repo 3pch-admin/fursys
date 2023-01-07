@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import platform.doc.entity.DocumentColumns;
+import platform.doc.entity.WTDocumentWTPartLink;
 import platform.part.entity.PartColumns;
 import platform.util.CommonUtils;
 import platform.util.DateUtils;
@@ -17,6 +19,7 @@ import platform.util.IBAUtils;
 import platform.util.PageUtils;
 import platform.util.StringUtils;
 import platform.util.ThumbnailUtils;
+import wt.doc.WTDocument;
 import wt.enterprise.MadeFromLink;
 import wt.enterprise.RevisionControlled;
 import wt.epm.EPMDocument;
@@ -758,4 +761,26 @@ public class PartHelper {
 		}
 		return false;
 	}
+	
+	public List<DocumentColumns> getWTDocuments(WTPart part) throws Exception {
+		
+		List<DocumentColumns> reValue = new ArrayList<>();
+		try {
+			if (part == null) {
+				return reValue;
+			}
+			
+			QueryResult qr = PersistenceHelper.manager.navigate(part, "document", WTDocumentWTPartLink.class);
+			while (qr.hasMoreElements()) {
+				WTDocumentWTPartLink link = (WTDocumentWTPartLink) qr.nextElement();
+				
+				reValue.add(new DocumentColumns(link.getDocument()));
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return reValue;
+	}
+	
 }

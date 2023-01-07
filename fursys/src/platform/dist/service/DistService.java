@@ -18,4 +18,5 @@ public interface DistService {
 	public Dist modify(DistDTO params) throws Exception;
 
 	public Dist matCreate(DistDTO params) throws Exception;
+	
 }

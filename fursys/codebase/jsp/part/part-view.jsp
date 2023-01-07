@@ -161,9 +161,15 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 <%-- 	<jsp:param value="<%=dto.getOid()%>" name="oid" /> --%>
 <%-- </jsp:include> --%>
 
+<!-- WTDOC -->
+<jsp:include page="/jsp/part/ref-part-doc-view.jsp">
+	<jsp:param value="<%=dto.getOid()%>" name="oid" />
+</jsp:include>
+
 <table class="button-table">
 	<tr>
 		<td class="right">
+			<button type="button" id="createDocBtn">기타문서등록</button>
 			<button type="button" id="modifyBtn">수정</button>
 			<button type="button" id="reviseBtn">개정</button>
 			<!-- 			<button type="button" id="deleteBtn">삭제</button> -->
@@ -174,6 +180,12 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 <script type="text/javascript">
 	$(function() {
 
+		$("#createDocBtn").click(function() {
+			var oid = $(this).data("oid");
+			var url = _url("/Windchill/platform/doc/createPartToDoc", oid);
+			_popup(url, 800, 800, "n");
+		})
+		
 		$("#thumb").click(function() {
 			var oid = $(this).data("oid");
 			_openCreoView(oid);
@@ -211,6 +223,9 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 			}, {
 				optionValue : "6",
 				optionText : "MBOM"
+			}, {
+				optionValue : "7",
+				optionText : "문서"
 			} ],
 			onchange : function(selectedObject, value) {
 				if (value == "1") {
@@ -225,7 +240,9 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 					$(".pbr").hide();
 					$(".mbom").hide();
 					$(".mbom-search").hide();
+					$(".doc-search").hide();
 					$(".mbr").hide();
+					$(".doc-view").hide();
 				} else if (value == "2") {
 					$(".info-view").hide();
 					$(".attr-view").show();
@@ -239,6 +256,7 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 					$(".mbom").hide();
 					$(".mbom-search").hide();
 					$(".mbr").hide();
+					$(".doc-view").hide();
 				} else if (value == "3") {
 					$(".info-view").hide();
 					$(".attr-view").hide();
@@ -252,6 +270,7 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 					$(".mbom").hide();
 					$(".mbom-search").hide();
 					$(".mbr").hide();
+					$(".doc-view").hide();
 				} else if (value == "4") {
 					$(".info-view").hide();
 					$(".attr-view").hide();
@@ -265,6 +284,7 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 					$(".mbom").hide();
 					$(".mbom-search").hide();
 					$(".mbr").hide();
+					$(".doc-view").hide();
 				} else if (value == "5") {
 					$(".info-view").hide();
 					$(".attr-view").hide();
@@ -279,6 +299,7 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 					$(".mbom").hide();
 					$(".mbom-search").hide();
 					$(".mbr").hide();
+					$(".doc-view").hide();
 				} else if (value == "6") {
 					$(".info-view").hide();
 					$(".attr-view").hide();
@@ -293,6 +314,21 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 					$(".mbom-search").show();
 					$(".mbr").show();
 					_selector("mcolor");
+					$(".doc-view").hide();
+				}else if (value == "7") {
+					$(".info-view").hide();
+					$(".attr-view").hide();
+					$(".history-view").hide();
+					$(".ebom").hide();
+					$(".ebom-search").hide();
+					$(".ebr").hide();
+					$(".pbom").hide();
+					$(".pbom-search").hide();
+					$(".pbr").hide();
+					$(".mbom").hide();
+					$(".mbom-search").hide();
+					$(".mbr").hide();
+					$(".doc-view").show();
 				}
 			},
 		});

@@ -240,5 +240,30 @@ public class DocumentController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/createPartToDoc", method = RequestMethod.GET)
+	public ModelAndView createPartToDoc(@RequestParam String oid) throws Exception {
+		System.out.println("#####################");
+		ModelAndView model = new ModelAndView();
+		model.addObject("partOid", oid);
+		model.setViewName("popup:/doc/doc-create-part");
+		return model;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/createPartToDoc", method = RequestMethod.POST)
+	public Map<String, Object> createPartToDoc(@RequestBody DocumentDTO params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			WTDocument doc = DocumentHelper.service.create(params);
+			result.put("result", true);
+			result.put("msg", doc.getName() + " 문서가 등록 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
 
 }

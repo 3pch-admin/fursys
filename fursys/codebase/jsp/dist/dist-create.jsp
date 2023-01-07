@@ -92,6 +92,7 @@
 		<td colspan="3">
 			<!-- <button type="button" id="addBtn">추가</button> -->
 			<button type="button" id="ecn_addBtn">ECN 추가</button>
+			<button type="button" id="addBtn">자재 추가</button>
 			<button type="button" id="addBtn">단품 추가</button>
 			<button type="button" id="set_addBtn">세트 추가</button>
 			<button type="button" id="deleteBttn">삭제</button>
