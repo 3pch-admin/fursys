@@ -18,6 +18,7 @@ import platform.code.service.BaseCodeHelper;
 import platform.dist.entity.Dist;
 import platform.dist.entity.DistDTO;
 import platform.dist.entity.DistPartColumns;
+import platform.dist.entity.DistributorUserColumns;
 import platform.dist.service.DistHelper;
 import platform.dist.service.DistributorHelper;
 import platform.epm.entity.EpmColumns;
@@ -94,9 +95,9 @@ public class DistController {
 
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public Map<String, Object> create(@RequestBody DistDTO params) {
+	public Map<String, Object> create(@RequestBody Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		try {
+		try {	
 			Dist dist = DistHelper.service.create(params);
 			result.put("result", true);
 			result.put("msg", dist.getName() + " 배포(단품)가 등록 되었습니다.");
@@ -267,4 +268,122 @@ public class DistController {
 		model.setViewName("popup:/dist/dist-detail-view");
 		return model;
 	}
+	
+	@RequestMapping(value = "/partList", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> partList(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<DistPartColumns> list = new ArrayList<DistPartColumns>();
+		try {
+			
+			String oid = (String) params.get("oid");
+			
+			Dist di = (Dist)CommonUtils.persistable(oid);
+			
+			list = DistHelper.manager.getPartColumnLinks(di);
+			result.put("result", true);
+			result.put("list", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/distributortList", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> distributortList(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<DistributorUserColumns> list = new ArrayList<DistributorUserColumns>();
+		try {
+			
+			String oid = (String) params.get("oid");
+			
+			Dist di = (Dist)CommonUtils.persistable(oid);
+			
+			list = DistHelper.manager.getDistributorUserColumnLinks(di);
+			result.put("result", true);
+			result.put("list", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/sendEp", method = RequestMethod.POST)
+	public Map<String, Object> sendEp(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {	
+			System.out.println("####controller###############==sendEp==");
+			//Dist dist = DistHelper.service.create(params);
+			
+			
+			result.put("result", true);
+			result.put("msg", "배포(단품)가 등록 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/sendEp2", method = RequestMethod.POST)
+	public ModelAndView sendEp2(@RequestBody Map<String, Object> params) throws Exception {
+		
+		String oid = (String)params.get("oid");
+		
+		System.out.println("####controller==sendEp2=="+oid);
+		
+		Map<String, Object> sendMap = new HashMap<String, Object>(); //DistributorHelper.manager.getDistributorUser();
+		
+		sendMap.put("upn", "ljh1103@fursys.com");
+		//sendMap.put("upn", "dc1995@fursys.com");
+		//sendMap.put("upn", "youngsoo_shim@fursys.com");
+		
+		sendMap.put("microsoftAppId", "0f74ef2f-72f1-4a58-90d7-0135013f0bda");
+		sendMap.put("title", "titleV");
+		
+		Map<String, Object> titleDesignMap = new HashMap<String, Object>();
+		titleDesignMap.put("color", "1");
+		titleDesignMap.put("weight", "1");
+		titleDesignMap.put("size", "1");
+		
+		sendMap.put("titleDesign", titleDesignMap);
+			
+		sendMap.put("sendDt", "2022-07-12 14:20");
+		sendMap.put("sender", "");
+		sendMap.put("regId", "ljh1103@fursys.com");
+		sendMap.put("contents", "");
+		
+		sendMap.put("userImgUrl", "");
+		sendMap.put("notificationMessage", "");
+		
+		Map<String, Object> linkButtonsMap = new HashMap<String, Object>();
+		linkButtonsMap.put("linkUrl", "www.naver.com");
+		linkButtonsMap.put("linkTitle", "네이벙");
+		
+		sendMap.put("linkButtons", linkButtonsMap);
+		
+		Map<String, Object> descriptionItemsMap = new HashMap<String, Object>();
+		descriptionItemsMap.put("title", "1");
+		descriptionItemsMap.put("value", "1");
+		
+		sendMap.put("descriptionItems", descriptionItemsMap);
+			
+		
+		
+		ModelAndView model = new ModelAndView();
+		model.addObject(sendMap);
+		model.setViewName("https://api.fursys.com/teams/send");
+		
+		
+		return model;
+	}
+	
 }

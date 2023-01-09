@@ -19,8 +19,14 @@ public interface DistributorService {
 
 	public DistributorUser userDelete(String oid) throws Exception;
 
-	public void send(Distributor distributor) throws Exception;
-
+	public int sendDistributor(Map<String, Object> params) throws Exception;
+	
+	public void sendDistributorUser(DistributorUser distUser) throws Exception;
+	
+	public boolean duplicateDistributor(Distributor distributor) throws Exception;
+	
+	public boolean duplicateDistributorUser(DistributorUser distUser) throws Exception;
+	
 	public void _send(Distributor distributor) throws Exception;
 
 	public void __send(Distributor distributor) throws Exception;

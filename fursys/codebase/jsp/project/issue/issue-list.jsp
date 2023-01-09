@@ -92,7 +92,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 				style : "left indent10"
 			}, {
 				dataField : "projectName",
-				headerText : "프로젝트 번호",
+				headerText : "프로젝트 명",
 				dataType : "string",
 				cellMerge : true
 			}, {

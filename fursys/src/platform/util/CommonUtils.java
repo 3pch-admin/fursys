@@ -59,6 +59,10 @@ public class CommonUtils {
 	public static String oid(Persistable per) {
 		return per.getPersistInfo().getObjectIdentifier().getStringValue();
 	}
+	
+	public static long longValue(Persistable per) {
+		return per.getPersistInfo().getObjectIdentifier().getId();
+	}
 
 	public static WTContainerRef getContainer(String productName) throws Exception {
 		WTOrganization org = OrganizationServicesHelper.manager.getOrganization(SessionHelper.manager.getPrincipal());

@@ -1,3 +1,6 @@
+<%@page import="platform.dist.entity.DistributorUserDTO"%>
+<%@page import="platform.dist.entity.DistributorUser"%>
+<%@page import="platform.dist.service.DistributorHelper"%>
 <%@page import="platform.raonk.entity.Raonk"%>
 <%@page import="platform.util.CommonUtils"%>
 <%@page import="platform.code.entity.BaseCode"%>
@@ -50,11 +53,41 @@ DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 		<th>사용여부</th>
 		<td><%=dto.getEnable() == true ? "사용" : "사용안함"%></td>
 	</tr>
+	<tr>
+		<th>사용자</th>
+		<td>
+			<table class="create-table">
+			<tr>
+				<th>사용자 아이디(이메일)</th>
+				<th>사용자명</th>
+				<th>사용여부</th>
+			</tr>
+			<%
+			ArrayList<DistributorUser> userList = DistributorHelper.manager.getDistributorUser(dto.getOid());
+			
+			for(DistributorUser diUser : userList){
+				DistributorUserDTO udto = new DistributorUserDTO(diUser);
+			%>
+			<tr>
+				<td><%=udto.getUserId() %></td>
+				<td><%=udto.getUserName() %></td>
+				<td><%=udto.getEnableString() %></td>
+			</tr>
+			<%
+			}
+			%>
+			</table>
+		</td>
+	</tr>
+	
 </table>
 
 <table class="button-table">
 	<tr>
 		<td class="right">
+			<button type="button" id="sendBtn">전송</button>
+			<button type="button" id="sendHistoryBtn">전송이력</button>
+			<button type="button" id="closeBtn">사용여부 변경</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -102,6 +135,27 @@ DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 				self.close();
 			}, "POST");
 		})
+		
+		$("#sendBtn").click(function() {
+
+			if (!confirm("전송 하시겠습니까?")) {
+				return false;
+			}
+
+			var params = _data($("#form"));
+			var url = _url("/distributor/sendDistributor");
+			console.log(params);
+			_call(url, params, function(data) {
+				opener.load();
+				self.close();
+			}, "POST");
+		})
+		
+		$("#sendHistoryBtn").click(function() {
+
+
+		})
+		
 	})
 
 	function distributor(userId, userName, email) {

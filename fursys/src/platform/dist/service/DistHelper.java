@@ -14,9 +14,12 @@ import com.ptc.wvs.server.util.PublishUtils;
 
 import platform.dist.entity.Dist;
 import platform.dist.entity.DistColumns;
+import platform.dist.entity.DistDistributorUserLink;
 import platform.dist.entity.DistPartColumns;
 import platform.dist.entity.DistPartDistributorUserLink;
 import platform.dist.entity.DistPartLink;
+import platform.dist.entity.DistributorUser;
+import platform.dist.entity.DistributorUserColumns;
 import platform.dist.vo.DistFileVO;
 import platform.dist.vo.TransferDetailVO;
 import platform.dist.vo.TransferFileVO;
@@ -229,6 +232,16 @@ public class DistHelper {
 		while (result.hasMoreElements()) {
 			WTPart part = (WTPart) result.nextElement();
 			list.add(new DistPartColumns(part));
+		}
+		return list;
+	}
+	
+	public ArrayList<DistributorUserColumns> getDistributors(Dist dist) throws Exception {
+		ArrayList<DistributorUserColumns> list = new ArrayList<DistributorUserColumns>();
+		QueryResult result = PersistenceHelper.manager.navigate(dist, "distUser", DistDistributorUserLink.class);
+		while (result.hasMoreElements()) {
+			DistDistributorUserLink link = (DistDistributorUserLink) result.nextElement();
+			list.add(new DistributorUserColumns(link.getDistUser()));
 		}
 		return list;
 	}
@@ -525,5 +538,37 @@ public class DistHelper {
 			throw e;
 		}
 		return data;
+	}
+	
+	public ArrayList<DistPartColumns> getPartColumnLinks(Dist dist) throws Exception {
+		ArrayList<DistPartColumns> list = new ArrayList<DistPartColumns>();
+
+		QueryResult result = PersistenceHelper.manager.navigate(dist, "part", DistPartLink.class, false);
+		while (result.hasMoreElements()) {
+			DistPartLink link = (DistPartLink) result.nextElement();
+			list.add(new DistPartColumns(link));
+		}
+		return list;
+	}
+	
+	public ArrayList<DistributorUserColumns> getDistributorUserColumnLinks(Dist dist) throws Exception {
+		ArrayList<DistributorUserColumns> list = new ArrayList<DistributorUserColumns>();
+
+		QueryResult result = PersistenceHelper.manager.navigate(dist, "distUser", DistDistributorUserLink.class, false);
+		while (result.hasMoreElements()) {
+			DistDistributorUserLink link = (DistDistributorUserLink) result.nextElement();
+			list.add(new DistributorUserColumns(link.getDistUser()));
+		}
+		return list;
+	}
+	public ArrayList<DistributorUser> getDistributorUserLinks(Dist dist) throws Exception {
+		ArrayList<DistributorUser> list = new ArrayList<DistributorUser>();
+
+		QueryResult result = PersistenceHelper.manager.navigate(dist, "distUser", DistDistributorUserLink.class, false);
+		while (result.hasMoreElements()) {
+			DistDistributorUserLink link = (DistDistributorUserLink) result.nextElement();
+			list.add(link.getDistUser());
+		}
+		return list;
 	}
 }

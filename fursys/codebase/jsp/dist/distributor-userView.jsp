@@ -20,7 +20,7 @@ String distName = "";
 if ("IN".equals(distUser.getType())) {
 	distName =BaseCodeHelper.manager.getNameByCodeTypeAndCode("FACTORY_CODE", distUser.getName());
 } else {
-	distName = distUser.getName();
+	distName = distUser.getDistributor().getName();
 }
 
 

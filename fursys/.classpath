@@ -63,5 +63,6 @@
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/lib/wnc.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/srclib/tool/Annotations.jar" sourcepath="/cust_Windchill_src"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase"/>
+	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/jsch-0.1.55.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
