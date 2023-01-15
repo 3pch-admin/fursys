@@ -41,7 +41,6 @@
 							<th>배포제목</th>
 							<td>
 								<input type="text" class="AXInput w70p" name="dist_name">
-								<input type="hidden" name="material_type" value="ITEM">
 							</td>
 							<th>CAD 파일명</th>
 							<td>

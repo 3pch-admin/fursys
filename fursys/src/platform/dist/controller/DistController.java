@@ -47,15 +47,6 @@ public class DistController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/matCreate", method = RequestMethod.GET)
-	public ModelAndView matCreate() throws Exception {
-		ModelAndView model = new ModelAndView();
-//		ArrayList<Map<String, Object>> list = DistributorHelper.manager.getDistributorUser();
-//		model.addObject("list", list);
-		model.setViewName("popup:/dist/dist-matCreate");
-		return model;
-	}
-
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> list(@RequestBody Map<String, Object> params) {
@@ -71,28 +62,6 @@ public class DistController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/matList", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> matList(@RequestBody Map<String, Object> params) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			result = DistHelper.manager.list(params);
-			result.put("result", true);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("result", false);
-			result.put("msg", e.toString());
-		}
-		return result;
-	}
-	
-	@RequestMapping(value = "/matList", method = RequestMethod.GET)
-	public ModelAndView matList() throws Exception {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/jsp/dist/dist-matList.jsp");
-		return model;
-	}
-
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public Map<String, Object> create(@RequestBody Map<String, Object> params) {
@@ -109,22 +78,6 @@ public class DistController {
 		return result;
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/matCreate", method = RequestMethod.POST)
-	public Map<String, Object> matCreate(@RequestBody DistDTO params) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			Dist dist = DistHelper.service.matCreate(params);
-			result.put("result", true);
-			result.put("msg", dist.getName() + " 배포(자재)가 등록 되었습니다.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("result", false);
-			result.put("msg", e.toString());
-		}
-		return result;
-	}
-
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public ModelAndView view(@RequestParam String oid) throws Exception {
 		ModelAndView model = new ModelAndView();
@@ -165,35 +118,7 @@ public class DistController {
 
 	@ResponseBody
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public Map<String, Object> modify(@RequestBody DistDTO params) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			Dist dist = DistHelper.service.modify(params);
-			result.put("result", true);
-			result.put("msg", dist.getName() + "배포가 수정 되었습니다.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("result", false);
-			result.put("msg", e.toString());
-		}
-		return result;
-	}
-	
-	@RequestMapping(value = "/matModify", method = RequestMethod.GET)
-	public ModelAndView matModify(@RequestParam String oid) throws Exception {
-		ModelAndView model = new ModelAndView();
-		Dist dist = (Dist) CommonUtils.persistable(oid);
-		DistDTO dto = new DistDTO(dist);
-		ArrayList<Map<String, Object>> list = DistributorHelper.manager.getDistributor();
-		model.addObject("dto", dto);
-		model.addObject("list", list);
-		model.setViewName("popup:/dist/dist-matModify");
-		return model;
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/matModify", method = RequestMethod.POST)
-	public Map<String, Object> matModify(@RequestBody DistDTO params) {
+	public Map<String, Object> modify(@RequestBody Map<String,Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			Dist dist = DistHelper.service.modify(params);
@@ -238,6 +163,23 @@ public class DistController {
 		model.addObject("cat_m", cat_m);
 		model.addObject("units", units);
 		model.setViewName("popup:/dist/dist-mat-list");
+		return model;
+	}
+	
+	@RequestMapping(value = "/popup_set", method = RequestMethod.GET)
+	public ModelAndView popup_set() throws Exception {
+		ModelAndView model = new ModelAndView();
+		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND"); // 브랜드
+		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY"); // 회사
+		ArrayList<BaseCode> cat_l = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_L"); // 회사
+		ArrayList<BaseCode> cat_m = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_M"); // 회사
+		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
+		model.addObject("brand", brand);
+		model.addObject("company", company);
+		model.addObject("cat_l", cat_l);
+		model.addObject("cat_m", cat_m);
+		model.addObject("units", units);
+		model.setViewName("popup:/dist/dist-set-list");
 		return model;
 	}
 

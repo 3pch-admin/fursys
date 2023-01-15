@@ -149,14 +149,6 @@ public class DistHelper {
 				query.appendWhere(sc, new int[] { idx });
 			}
 
-			if (StringUtils.isNotNull(material_type)) {
-				if (query.getConditionCount() > 0) {
-					query.appendAnd();
-				}
-				sc = new SearchCondition(Dist.class, Dist.MATERIAL_TYPE, "=", material_type);
-				query.appendWhere(sc, new int[] { idx });
-			}
-
 //			if (query.getConditionCount() > 0) {
 //				query.appendAnd();
 //			}

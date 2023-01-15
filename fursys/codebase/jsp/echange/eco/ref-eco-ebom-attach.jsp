@@ -185,7 +185,7 @@
 	partGridID = AUIGrid.create("#part_grid_wrap", columnLayout, auiGridProps);
 	$(function() {
 		$("#selectBom").click(function() {
-			var url = "/Windchill/platform/ebomMaster/popup?box=1&callBack=part";
+			var url = "/Windchill/platform/part/popup?box=1&callBack=part";
 			_popup(url, "", "", "f");
 		})
 

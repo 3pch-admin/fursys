@@ -39,7 +39,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 			</font>
 		</th>
 		<td>
-			<input type="text" class="AXInput w60p" name="name" value="<%=dto.getName()%>">
+			<input type="text" class="AXInput w60p" name="distName" id="distName" value="<%=dto.getName()%>">
 		</td>
 		<th>
 			다운로드 기간
@@ -103,10 +103,10 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 		<td colspan="3">
 			<!-- <button type="button" id="addBtn">추가</button> -->
 			<button type="button" id="ecn_addBtn">ECN 추가</button>
-			<button type="button" id="addBtn">자재 추가</button>
-			<button type="button" id="addBtn">단품 추가</button>
+			<button type="button" id="mat_addBtn">자재 추가</button>
+			<button type="button" id="item_addBtn">단품 추가</button>
 			<button type="button" id="set_addBtn">세트 추가</button>
-			<button type="button" id="deleteBttn">삭제</button>
+			<button type="button" id="deleteBtn">삭제</button>
 			<div id="grid_wrap" style="height: 370px; padding-top: 5px;"></div>
 		</td>
 	</tr>
@@ -116,7 +116,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="saveBtn">등록</button>
+			<button type="button" id="saveBtn">저장</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -158,13 +158,14 @@ var dist_columnLayout = [ {
 	visible : false
 }, ];
 var dist_auiGridProps = {
-		rowIdField : "distributorUser_oid",
+// 		rowIdField : "distributorUser_oid",
 		headerHeight : 30,
 		rowHeight : 30,
 		fillColumnSizeMode : true,
 		// 						rowCheckToRadio : false,
 		showRowCheckColumn : true,
-		showRowNumColumn : false
+		showRowNumColumn : false,
+		softRemoveRowMode : false
 };
 
 
@@ -295,14 +296,14 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		visible : false
 	}, ];
 	var auiGridProps = {
-		rowIdField : "rowId",
+// 		rowIdField : "number",
 		headerHeight : 30,
 		rowHeight : 30,
 		showRowCheckColumn : true,
-		showRowNumColumn : true,
+		showRowNumColumn : false,
 // 		rowCheckToRadio : true,
 // 		rowNumHeaderText : "번호",
-fillColumnSizeMode : true,
+		fillColumnSizeMode : true,
 		softRemoveRowMode : false,
 		showAutoNoDataMessage : false,
 		enableCellMerge : true,
@@ -365,8 +366,16 @@ fillColumnSizeMode : true,
 			self.close();
 		})
 
-		$("#addBtn").click(function() {
+		$("#item_addBtn").click(function() {
 			var url = _url("/dist/popup?box=2");
+			_popup(url, "", "", "f");
+		})
+		$("#mat_addBtn").click(function() {
+			var url = _url("/dist/popup_mat?box=2");
+			_popup(url, "", "", "f");
+		})
+		$("#set_addBtn").click(function () {
+			var url = _url("/dist/popup_set?box=2");
 			_popup(url, "", "", "f");
 		})
 		
@@ -381,23 +390,29 @@ fillColumnSizeMode : true,
 
 		$("#dist_deleteBtn").click(function() {
 			var items = AUIGrid.getCheckedRowItems(dist_GridID);
-			if (items.length > 1) {
+			if (items.length < 1) {
 				alert("배포처를 선택하세요.");
 				return false;
 			}
-			AUIGrid.removeRowByRowId(dist_GridID, items[0].item.rowId);
-		})
-
-		$("#deleteBttn").click(function() {
-			var items = AUIGrid.getCheckedRowItems(myGridID);
-			if (items.length > 1) {
-				alert("배포도면을 선택 선택하세요.");
-				return false;
-			}
-			AUIGrid.removeRowByRowId(myGridID, items[0].item.rowId);
+			AUIGrid.removeCheckedRows(dist_GridID);
 		})
 		
+	$("#deleteBtn").click(function() {
+			var items = AUIGrid.getCheckedRowItems(myGridID);
+			if (items.length == 0) {
+				alert("삭제 할 도면을 선택하세요.");
+			}
+			AUIGrid.removeCheckedRows(myGridID);
+		})
+		
+		
 		$("#saveBtn").click(function() {
+			var addRows = AUIGrid.getAddedRowItems(myGridID);
+			var removeRows = AUIGrid.getRemovedItems(myGridID);
+			if(removeRows.length == 0 && addRows.length == 0 ){
+				return false;
+		}
+		
 			if (!confirm("수정 하시겠습니까?")) {
 				return false;
 			}
@@ -412,7 +427,10 @@ fillColumnSizeMode : true,
 			var params = _data($("#form"));
 			var url = _url("/dist/modify");
 			var partList = AUIGrid.getGridData(myGridID);
+			var distributorList = AUIGrid.getGridData(dist_GridID);
 			params.partList = partList;
+			params.distributorList = distributorList;
+			params.removeRows = removeRows;
 			console.log(params);
 			_call(url, params, function(data) {
 				opener.load();
@@ -424,13 +442,7 @@ fillColumnSizeMode : true,
 			AUIGrid.resize("#grid_wrap");
 		})
 
-		$("#deleteBtn").click(function() {
-			var items = AUIGrid.getCheckedRowItems(myGridID);
-			if (items.length == 0) {
-				alert("삭제 할 도면을 선택하세요.");
-			}
-			AUIGrid.removeCheckedRows(myGridID);
-		})
+	
 
 		_selector("duration");
 	})

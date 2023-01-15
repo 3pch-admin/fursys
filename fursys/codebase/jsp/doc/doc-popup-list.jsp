@@ -42,8 +42,8 @@ ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("compan
 				</colgroup>
 				<tr>
 					<th>문서분류</th>
-					<td colspan="3">
-						<input type="text" class="AXInput w80p" name="location" id="location" value="<%=DocumentHelper.ROOT%>" readonly="readonly">
+					<td colspan="5">
+						<input type="text" class="AXInput w50p" name="location" id="location" value="<%=DocumentHelper.ROOT%>" readonly="readonly">
 					</td>
 				</tr>
 				<tr>

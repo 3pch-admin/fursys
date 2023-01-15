@@ -27,7 +27,6 @@
 	user-select: none;
 	touch-action: none;
 	-ms-touch-action: none;
-	border-top: 2px solid #2b85c1;
 }
 
 /* 그리드 table, tr, td 기본 - 셀 기본 */
