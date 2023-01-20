@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -14,10 +13,12 @@ import javax.xml.bind.Marshaller;
 import org.apache.commons.io.FileDeleteStrategy;
 
 import platform.dist.entity.Dist;
-import platform.dist.entity.DistDTO;
 import platform.dist.entity.DistDistributorUserLink;
 import platform.dist.entity.DistPartLink;
+import platform.dist.entity.Distributor;
+import platform.dist.entity.DistributorDistributorUserLink;
 import platform.dist.entity.DistributorUser;
+import platform.dist.entity.DistributorUserColumns;
 import platform.dist.vo.TransferFileVO;
 import platform.dist.vo.TransferXMLVO;
 import platform.util.CommonUtils;
@@ -256,11 +257,16 @@ public class StandardDistService extends StandardManager implements DistService 
 
 			ContentUtils.updateSecondary(secondary, dist);
 
-			for (Map<String, String> dd : partList) {
-//				WTPart part = (WTPart) CommonUtils.persistable(dd.get(partList));
-				System.out.println("partList : " + partList);
-				DistPartLink link = (DistPartLink) CommonUtils.persistable(dd.get(partList));
-				PersistenceHelper.manager.delete(link);
+			ArrayList<DistPartLink> links = DistHelper.manager.getPartLinks(dist);
+			System.out.println("linkssssssss : " + links);
+			ArrayList<Dist> dlinks = new ArrayList<>();
+			for(DistPartLink dd : links) {
+				Dist ds = dd.getDist();
+				System.out.println("dsssss  : " + ds);
+				PersistenceHelper.manager.delete(dd);
+				if(!dlinks.contains(ds)) {
+					dlinks.add(ds);
+				}
 			}
 			
 			for (Map<String, String> partMap : partList) {
@@ -271,8 +277,17 @@ public class StandardDistService extends StandardManager implements DistService 
 //				link.setDwg(map.isDwg());
 //				link.setStep(map.isStep());
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
+				System.out.println("partList 278 link : " + link);
 			}
 
+			ArrayList<DistributorUser> dUser = DistHelper.manager.getDistributorUserLinks(dist);
+			System.out.println("dUser : " + dUser);
+			for(DistributorUser du : dUser) {
+				System.out.println("du.getDistributor : " + du.getDistributor());
+				Distributor dduLink = du.getDistributor();
+				System.out.println("getDistributor : " + dduLink);
+			}
+			
 			for (Map<String, String> userMap : userList) {
 				String uoid = (String) userMap.get("oid");
 				DistributorUser diUser = (DistributorUser) CommonUtils.persistable(uoid);

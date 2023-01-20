@@ -407,11 +407,6 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		
 		
 		$("#saveBtn").click(function() {
-			var addRows = AUIGrid.getAddedRowItems(myGridID);
-			var removeRows = AUIGrid.getRemovedItems(myGridID);
-			if(removeRows.length == 0 && addRows.length == 0 ){
-				return false;
-		}
 		
 			if (!confirm("수정 하시겠습니까?")) {
 				return false;
@@ -429,8 +424,9 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 			var partList = AUIGrid.getGridData(myGridID);
 			var distributorList = AUIGrid.getGridData(dist_GridID);
 			params.partList = partList;
+			console.log("aaaaaaaaaaaaaaaaaa");
+			console.log(partList);
 			params.distributorList = distributorList;
-			params.removeRows = removeRows;
 			console.log(params);
 			_call(url, params, function(data) {
 				opener.load();

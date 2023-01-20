@@ -281,6 +281,9 @@
 			label : "기존부품 추가",
 			callback : contextItemHandler
 		}, {
+			label : "재공 추가",
+			callback : contextItemHandler
+		}, {
 			label : "_$line"
 		}, {
 			label : "레벨 올리기 (Shift + Alt + ←)",
@@ -321,7 +324,7 @@
 		var rowIndex = event.rowIndex;
 		switch (event.contextIndex) {
 		case 0:
-			var root = AUIGrid.getItemByRowIndex(myGridID, 0);
+			var root = AUIGrid.getItemByRowIndex(rightGridID, 0);
 			var url = "/Windchill/platform/part/top?partTypeCd=" + item.partTypeCd + "&rowId=" + root._$uid + "&poid=" + root.oid + "&callBack=_top";
 			_popup(url, 1100, 380, "n");
 			break;
@@ -333,29 +336,31 @@
 			var url = "/Windchill/platform/part/exist?partTypeCd=" + item.partTypeCd + "&rowId=" + item._$uid + "&poid=" + item.oid + "&box=1&callBack=_child";
 			_popup(url, "", "", "f");
 			break;
-		case 4:
-			AUIGrid.outdentTreeDepth(myGridID);
+		case 3:
 			break;
 		case 5:
-			AUIGrid.indentTreeDepth(myGridID);
-			console.log(item);
-			var parentItem = AUIGrid.getParentItemByRowId(myGridID, item.uid);
-			console.log(parentItem);
+			AUIGrid.outdentTreeDepth(rightGridID);
 			break;
 		case 6:
-			AUIGrid.moveRowsToUp(myGridID);
+			AUIGrid.indentTreeDepth(rightGridID);
+			console.log(item);
+			var parentItem = AUIGrid.getParentItemByRowId(rightGridID, item.uid);
+			console.log(parentItem);
 			break;
 		case 7:
-			AUIGrid.moveRowsToDown(myGridID);
+			AUIGrid.moveRowsToUp(rightGridID);
 			break;
-		case 9:
-			AUIGrid.undo(myGridID);
+		case 8:
+			AUIGrid.moveRowsToDown(rightGridID);
 			break;
 		case 10:
-			AUIGrid.redo(myGridID);
+			AUIGrid.undo(rightGridID);
 			break;
 		case 11:
-			AUIGrid.removeRow(myGridID, "selectedIndex");
+			AUIGrid.redo(rightGridID);
+			break;
+		case 12:
+			AUIGrid.removeRow(rightGridID, "selectedIndex");
 			break;
 		}
 	};

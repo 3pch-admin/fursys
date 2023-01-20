@@ -843,3 +843,29 @@ textarea.none {
 .m0 {
 	margin: 0 !important;
 }
+
+
+/*lump 일괄대체*/
+table.lump-table {
+	width: 100%;
+	/* 	border-top: 2px solid #2b85c1; */
+	font-size: 12px;
+}
+
+table.lump-table th {
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+	border-right: 1px solid #c8c8c8;
+	border-bottom: 1px solid #c8c8c8;
+	height: 36px;
+	border-left: 1px solid #c8c8c8;
+}
+
+/* table.lump-table th:first-child { */
+/* 	border-left: 1px solid #c8c8c8; */
+/* } */
+
+table.lump-table td {
+/* 	border-right: 1px solid #c8c8c8; */
+	border-bottom: 1px solid #c8c8c8;
+	text-indent: 5px;
+}

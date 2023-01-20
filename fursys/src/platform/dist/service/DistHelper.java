@@ -563,4 +563,15 @@ public class DistHelper {
 		}
 		return list;
 	}
+	
+//	public ArrayList<DistDistributorUserLink> getDistDistributorUserLinks(Dist dist) throws Exception {
+//		ArrayList<DistDistributorUserLink> list = new ArrayList<DistDistributorUserLink>();
+//		
+//		QueryResult result = PersistenceHelper.manager.navigate(dist, "distUser", DistDistributorUserLink.class, false);
+//		while (result.hasMoreElements()) {
+//			DistDistributorUserLink link = (DistDistributorUserLink) result.nextElement();
+//			list.add(link.getDistUser());
+//		}
+//		return list;
+//	}
 }

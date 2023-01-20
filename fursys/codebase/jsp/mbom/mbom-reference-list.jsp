@@ -1,9 +1,20 @@
+<%@page import="platform.util.CommonUtils"%>
 <%@page import="platform.doc.service.DocumentHelper"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 String callBack = (String) request.getParameter("callBack");
+	boolean isAdmin = CommonUtils.isAdmin();
 %>
-<div class="header-title">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<%@include file="/jsp/common/iframe.jsp"%>
+<%@include file="/jsp/common/script.jsp"%>
+</head>
+<!-- <body> -->
+		<div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
 	<span>HOME</span>
 	>
@@ -66,15 +77,15 @@ String callBack = (String) request.getParameter("callBack");
 			<table class="button-table">
 				<tr>
 					<td class="right">
-<!-- 						<button type="button" id="addBtn">추가</button> -->
-						<button type="button" id="derivedBtn">파생</button>
+						<button type="button" id="addBtn">추가</button>
+<!-- 						<button type="button" id="derivedBtn">파생</button> -->
 						<button type="button" id="searchBtn">조회</button>
 						<button type="button" id="closeBtn">닫기</button>
 					</td>
 				</tr>
 			</table>
 
-			<div id="grid_wrap" style="height: 740px;"></div>
+				<div id="grid_wrap" style="height: 560px;"></div>
 			<div id="grid_paging" class="aui-grid-paging-panel my-grid-paging-panel"></div>
 			<script type="text/javascript">
 				var myGridID;
@@ -300,7 +311,7 @@ String callBack = (String) request.getParameter("callBack");
 							alert("추가 할 단품을 선택하세요.");
 							return false;
 						}
-						var url = "/Windchill/platform/mbom/derived";
+						var url = "Windchill/platform/mbom/derived";
 						_popup(url, "", "", "f");
 					})
 
@@ -315,14 +326,17 @@ String callBack = (String) request.getParameter("callBack");
 						// 							alert("MBOM 작성중인 MBOM만 추가 할 수 있습니다.");
 						// 							return false;
 						// 						}
-						var params = new Object();
-						params.poid = items[0].item.poid;
-						params.oid = items[0].item.oid;
-						var url = _url("/mbom/info");
-						_call(url, params, function(data) {
-							opener.	<%=callBack%>(data.list);
-							self.close();
-						}, "POST");
+// 						var params = new Object();
+// 						params.poid = items[0].item.poid;
+// 						params.oid = items[0].item.oid;
+// 						var url = _url("/mbom/info");
+// 						_call(url, params, function(data) {
+<%-- 							opener.	<%=callBack%>(data.list); --%>
+// 							self.close();
+// 						}, "POST");
+// 					})
+					var url = "/Windchill/platform/mbom/reference";
+					_popup(url, "", "", "f");
 					})
 
 					$("#closeBtn").click(function() {

@@ -447,6 +447,9 @@ WTPart part = (WTPart) request.getAttribute("part");
 			label : "기존부품 추가",
 			callback : contextItemHandler
 		}, {
+			label : "재공 추가",
+			callback : contextItemHandler
+		}, {
 			label : "_$line"
 		}, {
 			label : "레벨 올리기 (Shift + Alt + ←)",
@@ -499,28 +502,30 @@ WTPart part = (WTPart) request.getAttribute("part");
 			var url = "/Windchill/platform/part/exist?partTypeCd=" + item.partTypeCd + "&rowId=" + item._$uid + "&poid=" + item.oid + "&box=1&callBack=_child";
 			_popup(url, "", "", "f");
 			break;
-		case 4:
-			AUIGrid.outdentTreeDepth(rightGridID);
+		case 3:
 			break;
 		case 5:
+			AUIGrid.outdentTreeDepth(rightGridID);
+			break;
+		case 6:
 			AUIGrid.indentTreeDepth(rightGridID);
 			console.log(item);
 			var parentItem = AUIGrid.getParentItemByRowId(rightGridID, item.uid);
 			console.log(parentItem);
 			break;
-		case 6:
+		case 7:
 			AUIGrid.moveRowsToUp(rightGridID);
 			break;
-		case 7:
+		case 8:
 			AUIGrid.moveRowsToDown(rightGridID);
 			break;
-		case 9:
+		case 10:
 			AUIGrid.undo(rightGridID);
 			break;
-		case 10:
+		case 11:
 			AUIGrid.redo(rightGridID);
 			break;
-		case 11:
+		case 12:
 			AUIGrid.removeRow(rightGridID, "selectedIndex");
 			break;
 		}

@@ -89,7 +89,7 @@
 								%>
 							</td> --%>
 							<td class="right">
-								<button type="button" id="">일괄 대체(관리자모드)</button>
+								<button type="button" id="lumpBtn">일괄 대체(관리자모드)</button>
 								<button type="button" id="derivedBtn">파생</button>
 								<button type="button" id="modifyBtn">수정</button>
 								<button type="button" id="searchBtn">조회</button>
@@ -322,6 +322,11 @@
 
 						});
 						$(function() {
+							$("#lumpBtn").click(function() {
+								var url = "/Windchill/jsp/mbom/mbom-lump.jsp";
+								_popup(url, "1220", "220", "n");
+							})
+							
 							$("#modifyBtn").click(function() {
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if(items.length == 0 ){

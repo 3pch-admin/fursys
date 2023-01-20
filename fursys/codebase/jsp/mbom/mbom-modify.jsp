@@ -6,7 +6,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 %>
-
 <style type="text/css">
 .library {
 	background-color: #fefbc0;
@@ -119,6 +118,7 @@
 				<option value="7">전체확장</option>
 		</select></td>
 		<td class="right">
+			<button type="button" id="referenceBtn">참조mBOM</button>
 			<button type="button" id="standardCostBtn">표준원가 조회</button>
 			<button type="button" id="matBatchBtn">자재 일괄 등록</button>
 			<button type="button" id="modifyBtn">수정</button>
@@ -480,6 +480,11 @@ $(function() {
 	$("#matBatchBtn").click(function() {
 		var url = _url("/mbom/matBatch");
 		_popup(url, 1300, 500, "n");
+	})
+	
+	$("#referenceBtn").click(function() {
+		var url= "/Windchill/jsp/mbom/mbom-reference-list.jsp";
+		_popup(url, "", "", "f");
 	})
 })
 </script>

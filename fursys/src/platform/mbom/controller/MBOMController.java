@@ -25,6 +25,12 @@ import wt.part.QuantityUnit;
 @RequestMapping(value = "/mbom/**")
 public class MBOMController {
 	
+	@RequestMapping(value = "/reference", method = RequestMethod.GET)
+	public ModelAndView reference() throws Exception{
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/mbom/mbom-reference");
+		return model;
+	}
 	@RequestMapping(value = "/derived", method = RequestMethod.GET)
 	public ModelAndView derived() throws Exception{
 		ModelAndView model = new ModelAndView();
