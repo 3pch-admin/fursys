@@ -26,6 +26,8 @@ import wt.util.WTException;
 				@GeneratedProperty(name = "email", type = String.class, javaDoc = "이메일"),
 				
 				@GeneratedProperty(name = "name", type = String.class, javaDoc = "업체명"),
+				
+				@GeneratedProperty(name = "obj_id", type = String.class, javaDoc = "cpc_id"),
 
 				@GeneratedProperty(name = "description", type = String.class, javaDoc = "설명", constraints = @PropertyConstraints(upperLimit = 4000)),
 

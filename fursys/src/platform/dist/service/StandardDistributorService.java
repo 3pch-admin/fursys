@@ -3,6 +3,7 @@ package platform.dist.service;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ import wt.session.SessionHelper;
 import wt.util.WTException;
 
 public class StandardDistributorService extends StandardManager implements DistributorService {
-
+	
 	private String cpcHost = "distlocal";
 	
 	public static StandardDistributorService newStandardDistributorService() throws WTException {
@@ -62,8 +63,8 @@ public class StandardDistributorService extends StandardManager implements Distr
 			distributor.setOwnership(Ownership.newOwnership(prin));
 
 			distributor = (Distributor) PersistenceHelper.manager.save(distributor);
-
-//			send(distributor); // 배포처
+			
+			sendDistributor(distributor); // 배포처
 //			_send(distributor); // 로그인 유저
 //			__send(distributor); // 배포사용자
 
@@ -156,8 +157,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 
 	@Override
 	public DistributorUser userCreate(Map<String, Object> params) throws Exception {
-		DistributorUser distributor = null;
-
+		DistributorUser diUser = null;
 		String name = (String) params.get("distributor"); // 업체명
 		String plant = (String) params.get("factory");
 		String description = (String) params.get("description");
@@ -179,41 +179,41 @@ public class StandardDistributorService extends StandardManager implements Distr
 		Transaction trs = new Transaction();
 		try {
 			trs.start();
-
-			distributor = DistributorUser.newDistributorUser();
+			Distributor distributorObj = null;
+			diUser = DistributorUser.newDistributorUser();
 
 			if ("IN".equals(type)) {
-				distributor.setName(plant);
-				distributor.setEmail(umail);
-				distributor.setUserId(userId);
-				distributor.setUserName(username);
+				diUser.setName(plant);
+				diUser.setEmail(umail);
+				diUser.setUserId(userId);
+				diUser.setUserName(username);
 			} else if ("OUT".equals(type)) {
-				distributor.setName(name);
-				distributor.setUserId(email);
-				distributor.setEmail(email);
-				distributor.setUserName(userName);
+				diUser.setName(name);
+				diUser.setUserId(email);
+				diUser.setEmail(email);
+				diUser.setUserName(userName);
 			}
 			
 			if( distributorOid != null && distributorOid.length() > 0 ) {
-				Distributor distributorObj = (Distributor)CommonUtils.persistable(distributorOid);
-				distributor.setDistributor(distributorObj);
+				distributorObj = (Distributor)CommonUtils.persistable(distributorOid);
+				diUser.setDistributor(distributorObj);
 				
-				distributor.setType(distributorObj.getType());
-				distributor.setNumber(distributorObj.getNumber());
-				distributor.setName(distributorObj.getName());
+				diUser.setType(distributorObj.getType());
+				diUser.setNumber(distributorObj.getNumber());
+				diUser.setName(distributorObj.getName());
 			}
 			
 
 			
-			distributor.setDescription(description);
-			distributor.setEnable(Boolean.parseBoolean(enable));
+			diUser.setDescription(description);
+			diUser.setEnable(Boolean.parseBoolean(enable));
 			WTPrincipal prin = SessionHelper.manager.getPrincipal();
-			distributor.setOwnership(Ownership.newOwnership(prin));
+			diUser.setOwnership(Ownership.newOwnership(prin));
 
-			PersistenceHelper.manager.save(distributor);
+			PersistenceHelper.manager.save(diUser);
 
-//			send(distributor); // 배포처
-//			_send(distributor); // 로그인 유저
+			sendDistributor(distributorObj);	//배포처
+			sendDistributorUser(diUser); // 로그인 유저
 //			__send(distributor); // 배포사용자
 
 			trs.commit();
@@ -226,7 +226,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 			if (trs != null)
 				trs.rollback();
 		}
-		return distributor;
+		return diUser;
 	}
 
 	@Override
@@ -311,9 +311,19 @@ public class StandardDistributorService extends StandardManager implements Distr
 		}
 		return distributor;
 	}
-
+	
 	@Override
 	public int sendDistributor(Map<String, Object> params) throws Exception {
+		String oid = (String)params.get("oid");
+		
+		Distributor di = (Distributor)CommonUtils.persistable(oid);
+		
+		return sendDistributor(di);
+	}
+	
+	
+	@Override
+	public int sendDistributor(Distributor di) throws Exception {
 		int reValue = 0;
 		Statement st = null;
 		Connection con = null;
@@ -321,19 +331,15 @@ public class StandardDistributorService extends StandardManager implements Distr
 		Transaction trs = new Transaction();
 		try {
 			trs.start();
-			
-			String oid = (String)params.get("oid");
-			
-			Distributor di = (Distributor)CommonUtils.persistable(oid);
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
-
 			
 			boolean duChk = DistributorHelper.service.duplicateDistributor(di);
+			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
+			st = con.createStatement();
 			
-			if( duChk) {
-				con = DBCPManager.getConnection(cpcHost); // 운영 dist..
-				st = con.createStatement();
+			if( !duChk) {
+				
 				/// 배포처
 				StringBuffer sql = new StringBuffer();
 				sql.append("INSERT INTO SITE_INFO (");
@@ -393,6 +399,27 @@ public class StandardDistributorService extends StandardManager implements Distr
 	
 				CPCHistoryHelper.createCPCHistory(CommonUtils.oid(di), CPCHistoryHelper.company, sql.toString());
 			}else {
+				//중복임..update
+				
+				String isEnable = "N";
+				
+				if( di.getEnable()) {
+					isEnable = "Y";
+				}
+				
+				/// 배포처
+				StringBuffer sql = new StringBuffer();
+				sql.append(" UPDATE SITE_INFO ");
+				sql.append(" SET " );
+				sql.append(" USER_YN='" + isEnable + "', ");
+				sql.append(" UPDATE_DAT=SYSDATE , ");
+				sql.append(" UPDATE_USER_ID='" + user.getName() + "', ");
+				sql.append(" UPDATE_USER_NM='" + user.getFullName() + "' ");
+				sql.append(" WHERE SITE_CD = '" + di.getNumber() + "' ");
+	
+				st.execute(sql.toString());
+	
+				CPCHistoryHelper.createCPCHistory(CommonUtils.oid(di), CPCHistoryHelper.company, sql.toString());
 				
 			}
 			trs.commit();
@@ -523,9 +550,20 @@ public class StandardDistributorService extends StandardManager implements Distr
 		}
 	}
 	
+	@Override
+	public int sendDistributorUser(Map<String, Object> params) throws Exception {
+		String oid = (String)params.get("oid");
+		
+		DistributorUser di = (DistributorUser)CommonUtils.persistable(oid);
+		
+		return sendDistributorUser(di);
+	}
 	
 	@Override
-	public void sendDistributorUser(DistributorUser distUser) throws Exception {
+	public int sendDistributorUser(DistributorUser distUser) throws Exception {
+		
+		int reValue = 0;
+		
 		Statement st = null;
 		Connection con = null;
 		ResultSet rs = null;
@@ -538,30 +576,59 @@ public class StandardDistributorService extends StandardManager implements Distr
 
 			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
 
-			/// 배포처
-			StringBuffer sql = new StringBuffer();
-			sql.append("INSERT INTO SITE_USER_INFO (");
-			sql.append("OBJ_ID, SITE_CD, USER_INFO_ID, USE_YN, ");
-			sql.append("CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
-			sql.append(") VALUES(");
-
-			sql.append("'" + UUID.randomUUID().toString().replace("-", "") + "', ");
-			if (distUser.getType().equals("IN")) {
-				sql.append("'" + distUser.getName() + "', ");
-			} else {
-				sql.append("'" + distUser.getNumber() + "', ");
+			boolean duChk = DistributorHelper.service.duplicateDistributorUser(distUser);
+			
+			if( !duChk) {
+			
+				String obj_id = UUID.randomUUID().toString().replace("-", "");
+				
+				/// 배포처
+				StringBuffer sql = new StringBuffer();
+				sql.append("INSERT INTO SITE_USER_INFO (");
+				sql.append("OBJ_ID, SITE_CD, USER_INFO_ID, USE_YN, ");
+				sql.append("CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
+				sql.append(") VALUES(");
+	
+				sql.append("'" + obj_id + "', ");
+				if (distUser.getType().equals("IN")) {
+					sql.append("'" + distUser.getName() + "', ");
+				} else {
+					sql.append("'" + distUser.getNumber() + "', ");
+				}
+				sql.append("'" + distUser.getUserId() + "', ");
+				sql.append("'Y', ");
+				sql.append("SYSDATE, ");
+				sql.append("SYSDATE, ");
+				sql.append("'" + user.getName() + "', ");
+				sql.append("'" + user.getFullName() + "', ");
+				sql.append("'" + user.getName() + "', ");
+				sql.append("'" + user.getFullName() + "')");
+	
+				st.execute(sql.toString());
+				
+				distUser.setObj_id(obj_id);
+				PersistenceHelper.manager.modify(distUser);
+				
+			}else {
+				//중복
+				
+				String isEnable = "N";
+				
+				if( distUser.getEnable()) {
+					isEnable = "Y";
+				}
+				
+				/// 배포처
+				StringBuffer sql = new StringBuffer();
+				sql.append(" UPDATE SITE_INFO ");
+				sql.append(" SET " );
+				sql.append(" USER_YN='" + isEnable + "', ");
+				sql.append(" UPDATE_DAT=SYSDATE , ");
+				sql.append(" UPDATE_USER_ID='" + user.getName() + "', ");
+				sql.append(" UPDATE_USER_NM='" + user.getFullName() + "' ");
+				sql.append(" WHERE SITE_CD = '" + distUser.getObj_id() + "' ");
 			}
-			sql.append("'" + distUser.getUserId() + "', ");
-			sql.append("'Y', ");
-			sql.append("SYSDATE, ");
-			sql.append("SYSDATE, ");
-			sql.append("'" + user.getName() + "', ");
-			sql.append("'" + user.getFullName() + "', ");
-			sql.append("'" + user.getName() + "', ");
-			sql.append("'" + user.getFullName() + "')");
-
-			st.execute(sql.toString());
-
+			
 			trs.commit();
 			trs = null;
 		} catch (Exception e) {
@@ -573,6 +640,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 			if (trs != null)
 				trs.rollback();
 		}
+		return reValue;
 	}
 	
 	@Override
@@ -586,36 +654,30 @@ public class StandardDistributorService extends StandardManager implements Distr
 		Transaction trs = new Transaction();
 		try {
 			trs.start();
-
-			
-			String diName = di.getName();
-			String diNumber = di.getNumber();
-			
-			
 			
 			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 			st = con.createStatement();
 
-			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
-
 			/// 배포처
 			StringBuffer sql = new StringBuffer();
-			sql.append("INSERT INTO SITE_USER_INFO (");
-			sql.append("OBJ_ID, SITE_CD, USER_INFO_ID, USE_YN, ");
-			sql.append("CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
-			sql.append(") VALUES(");
-
 			
-			sql.append("'Y', ");
-			sql.append("SYSDATE, ");
-			sql.append("SYSDATE, ");
-			sql.append("'" + user.getName() + "', ");
-			sql.append("'" + user.getFullName() + "', ");
-			sql.append("'" + user.getName() + "', ");
-			sql.append("'" + user.getFullName() + "')");
+			sql.append(" SELECT * FROM SITE_INFO ");
+			sql.append(" WHERE SITE_TYPE_CD = '" + di.getType() + "' ");			//I: 사내, O: 사외
+			sql.append(" AND SITE_CD = '" + di.getNumber() + "' ");					//사외 : 배포처(업체) 코드자동생성 (SU-YYYY-MM-XXXXX), 사내 : 사업장코드
+			//sql.append(" AND USE_YN=''; ");						
+			
+			System.out.println("#### sql.toString()=="+sql.toString());
 
 			st.execute(sql.toString());
+			
+			rs = st.getResultSet();
+			
+			System.out.println("####rs.getRow()=="+rs.getRow());
 
+			if( rs.getRow()> 0 ) {
+				reValue = true;
+			}
+			
 			trs.commit();
 			trs = null;
 		} catch (Exception e) {
@@ -645,31 +707,23 @@ public class StandardDistributorService extends StandardManager implements Distr
 			con = DBCPManager.getConnection(cpcHost); // 운영 dist..
 			st = con.createStatement();
 
-			WTUser user = (WTUser) SessionHelper.manager.getPrincipal();
-
-			/// 배포처
 			StringBuffer sql = new StringBuffer();
-			sql.append("INSERT INTO SITE_USER_INFO (");
-			sql.append("OBJ_ID, SITE_CD, USER_INFO_ID, USE_YN, ");
-			sql.append("CREATE_DATE, UPDATE_DATE, CREATE_USER_ID, CREATE_USER_NM, UPDATE_USER_ID, UPDATE_USER_NM");
-			sql.append(") VALUES(");
-
-			sql.append("'" + UUID.randomUUID().toString().replace("-", "") + "', ");
-			if (distUser.getType().equals("IN")) {
-				sql.append("'" + distUser.getName() + "', ");
-			} else {
-				sql.append("'" + distUser.getNumber() + "', ");
-			}
-			sql.append("'" + distUser.getUserId() + "', ");
-			sql.append("'Y', ");
-			sql.append("SYSDATE, ");
-			sql.append("SYSDATE, ");
-			sql.append("'" + user.getName() + "', ");
-			sql.append("'" + user.getFullName() + "', ");
-			sql.append("'" + user.getName() + "', ");
-			sql.append("'" + user.getFullName() + "')");
+			
+			sql.append(" SELECT * FROM SITE_USER_INFO ");
+			sql.append(" WHERE OBJ_ID = '" + distUser.getObj_id() + "' ");			
+			//sql.append(" AND USE_YN=''; ");						
+			
+			System.out.println("####DistributorUser sql.toString()=="+sql.toString());
 
 			st.execute(sql.toString());
+			
+			rs = st.getResultSet();
+			
+			System.out.println("####DistributorUser rs.getRow()=="+rs.getRow());
+
+			if( rs.getRow()> 0 ) {
+				reValue = true;
+			}
 
 			trs.commit();
 			trs = null;
@@ -685,7 +739,6 @@ public class StandardDistributorService extends StandardManager implements Distr
 		
 		return reValue;
 	}
-	
 	
 	
 }

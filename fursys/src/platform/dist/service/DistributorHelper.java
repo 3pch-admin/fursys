@@ -289,17 +289,19 @@ public class DistributorHelper {
 	public String getNextNumber() throws Exception {
 
 		Calendar ca = Calendar.getInstance();
-		int day = ca.get(Calendar.DATE);
 		int month = ca.get(Calendar.MONTH) + 1;
 		int year = ca.get(Calendar.YEAR);
-		DecimalFormat df = new DecimalFormat("00");
-		String number = df.format(year) + df.format(month) + df.format(day);
+		DecimalFormat df4 = new DecimalFormat("0000");
+		DecimalFormat df2 = new DecimalFormat("00");
+		String number = df4.format(year) + "-" + df2.format(month) + "-";
 
+		System.out.println("### getNextNumber=="+number);
+		
 		QuerySpec query = new QuerySpec();
 		int idx = query.appendClassList(Distributor.class, true);
 
 		SearchCondition sc = new SearchCondition(Distributor.class, Distributor.NUMBER, SearchCondition.LIKE, 
-				"COMPANY-" + number.toUpperCase() + "%");
+				"SU-" + number.toUpperCase() + "%");
 		query.appendWhere(sc, new int[] { idx });
 
 		ClassAttribute attr = new ClassAttribute(Distributor.class, Distributor.NUMBER);
@@ -308,20 +310,24 @@ public class DistributorHelper {
 
 		QueryResult result = PersistenceHelper.manager.find(query);
 
+		//SU-2023-01-00001
+		
+		
 		if (result.hasMoreElements()) {
 			Object[] obj = (Object[]) result.nextElement();
 			Distributor distributor = (Distributor) obj[0];
 
-			String s = distributor.getNumber().substring(20);
-
+			String s = distributor.getNumber().split("-")[3];
+			System.out.println("### s=="+s);
 			int ss = Integer.parseInt(s) + 1;
-			DecimalFormat d = new DecimalFormat("00");
-			number += d.format(ss);
+			DecimalFormat df5 = new DecimalFormat("00000");
+			number += df5.format(ss);
+			System.out.println("### ss=="+ss);
 		} else {
-			number += "01";
+			number += "00001";
 		}
 
-		return "COMPANY-" + number;
+		return "SU-" + number;
 	}
 
 	public ArrayList<Map<String, Object>> getDistributor() throws Exception {

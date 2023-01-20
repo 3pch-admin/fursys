@@ -338,7 +338,8 @@ public class DistributorController {
 	public Map<String, Object> sendDistributor(@RequestBody Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int sendResult = DistributorHelper.service.sendDistributor(params);
+			
+			int sendResult = DistributorHelper.service.sendDistributor(params);	
 			result.put("result", true);
 			result.put("msg", " 전송 등록 되었습니다.");
 		} catch (Exception e) {

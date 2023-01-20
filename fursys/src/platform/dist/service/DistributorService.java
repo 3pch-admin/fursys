@@ -21,7 +21,11 @@ public interface DistributorService {
 
 	public int sendDistributor(Map<String, Object> params) throws Exception;
 	
-	public void sendDistributorUser(DistributorUser distUser) throws Exception;
+	public int sendDistributor(Distributor di) throws Exception;
+	
+	public int sendDistributorUser(Map<String, Object> params) throws Exception;
+	
+	public int sendDistributorUser(DistributorUser distUser) throws Exception;
 	
 	public boolean duplicateDistributor(Distributor distributor) throws Exception;
 	
@@ -30,4 +34,5 @@ public interface DistributorService {
 	public void _send(Distributor distributor) throws Exception;
 
 	public void __send(Distributor distributor) throws Exception;
+	
 }
