@@ -29,11 +29,7 @@ public class DistributorUserDTO {
 		setUserId(distUser.getUserId());
 		setUserName(distUser.getUserName());
 		setEmail(StringUtils.convertToStr(distUser.getEmail(), ""));
-		if ("IN".equals(distUser.getType())) {
-			setName(BaseCodeHelper.manager.getNameByCodeTypeAndCode("FACTORY_CODE", distUser.getName()));
-		} else {
-			setName(distUser.getDistributor().getName());
-		}
+		setName(distUser.getDistributor().getName());
 
 		setDescription(distUser.getDescription());
 		setNumber(distUser.getNumber());
