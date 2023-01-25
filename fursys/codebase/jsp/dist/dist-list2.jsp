@@ -39,7 +39,7 @@ qweqweqwrqwqr	wqwrqw 123123
 							<col width="*">
 						</colgroup>
 						<tr>
-							<th>배포제목</th>
+							<th>배포제목ㅂㅈㄷㅂㅈㄷㅂㅈㄷ</th>
 							<td>
 								<input type="text" class="AXInput w70p" name="dist_name">
 								<input type="hidden" name="material_type" value="ITEM">
