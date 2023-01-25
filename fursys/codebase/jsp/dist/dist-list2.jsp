@@ -72,7 +72,7 @@ qweqweqwrqwqr	wqwrqw 123123
 								<input type="text" class="AXInput w200px" name="creator" id="creator" readonly="readonly">
 								<i class="axi axi-close2 axicon clearUser" data-target="creator"></i>
 							</td>
-							<th>배포처구분</th>
+							<th>배포처구분MergeTest</th>
 							<td>
 								<select name="type" id="type" class="AXSelect w100px">
 									<option value="">선택</option>
