@@ -24,7 +24,7 @@ import wt.util.WTException;
 
 public class StandardDistributorService extends StandardManager implements DistributorService {
 	
-	private String cpcHost = "dist";
+	private String cpcHost = "distlocal";
 	
 	public static StandardDistributorService newStandardDistributorService() throws WTException {
 		StandardDistributorService instance = new StandardDistributorService();
@@ -174,7 +174,7 @@ public class StandardDistributorService extends StandardManager implements Distr
 		String userId = (String) params.get("userId");
 		String username = (String) params.get("username");
 
-		
+		System.out.println();
 		
 		Transaction trs = new Transaction();
 		try {
@@ -196,14 +196,13 @@ public class StandardDistributorService extends StandardManager implements Distr
 			
 			if( distributorOid != null && distributorOid.length() > 0 ) {
 				distributorObj = (Distributor)CommonUtils.persistable(distributorOid);
-				diUser.setDistributor(distributorObj);
-				
-				diUser.setType(distributorObj.getType());
-				diUser.setNumber(distributorObj.getNumber());
-				diUser.setName(distributorObj.getName());
+			}else {
+				distributorObj = DistributorHelper.manager.getDistributor(plant) ;
 			}
-			
-
+			diUser.setDistributor(distributorObj);
+			diUser.setType(distributorObj.getType());
+			diUser.setNumber(distributorObj.getNumber());
+			diUser.setName(distributorObj.getName());
 			
 			diUser.setDescription(description);
 			diUser.setEnable(Boolean.parseBoolean(enable));

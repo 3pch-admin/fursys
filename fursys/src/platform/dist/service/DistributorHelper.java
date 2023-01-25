@@ -17,6 +17,7 @@ import platform.util.CommonUtils;
 import platform.util.DateUtils;
 import platform.util.PageUtils;
 import platform.util.StringUtils;
+import platform.util.entity.CPCHistory;
 import wt.fc.PersistenceHelper;
 import wt.fc.QueryResult;
 import wt.fc.ReferenceFactory;
@@ -362,6 +363,29 @@ public class DistributorHelper {
 
 		return list;
 	}
+	
+	public Distributor getDistributor(String plantCode) throws Exception {
+		Distributor reValue = null;
+		
+		if( plantCode != null && plantCode.length() > 0 ) {
+		
+			QuerySpec query = new QuerySpec();
+			int idx = query.appendClassList(Distributor.class, true);
+	
+			SearchCondition sc = new SearchCondition(Distributor.class, Distributor.NUMBER, "=", plantCode);
+			query.appendWhere(sc, new int[] { idx });
+	
+			QueryResult result = PersistenceHelper.manager.find(query);
+	
+			while (result.hasMoreElements()) {
+				Object[] obj = (Object[]) result.nextElement();
+				Distributor distributor = (Distributor) obj[0];
+				return distributor;
+			}
+		}
+
+		return reValue;
+	}
 
 	public ArrayList<Map<String, Object>> getDistributorUser() throws Exception {
 		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -595,7 +619,31 @@ public class DistributorHelper {
 		return getDistributorUser(di);
 	}
 	
-	
-	
+	public ArrayList<CPCHistory> getCPCHistory(String oid) throws Exception {
+		ArrayList<CPCHistory> list = new ArrayList<CPCHistory>();
+
+		//select * from cpchis where targetoid='oid';
+		
+		
+		QuerySpec qs = new QuerySpec();
+		int idx = qs.appendClassList(CPCHistory.class, true);
+		
+		qs.appendWhere(new SearchCondition(CPCHistory.class, CPCHistory.TARGET_OID, "=", oid ), new int[] { idx });
+
+		ClassAttribute ca = new ClassAttribute(CPCHistory.class, Distributor.CREATE_TIMESTAMP);
+		OrderBy by = new OrderBy(ca, true);
+		qs.appendOrderBy(by, new int[] { idx });
+
+		QueryResult result = PersistenceHelper.manager.find(qs);
+
+		while (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			CPCHistory cpcHistory = (CPCHistory) obj[0];
+
+			list.add(cpcHistory);
+		}
+
+		return list;
+	}
 	
 }

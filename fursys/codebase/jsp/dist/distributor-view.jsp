@@ -1,3 +1,4 @@
+<%@page import="platform.util.entity.CPCHistory"%>
 <%@page import="platform.dist.entity.DistributorUserDTO"%>
 <%@page import="platform.dist.entity.DistributorUser"%>
 <%@page import="platform.dist.service.DistributorHelper"%>
@@ -79,7 +80,32 @@ DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 			</table>
 		</td>
 	</tr>
-	
+	<tr>
+		<th>전송이력</th>
+		<td>
+			<table class="create-table">
+				<tr>
+					<th>send Query</th>
+					<th>send Date</th>
+					<th>send User</th>
+				</tr>
+				<%
+				ArrayList<CPCHistory> historys = DistributorHelper.manager.getCPCHistory(dto.getOid());
+				
+				for( CPCHistory history : historys ){
+				%>
+				<tr>
+					<td><%=history.getSendQuery() %></td>
+					<td><%=history.getCreateTimestamp() %></td>
+					<td><%=history.getOwnership().getOwner().getFullName() %></td>
+				</tr>
+				<%
+				}
+				%>
+			</table>
+		</td>
+	</tr>
+
 </table>
 
 <table class="button-table">
