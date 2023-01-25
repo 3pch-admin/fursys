@@ -1,6 +1,6 @@
-<%@page import="platform.code.service.BaseCodeHelper"%>
-<%@page import="platform.dist.entity.DistributorUser"%>
 <%@page import="platform.dist.entity.DistributorUserDTO"%>
+<%@page import="platform.dist.entity.DistributorUser"%>
+<%@page import="platform.dist.service.DistributorHelper"%>
 <%@page import="platform.raonk.entity.Raonk"%>
 <%@page import="platform.util.CommonUtils"%>
 <%@page import="platform.code.entity.BaseCode"%>
@@ -10,31 +10,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 // ArrayList<BaseCode> plant = (ArrayList<BaseCode>) request.getAttribute("plant");
-DistributorUserDTO dto = (DistributorUserDTO) request.getAttribute("dto");
+DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 // String oid = (String) request.getAttribute("oid");
 // DistributorDTO dto = (DistributorDTO) CommonUtils.persistable(oid);
-
-DistributorUser distUser = (DistributorUser)CommonUtils.persistable(dto.getOid());
-
-String distName = "";
-if ("IN".equals(distUser.getType())) {
-	distName =BaseCodeHelper.manager.getNameByCodeTypeAndCode("FACTORY_CODE", distUser.getName());
-} else {
-	distName = distUser.getDistributor().getName();
-}
-
-
 %>
 <!-- hidden value -->
 <input type="hidden" name="content" id="content">
-<input type="hidden" name="oid"  value="<%=dto.getOid()%>">
+<input type="hidden" name="oid" value="<%=dto.getOid()%>">
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
 	<span>HOME</span>
 	>
 	<span>배포 관리</span>
 	>
-	<span>배포처 사용자 정보</span>
+	<span>배포처 정보</span>
 </div>
 
 <table class="create-table">
@@ -45,41 +34,52 @@ if ("IN".equals(distUser.getType())) {
 	<tr>
 		<th>배포처 구분</th>
 		<td>
-			<%=dto.getType()%>
+			<%=dto.getType().equals("OUT") ? "사외" : "사내"%>
+		</td>
+	</tr>
+	<tr>
+		<th>업체 코드</th>
+		<td>
+			<%=dto.getNumber()%>
 		</td>
 	</tr>
 	<tr>
 		<th>사업장/업체</th>
 		<td>
-			<%=dto.getName()%> / <%=distName %>
-		</td>
-	</tr>
-	<tr>
-		<th>사용자 아이디</th>
-		<td><%=dto.getUserId()%></td>
-	</tr>
-	<tr>
-		<th>사용자 이메일</th>
-		<td>
-			<%=dto.getEmail() %>
-		</td>
-	</tr>
-	<tr>
-		<th>사용자명</th>
-		<td>
-			<%=dto.getUserName()%>
-		</td>
-	</tr>
-	<tr>
-		<th>설명</th>
-		<td>
-			<%=dto.getDescription()%>
+			<%=dto.getName()%>
 		</td>
 	</tr>
 	<tr>
 		<th>사용여부</th>
-		<td><%=dto.getEnable() == true ? "사용" : "사용안함" %></td>
+		<td><%=dto.getEnable() == true ? "사용" : "사용안함"%></td>
 	</tr>
+	<tr>
+		<th>사용자</th>
+		<td>
+			<table class="create-table">
+			<tr>
+				<th>사용자 아이디(이메일)</th>
+				<th>사용자명</th>
+				<th>사용여부</th>
+			</tr>
+			<%
+			ArrayList<DistributorUser> userList = DistributorHelper.manager.getDistributorUser(dto.getOid());
+			
+			for(DistributorUser diUser : userList){
+				DistributorUserDTO udto = new DistributorUserDTO(diUser);
+			%>
+			<tr>
+				<td><%=udto.getUserId() %></td>
+				<td><%=udto.getUserName() %></td>
+				<td><%=udto.getEnableString() %></td>
+			</tr>
+			<%
+			}
+			%>
+			</table>
+		</td>
+	</tr>
+	
 </table>
 
 <table class="button-table">
@@ -87,6 +87,7 @@ if ("IN".equals(distUser.getType())) {
 		<td class="right">
 			<button type="button" id="sendBtn">전송</button>
 			<button type="button" id="sendHistoryBtn">전송이력</button>
+			<button type="button" id="closeBtn">사용여부 변경</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -154,6 +155,7 @@ if ("IN".equals(distUser.getType())) {
 
 
 		})
+		
 	})
 
 	function distributor(userId, userName, email) {

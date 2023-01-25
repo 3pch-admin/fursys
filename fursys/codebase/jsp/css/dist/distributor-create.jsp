@@ -53,13 +53,13 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 		</td>
 	</tr>
 	<!-- 사외 -->
-		<tr class="factory">
+		<tr class="close factory">
 			<th>업체코드</th>
 			<td>
 				<input type="text" readonly="readonly" class="AXInput w40p" placeholder="자동생성">
 			</td>
 		</tr>
-	<tr class="factory">
+	<tr class="close factory">
 <!-- <tr> -->
 		<th>업체명</th>
 		<td>

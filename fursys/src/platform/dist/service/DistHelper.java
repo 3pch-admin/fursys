@@ -18,11 +18,15 @@ import platform.dist.entity.DistDistributorUserLink;
 import platform.dist.entity.DistPartColumns;
 import platform.dist.entity.DistPartDistributorUserLink;
 import platform.dist.entity.DistPartLink;
+import platform.dist.entity.Distributor;
 import platform.dist.entity.DistributorUser;
 import platform.dist.entity.DistributorUserColumns;
 import platform.dist.vo.DistFileVO;
+import platform.dist.vo.DistUserVO;
 import platform.dist.vo.TransferDetailVO;
 import platform.dist.vo.TransferFileVO;
+import platform.epm.service.EpmHelper;
+import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import platform.util.DateUtils;
 import platform.util.PageUtils;
@@ -50,6 +54,7 @@ import wt.query.SearchCondition;
 import wt.representation.Representation;
 import wt.services.ServiceFactory;
 import wt.util.WTAttributeNameIfc;
+import wt.vc.VersionControlHelper;
 
 public class DistHelper {
 
@@ -146,6 +151,14 @@ public class DistHelper {
 				}
 				sc = new SearchCondition(Dist.class, WTAttributeNameIfc.CREATE_STAMP_NAME, "<=",
 						DateUtils.endTimestamp(endCreatedDate));
+				query.appendWhere(sc, new int[] { idx });
+			}
+
+			if (StringUtils.isNotNull(material_type)) {
+				if (query.getConditionCount() > 0) {
+					query.appendAnd();
+				}
+				sc = new SearchCondition(Dist.class, Dist.MATERIAL_TYPE, "=", material_type);
 				query.appendWhere(sc, new int[] { idx });
 			}
 
@@ -249,23 +262,27 @@ public class DistHelper {
 		return list;
 	}
 
-	public List<TransferDetailVO> details(String type, DistPartLink link, String path) throws Exception {
+	public List<TransferDetailVO> details(String type, DistPartLink link, String path, Dist di) throws Exception {
 
 		TransferDetailVO detail = detail(link, path);
 		List<TransferDetailVO> details = new ArrayList<>();
 		details.add(detail);
 
-		/*
-		 * Distributor distributor = link.getDistributor(); DistUserVO userVo = new
-		 * DistUserVO(); userVo.setSiteTypeCd(distributor.getType().equals("IN") ? "I" :
-		 * "O"); userVo.setSiteCd(distributor.getNumber());
-		 * userVo.setSiteNm(distributor.getName());
-		 * userVo.setId(distributor.getUserId());
-		 * userVo.setUserName(distributor.getUserName());
-		 * userVo.setEmail(distributor.getEmail());
-		 * 
-		 * detail.addUsers(userVo);
-		 */
+		ArrayList<DistributorUser> diUsers = DistHelper.manager.getDistributorUserLinks(di);
+	
+		for(DistributorUser diUser: diUsers ) {
+		
+			DistUserVO userVo = new DistUserVO();
+
+			userVo.setSiteTypeCd(diUser.getType().equals("IN") ? "I" : "O");
+			userVo.setSiteCd(diUser.getNumber());
+			userVo.setSiteNm(diUser.getName());
+			userVo.setId(diUser.getUserId());
+			userVo.setUserName(diUser.getUserName());
+			userVo.setEmail(diUser.getEmail());
+
+			detail.addUsers(userVo);
+		}
 		return details;
 	}
 
@@ -274,108 +291,109 @@ public class DistHelper {
 
 		TransferDetailVO detail = new TransferDetailVO();
 		WTPart part = link.getPart();
-		EPMDocument epm = null;// EpmHelper.manager.getPart(epm);
-
-		detail.setPartOid(String.valueOf(epm.getPersistInfo().getObjectIdentifier().getId()));
-		detail.setPartName(epm.getName());
-		detail.setPartVersion(epm.getVersionIdentifier().getSeries().getValue() + "."
-				+ epm.getIterationIdentifier().getSeries().getValue());
-		detail.setPartNumber(epm.getNumber());
-		detail.setReleaseDate(DateUtils.getTimeToString(today, "yyyy-MM-dd"));
-
-		detail.setEpmOid(CommonUtils.oid(epm));
-		detail.setErpCd(IBAUtils.getStringIBAValue(epm, "ERP_CODE"));
-
-		Folder folder = FolderHelper.service.getFolder(epm.getLocation(), epm.getContainerReference());
-
-		if (folder instanceof Cabinet) {
-			detail.setCadFolderOid(
-					"ROOT:" + epm.getContainerReference().getObject().getPersistInfo().getObjectIdentifier().getId());
-		} else {
-			SubFolder subfolder = (SubFolder) folder;
-			long subfolderOid = subfolder.getPersistInfo().getObjectIdentifier().getId();
-			QuerySpec query = new QuerySpec(SubFolderLink.class);
-			query = new QuerySpec(SubFolderLink.class);
-			query.setAdvancedQueryEnabled(true);
-
-			SearchCondition cond = new SearchCondition(SubFolderLink.class, "roleBObjectRef.key.id",
-					SearchCondition.EQUAL, subfolderOid);
-			query.appendWhere(cond, new int[] { 0 });
-
-			QueryResult queryResult = PersistenceHelper.manager.find(query);
-
-			SubFolderLink subFold = null;
-
-			while (queryResult.hasMoreElements()) {
-				subFold = (SubFolderLink) queryResult.nextElement();
+		
+		EPMDocument epm = PartHelper.manager.getEPMDocument(part);
+		if( epm != null) {
+			detail.setPartOid(String.valueOf(epm.getPersistInfo().getObjectIdentifier().getId()));
+			detail.setPartName(epm.getName());
+			detail.setPartVersion(VersionControlHelper.getIterationDisplayIdentifier(epm).toString());
+			detail.setPartNumber(epm.getNumber());
+			detail.setReleaseDate(DateUtils.getTimeToString(today, "yyyy-MM-dd"));
+	
+			detail.setEpmOid(CommonUtils.oid(epm));
+			detail.setErpCd(IBAUtils.getStringIBAValue(epm, "ERP_CODE"));
+	
+			Folder folder = FolderHelper.service.getFolder(epm.getLocation(), epm.getContainerReference());
+	
+			if (folder instanceof Cabinet) {
+				detail.setCadFolderOid(
+						"ROOT:" + epm.getContainerReference().getObject().getPersistInfo().getObjectIdentifier().getId());
+			} else {
+				SubFolder subfolder = (SubFolder) folder;
+				long subfolderOid = subfolder.getPersistInfo().getObjectIdentifier().getId();
+				QuerySpec query = new QuerySpec(SubFolderLink.class);
+				query = new QuerySpec(SubFolderLink.class);
+				query.setAdvancedQueryEnabled(true);
+	
+				SearchCondition cond = new SearchCondition(SubFolderLink.class, "roleBObjectRef.key.id",
+						SearchCondition.EQUAL, subfolderOid);
+				query.appendWhere(cond, new int[] { 0 });
+	
+				QueryResult queryResult = PersistenceHelper.manager.find(query);
+	
+				SubFolderLink subFold = null;
+	
+				while (queryResult.hasMoreElements()) {
+					subFold = (SubFolderLink) queryResult.nextElement();
+				}
+				detail.setCadFolderOid(subFold.getPersistInfo().getObjectIdentifier().getStringValue());
 			}
-			detail.setCadFolderOid(subFold.getPersistInfo().getObjectIdentifier().getStringValue());
-		}
-
-		DistFileVO fileVo = getDistFileVO(epm);
-		String newPath = path + File.separator + String.valueOf(epm.getPersistInfo().getObjectIdentifier().getId());
-		write(fileVo, newPath);
-
-		if (fileVo.getPdfFile() != null && link.isPdf()) {
-			TransferFileVO tFile = new TransferFileVO();
-			tFile.setFileName(fileVo.getPdfFile().getFileName());
-			tFile.setOid(String.valueOf(fileVo.getPdfFile().getPersistInfo().getObjectIdentifier().getId()));
-			tFile.setFileUrl(path + File.separator + tFile.getFileName());
-			detail.setPdfFile(tFile);
-		}
-
-		if (fileVo.getDwgFile() != null && link.isDwg()) {
-			TransferFileVO tFile = new TransferFileVO();
-			tFile.setFileName(fileVo.getDwgFile().getFileName());
-			tFile.setOid(String.valueOf(fileVo.getDwgFile().getPersistInfo().getObjectIdentifier().getId()));
-			tFile.setFileUrl(path + File.separator + tFile.getFileName());
-
-			detail.setDwgFile(tFile);
-		}
-
-		if (fileVo.getStpFile() != null && link.isStep()) {
-			TransferFileVO tFile = new TransferFileVO();
-			tFile.setFileName(fileVo.getStpFile().getFileName());
-			tFile.setOid(String.valueOf(fileVo.getStpFile().getPersistInfo().getObjectIdentifier().getId()));
-			tFile.setFileUrl(path + File.separator + tFile.getFileName());
-
-			detail.setStpFile(tFile);
-		}
-
-		if (fileVo.getJpg2DFile() != null) {
-			TransferFileVO tFile = new TransferFileVO();
-			tFile.setFileName(fileVo.getJpg2DFile().getFileName());
-			tFile.setOid(String.valueOf(fileVo.getJpg2DFile().getPersistInfo().getObjectIdentifier().getId()));
-			tFile.setFileUrl(path + File.separator + tFile.getFileName());
-
-			detail.setJpg2DFile(tFile);
-		}
-
-		if (fileVo.getJpg2DSmallFile() != null) {
-			TransferFileVO tFile = new TransferFileVO();
-			tFile.setFileName(fileVo.getJpg2DSmallFile().getFileName());
-			tFile.setOid(String.valueOf(fileVo.getJpg2DSmallFile().getPersistInfo().getObjectIdentifier().getId()));
-			tFile.setFileUrl(path + File.separator + tFile.getFileName());
-
-			detail.setJpg2DSmallFile(tFile);
-		}
-
-		if (fileVo.getJpg3DFile() != null) {
-			TransferFileVO tFile = new TransferFileVO();
-			tFile.setFileName(fileVo.getJpg3DFile().getFileName());
-			tFile.setOid(String.valueOf(fileVo.getJpg3DFile().getPersistInfo().getObjectIdentifier().getId()));
-			tFile.setFileUrl(path + File.separator + tFile.getFileName());
-
-			detail.setJpg3DFile(tFile);
-		}
-
-		if (fileVo.getJpg3DSmallFile() != null) {
-			TransferFileVO tFile = new TransferFileVO();
-			tFile.setFileName(fileVo.getJpg3DSmallFile().getFileName());
-			tFile.setOid(String.valueOf(fileVo.getJpg3DSmallFile().getPersistInfo().getObjectIdentifier().getId()));
-			tFile.setFileUrl(path + File.separator + tFile.getFileName());
-
-			detail.setJpg3DSmallFile(tFile);
+	
+			DistFileVO fileVo = getDistFileVO(epm);
+			String newPath = path + File.separator + String.valueOf(epm.getPersistInfo().getObjectIdentifier().getId());
+			write(fileVo, newPath);
+	
+			if (fileVo.getPdfFile() != null && link.isPdf()) {
+				TransferFileVO tFile = new TransferFileVO();
+				tFile.setFileName(fileVo.getPdfFile().getFileName());
+				tFile.setOid(String.valueOf(fileVo.getPdfFile().getPersistInfo().getObjectIdentifier().getId()));
+				tFile.setFileUrl(path + File.separator + tFile.getFileName());
+				detail.setPdfFile(tFile);
+			}
+	
+			if (fileVo.getDwgFile() != null && link.isDwg()) {
+				TransferFileVO tFile = new TransferFileVO();
+				tFile.setFileName(fileVo.getDwgFile().getFileName());
+				tFile.setOid(String.valueOf(fileVo.getDwgFile().getPersistInfo().getObjectIdentifier().getId()));
+				tFile.setFileUrl(path + File.separator + tFile.getFileName());
+	
+				detail.setDwgFile(tFile);
+			}
+	
+			if (fileVo.getStpFile() != null && link.isStep()) {
+				TransferFileVO tFile = new TransferFileVO();
+				tFile.setFileName(fileVo.getStpFile().getFileName());
+				tFile.setOid(String.valueOf(fileVo.getStpFile().getPersistInfo().getObjectIdentifier().getId()));
+				tFile.setFileUrl(path + File.separator + tFile.getFileName());
+	
+				detail.setStpFile(tFile);
+			}
+	
+			if (fileVo.getJpg2DFile() != null) {
+				TransferFileVO tFile = new TransferFileVO();
+				tFile.setFileName(fileVo.getJpg2DFile().getFileName());
+				tFile.setOid(String.valueOf(fileVo.getJpg2DFile().getPersistInfo().getObjectIdentifier().getId()));
+				tFile.setFileUrl(path + File.separator + tFile.getFileName());
+	
+				detail.setJpg2DFile(tFile);
+			}
+	
+			if (fileVo.getJpg2DSmallFile() != null) {
+				TransferFileVO tFile = new TransferFileVO();
+				tFile.setFileName(fileVo.getJpg2DSmallFile().getFileName());
+				tFile.setOid(String.valueOf(fileVo.getJpg2DSmallFile().getPersistInfo().getObjectIdentifier().getId()));
+				tFile.setFileUrl(path + File.separator + tFile.getFileName());
+	
+				detail.setJpg2DSmallFile(tFile);
+			}
+	
+			if (fileVo.getJpg3DFile() != null) {
+				TransferFileVO tFile = new TransferFileVO();
+				tFile.setFileName(fileVo.getJpg3DFile().getFileName());
+				tFile.setOid(String.valueOf(fileVo.getJpg3DFile().getPersistInfo().getObjectIdentifier().getId()));
+				tFile.setFileUrl(path + File.separator + tFile.getFileName());
+	
+				detail.setJpg3DFile(tFile);
+			}
+	
+			if (fileVo.getJpg3DSmallFile() != null) {
+				TransferFileVO tFile = new TransferFileVO();
+				tFile.setFileName(fileVo.getJpg3DSmallFile().getFileName());
+				tFile.setOid(String.valueOf(fileVo.getJpg3DSmallFile().getPersistInfo().getObjectIdentifier().getId()));
+				tFile.setFileUrl(path + File.separator + tFile.getFileName());
+	
+				detail.setJpg3DSmallFile(tFile);
+			}
 		}
 		return detail;
 	}
@@ -564,14 +582,14 @@ public class DistHelper {
 		return list;
 	}
 	
-//	public ArrayList<DistDistributorUserLink> getDistDistributorUserLinks(Dist dist) throws Exception {
-//		ArrayList<DistDistributorUserLink> list = new ArrayList<DistDistributorUserLink>();
-//		
-//		QueryResult result = PersistenceHelper.manager.navigate(dist, "distUser", DistDistributorUserLink.class, false);
-//		while (result.hasMoreElements()) {
-//			DistDistributorUserLink link = (DistDistributorUserLink) result.nextElement();
-//			list.add(link.getDistUser());
-//		}
-//		return list;
-//	}
+	public ArrayList<DistDistributorUserLink> getDistDistributorUserLinks(Dist dist) throws Exception {
+		ArrayList<DistDistributorUserLink> list = new ArrayList<DistDistributorUserLink>();
+		
+		QueryResult result = PersistenceHelper.manager.navigate(dist, "distUser", DistDistributorUserLink.class, false);
+		while (result.hasMoreElements()) {
+			DistDistributorUserLink link = (DistDistributorUserLink) result.nextElement();
+			list.add(link);
+		}
+		return list;
+	}
 }

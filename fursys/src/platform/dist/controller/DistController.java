@@ -47,6 +47,15 @@ public class DistController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/matCreate", method = RequestMethod.GET)
+	public ModelAndView matCreate() throws Exception {
+		ModelAndView model = new ModelAndView();
+//		ArrayList<Map<String, Object>> list = DistributorHelper.manager.getDistributorUser();
+//		model.addObject("list", list);
+		model.setViewName("popup:/dist/dist-matCreate");
+		return model;
+	}
+
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> list(@RequestBody Map<String, Object> params) {
@@ -62,14 +71,13 @@ public class DistController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/matList", method = RequestMethod.POST)
 	@ResponseBody
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public Map<String, Object> create(@RequestBody Map<String, Object> params) {
+	public Map<String, Object> matList(@RequestBody Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		try {	
-			Dist dist = DistHelper.service.create(params);
+		try {
+			result = DistHelper.manager.list(params);
 			result.put("result", true);
-			result.put("msg", dist.getName() + " 배포(단품)가 등록 되었습니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("result", false);
@@ -78,6 +86,30 @@ public class DistController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/matList", method = RequestMethod.GET)
+	public ModelAndView matList() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("/jsp/dist/dist-matList.jsp");
+		return model;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public Map<String, Object> create(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {	
+			Dist dist = DistHelper.service.create(params);
+			result.put("result", true);
+			result.put("msg", dist.getName() + " 배포가 등록 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
+
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public ModelAndView view(@RequestParam String oid) throws Exception {
 		ModelAndView model = new ModelAndView();
@@ -118,7 +150,7 @@ public class DistController {
 
 	@ResponseBody
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public Map<String, Object> modify(@RequestBody Map<String,Object> params) {
+	public Map<String, Object> modify(@RequestBody Map<String, Object> params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			Dist dist = DistHelper.service.modify(params);
@@ -163,23 +195,6 @@ public class DistController {
 		model.addObject("cat_m", cat_m);
 		model.addObject("units", units);
 		model.setViewName("popup:/dist/dist-mat-list");
-		return model;
-	}
-	
-	@RequestMapping(value = "/popup_set", method = RequestMethod.GET)
-	public ModelAndView popup_set() throws Exception {
-		ModelAndView model = new ModelAndView();
-		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND"); // 브랜드
-		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY"); // 회사
-		ArrayList<BaseCode> cat_l = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_L"); // 회사
-		ArrayList<BaseCode> cat_m = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_M"); // 회사
-		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
-		model.addObject("brand", brand);
-		model.addObject("company", company);
-		model.addObject("cat_l", cat_l);
-		model.addObject("cat_m", cat_m);
-		model.addObject("units", units);
-		model.setViewName("popup:/dist/dist-set-list");
 		return model;
 	}
 
@@ -284,8 +299,8 @@ public class DistController {
 		
 		Map<String, Object> sendMap = new HashMap<String, Object>(); //DistributorHelper.manager.getDistributorUser();
 		
-		sendMap.put("upn", "ljh1103@fursys.com");
-		//sendMap.put("upn", "dc1995@fursys.com");
+		//sendMap.put("upn", "ljh1103@fursys.com");
+		sendMap.put("upn", "dc1995@fursys.com");
 		//sendMap.put("upn", "youngsoo_shim@fursys.com");
 		
 		sendMap.put("microsoftAppId", "0f74ef2f-72f1-4a58-90d7-0135013f0bda");
@@ -300,7 +315,7 @@ public class DistController {
 			
 		sendMap.put("sendDt", "2022-07-12 14:20");
 		sendMap.put("sender", "");
-		sendMap.put("regId", "ljh1103@fursys.com");
+		sendMap.put("regId", "dc1995@fursys.com");
 		sendMap.put("contents", "");
 		
 		sendMap.put("userImgUrl", "");
@@ -322,10 +337,24 @@ public class DistController {
 		
 		ModelAndView model = new ModelAndView();
 		model.addObject(sendMap);
-		model.setViewName("https://api.fursys.com/teams/send");
+		model.setViewName("https://api.fursys.com/teamsbot/send");
 		
 		
 		return model;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/sendCPC", method = RequestMethod.POST)
+	public void sendCPC(@RequestBody Map<String, Object> params) throws Exception {
+		
+		String oid = (String)params.get("oid");
+		
+		System.out.println("####controller==sendCPC=="+oid);
+		Dist di = (Dist)CommonUtils.persistable(oid);
+		String type = "DIST";
+		
+		DistHelper.service.afterAction(di, type);
+		
 	}
 	
 }

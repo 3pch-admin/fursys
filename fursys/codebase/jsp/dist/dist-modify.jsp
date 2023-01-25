@@ -131,11 +131,11 @@ var dist_columnLayout = [ {
 	dataType : "string",
 	width : 350,
 	style : "left indent10"
-}, {
-	dataField : "type",
-	headerText : "배포처 구분",
-	dataType : "string",
-	width : 100
+// }, {
+// 	dataField : "type",
+// 	headerText : "배포처 구분",
+// 	dataType : "string",
+// 	width : 100
 }, {
 	dataField : "userId",
 	headerText : "사용자 아이디",

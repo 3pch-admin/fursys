@@ -23,7 +23,7 @@
 			>
 			<span>배포 관리</span>
 			>
-			<span>도면 배포</span>
+			<span>도면 배포(자재)</span>
 		</div>
 		<table id="wrap-table">
 			<tr>
@@ -41,7 +41,7 @@
 							<th>배포제목</th>
 							<td>
 								<input type="text" class="AXInput w70p" name="dist_name">
-								<input type="hidden" name="material_type" value="ITEM">
+								<input type="hidden" name="material_type" value="MAT">
 							</td>
 							<th>CAD 파일명</th>
 							<td>
@@ -111,32 +111,33 @@
 							headerText : "번호",
 							dataType : "string",
 							width : 40
+						// 						}, {
+						// 							dataField : "number",
+						// 							headerText : "배포번호",
+						// 							dataType : "string",
+						// 							width : 140,
+						// 							cellMerge : true,
 						}, {
 							dataField : "name",
-							headerText : "배포명",
+							headerText : "배포제목",
 							dataType : "string",
 							style : "left indent10",
-// 							width : 300,
+							width : 300,
 							cellMerge : true,
 						}, {
 							dataField : "state",
 							headerText : "상태",
 							dataType : "string",
 							width : 80,
-							//cellMerge : true,
+							cellMerge : true,
 							mergeRef : "number",
 							mergePolicy : "restrict"
-						}, {
-							dataField : "duration",
-							headerText : "다운로드 기간",
-							dataType : "string",
-							width : 150,
 						}, {
 							dataField : "creator",
 							headerText : "작성자",
 							dataType : "string",
 							width : 100,
-							//cellMerge : true,
+							cellMerge : true,
 							mergeRef : "number",
 							mergePolicy : "restrict"
 						}, {
@@ -144,11 +145,72 @@
 							headerText : "작성일자",
 							dataType : "string",
 							width : 100,
-							//cellMerge : true,
+							cellMerge : true,
 							mergeRef : "number",
 							mergePolicy : "restrict"
+// 						}, {
+// 							dataField : "fileName",
+// 							headerText : "CAD 파일명",
+// 							dataType : "string",
+// 							style : "left indent10",
+// 							cellMerge : true,
+// 							width : 250,
 						}, {
-							
+							dataField : "pdf",
+							headerText : "PDF",
+							dataType : "string",
+							width : 60,
+							editable : true,
+							renderer : {
+								type : "CheckBoxEditRenderer",
+								showLabel : false,
+								checkValue : "true", // true, false 인 경우가 기본
+								unCheckValue : "false",
+							}
+						}, {
+							dataField : "step",
+							headerText : "STEP",
+							dataType : "string",
+							width : 60,
+							renderer : {
+								type : "CheckBoxEditRenderer",
+								showLabel : false,
+								checkValue : "true", // true, false 인 경우가 기본
+								unCheckValue : "false",
+							}
+						}, {
+							dataField : "dwg",
+							headerText : "DWG",
+							dataType : "string",
+							width : 60,
+							renderer : {
+								type : "CheckBoxEditRenderer",
+								showLabel : false,
+								checkValue : "true", // true, false 인 경우가 기본
+								unCheckValue : "false",
+							}
+						}, {
+							dataField : "types",
+							headerText : "배포처구분",
+							dataType : "string",
+							width : 130
+						}, {
+							dataField : "distributor",
+							headerText : "배포처",
+							dataType : "string",
+							width : 200
+						}, {
+							dataField : "user",
+							headerText : "배포처 수신자",
+							dataType : "string",
+							width : 250,
+							style : "left indent10"
+						}, {
+							dataField : "duration",
+							headerText : "다운로드 기간",
+							dataType : "string",
+							width : 150,
+						}, {
 							dataField : "oid",
 							headerText : "oid",
 							dataType : "string",
@@ -158,11 +220,11 @@
 							rowIdField : "oid",
 							headerHeight : 30,
 							rowHeight : 30,
-							fillColumnSizeMode : true,
+														fillColumnSizeMode : true,
 							rowCheckToRadio : true,
 							showRowCheckColumn : true,
 							showRowNumColumn : false,
-							enableCellMerge : false,
+							enableCellMerge : true,
 							cellMergePolicy : "withNull",
 						};
 						myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
@@ -231,16 +293,16 @@
 							if (event.dataField == "name" || event.dataField == "fileName") {
 								var rowItem = event.item;
 								var url = _url("/dist/view", rowItem.oid);
-								//_popup(url, "", "", "f");
-								_popup(url, 1400, 960, "n");
+								_popup(url, "", "", "f");
+								// 								_popup(url, 1400, 560, "n");
 							}
 						});
 
 						$(function() {
 
 							$("#createBtn").click(function() {
-								var url = "/Windchill/platform/dist/create";
-								_popup(url, "1024", "600", "n");
+								var url = "/Windchill/platform/dist/matCreate";
+								_popup(url, "", "", "f");
 							})
 
 							$("#modifyBtn").click(function() {
@@ -250,12 +312,12 @@
 									return false;
 								}
 								var oid = items[0].item.oid;
-								var url = _url("/dist/modify", oid);
+								var url = _url("/dist/matModify", oid);
 								_popup(url, "", "", "f");
 							})
 
 							$("#excelBtn").click(function() {
-								_excel(myGridID, "도면 배포", []);
+								_excel(myGridID, "도면 배포(자재)", []);
 							})
 
 							$("#approvalBtn").click(function() {

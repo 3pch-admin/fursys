@@ -11,14 +11,14 @@
 // JSONArray arr = JSONArray.fromObject(list);
 %>
 <!-- hidden value -->
-<input type="hidden" name="description" id="description">
+<input type="hidden" name="content" id="content">
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
 	<span>HOME</span>
 	>
 	<span>배포 관리</span>
 	>
-	<span>배포 등록</span>
+	<span>배포 등록(자재)</span>
 </div>
 
 <table class="create-table" style="margin-bottom: 5px;">
@@ -29,11 +29,20 @@
 		<col width="*">
 	</colgroup>
 	<tr>
-		<th>배포명<font color="red"><b>*</b></font></th>
+		<th>
+			배포명
+			<font color="red">
+				<b>*</b>
+			</font>
+		</th>
 		<td>
-			<input type="text" class="AXInput w60p" name="distName" id="distName">
+			<input type="text" class="AXInput w60p" name="name">
 		</td>
-		<th>다운로드 기간<font color="red"><b>*</b></font>
+		<th>
+			다운로드 기간
+			<font color="red">
+				<b>*</b>
+			</font>
 		</th>
 		<td>
 			<select id="duration" name="duration" class="AXSelect w100px">
@@ -57,7 +66,7 @@
 					var kEditorParam = {
 						Id : "editor",
 						Width : "100%",
-						Height : "200px",
+						Height : "250px",
 						FocusInitObjId : "name",
 						Runtimes : 'html5' // agent, html5
 					};
@@ -66,7 +75,6 @@
 			</div>
 		</td>
 	</tr>
-	<!-- 
 	<tr>
 		<th>첨부파일</th>
 		<td colspan="3">
@@ -77,32 +85,12 @@
 			</script>
 		</td>
 	</tr>
-	 -->
-	<tr style="height: 300px;">
-		<th>배포처</th>
-		<td colspan="3"    >
-			<button type="button" id="dist_addBtn">사용자로 추가</button>
-			<button type="button" id="dist_addBtn2">배포처로 추가</button>
-			<button type="button" id="dist_deleteBtn">삭제</button>
-			<div id="dist_grid_wrap" style="height: 250px; padding-top: 5px;"></div>
-		</td>
-	</tr>
-	<tr style="height: 420px;">
-		<th>배포 도면</th>
-		<td colspan="3">
-			<!-- <button type="button" id="addBtn">추가</button> -->
-			<button type="button" id="ecn_addBtn">ECN 추가</button>
-			<button type="button" id="part_addBtn">세트 추가</button>
-			<button type="button" id="part_addBtn2">단품 추가</button>
-			<button type="button" id="part_addBtn3">자재 추가</button>
-			<button type="button" id="deleteBttn">삭제</button>
-			<div id="grid_wrap" style="height: 370px; padding-top: 5px;"></div>
-		</td>
-	</tr>
-	
 </table>
 
-
+<button type="button" id="addBtn">추가</button>
+<!-- <button type="button" id="daddBtn">배포처 추가</button> -->
+<button type="button" id="deleteBttn">삭제</button>
+<div id="grid_wrap" style="height: 370px; padding-top: 5px;"></div>
 
 <table class="button-table">
 	<tr>
@@ -114,59 +102,7 @@
 </table>
 
 <script type="text/javascript">
-
-	var dist_GridID;
-	
-	var dist_columnLayout = [ {
-		dataField : "name",
-		headerText : "배포처",
-		dataType : "string",
-		style : "left indent10"
-	}, {
-		dataField : "type",
-		headerText : "배포처 구분",
-		dataType : "string",
-		width : 100
-// 	}, {
-// 		dataField : "userId",
-// 		headerText : "사용자 아이디",
-// 		dataType : "string",
-// 		width : 120
-	}, {
-		dataField : "userName",
-		headerText : "사용자명",
-		dataType : "string",
-		width : 120
-	}, {
-		dataField : "email",
-		headerText : "이메일",
-		dataType : "string",
-		width : 200
-	}, {
-		dataField : "distributorUser_oid",
-		headerText : "distributorUser_oid",
-		dataType : "string",
-		visible : false
-	}, ];
-	var dist_auiGridProps = {
-			rowIdField : "distributorUser_oid",
-			headerHeight : 30,
-			rowHeight : 30,
-			fillColumnSizeMode : true,
-			// 						rowCheckToRadio : false,
-			showRowCheckColumn : true,
-			showRowNumColumn : false
-	};
-	
-	
-	dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridProps);
-
-	
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	var myGridID;
-	
 	var columnLayout = [ {
 		// 		dataField : "s",
 		headerText : "",
@@ -277,6 +213,57 @@
 		// 			}
 		}
 	}, {
+		dataField : "type",
+		headerText : "배포처구분",
+		dataType : "string",
+		width : 120,
+		editable : false,
+	}, {
+		dataField : "distributor",
+		headerText : "배포처",
+		dataType : "string",
+		width : 200,
+		editable : false,
+	// 		labelFunction : function(rowIndex, columnIndex, value, headerText, item) {
+	// 			var retStr = "";
+	// 			for (var i = 0, len = list.length; i < len; i++) {
+	// 				if (list[i]["oid"] == value) {
+	// 					retStr = list[i]["name"];
+	// 					break;
+	// 				}
+	// 			}
+	// 			return retStr == "" ? value : retStr;
+	// 		},
+	// 		editRenderer : {
+	// 			type : "ComboBoxRenderer",
+	// 			autoCompleteMode : true, // 자동완성 모드 설정
+	// 			autoEasyMode : true,
+	// 			matchFromFirst : false, // 처음부터 매치가 아닌 단순 포함되는 자동완성
+	// 			list : list, //key-value Object 로 구성된 리스트
+	// 			keyField : "oid", // key 에 해당되는 필드명
+	// 			valueField : "name", // value 에 해당되는 필드명
+	// 			// 에디팅 유효성 검사
+	// 			validator : function(oldValue, newValue, item) {
+	// 				var isValid = false;
+	// 				for (var i = 0, len = list.length; i < len; i++) { // keyValueList 있는 값만..
+	// 					if (list[i]["name"] == newValue) {
+	// 						isValid = true;
+	// 						break;
+	// 					}
+	// 				}
+	// 				// 리턴값은 Object 이며 validate 의 값이 true 라면 패스, false 라면 message 를 띄움
+	// 				return {
+	// 					"validate" : isValid,
+	// 					"message" : "리스트에 있는 값만 선택(입력) 가능합니다."
+	// 				};
+	// 			}
+	// 		}
+	}, {
+		dataField : "user",
+		headerText : "배포처 수신자",
+		dataType : "string",
+		width : 250
+	}, {
 		dataField : "uoid",
 		headerText : "uoid",
 		dataType : "string",
@@ -301,8 +288,6 @@
 		editable : true,
 		cellMergePolicy : "withNull",
 	};
-	
-	
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
 
 	AUIGrid.bind(myGridID, "cellEditEnd", function(event) {
@@ -357,34 +342,10 @@
 		$("#closeBtn").click(function() {
 			self.close();
 		})
-		
-		$("#dist_addBtn").click(function() {
-			var url = _url("/distributor/popupUser?box=2");
-			_popup(url, 1000, 500, "n");
-		})
-		
-		$("#dist_deleteBtn").click(function() {
-			var items = AUIGrid.getCheckedRowItems(dist_GridID);
-			if (items.length > 1) {
-				alert("배포처를 선택하세요.");
-				return false;
-			}
-			AUIGrid.removeRowByRowId(dist_GridID, items[0].item.rowId);
-		})
 
-		$("#part_addBtn").click(function() {
-			var url = _url("/dist/popup?box=2&cmd=1");
-			_popup(url, 1000, 500, "n");
-		})
-		
-		$("#part_addBtn2").click(function() {
-			var url = _url("/dist/popup?box=2&cmd=2");
-			_popup(url, 1000, 500, "n");
-		})
-		
-		$("#part_addBtn3").click(function() {
-			var url = _url("/dist/popup?box=2&cmd=3");
-			_popup(url, 1000, 500, "n");
+		$("#addBtn").click(function() {
+			var url = _url("/dist/popup_mat?box=2");
+			_popup(url, "", "", "f");
 		})
 
 		$("#deleteBttn").click(function() {
@@ -404,17 +365,14 @@
 			RAONKEDITOR.GetHtmlContents({
 				type : 'htmlexwithdoctype',
 				callback : function(paramObj) {
-					$("#description").val(btoa(unescape(encodeURIComponent(paramObj.strData))));
+					$("#content").val(btoa(unescape(encodeURIComponent(paramObj.strData))));
 				}
 			}, 'editor');
 
 			var params = _data($("#form"));
-			var url = _url("/dist/create");
+			var url = _url("/dist/matCreate");
 			var partList = AUIGrid.getGridData(myGridID);
-			var distributorList = AUIGrid.getGridData(dist_GridID);
 			params.partList = partList;
-			console.log(distributorList);
-			params.distributorList = distributorList;
 			console.log(params);
 			_call(url, params, function(data) {
 				opener.load();
@@ -424,7 +382,6 @@
 
 		$(window).resize(function() {
 			AUIGrid.resize("#grid_wrap");
-			AUIGrid.resize("#dist_grid_wrap");
 		})
 
 		$("#deleteBtn").click(function() {
@@ -450,11 +407,39 @@
 	})
 
 	function info(list) {
-		AUIGrid.addRow(dist_GridID, list);
-	}
-	
-	function dist(list) {
-		AUIGrid.addRow(dist_GridID, list);
+		for (var i = 0; i < list.length; i++) {
+			var value = list[i];
+			var email = value.email;
+			var type = value.type;
+			var name = value.name;
+			var uoid = value.uoid;
+			var userName = value.userName;
+
+			var selectedItems = AUIGrid.getSelectedItems(myGridID);
+			if (selectedItems.length <= 0)
+				return;
+
+			// distributor, user 사용자, type
+			
+			if (i == 0) {
+				var selItem = selectedItems[0].item;
+				selItem.user = userName;
+				selItem.distributor = name;
+				selItem.uoid = uoid;
+				selItem.type = type;
+				AUIGrid.updateRowsById(myGridID, selItem, selItem.rowId);
+			} else {
+				var selItem = selectedItems[0].item;
+				var item = new Object();
+				// 선택행 아래..
+				item  = selItem;
+				item.user = userName;
+				item.distributor = name;
+				item.uoid = uoid;
+				item.type = type;
+				AUIGrid.addRow(myGridID, item, "selectionDown");
+			}
+		}
 	}
 
 	function part(list) {

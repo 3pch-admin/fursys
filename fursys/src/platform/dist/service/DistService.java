@@ -15,6 +15,10 @@ public interface DistService {
 
 	public Dist delete(String oid) throws Exception;
 	
-	public Dist modify(Map<String, Object> params) throws Exception;
+//	public Dist modify(DistDTO params) throws Exception;
 
+	public Dist matCreate(DistDTO params) throws Exception;
+
+	public Dist modify(Map<String, Object> params) throws Exception;
+	
 }

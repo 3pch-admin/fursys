@@ -5,6 +5,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 boolean isAdmin = CommonUtils.isAdmin();
+
+String box = request.getParameter("box");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -32,15 +35,15 @@ boolean isAdmin = CommonUtils.isAdmin();
 			<td>
 				<table class="search-table top-color">
 					<colgroup>
-						<col width="150">
-						<col width="*">
-						<col width="150">
+						<col width="100">
+						<col width="350">
+						<col width="100">
 						<col width="*">
 					</colgroup>
 					<tr>
 						<th>배포처</th>
 						<td colspan="3">
-							<input type="text" class="AXInput w40p" name="name">
+							<input type="text" class="AXInput w40p" name="name" id="name">
 						</td>
 					</tr>
 					<tr>
@@ -55,19 +58,17 @@ boolean isAdmin = CommonUtils.isAdmin();
 						<th>사용여부</th>
 						<td>
 							<select name="enable" class="AXSelect w100px" id="enable">
-								<option value="">전체</option>
 								<option value="true" selected="selected">사용</option>
-								<option value="false">사용안함</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th>작성자</th>
 						<td>
-							<input type="text" class="AXInput w30p" name="creator" id="creator">
+							<input type="text" class="AXInput w30p" name="creator">
 						</td>
 						<th>작성일자</th>
-						<td>
+						<td colspan="3">
 							<input type="text" class="AXInput w100px" name="startCreatedDate" id="startCreatedDate" maxlength="8">
 							~
 							<input type="text" class="AXInput w100px" name="endCreatedDate" id="endCreatedDate" data-start="startCreatedDate" maxlength="8">
@@ -78,31 +79,15 @@ boolean isAdmin = CommonUtils.isAdmin();
 				<a style="display: none;" id="download"></a>
 				<table class="button-table">
 					<tr>
-						<td class="left">
-							<%
-							if (isAdmin) {
-							%>
-							<button type="button" id="createBtn">등록</button>
-							<!-- 							<button type="button" id="modifyBtn">수정</button> -->
-							<button type="button" id="deleteBtn">사용여부 변경</button>
-							<%
-							}
-							%>
-						</td>
 						<td class="right">
-							<%
-							if (isAdmin) {
-							%>
-							<button type="button" id="excelBtn">엑셀</button>
-							<%
-							}
-							%>
+							<button type="button" id="addBtn">추가</button>
 							<button type="button" id="searchBtn">조회</button>
+							<button type="button" id="closeBtn">닫기</button>
 						</td>
 					</tr>
 				</table>
 
-				<div id="grid_wrap" style="height: 640px;"></div>
+				<div id="grid_wrap" style="height: 380px;"></div>
 				<div id="grid_paging" class="aui-grid-paging-panel my-grid-paging-panel"></div>
 				<script type="text/javascript">
 					var myGridID;
@@ -121,11 +106,16 @@ boolean isAdmin = CommonUtils.isAdmin();
 						headerText : "배포처 구분",
 						dataType : "string",
 						width : 100
+					// 						}, {
+					// 							dataField : "number",
+					// 							headerText : "배포처 코드",
+					// 							dataType : "string",
+					// 							width : 200
 					}, {
 						dataField : "name",
 						headerText : "배포처",
 						dataType : "string",
-						style : "left indent10"
+						style : "left indent10",
 					}, {
 						dataField : "enable",
 						headerText : "사용여부",
@@ -142,6 +132,16 @@ boolean isAdmin = CommonUtils.isAdmin();
 						dataType : "date",
 						formatString : "yyyy/mm/dd",
 						width : 150
+					}, {
+						dataField : "diUsers",
+						headerText : "diUsers",
+						dataType : "array",
+						visible : false
+					}, {
+						dataField : "diUserOids",
+						headerText : "diUserOids",
+						dataType : "string",
+						visible : false
 					}, {
 						dataField : "oid",
 						headerText : "oid",
@@ -207,6 +207,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 							$("input[name=sessionid").val(data.sessionid);
 							createPagingNavigator(data.curPage);
 							AUIGrid.removeAjaxLoader(myGridID);
+							console.log(data.list);
 							AUIGrid.setGridData(myGridID, data.list);
 						}, "POST");
 					}
@@ -219,18 +220,54 @@ boolean isAdmin = CommonUtils.isAdmin();
 					}
 
 					AUIGrid.bind(myGridID, "cellClick", function(event) {
-						if (event.dataField == "name" || event.dataField == "number") {
-							var rowItem = event.item;
-							var url = _url("/distributor/view", rowItem.oid);
-							_popup(url, 800, 800, "n");
+						var rowItem = event.item;
+						var rowIdFeild, rowId;
+						rowIdField = AUIGrid.getProp(event.pid, "rowIdField");
+						rowId = rowItem[rowIdField];
+						if (AUIGrid.isCheckedRowById(event.pid, rowId)) {
+							AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
+						} else {
+							AUIGrid.addCheckedRowsByIds(event.pid, rowId);
 						}
 					});
 
 					$(function() {
+						$("#closeBtn").click(function() {
+							self.close();
+						})
+
+						$("#addBtn").click(function() {
+							var items = AUIGrid.getCheckedRowItems(myGridID);
+							if (items.length == 0) {
+								alert("배포처를 선택하세요.");
+								return false;
+							}
+							<%
+							if("3".equals(box)){
+							%>
+							var list = _array(items);
+							var params = new Object();
+							params.list = list;
+							var url = _url("/distributor/userInfoList");
+							_call(url, params, function(data) {
+								opener.info(data.list);
+								self.close();
+							}, "POST");
+							<%
+							}else{
+							%>
+							var oid = items[0].item.oid;
+							var name = items[0].item.name;
+								opener.dist(name);
+								self.close();
+							<%
+							}
+							%>
+						})
 
 						$("#createBtn").click(function() {
 							var url = "/Windchill/platform/distributor/create";
-							_popup(url, 600, 300, "n");
+							_popup(url, 1000, 430, "n");
 						})
 
 						$("#modifyBtn").click(function() {
@@ -244,17 +281,13 @@ boolean isAdmin = CommonUtils.isAdmin();
 							_popup(url, "", "", "f");
 						})
 
-						$("#excelBtn").click(function() {
-							_excel(myGridID, "배포처", []);
-						})
-
 						$("#deleteBtn").click(function() {
 							var items = AUIGrid.getCheckedRowItems(myGridID);
 							if (items.length == 0) {
-								alert("배포처를 선택하세요.");
+								alert("삭제 할 배포처를 선택하세요.");
 								return false;
 							}
-							if (!confirm("사용여부 변경 하시겠습니까?")) {
+							if (!confirm("삭제 하시겠습니까?")) {
 								return false;
 							}
 							var oid = items[0].item.oid;
@@ -273,12 +306,10 @@ boolean isAdmin = CommonUtils.isAdmin();
 							$("input[name=sessionid").val(0);
 							load();
 						})
-
-						_clearBetween("clearBetween")
+						
 						_between("endCreatedDate");
 						_selector("type");
 						_selector("enable");
-						_user("creator");
 					}).keypress(function(e) {
 						if (e.keyCode == 13) {
 							currentPage = 1;
@@ -294,7 +325,6 @@ boolean isAdmin = CommonUtils.isAdmin();
 				</script>
 			</td>
 		</table>
-
 	</form>
 </body>
 </html>

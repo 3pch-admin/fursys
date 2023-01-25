@@ -26,24 +26,24 @@ boolean isAdmin = CommonUtils.isAdmin();
 			>
 			<span>배포 관리</span>
 			>
-			<span>배포처 관리</span>
+			<span>배포처 사용자 관리</span>
 		</div>
 		<table id="wrap-table">
 			<td>
 				<table class="search-table top-color">
 					<colgroup>
-						<col width="150">
+						<col width="100">
 						<col width="*">
-						<col width="150">
+						<col width="100">
+						<col width="*">
+						<col width="100">
 						<col width="*">
 					</colgroup>
 					<tr>
 						<th>배포처</th>
-						<td colspan="3">
-							<input type="text" class="AXInput w40p" name="name">
+						<td>
+							<input type="text" class="AXInput w70p" name="name">
 						</td>
-					</tr>
-					<tr>
 						<th>배포처 구분</th>
 						<td>
 							<select name="type" id="type" class="AXSelect w100px">
@@ -55,23 +55,24 @@ boolean isAdmin = CommonUtils.isAdmin();
 						<th>사용여부</th>
 						<td>
 							<select name="enable" class="AXSelect w100px" id="enable">
-								<option value="">전체</option>
-								<option value="true" selected="selected">사용</option>
+								<option value="">선택</option>
+								<option value="true" selected>사용</option>
 								<option value="false">사용안함</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th>작성자</th>
+						<th>사용자 아이디</th>
 						<td>
-							<input type="text" class="AXInput w30p" name="creator" id="creator">
+							<input type="text" class="AXInput w70p" name="userId">
 						</td>
-						<th>작성일자</th>
+						<th>사용자 명</th>
 						<td>
-							<input type="text" class="AXInput w100px" name="startCreatedDate" id="startCreatedDate" maxlength="8">
-							~
-							<input type="text" class="AXInput w100px" name="endCreatedDate" id="endCreatedDate" data-start="startCreatedDate" maxlength="8">
-							<i class="axi axi-close2 axicon clearBetween" data-target="CreatedDate"></i>
+							<input type="text" class="AXInput w70p" name="userName">
+						</td>
+						<th>이메일</th>
+						<td>
+							<input type="text" class="AXInput w70p" name="email">
 						</td>
 					</tr>
 				</table>
@@ -83,7 +84,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 							if (isAdmin) {
 							%>
 							<button type="button" id="createBtn">등록</button>
-							<!-- 							<button type="button" id="modifyBtn">수정</button> -->
+							<!-- <button type="button" id="modifyBtn">수정</button>  -->
 							<button type="button" id="deleteBtn">사용여부 변경</button>
 							<%
 							}
@@ -102,7 +103,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 					</tr>
 				</table>
 
-				<div id="grid_wrap" style="height: 640px;"></div>
+				<div id="grid_wrap" style="height: 680px;"></div>
 				<div id="grid_paging" class="aui-grid-paging-panel my-grid-paging-panel"></div>
 				<script type="text/javascript">
 					var myGridID;
@@ -117,15 +118,30 @@ boolean isAdmin = CommonUtils.isAdmin();
 						dataType : "string",
 						width : 40
 					}, {
+						dataField : "name",
+						headerText : "배포처",
+						dataType : "string",
+						style : "left indent10"
+					}, {
 						dataField : "type",
 						headerText : "배포처 구분",
 						dataType : "string",
 						width : 100
 					}, {
-						dataField : "name",
-						headerText : "배포처",
+						dataField : "userId",
+						headerText : "사용자 아이디",
 						dataType : "string",
-						style : "left indent10"
+						width : 120
+					}, {
+						dataField : "userName",
+						headerText : "사용자명",
+						dataType : "string",
+						width : 120
+					}, {
+						dataField : "email",
+						headerText : "이메일",
+						dataType : "string",
+						width : 200
 					}, {
 						dataField : "enable",
 						headerText : "사용여부",
@@ -141,7 +157,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						headerText : "작성일자",
 						dataType : "date",
 						formatString : "yyyy/mm/dd",
-						width : 150
+						width : 100
 					}, {
 						dataField : "oid",
 						headerText : "oid",
@@ -153,7 +169,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						headerHeight : 30,
 						rowHeight : 30,
 						fillColumnSizeMode : true,
-						rowCheckToRadio : true,
+						// 						rowCheckToRadio : false,
 						showRowCheckColumn : true,
 						showRowNumColumn : false
 					};
@@ -199,7 +215,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 					function load() {
 						var params = _data($("#form"));
-						var url = _url("/distributor/list");
+						var url = _url("/distributor/userList");
 						AUIGrid.showAjaxLoader(myGridID);
 						_call(url, params, function(data) {
 							totalRowCount = data.total;
@@ -221,37 +237,37 @@ boolean isAdmin = CommonUtils.isAdmin();
 					AUIGrid.bind(myGridID, "cellClick", function(event) {
 						if (event.dataField == "name" || event.dataField == "number") {
 							var rowItem = event.item;
-							var url = _url("/distributor/view", rowItem.oid);
-							_popup(url, 800, 800, "n");
+							var url = _url("/distributor/userView", rowItem.oid);
+							_popup(url, 700, 380, "n");
 						}
 					});
 
 					$(function() {
 
 						$("#createBtn").click(function() {
-							var url = "/Windchill/platform/distributor/create";
-							_popup(url, 600, 300, "n");
+							var url = "/Windchill/platform/distributor/userCreate";
+							_popup(url, 1000, 430, "n");
 						})
 
 						$("#modifyBtn").click(function() {
 							var items = AUIGrid.getCheckedRowItems(myGridID);
 							if (items.length == 0) {
-								alert("수정 할 배포처를 선택하세요.");
+								alert("수정 할 배포처 사용자를 선택하세요.");
 								return false;
 							}
 							var oid = items[0].item.oid;
-							var url = _url("/distributor/modify", oid);
+							var url = _url("/distributor/userModify", oid);
 							_popup(url, "", "", "f");
 						})
 
 						$("#excelBtn").click(function() {
-							_excel(myGridID, "배포처", []);
+							_excel(myGridID, "배포처 사용자 관리", []);
 						})
 
 						$("#deleteBtn").click(function() {
 							var items = AUIGrid.getCheckedRowItems(myGridID);
 							if (items.length == 0) {
-								alert("배포처를 선택하세요.");
+								alert("배포처 사용자를 선택하세요.");
 								return false;
 							}
 							if (!confirm("사용여부 변경 하시겠습니까?")) {
@@ -274,11 +290,8 @@ boolean isAdmin = CommonUtils.isAdmin();
 							load();
 						})
 
-						_clearBetween("clearBetween")
-						_between("endCreatedDate");
 						_selector("type");
 						_selector("enable");
-						_user("creator");
 					}).keypress(function(e) {
 						if (e.keyCode == 13) {
 							currentPage = 1;
@@ -293,8 +306,8 @@ boolean isAdmin = CommonUtils.isAdmin();
 					})
 				</script>
 			</td>
+			</tr>
 		</table>
-
 	</form>
 </body>
 </html>

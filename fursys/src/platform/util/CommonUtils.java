@@ -107,7 +107,10 @@ public class CommonUtils {
 	}
 
 	public static Persistable persistable(String oid) throws Exception {
-		return rf.getReference(oid).getObject();
+		if( oid != null && oid.length() > 0 ) {
+			return rf.getReference(oid).getObject();
+		}
+		return null;
 	}
 
 	public static Persistable getLatestVersion(Persistable persistable) throws Exception {

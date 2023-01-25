@@ -56,7 +56,7 @@
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/wc3rdpartylibs.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/wex-kernel.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/wncWeb.jar"/>
-	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/zip4j-2.11.1.jar"/>
+	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/zip4j-2.11.1.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1673826133277/source/zip4j-2.11.1-sources.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/lib/pdml.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/lib/reql.jar"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/lib/servlet.jar"/>
@@ -64,5 +64,6 @@
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/srclib/tool/Annotations.jar" sourcepath="/cust_Windchill_src"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase"/>
 	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/jsch-0.1.55.jar"/>
+	<classpathentry kind="lib" path="C:/ptc/Windchill_12.0/Windchill/codebase/WEB-INF/lib/jcifs-1.3.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

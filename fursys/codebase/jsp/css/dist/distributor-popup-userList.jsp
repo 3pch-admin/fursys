@@ -3,6 +3,9 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="platform.doc.service.DocumentHelper"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+boolean isAdmin = CommonUtils.isAdmin();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +26,7 @@
 			>
 			<span>배포 관리</span>
 			>
-			<span>도면 배포</span>
+			<span>배포처 사용자 관리</span>
 		</div>
 		<table id="wrap-table">
 			<tr>
@@ -38,66 +41,54 @@
 							<col width="*">
 						</colgroup>
 						<tr>
-							<th>배포제목</th>
-							<td>
-								<input type="text" class="AXInput w70p" name="dist_name">
-								<input type="hidden" name="material_type" value="ITEM">
-							</td>
-							<th>CAD 파일명</th>
-							<td>
-								<input type="text" class="AXInput w70p" name="fileName">
-							</td>
-							<th>상태</th>
-							<td>
-								<select name="state" class="AXSelect w100px" id="state">
-									<option value="">선택</option>
-									<option value="작업중">작업중</option>
-									<option value="승인중">승인중</option>
-									<option value="릴리즈됨">릴리즈됨</option>
-									<option value="반려됨">반려됨</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th>작성일자</th>
-							<td>
-								<input type="text" class="AXInput w100px" name="startCreatedDate" id="startCreatedDate" maxlength="8">
-								~
-								<input type="text" class="AXInput w100px" name="endCreatedDate" id="endCreatedDate" data-start="startCreatedDate" maxlength="8">
-								<i class="axi axi-close2 axicon clearBetween" data-target="CreatedDate"></i>
-							</td>
 							<th>배포처</th>
 							<td>
-								<input type="text" class="AXInput w200px" name="creator" id="creator" readonly="readonly">
-								<i class="axi axi-close2 axicon clearUser" data-target="creator"></i>
+								<input type="text" class="AXInput w70p" name="name">
 							</td>
-							<th>배포처구분</th>
+							<th>배포처 구분</th>
 							<td>
 								<select name="type" id="type" class="AXSelect w100px">
 									<option value="">선택</option>
-									<option value="IN">사내</option>
 									<option value="OUT">사외</option>
+									<option value="IN">사내</option>
+								</select>
+							</td>
+							<th>사용여부</th>
+							<td>
+								<select name="enable" class="AXSelect w100px" id="enable">
+									<option value="">선택</option>
+									<option value="true">사용</option>
+									<option value="false">사용안함</option>
 								</select>
 							</td>
 						</tr>
+						<tr>
+							<th>사용자 아이디</th>
+							<td>
+								<input type="text" class="AXInput w70p" name="userId">
+							</td>
+							<th>사용자 명</th>
+							<td>
+								<input type="text" class="AXInput w70p" name="userName">
+							</td>
+							<th>이메일</th>
+							<td>
+								<input type="text" class="AXInput w70p" name="email">
+							</td>
+						</tr>
 					</table>
-
+					<a style="display: none;" id="download"></a>
 					<table class="button-table">
 						<tr>
-							<td class="left">
-								<button type="button" id="createBtn">등록</button>
-								<button type="button" id="modifyBtn">수정</button>
-								<button type="button" id="deleteBtn">삭제</button>
-								<button type="button" id="approvalBtn">결재</button>
-							</td>
 							<td class="right">
-								<button type="button" id="excelBtn">엑셀</button>
+								<button type="button" id="addBtn">추가</button>
 								<button type="button" id="searchBtn">조회</button>
+								<button type="button" id="closeBtn">닫기</button>
 							</td>
 						</tr>
 					</table>
 
-					<div id="grid_wrap" style="height: 530px;"></div>
+					<div id="grid_wrap" style="height: 380px;"></div>
 					<div id="grid_paging" class="aui-grid-paging-panel my-grid-paging-panel"></div>
 					<script type="text/javascript">
 						var myGridID;
@@ -110,45 +101,54 @@
 							dataField : "no",
 							headerText : "번호",
 							dataType : "string",
-							width : 40
+							width : 50
+						}, {
+							dataField : "type",
+							headerText : "배포처 구분",
+							dataType : "string",
+							width : 100
+						// 						}, {
+						// 							dataField : "number",
+						// 							headerText : "배포처 코드",
+						// 							dataType : "string",
+						// 							width : 200
 						}, {
 							dataField : "name",
-							headerText : "배포명",
+							headerText : "배포처",
 							dataType : "string",
-							style : "left indent10",
-// 							width : 300,
-							cellMerge : true,
+							width : 200
 						}, {
-							dataField : "state",
-							headerText : "상태",
+							dataField : "userId",
+							headerText : "사용자 아이디",
 							dataType : "string",
-							width : 80,
-							//cellMerge : true,
-							mergeRef : "number",
-							mergePolicy : "restrict"
+							width : 200
 						}, {
-							dataField : "duration",
-							headerText : "다운로드 기간",
+							dataField : "userName",
+							headerText : "사용자명",
 							dataType : "string",
-							width : 150,
+							width : 200
+						}, {
+							dataField : "email",
+							headerText : "이메일",
+							dataType : "string",
+							width : 200
+						}, {
+							dataField : "enable",
+							headerText : "사용여부",
+							dataType : "string",
+							width : 120
 						}, {
 							dataField : "creator",
 							headerText : "작성자",
 							dataType : "string",
-							width : 100,
-							//cellMerge : true,
-							mergeRef : "number",
-							mergePolicy : "restrict"
+							width : 100
 						}, {
 							dataField : "createdDate",
 							headerText : "작성일자",
-							dataType : "string",
-							width : 100,
-							//cellMerge : true,
-							mergeRef : "number",
-							mergePolicy : "restrict"
+							dataType : "date",
+							formatString : "yyyy/mm/dd",
+							width : 100
 						}, {
-							
 							dataField : "oid",
 							headerText : "oid",
 							dataType : "string",
@@ -159,11 +159,9 @@
 							headerHeight : 30,
 							rowHeight : 30,
 							fillColumnSizeMode : true,
-							rowCheckToRadio : true,
+							// 						rowCheckToRadio : true,     //라디오 박스
 							showRowCheckColumn : true,
-							showRowNumColumn : false,
-							enableCellMerge : false,
-							cellMergePolicy : "withNull",
+							showRowNumColumn : false
 						};
 						myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
 						createPagingNavigator(1);
@@ -207,10 +205,9 @@
 
 						function load() {
 							var params = _data($("#form"));
-							var url = _url("/dist/list");
+							var url = _url("/distributor/userList");
 							AUIGrid.showAjaxLoader(myGridID);
 							_call(url, params, function(data) {
-								console.log(data.list);
 								totalRowCount = data.total;
 								totalPage = Math.ceil(totalRowCount / data.pageSize);
 								$("input[name=sessionid").val(data.sessionid);
@@ -228,72 +225,34 @@
 						}
 
 						AUIGrid.bind(myGridID, "cellClick", function(event) {
-							if (event.dataField == "name" || event.dataField == "fileName") {
-								var rowItem = event.item;
-								var url = _url("/dist/view", rowItem.oid);
-								//_popup(url, "", "", "f");
-								_popup(url, 1400, 960, "n");
+							var rowItem = event.item;
+							var rowIdFeild, rowId;
+							rowIdField = AUIGrid.getProp(event.pid, "rowIdField");
+							rowId = rowItem[rowIdField];
+							if (AUIGrid.isCheckedRowById(event.pid, rowId)) {
+								AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
+							} else {
+								AUIGrid.addCheckedRowsByIds(event.pid, rowId);
 							}
 						});
 
 						$(function() {
 
-							$("#createBtn").click(function() {
-								var url = "/Windchill/platform/dist/create";
-								_popup(url, "1024", "600", "n");
-							})
-
-							$("#modifyBtn").click(function() {
+							$("#addBtn").click(function() {
 								var items = AUIGrid.getCheckedRowItems(myGridID);
 								if (items.length == 0) {
-									alert("수정 할 배포를 선택하세요.");
+									alert("사용자를 선택하세요.")
 									return false;
 								}
-								var oid = items[0].item.oid;
-								var url = _url("/dist/modify", oid);
-								_popup(url, "", "", "f");
-							})
-
-							$("#excelBtn").click(function() {
-								_excel(myGridID, "도면 배포", []);
-							})
-
-							$("#approvalBtn").click(function() {
-								var items = AUIGrid.getCheckedRowItems(myGridID);
-								if (items.length == 0) {
-									alert("결재 할 배포를 선택하세요.");
-									return false;
-								}
-								var oid = items[0].item.doid;
-								var url = _url("/app/register", oid);
-								_popup(url, 1300, 600, "n");
-							})
-
-							$("#deleteBtn").click(function() {
-								var items = AUIGrid.getCheckedRowItems(myGridID);
-								if (items.length == 0) {
-									alert("삭제 할 배포를 선택하세요.");
-									return false;
-								}
-
-								var state = items[0].item.state;
-					<%if (!CommonUtils.isAdmin()) {%>
-						if (state != "작업중") {
-									alert("작업중 상태의 배포만 삭제 할 수 있습니다.");
-									return false;
-								}
-					<%}%>
-						if (!confirm("삭제 하시겠습니까?")) {
-									return false;
-								}
-								var oid = items[0].item.oid;
-								var url = _url("/dist/delete", oid);
-								_call(url, null, function(data) {
-									currentPage = 1;
-									$("input[name=tpage").val(1);
-									$("input[name=sessionid").val(0);
-									load();
-								}, "GET");
+								var list = _array(items);
+								var params = new Object();
+								params.list = list;
+								var url = _url("/distributor/userInfo");
+								_call(url, params, function(data) {
+									console.log(data);
+									opener.info(data.list);
+									self.close();
+								}, "POST");
 							})
 
 							$("#searchBtn").click(function() {
@@ -302,14 +261,13 @@
 								$("input[name=sessionid").val(0);
 								load();
 							})
-							// 작성자, 수정자 선택바인드
-							_selector("state");
-							_between("endCreatedDate");
-							_check("latest");
-							_user("creator");
-							_selector("type")
-							_clearUser("clearUser");
-							_clearBetween("clearBetween");
+							
+							$("#closeBtn").click(function() {
+								self.close();
+							})
+
+							_selector("type");
+							_selector("enable");
 						}).keypress(function(e) {
 							if (e.keyCode == 13) {
 								currentPage = 1;

@@ -6,7 +6,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 String box = (String) request.getParameter("box");
-String cmd = (String) request.getParameter("cmd");
 ArrayList<BaseCode> brand = (ArrayList<BaseCode>) request.getAttribute("brand");
 ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("company");
 ArrayList<BaseCode> cat_l = (ArrayList<BaseCode>) request.getAttribute("cat_l");
@@ -86,24 +85,18 @@ QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
 <!-- 							<input type="radio" name="partType" value="ALL" disabled="disabled"> -->
 <!-- 							<span>전체</span> -->
 <!-- 						</label> -->
-
-						<%if( "1".equals(cmd)){ %>
-
- 						<label> 
- 							<input type="radio" name="partType" value="SET" checked="checked"> 
- 							<span>세트</span> 
- 						</label>
- 						<%}else if( "2".equals(cmd)){ %>
+<!-- 						<label> -->
+<!-- 							<input type="radio" name="partType" value="SET" disabled="disabled"> -->
+<!-- 							<span>세트</span> -->
+<!-- 						</label> -->
+<!-- 						<label> -->
+<!-- 							<input type="radio" name="partType" value="ITEM" disabled="disabled"> -->
+<!-- 							<span>단품</span> -->
+<!-- 						</label> -->
 						<label>
-							<input type="radio" name="partType" value="ITEM" checked="checked">
-							<span>단품</span>
+							<input type="radio" name="partType" value="MAT" checked="checked">
+							<span>자재</span>
 						</label>
-						<%}else if( "2".equals(cmd)){ %>
- 						<label>
- 							<input type="radio" name="partType" value="MAT" checked="checked">
- 							<span>자재</span>
- 						</label>
- 						<%} %>
 					</td>
 				</tr>
 				<tr>

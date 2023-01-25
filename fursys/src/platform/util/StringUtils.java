@@ -1,5 +1,8 @@
 package platform.util;
 
+import java.util.Base64;
+import java.util.Base64.Decoder;
+
 public class StringUtils {
 
 	private StringUtils() {
@@ -33,4 +36,17 @@ public class StringUtils {
 		}
 		return str.trim();
 	}
+	
+	public static String convertToDecodeBase64(String param) {
+		String reValue = "";
+		if (isNotNull(param)) {
+			Decoder decoder = Base64.getDecoder();
+	        byte[] decodedBytes = decoder.decode(param.getBytes());
+	        
+	        reValue = new String(decodedBytes);
+		}
+		return reValue;
+	}
+	
+	
 }

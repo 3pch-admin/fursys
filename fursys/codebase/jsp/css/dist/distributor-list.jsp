@@ -230,7 +230,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 
 						$("#createBtn").click(function() {
 							var url = "/Windchill/platform/distributor/create";
-							_popup(url, 600, 300, "n");
+							_popup(url, 800, 1250, "n");
 						})
 
 						$("#modifyBtn").click(function() {

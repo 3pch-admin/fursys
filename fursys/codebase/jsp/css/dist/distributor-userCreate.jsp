@@ -15,7 +15,7 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 	>
 	<span>배포 관리</span>
 	>
-	<span>배포처 등록</span>
+	<span>배포처 사용자 등록</span>
 </div>
 
 <table class="create-table">
@@ -32,7 +32,7 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 			</label>
 			&nbsp;
 			<label>
-				<input type="radio" name="type" value="OUT" checked="checked">
+				<input type="radio" name="type" value="OUT">
 				사외
 			</label>
 		</td>
@@ -52,18 +52,45 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 			</select>
 		</td>
 	</tr>
-	<!-- 사외 -->
-		<tr class="factory">
-			<th>업체코드</th>
-			<td>
-				<input type="text" readonly="readonly" class="AXInput w40p" placeholder="자동생성">
-			</td>
-		</tr>
-	<tr class="factory">
-<!-- <tr> -->
-		<th>업체명</th>
+	<tr class="close name">
+		<th>사용자 아이디</th>
 		<td>
-			<input type="text" class="AXInput w40p" name="names">
+			<input type="text" class="AXInput w30p" name="userId" readonly="readonly">
+			<input type="hidden" class="AXInput w30p" name="umail" readonly="readonly">
+		</td>
+	</tr>
+	<tr class="close name">
+		<th>사용자명</th>
+		<td>
+			<input type="text" class="AXInput w30p" name="username" readonly="readonly">
+		</td>
+	</tr>
+
+	<!-- 사외 -->
+	<tr class="close factory">
+		<th>배포처</th>
+		<td>
+			<input type="text" class="AXInput w70p" name="distributor" id="distributor">
+			<i class="axi axi-close2 axicon deleteDistributor"></i>
+		</td>
+	</tr>
+	<tr class="close factory">
+		<th>사용자 아이디(이메일)</th>
+		<td>
+			<input type="text" class="AXInput w60p" name="email">
+		</td>
+	</tr>
+	<tr class="close factory">
+		<th>사용자명</th>
+		<td>
+			<input type="text" class="AXInput w60p" name="userName">
+		</td>
+	</tr>
+
+	<tr>
+		<th>설명</th>
+		<td>
+			<textarea rows="6" cols="" class="AXTextarea" name="description"></textarea>
 		</td>
 	</tr>
 	<tr>
@@ -89,8 +116,11 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 
 <script type="text/javascript">
 	$(function() {
+		
 		_selector("enable");
 		_selector("factory");
+		//_finder("distributor", "/distributor/popupList");
+		_distributor("distributor");
 		$("#closeBtn").click(function() {
 			self.close();
 		})
@@ -100,66 +130,112 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 			_popup(url, 1200, 650, "n");
 		})
 
-		$("input:radio[name=type]").click(function() {
+		$("input[name=type]").click(function() {
 			if ($(this).val() == "IN") {
 				$(".name").show();
 				$(".factory").hide();
 				_selector("enable");
 				_selector("factory");
+				_distributor("distributor");
 			} else if ($(this).val() == "OUT") {
 				$(".name").hide();
 				$(".factory").show();
 				_selector("enable");
 				_selector("factory");
+				_distributor("distributor");
 			}
 		})
 
 		$("#saveBtn").click(function() {
-			$names = $("input[name=names]");
-			$factory = $("select[name=factory]");
-			$types = $("input[name='type']:checked");
-
-			if ($types.val() == undefined) {
+			$type = $("input[name='type']:checked");
+			$enable = $("input[name='enable']");
+			
+			$factory = $("select[name='factory']");
+			$userId  = $("input[name=userId");
+			//사내
+			$distributor = $("input[name=distributor]");
+			$email = $("input[name=email]");
+			$userName = $("input[name=userName]");
+			//사외
+			
+			if($type.val() == undefined){
 				alert("배포처 구분을 선택하세요.");
-				$types.focus();
+				$type.focus();
 				return false;
 			}
-
-			if ($types.val() == "OUT") {
-				if ($names.val() == "") {
-					alert("업체명을 입력하세요");
-					$names.focus();
-					return false;
-				}
+			if($enable.val() == ""){
+				alert("사용여부를 선택하세요.");
+				$enable.focus();
+				return false;
 			}
-
-			if ($types.val() == "IN") {
-				if ($factory.val() == "") {
+			
+			if($type.val() == "IN"){
+				if($factory.val() == ""){
 					alert("사업장을 선택하세요.");
 					$factory.focus();
 					return false;
 				}
+				if($userId.val()==""){
+					alert("사용자 아이디를 선택하세요.");
+					$userId.focus();
+					return false;
+				}
+			} else {
+				if($distributor.val()==""){
+				alert("배포처를 입력하세요.");
+				$distributor.focus();
+				return false;
+				}
+				if($email.val()==""){
+					alert("사용자 아이디를 입력하세요.");
+					$email.focus();
+					return false;
+				}
+				if($userName.val()==""){
+					alert("사용자명을 입력하세요.");
+					$userName.focus();
+					return false;
+				}
 			}
-
+			
 			if (!confirm("등록 하시겠습니까?")) {
 				return false;
 			}
 
 			var params = _data($("#form"));
-			var url = _url("/distributor/create");
+			var url = _url("/distributor/userCreate");
 			console.log(params);
 			_call(url, params, function(data) {
 				opener.load();
 				self.close();
 			}, "POST");
 		})
+		
+	
+	$("input[name=email]").blur(function() {
+			var email_check = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+			var email = $(this).val();
+			if (!email_check.test(email)) {
+				alert("잘못된 형식의 이메일 주소입니다.");
+				return false;
+			}
+		});
 
 		$("input").checks();
+
+		$(".deleteDistributor").click(function() {
+			$("input[name=distributor]").val("");
+		})
 	})
 
 	function distributor(userId, userName, email) {
 		$("input[name=userId]").val(userId);
 		$("input[name=username]").val(userName);
 		$("input[name=umail]").val(email);
+	}
+	
+	// distributor-popup-list 에서 배포처  
+	function dist(name){
+		$("input[name=distributor]").val(name);
 	}
 </script>

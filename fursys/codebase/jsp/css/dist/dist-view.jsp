@@ -1,10 +1,3 @@
-<%@page import="wt.content.ApplicationData"%>
-<%@page import="wt.content.ContentRoleType"%>
-<%@page import="wt.content.ContentHelper"%>
-<%@page import="com.ptc.wvs.server.util.PublishUtils"%>
-<%@page import="wt.representation.Representation"%>
-<%@page import="wt.epm.EPMDocument"%>
-<%@page import="wt.part.WTPart"%>
 <%@page import="platform.dist.entity.DistPartColumns"%>
 <%@page import="platform.dist.entity.DistributorUserColumns"%>
 <%@page import="platform.util.CommonUtils"%>
@@ -49,12 +42,6 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 		<td><%=dto.getCreator()%></td>
 		
 	</tr>
-	
-<!-- 	<tr> -->
-<!-- 		<th>description</th> -->
-<%-- 		<td><%=dto.getDescription() %></td> --%>
-		
-<!-- 	</tr> -->
 		<tr>
 		<th>내용</th>
 		<td colspan="3">
@@ -122,22 +109,6 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 					<td><%=di_part.isDwg()?"O":"X" %></td>
 				</tr>
 				<%
-					System.out.println("#### getOid=="+di_part.getOid());
-					if( di_part.getOid() != null){
-						WTPart part = (WTPart) CommonUtils.persistable(di_part.getOid());
-						
-						System.out.println("#### getEoid=="+di_part.getEoid());
-						if( di_part.getEoid() != null && di_part.getEoid().length() > 0  ){
-							EPMDocument epm = (EPMDocument) CommonUtils.persistable(di_part.getEoid());
-							if (epm != null) {
-								Representation representation = PublishUtils.getRepresentation(epm);
-								QueryResult result = ContentHelper.service.getContentsByRole(representation, ContentRoleType.ADDITIONAL_FILES);
-								while (result.hasMoreElements()) {
-									ApplicationData data = (ApplicationData) result.nextElement();
-									out.println(data.getFileName());
-								}
-							}						}
-					}
 				}
 				%>
 			</table>
