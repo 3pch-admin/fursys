@@ -228,8 +228,8 @@
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
 			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-			checkValue : "true", // true, false 인 경우가 기본
-			unCheckValue : "false",
+			//checkValue : "1", // true, false 인 경우가 기본
+			//unCheckValue : "2",
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType == "CADDRAWING") {
@@ -247,8 +247,8 @@
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
 			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-			checkValue : "true", // true, false 인 경우가 기본
-			unCheckValue : "false",
+			//checkValue : "1", // true, false 인 경우가 기본
+			//unCheckValue : "2",
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType != "CADDRAWING") {
@@ -266,8 +266,8 @@
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
 			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-			checkValue : "true", // true, false 인 경우가 기본
-			unCheckValue : "false",
+			//checkValue : "1", // true, false 인 경우가 기본
+			//unCheckValue : "2",
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType == "CADDRAWING") {

@@ -76,17 +76,26 @@ public class StandardDistService extends StandardManager implements DistService 
 
 			//ContentUtils.updateSecondary(secondary, dist);
 
-			ArrayList<Map<String, String>> partList = (ArrayList<Map<String, String>>) params.get("partList");
+			ArrayList<Map<String, Object>> partList = (ArrayList<Map<String, Object>>) params.get("partList");
 			
-			for (Map<String, String> partMap : partList) {
+			for (Map<String, Object> partMap : partList) {
 				
 				String oid  = (String)partMap.get("oid");
 				
+				boolean pdf  = (boolean)partMap.get("pdf");
+				boolean step  = (boolean)partMap.get("step");
+				boolean dwg  = (boolean)partMap.get("dwg");	
+				
+				System.out.println("### pdf=-="+pdf);
+				System.out.println("### step=-="+step);
+				System.out.println("### dwg=-="+dwg);
+				
 				WTPart part = (WTPart) CommonUtils.persistable(oid);
 				DistPartLink link = DistPartLink.newDistPartLink(dist, part);
-//				link.setPdf(map.isPdf());
-//				link.setDwg(map.isDwg());
-//				link.setStep(map.isStep());
+				//여기
+				link.setPdf(pdf);
+				link.setStep(step);
+				link.setDwg(dwg);
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
 			}
 			
