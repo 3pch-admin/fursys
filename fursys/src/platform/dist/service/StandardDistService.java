@@ -99,9 +99,9 @@ public class StandardDistService extends StandardManager implements DistService 
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
 			}
 			
-			ArrayList<Map<String, String>> userList = (ArrayList<Map<String, String>>) params.get("distributorList");
+			ArrayList<Map<String, Object>> userList = (ArrayList<Map<String, Object>>) params.get("distributorList");
 			
-			for (Map<String, String> userMap : userList) {
+			for (Map<String, Object> userMap : userList) {
 				String uoid  = (String)userMap.get("uoid");
 				DistributorUser diUser = (DistributorUser) CommonUtils.persistable(uoid);
 				DistDistributorUserLink link = DistDistributorUserLink.newDistDistributorUserLink(dist, diUser);
