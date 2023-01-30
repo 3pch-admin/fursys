@@ -236,8 +236,8 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
 			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-			checkValue : "true", // true, false 인 경우가 기본
-			unCheckValue : "false",
+// 			checkValue : "true", // true, false 인 경우가 기본
+// 			unCheckValue : "false",
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType == "CADDRAWING") {
@@ -255,8 +255,8 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
 			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-			checkValue : "true", // true, false 인 경우가 기본
-			unCheckValue : "false",
+// 			checkValue : "true", // true, false 인 경우가 기본
+// 			unCheckValue : "false",
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType != "CADDRAWING") {
@@ -274,8 +274,8 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
 			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-			checkValue : "true", // true, false 인 경우가 기본
-			unCheckValue : "false",
+// 			checkValue : "true", // true, false 인 경우가 기본
+// 			unCheckValue : "false",
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType == "CADDRAWING") {

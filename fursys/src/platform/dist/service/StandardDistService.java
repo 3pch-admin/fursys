@@ -320,8 +320,8 @@ public class StandardDistService extends StandardManager implements DistService 
 		String distName = (String) params.get("distName");
 		String description = (String) params.get("description");
 		String duration = (String) params.get("duration");
-		ArrayList<Map<String, String>> partList = (ArrayList<Map<String, String>>) params.get("partList");
-		ArrayList<Map<String, String>> userList = (ArrayList<Map<String, String>>) params.get("distributorList");
+		ArrayList<Map<String, Object>> partList = (ArrayList<Map<String, Object>>) params.get("partList");
+		ArrayList<Map<String, Object>> userList = (ArrayList<Map<String, Object>>) params.get("distributorList");
 
 		try {
 			trs.start();
@@ -348,8 +348,14 @@ public class StandardDistService extends StandardManager implements DistService 
 				}
 			}
 			//test
-			for (Map<String, String> partMap : partList) {
+			
+			for (Map<String, Object> partMap : partList) {
 				String poid = (String) partMap.get("oid");
+				
+				boolean pdf = (boolean) partMap.get("pdf");
+				boolean step = (boolean) partMap.get("step");
+				boolean dwg = (boolean) partMap.get("dwg");
+				
 				WTPart part = (WTPart) CommonUtils.persistable(poid);
 				DistPartLink link = DistPartLink.newDistPartLink(dist, part);
 //				link.setPdf(map.isPdf());
@@ -364,7 +370,7 @@ public class StandardDistService extends StandardManager implements DistService 
 				PersistenceHelper.manager.delete(link);
 			}
 			
-			for (Map<String, String> userMap : userList) {
+			for (Map<String, Object> userMap : userList) {
 				String uoid = (String) userMap.get("oid");
 				DistributorUser diUser = (DistributorUser) CommonUtils.persistable(uoid);
 				DistDistributorUserLink link = DistDistributorUserLink.newDistDistributorUserLink(dist, diUser);

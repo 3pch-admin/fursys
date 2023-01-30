@@ -579,6 +579,7 @@ public class DistHelper {
 		}
 		return list;
 	}
+	
 	public ArrayList<DistributorUser> getDistributorUserLinks(Dist dist) throws Exception {
 		ArrayList<DistributorUser> list = new ArrayList<DistributorUser>();
 
