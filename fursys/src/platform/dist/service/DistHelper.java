@@ -233,10 +233,20 @@ public class DistHelper {
 
 	public ArrayList<DistPartColumns> getParts(Dist dist) throws Exception {
 		ArrayList<DistPartColumns> list = new ArrayList<DistPartColumns>();
-		QueryResult result = PersistenceHelper.manager.navigate(dist, "part", DistPartLink.class);
-		while (result.hasMoreElements()) {
-			WTPart part = (WTPart) result.nextElement();
-			list.add(new DistPartColumns(part));
+		//QueryResult result = PersistenceHelper.manager.navigate(dist, "part", DistPartLink.class);
+		
+		QuerySpec qs = new QuerySpec();
+		
+		int idx = qs.appendClassList(DistPartLink.class, true);
+		
+		qs.appendWhere(new SearchCondition(DistPartLink.class, "roleAObjectRef.key.id", "=", CommonUtils.longValue(dist)), new int [] {idx} );
+		
+		QueryResult qr = PersistenceHelper.manager.find(qs);
+		
+		while (qr.hasMoreElements()) {
+			Object[] o = (Object[]) qr.nextElement();
+			DistPartLink link = (DistPartLink)o[0];
+			list.add(new DistPartColumns(link));
 		}
 		return list;
 	}
@@ -262,9 +272,9 @@ public class DistHelper {
 		return list;
 	}
 
-	public List<TransferDetailVO> details(String type, DistPartLink link, String path, Dist di) throws Exception {
+	public List<TransferDetailVO> details(String type, DistPartLink link, String path, Dist di, EPMDocument epm) throws Exception {
 
-		TransferDetailVO detail = detail(link, path);
+		TransferDetailVO detail = detail(link, path, epm);
 		List<TransferDetailVO> details = new ArrayList<>();
 		details.add(detail);
 
@@ -286,13 +296,11 @@ public class DistHelper {
 		return details;
 	}
 
-	private TransferDetailVO detail(DistPartLink link, String path) throws Exception {
+	private TransferDetailVO detail(DistPartLink link, String path, EPMDocument epm) throws Exception {
 		Timestamp today = DateUtils.today();
 
 		TransferDetailVO detail = new TransferDetailVO();
-		WTPart part = link.getPart();
 		
-		EPMDocument epm = PartHelper.manager.getEPMDocument(part);
 		if( epm != null) {
 			detail.setPartOid(String.valueOf(epm.getPersistInfo().getObjectIdentifier().getId()));
 			detail.setPartName(epm.getName());
@@ -451,7 +459,7 @@ public class DistHelper {
 				result = ContentHelper.service.getContentsByRole(representation, ContentRoleType.THUMBNAIL_SMALL);
 				while (result.hasMoreElements()) {
 					ApplicationData data = (ApplicationData) result.nextElement();
-					fileVo.setJpg3DFile(data);
+					fileVo.setJpg3DSmallFile(data);
 				}
 			}
 		}

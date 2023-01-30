@@ -22,6 +22,8 @@ import platform.dist.entity.Distributor;
 import platform.dist.entity.DistributorUser;
 import platform.dist.vo.TransferFileVO;
 import platform.dist.vo.TransferXMLVO;
+import platform.epm.service.EpmHelper;
+import platform.part.service.PartHelper;
 import platform.util.CommonUtils;
 import platform.util.ContentUtils;
 import platform.util.DateUtils;
@@ -32,6 +34,7 @@ import wt.content.ContentHelper;
 import wt.content.ContentItem;
 import wt.content.ContentRoleType;
 import wt.content.ContentServerHelper;
+import wt.epm.EPMDocument;
 import wt.fc.PersistenceHelper;
 import wt.fc.QueryResult;
 import wt.org.WTUser;
@@ -225,7 +228,15 @@ public class StandardDistService extends StandardManager implements DistService 
 
 			ArrayList<DistPartLink> links = DistHelper.manager.getPartLinks(dist);
 			for (DistPartLink link : links) {
-				vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist));
+				WTPart part = link.getPart();
+				EPMDocument epm = PartHelper.manager.getEPMDocument(part);
+				if( epm != null) {
+					vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist, epm));
+					EPMDocument epm2d = EpmHelper.manager.getEPM2D(epm);
+					if (epm2d != null) {
+						vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist, epm2d));
+					}
+				}
 			}
 
 			File triggerFile = new File(path + File.separator + "trigger");

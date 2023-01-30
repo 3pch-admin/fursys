@@ -20,6 +20,7 @@ import wt.vc.VersionControlHelper;
 @Setter
 public class DistPartColumns {
 	private String oid;
+	private String linkOid;
 	private String docType;
 	private String name;
 	private String number;
@@ -27,6 +28,9 @@ public class DistPartColumns {
 	private boolean pdf = false;
 	private boolean dwg = false;
 	private boolean step = false;
+	private boolean linkPdf = false;
+	private boolean linkDwg = false;
+	private boolean linkStep = false;
 	private String s;
 	private String t;
 	private String type;
@@ -76,13 +80,17 @@ public class DistPartColumns {
 	}
 	
 	public DistPartColumns(DistPartLink link) throws Exception {
-		
+		setLinkOid(CommonUtils.oid(link));
 		WTPart part = link.getPart();
 		
 		EPMDocument epm = PartHelper.manager.getEPMDocument(part);
 		if (epm != null) {
 			setEoid(epm.getPersistInfo().getObjectIdentifier().getStringValue());
 			setThum_3d(ThumbnailUtils.thumbnails(part)[1]);
+			DistFileVO fileVo = DistHelper.manager.getDistFileVO(epm);
+			//setPdf(fileVo.getPdfFile()!=null?true:false);
+			//setDwg(fileVo.getDwgFile()!=null?true:false);
+			setStep(fileVo.getStpFile()!=null?true:false);
 		}
 		EPMDocument epm2d = EpmHelper.manager.getEPM2D(epm);
 		if (epm2d != null) {
@@ -91,7 +99,7 @@ public class DistPartColumns {
 			DistFileVO fileVo = DistHelper.manager.getDistFileVO(epm2d);
 			setPdf(fileVo.getPdfFile()!=null?true:false);
 			setDwg(fileVo.getDwgFile()!=null?true:false);
-			setStep(fileVo.getStpFile()!=null?true:false);
+			//setStep(fileVo.getStpFile()!=null?true:false);
 		}
 		
 		setOid(CommonUtils.oid(part));
@@ -174,9 +182,9 @@ public class DistPartColumns {
 //			setDwg(true);
 //			setStep(false);
 //		} else {
-//			setPdf(false);
-//			setDwg(false);
-//			setStep(true);
+			setLinkPdf(link.isPdf());
+			setLinkDwg(link.isDwg());
+			setLinkStep(link.isStep());
 //		}
 	}
 }
