@@ -30,8 +30,11 @@ public class DistributorUserDTO {
 		setUserName(distUser.getUserName());
 		setEmail(StringUtils.convertToStr(distUser.getEmail(), ""));
 		setName(distUser.getDistributor().getName());
-
-		setDescription(distUser.getDescription());
+		if (distUser.getDescription() == null) {
+			setDescription("");
+		} else {
+			setDescription(distUser.getDescription());
+		}
 		setNumber(distUser.getNumber());
 		if( distUser.getEnable()) {
 			setEnableString("사용");

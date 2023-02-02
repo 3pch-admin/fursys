@@ -610,6 +610,8 @@ public class StandardDistributorService extends StandardManager implements Distr
 				distUser.setObj_id(obj_id);
 				PersistenceHelper.manager.modify(distUser);
 				
+				CPCHistoryHelper.createCPCHistory(CommonUtils.oid(distUser), CPCHistoryHelper.company, sql.toString());
+				
 			}else {
 				//중복
 				
@@ -628,6 +630,8 @@ public class StandardDistributorService extends StandardManager implements Distr
 				sql.append(" UPDATE_USER_ID='" + user.getName() + "', ");
 				sql.append(" UPDATE_USER_NM='" + user.getFullName() + "' ");
 				sql.append(" WHERE SITE_CD = '" + distUser.getObj_id() + "' ");
+				
+				CPCHistoryHelper.createCPCHistory(CommonUtils.oid(distUser), CPCHistoryHelper.company, sql.toString());
 			}
 			
 			trs.commit();

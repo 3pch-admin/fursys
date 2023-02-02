@@ -1,3 +1,4 @@
+<%@page import="platform.util.ThumbnailUtils"%>
 <%@page import="platform.dist.service.DistHelper"%>
 <%@page import="platform.dist.vo.DistFileVO"%>
 <%@page import="wt.content.ApplicationData"%>
@@ -103,19 +104,22 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 		<td colspan="3">
 			<table class="view-table info-view">
 				<tr>
-					<th>-</th>
+<!-- 					<th>-</th> -->
+<th>3D</th>
+<th>2D</th>
 					<th>부품번호</th>
 					<th>부품명칭</th>
 					<th>버전</th>
 					<th>PDF[링크][도면]</th>
 					<th>STEP[링크][도면]</th>
 					<th>DWG[링크][도면]</th>
-					<th>oid</th>
+<!-- 					<th>oid</th> -->
 				</tr>
 				<%
 				for(DistPartColumns di_part : dto.getPartList()){
 					System.out.println("#### getOid=="+di_part.getOid());
 					String oid =di_part.getOid();
+					String[] thumb2 = null;
 					if( di_part.getOid() != null){
 						WTPart part = (WTPart) CommonUtils.persistable(di_part.getOid());
 						
@@ -132,16 +136,17 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 									while (result.hasMoreElements()) {
 										ApplicationData data = (ApplicationData) result.nextElement();
 										oid +="//stp="+data.getFileName();
-										out.println(data.getFileName());
-									}
+										//out.println(data.getFileName());
 									DistFileVO fileVo = DistHelper.manager.getDistFileVO(epm);
 									oid +="//voStp="+fileVo.getStpFile().getFileName();
+									}
 								}
 								
 								
 								if( di_part.getEoid2d() != null && di_part.getEoid2d().length() > 0  ){
 									EPMDocument epm2d = (EPMDocument) CommonUtils.persistable(di_part.getEoid2d());
 									if (epm2d != null) {
+										thumb2 = ThumbnailUtils.thumbnails(epm2d);
 										oid +="//2d="+di_part.getEoid2d();
 										Representation representation2 = PublishUtils.getRepresentation(epm2d);
 										if(representation2 != null){
@@ -149,7 +154,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 											while (result2.hasMoreElements()) {
 												ApplicationData data = (ApplicationData) result2.nextElement();
 												oid +="//2d2="+data.getFileName();
-												out.println(data.getFileName());
+												//out.println(data.getFileName());
 											}
 										}
 									}
@@ -157,16 +162,27 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 							}						
 						}
 					}
+					String[] thumb = ThumbnailUtils.thumbnails(di_part.getOid());
 				%>
 				<tr>
-					<td><%=di_part.getLinkOid() %></td>
+					<td style="text-align: center">
+						<img src="<%=thumb[1]%>"style= "cursor: pointer;"  id="thumb" data-oid="<%=di_part.getEoid()%>"></td>
+					<td style="text-align: center">
+						<%
+						if (thumb2 != null) {
+						%><img src="<%=thumb2[1]%>" style="cursor: pointer;" id="thumb2" data-oid="<%=di_part.getEoid2d()%>">
+					</td>
+						<%
+						}
+						%>
+<%-- 					<td><%=di_part.getLinkOid() %></td> --%>
 					<td><%=di_part.getNumber() %></td>
 					<td><%=di_part.getName() %></td>
 					<td><%=di_part.getVersion() %></td>
 					<td>[<%=di_part.isLinkPdf()?"O":"X" %>][<%=di_part.isPdf()?"O":"X" %>]</td>
 					<td>[<%=di_part.isLinkStep()?"O":"X" %>][<%=di_part.isStep()?"O":"X" %>]</td>
 					<td>[<%=di_part.isLinkDwg()?"O":"X" %>][<%=di_part.isDwg()?"O":"X" %>]</td>
-					<td><%=oid %></td>
+<%-- 					<td><%=oid %></td> --%>
 				</tr>
 				<%
 					
@@ -200,6 +216,12 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 
 <script type="text/javascript">
 	$(function() {
+		
+		$("#thumb").click(function() {
+			var oid = $(this).data("oid");
+			console.log(oid);
+			_openCreoView(oid);
+		})
 
 		$("#sendEpBtn").click(function() {
 			if (!confirm("ep 전송 하시겠습니까?")) {

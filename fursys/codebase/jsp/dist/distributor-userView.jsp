@@ -1,3 +1,5 @@
+<%@page import="platform.util.service.CPCHistoryHelper"%>
+<%@page import="platform.util.entity.CPCHistory" %>
 <%@page import="platform.code.service.BaseCodeHelper"%>
 <%@page import="platform.dist.entity.DistributorUser"%>
 <%@page import="platform.dist.entity.DistributorUserDTO"%>
@@ -80,13 +82,38 @@ if ("IN".equals(distUser.getType())) {
 		<th>사용여부</th>
 		<td><%=dto.getEnable() == true ? "사용" : "사용안함" %></td>
 	</tr>
+	<tr>
+		<th>전송이력</th>
+		<td>
+			<table class="create-table">
+				<tr>
+					<th>send Query</th>
+					<th>send Date</th>
+					<th>send User</th>
+				</tr>
+				<%
+				ArrayList<CPCHistory> historys = CPCHistoryHelper.manager.getCPCHistory(dto.getOid());
+				
+				for( CPCHistory history : historys ){
+				%>
+				<tr>
+					<td><%=history.getSendQuery() %></td>
+					<td><%=history.getCreateTimestamp() %></td>
+					<td><%=history.getOwnership().getOwner().getFullName() %></td>
+				</tr>
+				<%
+				}
+				%>
+			</table>
+		</td>
+	</tr>
+	
 </table>
 
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="sendBtn">전송</button>
-			<button type="button" id="sendHistoryBtn">전송이력</button>
+			<button type="button" id="closeBtn">사용여부 변경</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -142,11 +169,11 @@ if ("IN".equals(distUser.getType())) {
 			}
 
 			var params = _data($("#form"));
-			var url = _url("/distributor/sendDistributor");
+			var url = _url("/distributor/sendDistributorUser");
 			console.log(params);
 			_call(url, params, function(data) {
 				opener.load();
-				self.close();
+// 				self.close();
 			}, "POST");
 		})
 		

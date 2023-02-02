@@ -32,7 +32,7 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 			</label>
 			&nbsp;
 			<label>
-				<input type="radio" name="type" value="OUT">
+				<input type="radio" name="type" value="OUT" checked>
 				사외
 			</label>
 		</td>
@@ -67,20 +67,20 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 	</tr>
 
 	<!-- 사외 -->
-	<tr class="close factory">
+	<tr class="factory">
 		<th>배포처</th>
 		<td>
 			<input type="text" class="AXInput w70p" name="distributor" id="distributor">
 			<i class="axi axi-close2 axicon deleteDistributor"></i>
 		</td>
 	</tr>
-	<tr class="close factory">
+	<tr class="factory">
 		<th>사용자 아이디(이메일)</th>
 		<td>
 			<input type="text" class="AXInput w60p" name="email">
 		</td>
 	</tr>
-	<tr class="close factory">
+	<tr class="factory">
 		<th>사용자명</th>
 		<td>
 			<input type="text" class="AXInput w60p" name="userName">

@@ -377,6 +377,30 @@ table.create-table td {
 	height: 24px;
 }
 
+/** dist-create-table **/
+table.dist-create-table {
+	width: 100%;
+	border-top: 2px solid #2b85c1;
+	font-size: 12px;
+}
+
+table.dist-create-table th {
+	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+	border-right: 1px solid #c8c8c8;
+	border-bottom: 1px solid #c8c8c8;
+	height: 36px;
+}
+
+table.dist-create-table th:first-child {
+	border-left: 1px solid #c8c8c8;
+}
+
+table.dist-create-table td {
+	border-right: 1px solid #c8c8c8;
+	border-bottom: 1px solid #c8c8c8;
+	height: 24px;
+}
+
 /** raonkEditor **/
 div.raonkEditor {
 	width: calc(100% - 10px);

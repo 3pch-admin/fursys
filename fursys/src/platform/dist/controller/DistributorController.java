@@ -350,5 +350,22 @@ public class DistributorController {
 		return result;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/sendDistributorUser", method = RequestMethod.POST)
+	public Map<String, Object> sendDistributorUser(@RequestBody Map<String, Object> params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			
+			int sendResult = DistributorHelper.service.sendDistributorUser(params);	
+			result.put("result", true);
+			result.put("msg", " 전송 등록 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
 
 }

@@ -126,12 +126,12 @@ boolean isAdmin = CommonUtils.isAdmin();
 						dataField : "type",
 						headerText : "배포처 구분",
 						dataType : "string",
-						width : 100
+						width : 80
 					}, {
 						dataField : "userId",
 						headerText : "사용자 아이디",
 						dataType : "string",
-						width : 120
+						width : 160
 					}, {
 						dataField : "userName",
 						headerText : "사용자명",
@@ -141,12 +141,12 @@ boolean isAdmin = CommonUtils.isAdmin();
 						dataField : "email",
 						headerText : "이메일",
 						dataType : "string",
-						width : 200
+						width : 160
 					}, {
 						dataField : "enable",
 						headerText : "사용여부",
 						dataType : "string",
-						width : 120
+						width : 80
 					}, {
 						dataField : "creator",
 						headerText : "작성자",
@@ -306,7 +306,6 @@ boolean isAdmin = CommonUtils.isAdmin();
 					})
 				</script>
 			</td>
-			</tr>
 		</table>
 	</form>
 </body>

@@ -21,7 +21,7 @@
 	<span>배포 등록</span>
 </div>
 
-<table class="create-table" style="margin-bottom: 5px;">
+<table class="dist-create-table" style="margin-bottom: 5px;">
 	<colgroup>
 		<col width="130">
 		<col width="*">
@@ -239,25 +239,6 @@
 		// 			}
 		}
 	}, {
-		dataField : "step",
-		headerText : "STEP",
-		dataType : "string",
-		width : 60,
-		renderer : {
-			type : "CheckBoxEditRenderer",
-			showLabel : false,
-			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-			//checkValue : "1", // true, false 인 경우가 기본
-			//unCheckValue : "2",
-		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
-		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
-		// 				if (item.docType != "CADDRAWING") {
-		// 					return false;
-		// 				}
-		// 				return true;
-		// 			}
-		}
-	}, {
 		dataField : "dwg",
 		headerText : "DWG",
 		dataType : "string",
@@ -271,6 +252,25 @@
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType == "CADDRAWING") {
+		// 					return false;
+		// 				}
+		// 				return true;
+		// 			}
+		}
+	}, {
+		dataField : "step",
+		headerText : "STEP",
+		dataType : "string",
+		width : 60,
+		renderer : {
+			type : "CheckBoxEditRenderer",
+			showLabel : false,
+			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
+			//checkValue : "1", // true, false 인 경우가 기본
+			//unCheckValue : "2",
+		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
+		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
+		// 				if (item.docType != "CADDRAWING") {
 		// 					return false;
 		// 				}
 		// 				return true;

@@ -247,25 +247,6 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		// 			}
 		}
 	}, {
-		dataField : "step",
-		headerText : "STEP",
-		dataType : "string",
-		width : 60,
-		renderer : {
-			type : "CheckBoxEditRenderer",
-			showLabel : false,
-			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
-// 			checkValue : "true", // true, false 인 경우가 기본
-// 			unCheckValue : "false",
-		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
-		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
-		// 				if (item.docType != "CADDRAWING") {
-		// 					return false;
-		// 				}
-		// 				return true;
-		// 			}
-		}
-	}, {
 		dataField : "dwg",
 		headerText : "DWG",
 		dataType : "string",
@@ -279,6 +260,25 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
 		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
 		// 				if (item.docType == "CADDRAWING") {
+		// 					return false;
+		// 				}
+		// 				return true;
+		// 			}
+		}
+	}, {
+		dataField : "step",
+		headerText : "STEP",
+		dataType : "string",
+		width : 60,
+		renderer : {
+			type : "CheckBoxEditRenderer",
+			showLabel : false,
+			editable : true, // 체크박스 편집 활성화 여부(기본값 : false)
+// 			checkValue : "true", // true, false 인 경우가 기본
+// 			unCheckValue : "false",
+		// 			disabledFunction : function(rowIndex, columnIndex, value, isChecked, item, dataField) {
+		// 				// 행 아이템의 name 이 Anna 라면 체크박스 비활성화(disabled) 처리
+		// 				if (item.docType != "CADDRAWING") {
 		// 					return false;
 		// 				}
 		// 				return true;
@@ -367,15 +367,15 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		})
 
 		$("#item_addBtn").click(function() {
-			var url = _url("/dist/popup?box=2");
+			var url = _url("/dist/popup?box=2&cmd=2");
 			_popup(url, "", "", "f");
 		})
 		$("#mat_addBtn").click(function() {
-			var url = _url("/dist/popup_mat?box=2");
+			var url = _url("/dist/popup?box=2&cmd=3");
 			_popup(url, "", "", "f");
 		})
 		$("#set_addBtn").click(function () {
-			var url = _url("/dist/popup_set?box=2");
+			var url = _url("/dist/popup?box=2&cmd=1");
 			_popup(url, "", "", "f");
 		})
 		

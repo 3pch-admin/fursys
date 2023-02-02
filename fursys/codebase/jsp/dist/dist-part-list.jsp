@@ -98,7 +98,7 @@ QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
 							<input type="radio" name="partType" value="ITEM" checked="checked">
 							<span>단품</span>
 						</label>
-						<%}else if( "2".equals(cmd)){ %>
+						<%}else if( "3".equals(cmd)){ %>
  						<label>
  							<input type="radio" name="partType" value="MAT" checked="checked">
  							<span>자재</span>

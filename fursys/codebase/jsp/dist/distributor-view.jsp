@@ -1,3 +1,4 @@
+<%@page import="platform.util.service.CPCHistoryHelper"%>
 <%@page import="platform.util.entity.CPCHistory"%>
 <%@page import="platform.dist.entity.DistributorUserDTO"%>
 <%@page import="platform.dist.entity.DistributorUser"%>
@@ -90,7 +91,7 @@ DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 					<th>send User</th>
 				</tr>
 				<%
-				ArrayList<CPCHistory> historys = DistributorHelper.manager.getCPCHistory(dto.getOid());
+				ArrayList<CPCHistory> historys = CPCHistoryHelper.manager.getCPCHistory(dto.getOid());
 				
 				for( CPCHistory history : historys ){
 				%>
@@ -111,8 +112,6 @@ DistributorDTO dto = (DistributorDTO) request.getAttribute("dto");
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="sendBtn">전송</button>
-			<button type="button" id="sendHistoryBtn">전송이력</button>
 			<button type="button" id="closeBtn">사용여부 변경</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>

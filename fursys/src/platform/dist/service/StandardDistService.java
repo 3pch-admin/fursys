@@ -348,7 +348,6 @@ public class StandardDistService extends StandardManager implements DistService 
 				}
 			}
 			//test
-			
 			for (Map<String, Object> partMap : partList) {
 				String poid = (String) partMap.get("oid");
 				
@@ -358,9 +357,9 @@ public class StandardDistService extends StandardManager implements DistService 
 				
 				WTPart part = (WTPart) CommonUtils.persistable(poid);
 				DistPartLink link = DistPartLink.newDistPartLink(dist, part);
-//				link.setPdf(map.isPdf());
-//				link.setDwg(map.isDwg());
-//				link.setStep(map.isStep());
+				link.setPdf(pdf);
+				link.setDwg(dwg);
+				link.setStep(step);
 				link = (DistPartLink) PersistenceHelper.manager.save(link);
 			}
 
