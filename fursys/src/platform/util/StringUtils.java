@@ -48,5 +48,17 @@ public class StringUtils {
 		return reValue;
 	}
 	
+	public static String getOnlyFileName(String param) {
+		String reValue = "";
+		if (isNotNull(param)) {
+			if( param.length() > 5) {
+					reValue = param.substring(0, param.length()-4);
+			}
+		}
+		return reValue;
+	}
+	
+	
+	
 	
 }

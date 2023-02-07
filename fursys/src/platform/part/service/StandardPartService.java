@@ -44,6 +44,8 @@ public class StandardPartService extends StandardManager implements PartService 
 		String location = params.getLocation();
 		String brand = params.getBrand();
 		String company = params.getCompany();
+		String cat_l = params.getCat_l();
+		String cat_m = params.getCat_m();
 		String part_height = params.getPart_height();
 		String part_depth = params.getPart_depth();
 		String part_width = params.getPart_width();
@@ -67,7 +69,7 @@ public class StandardPartService extends StandardManager implements PartService 
 
 			part.setDefaultUnit(QuantityUnit.toQuantityUnit(unit));
 
-			Folder folder = FolderTaskLogic.getFolder("/Default", CommonUtils.getContainer("FURSYS"));
+			Folder folder = FolderTaskLogic.getFolder("/Default", CommonUtils.getContainer("fursys"));
 			FolderHelper.assignLocation((FolderEntry) part, folder);
 
 			PersistenceHelper.manager.save(part);
@@ -79,6 +81,8 @@ public class StandardPartService extends StandardManager implements PartService 
 			IBAUtils.createIBA(part, "s", "BRAND_CODE", brand);
 			IBAUtils.createIBA(part, "s", "COMPANY_CODE", company);
 			IBAUtils.createIBA(part, "s", "ERP_CODE", erpCode);
+			IBAUtils.createIBA(part, "s", "CAT_L", cat_l);
+			IBAUtils.createIBA(part, "s", "CAT_M", cat_m);
 
 			IBAUtils.createIBA(part, "s", "PART_HEIGHT", part_height);
 			IBAUtils.createIBA(part, "s", "PART_DEPTH", part_depth);
@@ -143,6 +147,8 @@ public class StandardPartService extends StandardManager implements PartService 
 		String use_type_code = params.getUse_type_code();
 		String standard_code = params.getStandard_code();
 		String ref = params.getRef();
+		String cat_l = params.getCat_l();
+		String cat_m = params.getCat_m();
 		JSONObject node = new JSONObject();
 		WTPart part = null;
 		try {
@@ -182,6 +188,8 @@ public class StandardPartService extends StandardManager implements PartService 
 			IBAUtils.createIBA(part, "s", "BRAND_CODE", brand);
 			IBAUtils.createIBA(part, "s", "COMPANY_CODE", company);
 			IBAUtils.createIBA(part, "s", "ERP_CODE", erpCode);
+			IBAUtils.createIBA(part, "s", "CAT_L", cat_l);
+			IBAUtils.createIBA(part, "s", "CAT_M", cat_m);
 
 			IBAUtils.createIBA(part, "s", "PART_HEIGHT", part_height);
 			IBAUtils.createIBA(part, "s", "PART_DEPTH", part_depth);

@@ -8,6 +8,9 @@
 <%
 ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("company");
 ArrayList<BaseCode> brand = (ArrayList<BaseCode>) request.getAttribute("brand");
+
+ArrayList<BaseCode> cat_l = (ArrayList<BaseCode>) request.getAttribute("cat_l");
+ArrayList<BaseCode> cat_m = (ArrayList<BaseCode>) request.getAttribute("cat_m");
 QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
 String code = CommonUtils.getSessionBrand();
 String ccode = CommonUtils.getSessionCompany();
@@ -71,9 +74,42 @@ String ccode = CommonUtils.getSessionCompany();
 					</label>
 					&nbsp;
 					<label>
+						<input name="partType" type="radio" value="WIP">
+						<span>재공</span>
+					</label>
+					&nbsp;
+					<label>
 						<input name="partType" type="radio" value="MAT">
 						<span>자재</span>
 					</label>
+				</td>
+			</tr>
+			<tr>
+				<th>카테고리_대</th>
+				<td>
+					<select name="cat_l" id = "cat_l" class="AXSelect w200px">
+						<option value="">선택</option>
+						<%
+						for(BaseCode c : cat_l) {
+						%>
+							<option value="<%=c.getCode()%>" ><%=c.getName()%></option>
+						<%
+						}
+						%>
+					</select>
+				</td>
+				<th>카테고리_중</th>
+				<td>
+				<select name="cat_m" id = "cat_m" class="AXSelect w200px">
+						<option value="">선택</option>
+						<%
+						for(BaseCode d : cat_m) {
+						%>
+							<option value="<%=d.getCode()%>" ><%=d.getName()%></option>
+						<%
+						}
+						%>
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -264,8 +300,10 @@ String ccode = CommonUtils.getSessionCompany();
 				AUIGrid.resize("#doc_grid_wrap"); 
 			})
 			
-			_check("partType");
+// 			_check("partType");
 			_selector("standard_code");
+			_selector("cat_l");
+			_selector("cat_m");
 			_selector("company");
 			_selector("brand");
 			_selector("unit");

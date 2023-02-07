@@ -48,6 +48,8 @@ public class PartColumns {
 	private String manager;
 	private String eoid;
 	private String eoid2d;
+	private String cat_l;
+	private String cat_m;
 
 	public PartColumns() {
 
@@ -91,5 +93,7 @@ public class PartColumns {
 		setH(StringUtils.convertToStr(IBAUtils.getStringValue(part, "PART_HEIGHT"), "0") + " (mm)");
 		setCompanyNm(BaseCodeHelper.manager.getNameByCodeTypeAndCode("COMPANY_CODE", this.company));
 		setBrandNm(BaseCodeHelper.manager.getNameByCodeTypeAndCode("BRAND_CODE", this.brand));
+		setCat_l(BaseCodeHelper.manager.getNameByCodeTypeAndCode("CAT_L", this.cat_l));
+		setCat_m(BaseCodeHelper.manager.getNameByCodeTypeAndCode("CAT_M", this.cat_m));
 	}
 }

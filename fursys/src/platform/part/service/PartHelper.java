@@ -55,6 +55,7 @@ public class PartHelper {
 	public static final String MAT = "MAT"; // 자재
 	public static final String ITEM = "ITEM"; // 단품
 	public static final String SET = "SET"; // 세트
+	public static final String WIP = "WIP"; //재공
 	public static final String ALL = "ALL"; // 전체
 
 	public static final PartService service = ServiceFactory.getService(PartService.class);
@@ -98,6 +99,8 @@ public class PartHelper {
 			display = "단품";
 		} else if ("SET".equalsIgnoreCase(value)) {
 			display = "세트";
+		} else if ("WIP".equalsIgnoreCase(value)) {
+			display = "재공";
 		}
 		return display;
 	}

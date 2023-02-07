@@ -158,11 +158,11 @@ var dist_columnLayout = [ {
 	visible : false
 }, ];
 var dist_auiGridProps = {
-// 		rowIdField : "distributorUser_oid",
-		headerHeight : 30,
+// 						rowIdField : "distributorUser_oid",
+		headerHeight : 50,
 		rowHeight : 30,
 		fillColumnSizeMode : true,
-		// 						rowCheckToRadio : false,
+// 						rowCheckToRadio : false,
 		showRowCheckColumn : true,
 		showRowNumColumn : false,
 		softRemoveRowMode : false
@@ -232,6 +232,14 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		dataType : "string",
 		width : 60,
 		editable : true,
+		headerRenderer : {
+			type : "CheckBoxHeaderRenderer",
+			// 헤더의 체크박스가 상호 의존적인 역할을 할지 여부(기본값:false)
+			// dependentMode 는 renderer 의 type 으로 CheckBoxEditRenderer 를 정의할 때만 활성화됨.
+			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
+			dependentMode : true, 			
+			position : "bottom" // 기본값 "bottom"
+		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
@@ -251,6 +259,14 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		headerText : "DWG",
 		dataType : "string",
 		width : 60,
+		headerRenderer : {
+			type : "CheckBoxHeaderRenderer",
+			// 헤더의 체크박스가 상호 의존적인 역할을 할지 여부(기본값:false)
+			// dependentMode 는 renderer 의 type 으로 CheckBoxEditRenderer 를 정의할 때만 활성화됨.
+			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
+			dependentMode : true, 			
+			position : "bottom" // 기본값 "bottom"
+		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
@@ -270,6 +286,14 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 		headerText : "STEP",
 		dataType : "string",
 		width : 60,
+		headerRenderer : {
+			type : "CheckBoxHeaderRenderer",
+			// 헤더의 체크박스가 상호 의존적인 역할을 할지 여부(기본값:false)
+			// dependentMode 는 renderer 의 type 으로 CheckBoxEditRenderer 를 정의할 때만 활성화됨.
+			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
+			dependentMode : true, 			
+			position : "bottom" // 기본값 "bottom"
+		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
@@ -424,7 +448,6 @@ dist_GridID = AUIGrid.create("#dist_grid_wrap", dist_columnLayout, dist_auiGridP
 			var partList = AUIGrid.getGridData(myGridID);
 			var distributorList = AUIGrid.getGridData(dist_GridID);
 			params.partList = partList;
-			console.log("aaaaaaaaaaaaaaaaaa");
 			console.log(partList);
 			params.distributorList = distributorList;
 			console.log(params);

@@ -154,10 +154,14 @@ public class PartController {
 		ModelAndView model = new ModelAndView();
 		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY");
 		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND");
+		ArrayList<BaseCode> cat_l = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_L");
+		ArrayList<BaseCode> cat_m = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_M");
 		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
 		model.addObject("units", units);
 		model.addObject("company", company);
 		model.addObject("brand", brand);
+		model.addObject("cat_l", cat_l);
+		model.addObject("cat_m", cat_m);
 		model.setViewName("popup:/part/part-create");
 		return model;
 	}

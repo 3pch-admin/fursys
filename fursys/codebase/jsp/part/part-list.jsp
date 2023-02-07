@@ -293,9 +293,9 @@ String ccode = CommonUtils.getSessionCompany();
 					<table class="button-table">
 						<tr>
 							<td class="left">
-								<button type="button" id="createBtn">등록</button>
 							</td>
 							<td class="right">
+								<button type="button" id="createBtn">등록</button>
 								<button type="button" id="excelBtn">엑셀</button>
 								<button type="button" id="searchBtn">조회</button>
 							</td>
@@ -562,7 +562,7 @@ String ccode = CommonUtils.getSessionCompany();
 
 							$("#createBtn").click(function() {
 								var url = _url("/part/create");
-								_popup(url, 1400, 400, "n");
+								_popup(url, 1200, 600, "n");
 							})
 
 							$(".br").hide();

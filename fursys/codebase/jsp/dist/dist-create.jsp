@@ -1,3 +1,5 @@
+<%@page import="platform.dist.entity.DistPartColumns"%>
+<%@page import="platform.dist.entity.DistDTO"%>
 <%@page import="java.util.Map"%>
 <%@page import="net.sf.json.JSONArray"%>
 <%@page import="platform.raonk.entity.Raonk"%>
@@ -224,6 +226,17 @@
 		dataType : "string",
 		width : 60,
 		editable : true,
+		headerRenderer : {
+			type : "CheckBoxHeaderRenderer",
+			// 헤더의 체크박스가 상호 의존적인 역할을 할지 여부(기본값:false)
+			// dependentMode 는 renderer 의 type 으로 CheckBoxEditRenderer 를 정의할 때만 활성화됨.
+			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
+			dependentMode : false, 			
+			position : "bottom", // 기본값 "bottom"
+// 			onClick: function (e) {
+// 				myCheckboxHandler(e, "pdf");
+// 			},
+		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
@@ -237,12 +250,28 @@
 		// 				}
 		// 				return true;
 		// 			}
+			disabledFunction: function (rowIndex, columnIndex, value, isChecked, item, dataField) {
+				if (item.linkPdf == false)
+					return true; // true 반환하면 disabled 시킴
+				return false;
+			}
 		}
 	}, {
 		dataField : "dwg",
 		headerText : "DWG",
 		dataType : "string",
 		width : 60,
+		headerRenderer : {
+			type : "CheckBoxHeaderRenderer",
+			// 헤더의 체크박스가 상호 의존적인 역할을 할지 여부(기본값:false)
+			// dependentMode 는 renderer 의 type 으로 CheckBoxEditRenderer 를 정의할 때만 활성화됨.
+			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
+			dependentMode : false, 			
+			position : "bottom", // 기본값 "bottom"
+// 			onClick: function (e) {
+// 				myCheckboxHandler(e, "dwg");
+// 			},
+		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
@@ -256,12 +285,28 @@
 		// 				}
 		// 				return true;
 		// 			}
+			disabledFunction: function (rowIndex, columnIndex, value, isChecked, item, dataField) {
+				if (item.linkDwg == false)
+					return true; // true 반환하면 disabled 시킴
+				return false;
+			}
 		}
 	}, {
 		dataField : "step",
 		headerText : "STEP",
 		dataType : "string",
 		width : 60,
+		headerRenderer : {
+			type : "CheckBoxHeaderRenderer",
+			// 헤더의 체크박스가 상호 의존적인 역할을 할지 여부(기본값:false)
+			// dependentMode 는 renderer 의 type 으로 CheckBoxEditRenderer 를 정의할 때만 활성화됨.
+			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
+			dependentMode : false, 			
+			position : "bottom", // 기본값 "bottom"
+			onClick: function (e) {
+				myCheckboxHandler(e);
+			},
+		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
 			showLabel : false,
@@ -275,6 +320,14 @@
 		// 				}
 		// 				return true;
 		// 			}
+			disabledFunction: function (rowIndex, columnIndex, value, isChecked, item, dataField) {
+				console.log(item);
+				console.log("############ linkStep y/s");
+				console.log(item.linkStep);
+				if (item.linkStep == false)
+					return true; // true 반환하면 disabled 시킴
+				return false;
+				}
 		}
 	}, {
 		dataField : "uoid",
@@ -289,7 +342,7 @@
 	}, ];
 	var auiGridProps = {
 		rowIdField : "rowId",
-		headerHeight : 30,
+		headerHeight : 50,
 		rowHeight : 30,
 		showRowNumColumn : true,
 		showRowCheckColumn : true,
@@ -353,7 +406,6 @@
 	})
 
 	$(function() {
-
 		$("#closeBtn").click(function() {
 			self.close();
 		})
@@ -459,5 +511,36 @@
 
 	function part(list) {
 		AUIGrid.addRow(myGridID, list);
+	}
+	
+	function myCheckboxHandler(event) {
+		var item = AUIGrid.getRowsByValue(event.pid, item, item.linkStep);
+		console.log(item);
+		var linkValue = AUIGrid.getColumnDistinctValues(event.pid, "step");
+		//Anna 제외하기
+		linkValue.splice(linkValue.indexOf(false), 0);
+		console.log(linkValue);
+		//Anna 제외한 행들 모두 얻기
+		var rows = AUIGrid.getRowsByValue(event.pid, "step", linkValue);
+		var items = [];
+		var rowIdField = AUIGrid.getProp(event.pid, "rowIdField");
+		console.log("######rowsssssss");
+		console.log(rows);
+		console.log(rowIdField);
+		rows.forEach(function(v, n) {
+			console.log(v);
+			var item = {
+				id : v[rowIdField],
+				isChecked : event.checked,
+				step : event.checked
+			};
+			console.log("#########itemmmmmmmmm");
+			console.log(item);
+			items.push(item);
+			console.log("######### 푸쉬");
+			console.log(items);
+		});
+		//행 수정
+		AUIGrid.updateRowsById(event.pid, items);
 	}
 </script>

@@ -58,6 +58,8 @@ public class DistPartColumns {
 		if (epm != null) {
 			setEoid(epm.getPersistInfo().getObjectIdentifier().getStringValue());
 			setThum_3d(ThumbnailUtils.thumbnails(part)[1]);
+			DistFileVO fileVo = DistHelper.manager.getDistFileVO(epm);
+			setLinkStep(fileVo.getStpFile()!=null?true:false);
 		}
 		EPMDocument epm2d = EpmHelper.manager.getEPM2D(epm);
 		if (epm2d != null) {
@@ -67,6 +69,9 @@ public class DistPartColumns {
 			setPdf(fileVo.getPdfFile()!=null?true:false);
 			setDwg(fileVo.getDwgFile()!=null?true:false);
 			setStep(fileVo.getStpFile()!=null?true:false);
+			
+			setLinkPdf(fileVo.getPdfFile()!=null?true:false);
+			setLinkDwg(fileVo.getDwgFile()!=null?true:false);
 		}
 		
 		setOid(CommonUtils.oid(part));
@@ -182,9 +187,9 @@ public class DistPartColumns {
 //			setDwg(true);
 //			setStep(false);
 //		} else {
-			setLinkPdf(link.isPdf());
-			setLinkDwg(link.isDwg());
-			setLinkStep(link.isStep());
+							setLinkPdf(link.isPdf());
+							setLinkDwg(link.isDwg());
+							setLinkStep(link.isStep());
 //		}
 	}
 }

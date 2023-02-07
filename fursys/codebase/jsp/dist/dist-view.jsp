@@ -111,8 +111,8 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 					<th>부품명칭</th>
 					<th>버전</th>
 					<th>PDF[링크][도면]</th>
-					<th>STEP[링크][도면]</th>
 					<th>DWG[링크][도면]</th>
+					<th>STEP[링크][도면]</th>
 <!-- 					<th>oid</th> -->
 				</tr>
 				<%
@@ -139,6 +139,7 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 										//out.println(data.getFileName());
 									DistFileVO fileVo = DistHelper.manager.getDistFileVO(epm);
 									oid +="//voStp="+fileVo.getStpFile().getFileName();
+									out.println(fileVo.getStpFile().getFileName());
 									}
 								}
 								
@@ -180,8 +181,8 @@ DistDTO dto = (DistDTO) request.getAttribute("dto");
 					<td><%=di_part.getName() %></td>
 					<td><%=di_part.getVersion() %></td>
 					<td>[<%=di_part.isLinkPdf()?"O":"X" %>][<%=di_part.isPdf()?"O":"X" %>]</td>
-					<td>[<%=di_part.isLinkStep()?"O":"X" %>][<%=di_part.isStep()?"O":"X" %>]</td>
 					<td>[<%=di_part.isLinkDwg()?"O":"X" %>][<%=di_part.isDwg()?"O":"X" %>]</td>
+					<td>[<%=di_part.isLinkStep()?"O":"X" %>][<%=di_part.isStep()?"O":"X" %>]</td>
 <%-- 					<td><%=oid %></td> --%>
 				</tr>
 				<%

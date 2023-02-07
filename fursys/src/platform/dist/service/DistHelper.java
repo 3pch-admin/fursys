@@ -271,6 +271,142 @@ public class DistHelper {
 		}
 		return list;
 	}
+	
+	public List<TransferDetailVO> details(String type, DistPartLink link, String path, Dist di) throws Exception {
+
+		TransferDetailVO detail = detail(link, path);
+		List<TransferDetailVO> details = new ArrayList<>();
+		details.add(detail);
+
+		ArrayList<DistributorUser> diUsers = DistHelper.manager.getDistributorUserLinks(di);
+	
+		for(DistributorUser diUser: diUsers ) {
+		
+			DistUserVO userVo = new DistUserVO();
+
+			userVo.setSiteTypeCd(diUser.getType().equals("IN") ? "I" : "O");
+			userVo.setSiteCd(diUser.getNumber());
+			userVo.setSiteNm(diUser.getName());
+			userVo.setId(diUser.getUserId());
+			userVo.setUserName(diUser.getUserName());
+			userVo.setEmail(diUser.getEmail());
+
+			detail.addUsers(userVo);
+		}
+		return details;
+	}
+	
+	private TransferDetailVO detail(DistPartLink link, String path) throws Exception {
+		Timestamp today = DateUtils.today();
+
+		WTPart part = link.getPart();
+		EPMDocument epm = PartHelper.manager.getEPMDocument(part);
+		
+		TransferDetailVO detail = new TransferDetailVO();
+
+		detail.setPartOid(String.valueOf(epm.getPersistInfo().getObjectIdentifier().getId()));
+		//확장자 제거.
+		detail.setPartName(StringUtils.getOnlyFileName(epm.getName()));
+		detail.setPartVersion(VersionControlHelper.getIterationDisplayIdentifier(epm).toString());
+		detail.setPartNumber(StringUtils.getOnlyFileName(epm.getNumber()));
+		detail.setReleaseDate(DateUtils.getTimeToString(today, "yyyy-MM-dd"));
+
+		detail.setEpmOid(CommonUtils.oid(epm));
+		detail.setErpCd(IBAUtils.getStringIBAValue(epm, "ERP_CODE"));
+
+		Folder folder = FolderHelper.service.getFolder(epm.getLocation(), epm.getContainerReference());
+
+		if (folder instanceof Cabinet) {
+			detail.setCadFolderOid(
+					"ROOT:" + epm.getContainerReference().getObject().getPersistInfo().getObjectIdentifier().getId());
+		} else {
+			SubFolder subfolder = (SubFolder) folder;
+			long subfolderOid = subfolder.getPersistInfo().getObjectIdentifier().getId();
+			QuerySpec query = new QuerySpec(SubFolderLink.class);
+			query = new QuerySpec(SubFolderLink.class);
+			query.setAdvancedQueryEnabled(true);
+
+			SearchCondition cond = new SearchCondition(SubFolderLink.class, "roleBObjectRef.key.id",
+					SearchCondition.EQUAL, subfolderOid);
+			query.appendWhere(cond, new int[] { 0 });
+
+			QueryResult queryResult = PersistenceHelper.manager.find(query);
+
+			SubFolderLink subFold = null;
+
+			while (queryResult.hasMoreElements()) {
+				subFold = (SubFolderLink) queryResult.nextElement();
+			}
+			detail.setCadFolderOid(subFold.getPersistInfo().getObjectIdentifier().getStringValue());
+		}
+
+		DistFileVO fileVo = getDistFileVO(epm);
+		String newPath = path + File.separator + String.valueOf(epm.getPersistInfo().getObjectIdentifier().getId());
+		write(fileVo, newPath);
+
+		if (fileVo.getPdfFile() != null && link.isPdf()) {
+			TransferFileVO tFile = new TransferFileVO();
+			tFile.setFileName(fileVo.getPdfFile().getFileName());
+			tFile.setOid(String.valueOf(fileVo.getPdfFile().getPersistInfo().getObjectIdentifier().getId()));
+			tFile.setFileUrl(path + File.separator + tFile.getFileName());
+			detail.setPdfFile(tFile);
+		}
+
+		if (fileVo.getDwgFile() != null && link.isDwg()) {
+			TransferFileVO tFile = new TransferFileVO();
+			tFile.setFileName(fileVo.getDwgFile().getFileName());
+			tFile.setOid(String.valueOf(fileVo.getDwgFile().getPersistInfo().getObjectIdentifier().getId()));
+			tFile.setFileUrl(path + File.separator + tFile.getFileName());
+
+			detail.setDwgFile(tFile);
+		}
+
+		if (fileVo.getStpFile() != null && link.isStep()) {
+			TransferFileVO tFile = new TransferFileVO();
+			tFile.setFileName(fileVo.getStpFile().getFileName());
+			tFile.setOid(String.valueOf(fileVo.getStpFile().getPersistInfo().getObjectIdentifier().getId()));
+			tFile.setFileUrl(path + File.separator + tFile.getFileName());
+
+			detail.setStpFile(tFile);
+		}
+
+		if (fileVo.getJpg2DFile() != null) {
+			TransferFileVO tFile = new TransferFileVO();
+			tFile.setFileName(fileVo.getJpg2DFile().getFileName());
+			tFile.setOid(String.valueOf(fileVo.getJpg2DFile().getPersistInfo().getObjectIdentifier().getId()));
+			tFile.setFileUrl(path + File.separator + tFile.getFileName());
+
+			detail.setJpg2DFile(tFile);
+		}
+
+		if (fileVo.getJpg2DSmallFile() != null) {
+			TransferFileVO tFile = new TransferFileVO();
+			tFile.setFileName(fileVo.getJpg2DSmallFile().getFileName());
+			tFile.setOid(String.valueOf(fileVo.getJpg2DSmallFile().getPersistInfo().getObjectIdentifier().getId()));
+			tFile.setFileUrl(path + File.separator + tFile.getFileName());
+
+			detail.setJpg2DSmallFile(tFile);
+		}
+
+		if (fileVo.getJpg3DFile() != null) {
+			TransferFileVO tFile = new TransferFileVO();
+			tFile.setFileName(fileVo.getJpg3DFile().getFileName());
+			tFile.setOid(String.valueOf(fileVo.getJpg3DFile().getPersistInfo().getObjectIdentifier().getId()));
+			tFile.setFileUrl(path + File.separator + tFile.getFileName());
+
+			detail.setJpg3DFile(tFile);
+		}
+
+		if (fileVo.getJpg3DSmallFile() != null) {
+			TransferFileVO tFile = new TransferFileVO();
+			tFile.setFileName(fileVo.getJpg3DSmallFile().getFileName());
+			tFile.setOid(String.valueOf(fileVo.getJpg3DSmallFile().getPersistInfo().getObjectIdentifier().getId()));
+			tFile.setFileUrl(path + File.separator + tFile.getFileName());
+
+			detail.setJpg3DSmallFile(tFile);
+		}
+		return detail;
+	}
 
 	public List<TransferDetailVO> details(String type, DistPartLink link, String path, Dist di, EPMDocument epm) throws Exception {
 
@@ -314,8 +450,7 @@ public class DistHelper {
 			Folder folder = FolderHelper.service.getFolder(epm.getLocation(), epm.getContainerReference());
 	
 			if (folder instanceof Cabinet) {
-				detail.setCadFolderOid(
-						"ROOT:" + epm.getContainerReference().getObject().getPersistInfo().getObjectIdentifier().getId());
+				detail.setCadFolderOid( "ROOT:" + epm.getContainerReference().getObject().getPersistInfo().getObjectIdentifier().getId());
 			} else {
 				SubFolder subfolder = (SubFolder) folder;
 				long subfolderOid = subfolder.getPersistInfo().getObjectIdentifier().getId();
@@ -323,8 +458,7 @@ public class DistHelper {
 				query = new QuerySpec(SubFolderLink.class);
 				query.setAdvancedQueryEnabled(true);
 	
-				SearchCondition cond = new SearchCondition(SubFolderLink.class, "roleBObjectRef.key.id",
-						SearchCondition.EQUAL, subfolderOid);
+				SearchCondition cond = new SearchCondition(SubFolderLink.class, "roleBObjectRef.key.id", SearchCondition.EQUAL, subfolderOid);
 				query.appendWhere(cond, new int[] { 0 });
 	
 				QueryResult queryResult = PersistenceHelper.manager.find(query);
@@ -412,12 +546,12 @@ public class DistHelper {
 		Representation representation = PublishUtils.getRepresentation(epm);
 		// 기본 dwg.. add pdf step...
 		if (representation != null) {
+			
 			if ("CADDRAWING".equals(docType)) {
-				QueryResult result = ContentHelper.service.getContentsByRole(representation,
-						ContentRoleType.ADDITIONAL_FILES);
+				QueryResult result = ContentHelper.service.getContentsByRole(representation, ContentRoleType.ADDITIONAL_FILES);
 				while (result.hasMoreElements()) {
 					ApplicationData data = (ApplicationData) result.nextElement();
-					fileVo.setPdfFile(data);// ??
+					fileVo.setPdfFile(data);
 				}
 				result.reset();
 				result = ContentHelper.service.getContentsByRole(representation, ContentRoleType.SECONDARY);
@@ -441,8 +575,7 @@ public class DistHelper {
 				}
 
 			} else if ("CADASSEMBLY".equals(docType) || "CADCOMPONENT".equals(docType)) {
-				QueryResult result = ContentHelper.service.getContentsByRole(representation,
-						ContentRoleType.ADDITIONAL_FILES);
+				QueryResult result = ContentHelper.service.getContentsByRole(representation, ContentRoleType.ADDITIONAL_FILES);
 				while (result.hasMoreElements()) {
 					ApplicationData data = (ApplicationData) result.nextElement();
 					fileVo.setStpFile(data);
@@ -462,6 +595,67 @@ public class DistHelper {
 					fileVo.setJpg3DSmallFile(data);
 				}
 			}
+			
+			
+			//2d 한번에.
+			EPMDocument epm2d = EpmHelper.manager.getEPM2D(epm);
+			if( epm2d != null) {
+				String docType2d = epm2d.getDocType().toString();
+				Representation representation2d = PublishUtils.getRepresentation(epm2d);
+				// 기본 dwg.. add pdf step...
+				if (representation2d != null) {
+					
+					if ("CADDRAWING".equals(docType2d)) {
+						QueryResult result = ContentHelper.service.getContentsByRole(representation2d, ContentRoleType.ADDITIONAL_FILES);
+						while (result.hasMoreElements()) {
+							ApplicationData data = (ApplicationData) result.nextElement();
+							fileVo.setPdfFile(data);
+						}
+						result.reset();
+						result = ContentHelper.service.getContentsByRole(representation2d, ContentRoleType.SECONDARY);
+						while (result.hasMoreElements()) {
+							ApplicationData data = (ApplicationData) result.nextElement();
+							fileVo.setDwgFile(data);
+						}
+	
+						result.reset();
+						result = ContentHelper.service.getContentsByRole(representation2d, ContentRoleType.THUMBNAIL);
+						while (result.hasMoreElements()) {
+							ApplicationData data = (ApplicationData) result.nextElement();
+							fileVo.setJpg2DFile(data);
+						}
+	
+						result.reset();
+						result = ContentHelper.service.getContentsByRole(representation2d, ContentRoleType.THUMBNAIL_SMALL);
+						while (result.hasMoreElements()) {
+							ApplicationData data = (ApplicationData) result.nextElement();
+							fileVo.setJpg2DSmallFile(data);
+						}
+	
+					} else if ("CADASSEMBLY".equals(docType2d) || "CADCOMPONENT".equals(docType2d)) {
+						QueryResult result = ContentHelper.service.getContentsByRole(representation2d, ContentRoleType.ADDITIONAL_FILES);
+						while (result.hasMoreElements()) {
+							ApplicationData data = (ApplicationData) result.nextElement();
+							fileVo.setStpFile(data);
+						}
+	
+						result.reset();
+						result = ContentHelper.service.getContentsByRole(representation2d, ContentRoleType.THUMBNAIL);
+						while (result.hasMoreElements()) {
+							ApplicationData data = (ApplicationData) result.nextElement();
+							fileVo.setJpg3DFile(data);
+						}
+	
+						result.reset();
+						result = ContentHelper.service.getContentsByRole(representation2d, ContentRoleType.THUMBNAIL_SMALL);
+						while (result.hasMoreElements()) {
+							ApplicationData data = (ApplicationData) result.nextElement();
+							fileVo.setJpg3DSmallFile(data);
+						}
+					}
+				}
+			}
+			
 		}
 		return fileVo;
 	}

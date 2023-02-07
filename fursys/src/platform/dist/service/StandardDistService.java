@@ -228,15 +228,17 @@ public class StandardDistService extends StandardManager implements DistService 
 
 			ArrayList<DistPartLink> links = DistHelper.manager.getPartLinks(dist);
 			for (DistPartLink link : links) {
-				WTPart part = link.getPart();
-				EPMDocument epm = PartHelper.manager.getEPMDocument(part);
-				if( epm != null) {
-					vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist, epm));
-					EPMDocument epm2d = EpmHelper.manager.getEPM2D(epm);
-					if (epm2d != null) {
-						vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist, epm2d));
-					}
-				}
+				
+				vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist));
+				
+//				EPMDocument epm = PartHelper.manager.getEPMDocument(part);
+//				if( epm != null) {
+//					vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist, epm));
+//					EPMDocument epm2d = EpmHelper.manager.getEPM2D(epm);
+//					if (epm2d != null) {
+//						vo.addAllDistributeDetail(DistHelper.manager.details(type, link, path, dist, epm2d));
+//					}
+//				}
 			}
 
 			File triggerFile = new File(path + File.separator + "trigger");
