@@ -514,6 +514,14 @@ WTPart part = (WTPart) request.getAttribute("part");
 		AUIGrid.resize("#grid_left");
 		AUIGrid.resize("#grid_right");
 	})
+	
+	AUIGrid.bind(myGridID, "cellClick", function(event) {
+							if (event.dataField == "name" || event.dataField == "number") {
+								var rowItem = event.item;
+								var url = _url("/erp/getErpCode", rowItem.oid);
+								_popup(url, 1300, 600, "n");
+							} 
+						});
 
 	function validate(item) {
 		var children = item.children;

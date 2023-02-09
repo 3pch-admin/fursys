@@ -112,11 +112,11 @@
 	</colgroup>
 	<tr>
 		<td class="center none" valign="top">
-			<div id="grid_left" style="height: 840px;"></div>
+			<div id="grid_left" style="height: 640px;"></div>
 		</td>
 		<td class="none" valign="top">&nbsp;</td>
 		<td class="center none" valign="top">
-			<div id="grid_right" style="height: 840px;"></div>
+			<div id="grid_right" style="height: 640px;"></div>
 		</td>
 	</tr>
 </table>

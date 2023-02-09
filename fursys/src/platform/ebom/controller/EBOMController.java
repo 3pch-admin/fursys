@@ -99,6 +99,7 @@ public class EBOMController {
 		WTPart part = PartHelper.manager.getLatest(m);
 		model.addObject("oid", oid);
 		model.addObject("part", part);
+		//목업jsp임
 		model.setViewName("popup:/ebom/ebom-modify");
 		return model;
 	}

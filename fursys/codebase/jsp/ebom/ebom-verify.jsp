@@ -26,8 +26,8 @@ String oid = (String) request.getAttribute("oid");
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="closeBtn">닫기</button>
 			<button type="button" id="confirmBtn">저장</button>
+			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
 </table>
@@ -54,7 +54,7 @@ String oid = (String) request.getAttribute("oid");
 		headerText : "제품코드(ITEM_NAME)",
 		dataType : "string",
 		editable : false,
-		width : 250
+		width : 150
 	}, {
 		dataField : "partName",
 		headerText : "부품명(PART_NAME)",
@@ -66,21 +66,21 @@ String oid = (String) request.getAttribute("oid");
 		headerText : "부품번호(PART_NO)",
 		dataType : "string",
 		editable : false,
-		width : 250
+		width : 150
 	}, {
 		dataField : "cqty",
 		headerText : "CBOM 수량",
 		dataType : "string",
 		postfix : "개",
 		editable : false,
-		width : 100,
+		width : 80,
 	}, {
 		dataField : "eqty",
 		headerText : "EBOM 수량",
 		dataType : "string",
 // 		postfix : "개",
 		editable : false,
-		width : 100,
+		width : 80,
 	     renderer : {
 	            type : "TemplateRenderer",
 	     },		
@@ -97,7 +97,7 @@ String oid = (String) request.getAttribute("oid");
 		dataType : "string",
 		postfix : "개",
 		editable : false,
-		width : 100
+		width : 80
 	}, {
 		dataField : "oid",
 		headerText : "oid",
@@ -186,7 +186,7 @@ String oid = (String) request.getAttribute("oid");
 		
 		$("#confirmBtn").click(function() {
 			
-			var compare = 0;
+			var compare = 1;
 			if(compare == 0){
 				if(confirm("CAD와 EBOM의 수량이 일치합니다. \n저장하시겠습니까?")) {
 					var url = _url("/ebom/confirm", "<%=oid%>");

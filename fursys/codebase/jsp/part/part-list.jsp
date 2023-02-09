@@ -109,6 +109,11 @@ String ccode = CommonUtils.getSessionCompany();
 								</label>
 								&nbsp;
 								<label>
+									<input type="radio" name="partType" value="WIP">
+									재공
+								</label>
+								&nbsp;
+								<label>
 									<input type="radio" name="partType" value="MAT">
 									자재
 								</label>
@@ -551,7 +556,7 @@ String ccode = CommonUtils.getSessionCompany();
 							if (event.dataField == "name" || event.dataField == "number") {
 								var rowItem = event.item;
 								var url = _url("/part/view", rowItem.oid);
-								_popup(url, 1400, 500, "n");
+								_popup(url, 1300, 600, "n");
 							} else if (event.dataField == "thumb") {
 								_openCreoView(event.item.eoid);
 							}

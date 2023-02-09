@@ -323,7 +323,7 @@ table.search-table td label {
 
 table.create-table td label {
 	position: relative;
-	top: 3px;
+	top: 4px;
 	cursor: pointer;
 }
 

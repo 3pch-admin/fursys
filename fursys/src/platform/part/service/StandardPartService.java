@@ -54,7 +54,7 @@ public class StandardPartService extends StandardManager implements PartService 
 		String use_type_code = params.getUse_type_code();
 		String standard_code = params.getStandard_code();
 		String ref = params.getRef();
-
+		
 		WTPart part = null;
 		try {
 			trs.start();
@@ -69,7 +69,99 @@ public class StandardPartService extends StandardManager implements PartService 
 
 			part.setDefaultUnit(QuantityUnit.toQuantityUnit(unit));
 
-			Folder folder = FolderTaskLogic.getFolder("/Default", CommonUtils.getContainer("fursys"));
+			Folder folder = FolderTaskLogic.getFolder("/Default/부품", CommonUtils.getContainer("fursys"));
+			FolderHelper.assignLocation((FolderEntry) part, folder);
+
+			PersistenceHelper.manager.save(part);
+
+			IBAUtils.createIBA(part, "s", "PART_NAME", part_name);
+			IBAUtils.createIBA(part, "s", "PART_NAME_EN", part_name_en);
+
+			IBAUtils.createIBA(part, "s", "PART_TYPE", partType);
+			IBAUtils.createIBA(part, "s", "BRAND_CODE", brand);
+			IBAUtils.createIBA(part, "s", "COMPANY_CODE", company);
+			IBAUtils.createIBA(part, "s", "ERP_CODE", erpCode);
+			IBAUtils.createIBA(part, "s", "CAT_L", cat_l);
+			IBAUtils.createIBA(part, "s", "CAT_M", cat_m);
+			
+			System.out.println("##### cat_l: " + cat_l);
+			System.out.println("##### cat_m: " + cat_m);
+
+			IBAUtils.createIBA(part, "s", "PART_HEIGHT", part_height);
+			IBAUtils.createIBA(part, "s", "PART_DEPTH", part_depth);
+			IBAUtils.createIBA(part, "s", "PART_WIDTH", part_width);
+			IBAUtils.createIBA(part, "s", "PURCHASE_YN", purchase_yn);
+			IBAUtils.createIBA(part, "s", "DUMMY_UNIT_PRICE", dummy_unit_price);
+			IBAUtils.createIBA(part, "s", "USE_TYPE_CODE", use_type_code);
+			IBAUtils.createIBA(part, "s", "STANDARD_CODE", standard_code);
+
+			// bom
+			IBAUtils.createIBA(part, "b", "BOM", "true");
+
+			if (StringUtils.isNotNull(ref)) {
+				WTPart refPart = (WTPart) CommonUtils.persistable(ref);
+				// a copy b original
+				MadeFromLink link = MadeFromLink.newMadeFromLink(refPart, part);
+				PersistenceHelper.manager.save(link);
+			}
+
+			for (DocumentColumns data : params.getDocList()) {
+				WTDocument doc = (WTDocument) CommonUtils.persistable(data.getOid());
+				WTDocumentWTPartLink link = WTDocumentWTPartLink.newWTDocumentWTPartLink(doc, part);
+				PersistenceHelper.manager.save(link);
+			}
+
+			trs.commit();
+			trs = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			trs.rollback();
+			throw e;
+		} finally {
+			if (trs != null)
+				trs.rollback();
+		}
+		return part;
+	}
+
+	@Override
+	public WTPart modify(PartDTO params) throws Exception {
+		String oid = params.getOid();
+		System.out.println("### oid : " + oid);
+		String part_name = params.getPart_name();
+		String part_name_en = params.getPart_name_en();
+		String unit = params.getUnit();
+		String partType = params.getPartType();
+		String erpCode = params.getErpCode();
+		String location = params.getLocation();
+		String brand = params.getBrand();
+		String company = params.getCompany();
+		String cat_l = params.getCat_l();
+		String cat_m = params.getCat_m();
+		String part_height = params.getPart_height();
+		String part_depth = params.getPart_depth();
+		String part_width = params.getPart_width();
+		String purchase_yn = params.getPurchase_yn();
+		String dummy_unit_price = params.getDummy_unit_price();
+		String use_type_code = params.getUse_type_code();
+		String standard_code = params.getStandard_code();
+		String ref = params.getRef();
+		WTPart part = null;
+		Transaction trs = new Transaction();
+		try {
+			trs.start();
+			part = (WTPart) CommonUtils.persistable(oid);
+
+			part.setName(part_name);
+			part.setNumber(PartHelper.manager.getNextNumber(partType + "-"));
+			// 단위
+
+			View view = ViewHelper.service.getView("Design");
+			ViewHelper.assignToView(part, view);
+
+			part.setDefaultUnit(QuantityUnit.toQuantityUnit(unit));
+
+			Folder folder = FolderTaskLogic.getFolder("/Default/부품", CommonUtils.getContainer("fursys"));
 			FolderHelper.assignLocation((FolderEntry) part, folder);
 
 			PersistenceHelper.manager.save(part);
@@ -120,13 +212,7 @@ public class StandardPartService extends StandardManager implements PartService 
 		}
 		return part;
 	}
-
-	@Override
-	public WTPart modify(PartDTO params) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public JSONObject attach(PartDTO params) throws Exception {
 		Transaction trs = new Transaction();

@@ -55,6 +55,8 @@ public class PartDTO {
 	private String node;
 	private String cat_l;
 	private String cat_m;
+	private String cat_lNm;
+	private String cat_mNm;
 	
 	private ArrayList<DocumentColumns> docList = new ArrayList<DocumentColumns>();
 
@@ -95,8 +97,10 @@ public class PartDTO {
 		setRef(refPart != null ? CommonUtils.oid(refPart) : "");
 		setCompanyNm(BaseCodeHelper.manager.getNameByCodeTypeAndCode("COMPANY_CODE", this.company));
 		setBrandNm(BaseCodeHelper.manager.getNameByCodeTypeAndCode("BRAND_CODE", this.brand));
-		setCat_l(BaseCodeHelper.manager.getNameByCodeTypeAndCode("CAT_L", this.cat_l));
-		setCat_m(BaseCodeHelper.manager.getNameByCodeTypeAndCode("CAT_M", this.cat_m));
+		setCat_l(IBAUtils.getStringIBAValue(part, "CAT_L"));
+		setCat_m(IBAUtils.getStringIBAValue(part, "CAT_M"));
+		setCat_lNm(BaseCodeHelper.manager.getNameByCodeTypeAndCode("CAT_L", this.cat_l));
+		setCat_mNm(BaseCodeHelper.manager.getNameByCodeTypeAndCode("CAT_M", this.cat_m));
 		
 		
 		ECO eco = ECOHelper.manager.getRefECO(part);

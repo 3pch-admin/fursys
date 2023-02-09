@@ -30,21 +30,21 @@ import wt.part.WTPartMaster;
 @RequestMapping(value = "/part/**")
 public class PartController {
 
-	@RequestMapping(value = "/modify", method = RequestMethod.GET)
-	public ModelAndView modify(@RequestParam String oid) throws Exception {
-		ModelAndView model = new ModelAndView();
-		WTPart part = (WTPart) CommonUtils.persistable(oid);
-		PartDTO dto = new PartDTO(part);
-		model.addObject("dto", dto);
-		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY");
-		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND");
-		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
-		model.addObject("units", units);
-		model.addObject("company", company);
-		model.addObject("brand", brand);
-		model.setViewName("popup:/part/part-modify");
-		return model;
-	}
+//	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+//	public ModelAndView modify(@RequestParam String oid) throws Exception {
+//		ModelAndView model = new ModelAndView();
+//		WTPart part = (WTPart) CommonUtils.persistable(oid);
+//		PartDTO dto = new PartDTO(part);
+//		model.addObject("dto", dto);
+//		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY");
+//		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND");
+//		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
+//		model.addObject("units", units);
+//		model.addObject("company", company);
+//		model.addObject("brand", brand);
+//		model.setViewName("popup:/part/part-modify");
+//		return model;
+//	}
 
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public ModelAndView view(@RequestParam String oid) throws Exception {
@@ -163,6 +163,42 @@ public class PartController {
 		model.addObject("cat_l", cat_l);
 		model.addObject("cat_m", cat_m);
 		model.setViewName("popup:/part/part-create");
+		return model;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public Map<String, Object> modify(@RequestBody PartDTO params) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			WTPart part = PartHelper.service.modify(params);
+			result.put("result", true);
+			result.put("msg", part.getName() + " 부품이 수정 되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	public ModelAndView modify(@RequestParam String oid) throws Exception {
+		ModelAndView model = new ModelAndView();
+		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY");
+		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND");
+		ArrayList<BaseCode> cat_l = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_L");
+		ArrayList<BaseCode> cat_m = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_M");
+		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
+		WTPart part = (WTPart) CommonUtils.persistable(oid);
+		PartDTO dto = new PartDTO(part);
+		model.addObject("dto", dto);
+		model.addObject("units", units);
+		model.addObject("company", company);
+		model.addObject("brand", brand);
+		model.addObject("cat_l", cat_l);
+		model.addObject("cat_m", cat_m);
+		model.setViewName("popup:/part/part-modify");
 		return model;
 	}
 

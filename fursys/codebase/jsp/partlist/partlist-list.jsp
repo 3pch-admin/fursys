@@ -291,6 +291,7 @@ boolean isAdmin = CommonUtils.isAdmin();
 						AUIGrid.bind(myGridID, "cellClick", function(event) {
 							var dataField = event.dataField;
 							var rowItem = event.item;
+							console.log(rowItem);							
 							var state = rowItem.state;
 							if (dataField == "number") {
 								if (state == "EBOM 임시저장") {

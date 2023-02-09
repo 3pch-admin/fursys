@@ -1,0 +1,92 @@
+[
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCB0104" ,
+        "col_cd": "RCN",
+        "itm_nm": "목제도어_4X2/다이얼락용",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCB0104" ,
+        "col_cd": "WW",
+        "itm_nm": "목제도어_4X2/다이얼락용",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CA0042",
+        "col_cd": "CHA",
+        "itm_nm": "도어포켓 1개",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCC0104B",
+        "col_cd": "BK",
+        "itm_nm": "4단 2열 사물함 뒤판",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCC0104B",
+        "col_cd": "WW",
+        "itm_nm": "4단 2열 사물함 뒤판",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCC0104PN",
+        "col_cd": "BK",
+        "itm_nm": "4단 2열 사물함 선반류 외",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCC0104PN",
+        "col_cd": "WW",
+        "itm_nm": "4단 2열 사물함 선반류 외",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCC0104SN",
+        "col_cd": "BK",
+        "itm_nm": "4단 2열 사물함 측판",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "CCC0104SN",
+        "col_cd": "WW",
+        "itm_nm": "4단 2열 사물함 측판",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "단품" ,
+        "itm_cd": "XX4005",
+        "col_cd": "WW",
+        "itm_nm": "다이얼락 8개입",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    }
+]

@@ -8,7 +8,6 @@
 <%
 ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("company");
 ArrayList<BaseCode> brand = (ArrayList<BaseCode>) request.getAttribute("brand");
-
 ArrayList<BaseCode> cat_l = (ArrayList<BaseCode>) request.getAttribute("cat_l");
 ArrayList<BaseCode> cat_m = (ArrayList<BaseCode>) request.getAttribute("cat_m");
 QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
@@ -256,6 +255,50 @@ String ccode = CommonUtils.getSessionCompany();
 			})
 
 			$("#saveBtn").click(function() {
+				$part_name = $("input[name=part_name]");
+				$partType = $("input[name=partType]");
+				$cat_l = $("select[name=cat_l]");
+				$cat_m =$("select[name=cat_m]");
+				$unit = $("select[name=unit]");
+				$company = $("select[name=company]");
+				$brand = $("select[name=brand]");
+				
+				if($part_name.val() == ""){
+					alert("부품명을 입력하세요.");
+					$part_name.focus();
+					return false;
+				}
+				if($partType.val() == ""){
+					alert("부품타입을 선택하세요.");
+					$partType.focus();
+					return false;
+				}
+				if($cat_l.val() == ""){
+					alert("카테고리 대를 선택하세요.");
+					$cat_l.focus();
+					return false;
+				}
+				if($cat_m.val() == ""){
+					alert("카테고리 중를 선택하세요.");
+					$cat_.focus();
+					return false;
+				}
+				if($unit.val() == ""){
+					alert("단위를 선택하세요.");
+					$unit.focus();
+					return false;
+				}
+				if($company.val() == ""){
+					alert("회사를 선택하세요.");
+					$company.focus();
+					return false;
+				}
+				if($brand.val() == ""){
+					alert("브랜드를 선택하세요.");
+					$brand.focus();
+					return false;
+				}
+				
 				if (!confirm("등록 하시겠습니까?")) {
 					return false;
 				}
@@ -310,6 +353,7 @@ String ccode = CommonUtils.getSessionCompany();
 			_selector("purchase_yn");
 			_selector("use_type_code");
 			_folder("location", "/Default/부품");
+			$("input[name=partType]").checks();
 		})
 	</script>
 </body>

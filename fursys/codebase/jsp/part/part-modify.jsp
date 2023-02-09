@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="platform.code.entity.BaseCode"%>
+<%@page import="wt.part.QuantityUnit"%>
 <%@page import="platform.util.IBAUtils"%>
 <%@page import="platform.util.CommonUtils"%>
 <%@page import="platform.util.StringUtils"%>
@@ -6,7 +9,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 PartDTO dto = (PartDTO) request.getAttribute("dto");
+ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("company");
+ArrayList<BaseCode> brand = (ArrayList<BaseCode>) request.getAttribute("brand");
+ArrayList<BaseCode> cat_l = (ArrayList<BaseCode>) request.getAttribute("cat_l");
+ArrayList<BaseCode> cat_m = (ArrayList<BaseCode>) request.getAttribute("cat_m");
+QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
 %>
+<!-- hidden value -->
+<input type="hidden" name="oid" value="<%=dto.getOid() %>">
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
 	<span>HOME</span>
@@ -51,38 +61,90 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 	<tr>
 		<th>부품명칭</th>
 		<td>
-			<%=dto.getPart_name()%>
+			<input type="text" class="AXInput w60p" name="part_name" value="<%=dto.getPart_name()%>">
 		</td>
 		<th>부품명칭(영문)</th>
-		<td><%=dto.getPart_name_en()%></td>
+		<td>
+			<input type="text" class="AXInput w60p" name="part_name_en" value="<%=dto.getPart_name_en()%>">
+		</td>
 	</tr>
 	<tr>
 		<th>카테고리 대</th>
-			<td><%=dto.getCat_lNm()%></td>
+		<td>
+			<select name="cat_l" id="cat_l" class="AXSelect w200px">
+				<%
+				for (BaseCode c : cat_l){
+				%>
+				<option value="<%=c.getCode() %>" <% if(c.getCode().equals(dto.getCat_l())) {%> selected="selected" <% } %>><%=c.getName() %></option>
+				<%
+				}
+				%>
+<%-- 			<%=dto.getCompanyNm()%> --%>
+			</select></td>
 		<th>카테고리 중</th>
-			<td><%=dto.getCat_mNm()%></td>
+		<td>
+			<select name="cat_m" id="cat_m" class="AXSelect w200px">
+				<%
+				for (BaseCode c : cat_m) {
+				%>
+				<option value="<%=c.getCode()%>" <%if (c.getCode().equals(dto.getCat_m())) {%> selected="selected" <%}%>><%=c.getName()%></option>
+				<%
+				}
+			%>
+			</select>
+<%-- 		<%=dto.getBrandNm()%> --%>
+		</td>
 	</tr>
 	<tr>
 		<th>단위</th>
-			<td><%=dto.getUnit()%></td>
+		<td>
+			<select name="unit" id="unit" class="AXselect w200px"  style="height: 28px">
+				<%
+				for(QuantityUnit unit : units) {
+				%>
+				<option value= "<%=unit.toString() %>" <% if(unit.toString().equals(dto.getUnit())) { %> selected="selected" <%} %>><%=unit.getDisplay() %>(<%=unit.toString() %>)</option>
+				<%
+				}
+				%>
+			</select>
+		</td>
 		<th>ERP CODE</th>
 		<td>
-			<%-- 		<%=dto.getErpCode()%> --%> <%
-			 if ("자재".equals(dto.getPartTypeNm())) {
-			 %> WDWW015109<%=dto.getErpCode()%> <%
-			 } else if ("재공".equals(dto.getPartTypeNm())) {
-			 %> WDWW015109 <%
-			 } else {
-			 %> CCC0104 <%
-			 }
-			 %>
+		<%if("자재".equals(dto.getPartTypeNm())){%>
+		WDWW015109<%=dto.getErpCode()%>
+		<%} else if("재공".equals(dto.getPartTypeNm())) {%>
+		WDWW015109
+		<% } else {%>
+		CCC0104
+		<%} %>
 		</td>
 	</tr>
 	<tr>
 		<th>회사</th>
-		<td><%=dto.getCompanyNm()%></td>
+		<td>
+			<select name="company" id="company" class="AXSelect w200px">
+				<%
+				for (BaseCode c : company){
+				%>
+				<option value="<%=c.getCode() %>" <% if(c.getCode().equals(dto.getCompany())) {%> selected="selected" <% } %>><%=c.getName() %></option>
+				<%
+				}
+				%>
+<%-- 			<%=dto.getCompanyNm()%> --%>
+			</select></td>
 		<th>브랜드</th>
-		<td><%=dto.getBrandNm()%></td>
+		<td>
+			<select name="brand" id="brand" class="AXSelect w200px">
+				<%
+				for (BaseCode c : brand) {
+				%>
+				<option value="<%=c.getCode()%>" <%if (c.getCode().equals(dto.getBrand())) {%> selected="selected" <%}%>><%=c.getName()%></option>
+				<%
+				}
+			%>
+			</select>
+<%-- 		<%=dto.getBrandNm()%> --%>
+		</td>
 	</tr>
 	<tr>
 		<th>상태</th>
@@ -119,22 +181,32 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 	<!-- 자재 -->
 	<tr>
 		<th>규격 가로(W)</th>
-		<td><%=dto.getPart_width()%></td>
+		<td>
+			<input type="text" class="AXInput w60p" name="part_width" value="<%=dto.getPart_width()%>">
+		</td>
 		<th>규격 세로(D)</th>
-		<td colspan="2"><%=dto.getPart_depth()%></td>
+		<td colspan="2">
+			<input type="text" class="AXInput w60p" name="part_depth" value="<%=dto.getPart_depth()%>">
+		</td>
 	</tr>
 	<tr>
 		<th>규격 높이(H)</th>
-		<td colspan="3"><%=dto.getPart_height()%></td>
+		<td colspan="">
+			<input type="text" class="AXInput w60p" name="part_height" value="<%=dto.getPart_height()%>">
+		</td>
+		<td colspan="2"></td>
 	</tr>
 	<%
 	if (dto.getPartTypeNm().equals("자재")) {
 	%>
 	<tr>
 		<th>규격</th>
-		<td><%=dto.getStandard_code()%></td>
+		<td>
+			<input type="text" class="AXInput w60p" name="standard_code" value="<%=dto.getStandard_code()%>">
+		</td>
 		<th>가단가</th>
-		<td colspan="3"><%=dto.getDummy_unit_price()%>원
+		<td colspan="2">
+			<input type="text" class="AXInput w60p" name="dummy_unit_price" value="<%=dto.getDummy_unit_price()%>">원
 		</td>
 	</tr>
 	<%
@@ -142,9 +214,13 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 	%>
 	<tr>
 		<th>주문품여부</th>
-		<td><%=dto.getPurchase_yn()%></td>
+		<td>
+			<input type="text" class="AXInput w60p" name="purchase_yn" value="<%=dto.getPurchase_yn()%>">
+		</td>
 		<th>사용여부</th>
-		<td colspan=""><%=dto.getUse_type_code()%></td>
+		<td colspan="2">
+			<input type="text" class="AXInput w60p" name="use_type_code" value="<%=dto.getUse_type_code()%>">
+		</td>
 	</tr>
 	<%
 	}
@@ -180,9 +256,9 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="modifyBtn">수정</button>
-			<button type="button" id="reviseBtn">개정</button>
-			<!-- 			<button type="button" id="deleteBtn">삭제</button> -->
+			<button type="button" id="saveBtn">저장</button>
+<!-- 			<button type="button" id="reviseBtn">개정</button> -->
+<!-- 			<button type="button" id="deleteBtn">삭제</button> -->
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -195,10 +271,13 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 			_openCreoView(oid);
 		})
 
-		$("#modifyBtn").click(function() {
-// 			var oid = $("input[name=oid]").val();
-			var url = _url("/part/modify", "<%=dto.getOid()%>");
-			document.location.href = url;
+		$("#saveBtn").click(function() {
+			var params = _data($("#form"));
+			var url = _url("/part/modify");
+			_call(url, params, function(data) {
+				opener.load();
+				self.close();
+			}, "POST");
 		})
 
 		$("#closeBtn").click(function() {
@@ -312,5 +391,11 @@ PartDTO dto = (PartDTO) request.getAttribute("dto");
 				}
 			},
 		});
+		
+		_selector("cat_l");
+		_selector("cat_m");
+		_selector("unit");
+		_selector("company");
+		_selector("brand");
 	})
 </script>

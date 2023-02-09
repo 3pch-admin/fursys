@@ -100,8 +100,8 @@ WTPart part = (WTPart) request.getAttribute("part");
 <table class="button-table">
 	<tr>
 		<td class="right">
-			<button type="button" id="">PLM 임시코드 생성</button>
-			<button type="button" id="">자재재공코드 생성</button>
+			<button type="button" id="plmTempCodeBtn">PLM 임시코드 생성</button>
+			<button type="button" id="">자재코드 생성</button>
 			<button type="button" id="">임시저장</button>
 			<button type="button" id="">저장</button>
 <!-- 			<button type="button" id="verifyBtn">수량검증</button> -->
@@ -231,7 +231,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 			}
 		},
 	}, {
-		dataField : "",
+		dataField : "plmTempCode",
 		headerText : "PLM 임시코드",
 		dataType : "string",
 	}, {	
@@ -362,9 +362,9 @@ WTPart part = (WTPart) request.getAttribute("part");
 		}, {
 			label : "기존부품 추가",
 			callback : contextItemHandler
-		}, {
-			label : "재공 추가",
-			callback : contextItemHandler
+// 		}, {
+// 			label : "재공 추가",
+// 			callback : contextItemHandler
 		}, {
 			label : "_$line"
 		}, {
@@ -492,6 +492,14 @@ WTPart part = (WTPart) request.getAttribute("part");
 	// 		}
 	// 		return true; // 만약 return false 를 하게 되면 드랍 행위를 하지 않습니다.(즉, 기본 행위를 안함)
 	// 	});
+		AUIGrid.bind(myGridID, "cellClick", function(event) {
+			if (event.dataField == "erpCode") {
+				var rowItem = event.item;
+				var url = _url("/erp/getErpCode", rowItem.oid);
+				_popup(url, 1300, 600, "n");
+			} 
+		});
+	
 
 	$(window).resize(function() {
 		AUIGrid.resize("#grid_wrap");
@@ -550,6 +558,13 @@ WTPart part = (WTPart) request.getAttribute("part");
 	
 	$(function() {
 		loadTree();
+		
+		$("#plmTempCodeBtn").click(function() {
+			var item = {
+				plmTempCode : "WDWW015287"
+			};
+			AUIGrid.updateRow(myGridID, item, 5);
+		})
 
 		$("#verifyBtn").click(function() {
 			var url = _url("/ebom/verify", $("input[name=eoid]").val());
