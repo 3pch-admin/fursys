@@ -1,6 +1,6 @@
 <%@page import="platform.util.IBAUtils"%>
 <%@page import="platform.util.CommonUtils"%>
-<%@ page import="wt.part.WTPart" %>
+<%@page import="wt.part.WTPart"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 String oid = (String) request.getAttribute("oid");
@@ -11,21 +11,12 @@ WTPart part = (WTPart) request.getAttribute("part");
 	background-color: #fefbc0;
 }
 
-.released {
-	background-color: #dbdbfd;
-}
-
-.aui-grid-row-state-added {
-	background: url(/Windchill/jsp/images/grd_WF_treeClose.png) 50% 50% no-repeat !important;
-	cursor: pointer;
-}
-
 .aui-grid-tree-minus-icon {
 	display: inline-block;
 	width: 16px;
 	height: 16px;
 	border: none;
-	background: url(/Windchill/jsp/asset/AUIGrid/images/arrow-downright.png) 50% 50% no-repeat;
+	background: url(/Windchill/jsp/images/grd_WF_treeClose.png) 50% 50% no-repeat;
 	background-size: 16px;
 	vertical-align: bottom;
 	margin: 0 2px 0 0;
@@ -36,7 +27,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 	width: 16px;
 	height: 16px;
 	border: none;
-	background: url(/Windchill/jsp/asset/AUIGrid/images/arrow-right.png) 50% 50% no-repeat;
+	background: url(/Windchill/jsp/images/grd_WF_treeOpen.png) 50% 50% no-repeat;
 	background-size: 16px;
 	vertical-align: bottom;
 	margin: 0 2px 0 0;
@@ -76,6 +67,12 @@ WTPart part = (WTPart) request.getAttribute("part");
 	font-weight: bold;
 	color: #22741C;
 }
+
+/* 부품유형 자재일 때 erpCode Style */
+.aui-grid-erpCode-custom {
+	background : #e1e2de; 
+}
+
 </style>
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
@@ -83,7 +80,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 	>
 	<span>BOM관리</span>
 	>
-	<span>EBOM 등록</span>
+	<span>EBOM 수정</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -93,29 +90,22 @@ WTPart part = (WTPart) request.getAttribute("part");
 		<col width="580">
 	</colgroup>
 	<tr>
-		<th>부품명칭 / 유형</th>
+		<th>부품명칭</th>
 		<td>
-			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly">
-			<input type="text" name="number" class="AXInput w40p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요."> 
-			/ <input type="text" name="partType" class="AXInput w20p" readonly="readonly">
+			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly" value="<%=part.getPersistInfo().getObjectIdentifier().getStringValue()%>">
+			<input type="hidden" name="eoid" class="AXInput w70p" readonly="readonly" value="<%=oid%>">
+			<input type="text" name="number" class="AXInput w70p" readonly="readonly" value="<%=part.getNumber()%>">
 		</td>
-		<th>참조부품</th>
+		<th>유형</th>
 		<td>
-			<input type="hidden" name="eoid" class="AXInput w70p" readonly="readonly">
-			<input type="text" name="eNumber" class="AXInput w30p" readonly="readonly" placeholder="클릭하여 참조할 부품을 선택하세요.">
+			<input type="text" name="partType" class="AXInput w30p" readonly="readonly" value="<%=IBAUtils.getStringValue(part, "PART_TYPE")%>">
 		</td>
 	</tr>
 </table>
 
 <table class="button-table">
-<colgroup>
-		<col width="150">
-		<col width="610">
-		<col width="150">
-		<col width="580">
-	</colgroup>
 	<tr>
-	<td colspan="2" class="left">
+	<td class="left">
 			<select class="AXSelect w100px" id="depthSelect" onchange="showItemsOnDepth()">
 				<option value="expandAll">전체확장</option>
 				<option value="1">1레벨</option>
@@ -125,44 +115,23 @@ WTPart part = (WTPart) request.getAttribute("part");
 				<option value="5">5레벨</option>
 			</select>
 		</td>
-		<td>
-		<select class="AXSelect w100px" id="depthSelectR" onchange="showItemsOnDepthR()">
-				<option value="expandAll">전체확장</option>
-				<option value="1">1레벨</option>
-				<option value="2">2레벨</option>
-				<option value="3">3레벨</option>
-				<option value="4">4레벨</option>
-				<option value="5">5레벨</option>
-			</select>
-		</td>
 		<td class="right">
-			<button type="button" id="createBtn">등록</button>
-			<button type="button" id="verifyBtn">수량검증</button>
+<!-- 			<button type="button" id="plmTempCodeBtn">PLM 임시코드 생성</button> -->
+			<button type="button" id="matCodeBtn">자재코드 생성</button>
+			<button type="button" id="">임시저장</button>
+			<button type="button" id="">저장</button>
+<!-- 			<button type="button" id="verifyBtn">수량검증</button> -->
+<!-- 			<button type="button" id="modifyBtn">수정</button> -->
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
 </table>
 
-
-<table class="create-table none">
-	<colgroup>
-		<col width="49%">
-		<col width="30">
-		<col width="49%">
-	</colgroup>
-	<tr>
-		<td class="center none" valign="top">
-			<div id="grid_left" style="height: 820px;"></div>
-		</td>
-		<td class="none" valign="top">&nbsp;</td>
-		<td class="center none" valign="top">
-			<div id="grid_right" style="height: 820px;"></div>
-		</td>
-	</tr>
-</table>
+<div id="grid_wrap" style="height:800px;"></div>
 <script type="text/javascript">
 	var leftGridID;
 	var rightGridID;
+	var myGridID;
 	var columnLayout = [ {
 		dataField : "",
 		headerText : "",
@@ -202,27 +171,16 @@ WTPart part = (WTPart) request.getAttribute("part");
 			// 로직 처리
 			return style;
 		}
-	}, {
-		dataField : "number",
-		headerText : "CREO 파일명",
+	}, {	
+		dataField : "erpCode",
+		headerText : "품목코드(ERP CODE)",
 		dataType : "string",
-		style : "left indent10",
-		editable : false,
 		width : 350,
-		styleFunction : function(rowIndex, columnIndex, value, headerText, item, dataField) {
-			var style = "";
-			if (item.number.indexOf("ARTICLE") > -1 || item.number.indexOf("ZONE") > -1) {
-				style = "red";
-			}
-			return style;
-		},
-	// 		headerTooltip : {
-	// 			show : true,
-	// 			tooltipHtml : "레벨 내리기 단축키 : Shift + Alt + -><br>레벨 올리기 단축키 : Shift + Alt + <-<br>행 삭제 단축키 : Ctrl + Delete"
-	// 		},
+		editable : false,
+		styleFunction : erpCodeStyle
 	}, {
 		dataField : "partName",
-		headerText : "부품명",
+		headerText : "품목명(PART_NAME)",
 		dataType : "string",
 		editable : false,
 		width : 200
@@ -248,6 +206,30 @@ WTPart part = (WTPart) request.getAttribute("part");
 			}
 		},
 	}, {
+		dataField : "unit",
+		headerText : "단위",
+		dataType : "string",
+		editable : false,
+		width : 100
+// 	}, {
+// 		dataField : "number",
+// 		headerText : "부품번호",
+// 		dataType : "string",
+// 		style : "left indent10",
+// 		editable : false,
+// 		width : 350,
+// 		styleFunction : function(rowIndex, columnIndex, value, headerText, item, dataField) {
+// 			var style = "";
+// 			if (item.number.indexOf("ARTICLE") > -1 || item.number.indexOf("ZONE") > -1) {
+// 				style = "red";
+// 			}
+// 			return style;
+// 		},
+	// 		headerTooltip : {
+	// 			show : true,
+	// 			tooltipHtml : "레벨 내리기 단축키 : Shift + Alt + -><br>레벨 올리기 단축키 : Shift + Alt + <-<br>행 삭제 단축키 : Ctrl + Delete"
+	// 		},
+	}, {
 		dataField : "itemName",
 		headerText : "ITEM_NAME",
 		dataType : "string",
@@ -260,18 +242,22 @@ WTPart part = (WTPart) request.getAttribute("part");
 		editable : false,
 		width : 150
 	}, {
-		dataField : "state",
-		headerText : "상태",
-		dataType : "string",
-		editable : false,
-		width : 120
-	}, {
 		dataField : "version",
 		headerText : "버전",
 		dataType : "string",
 		editable : false,
 		width : 80
 	}, {
+		dataField : "state",
+		headerText : "상태",
+		dataType : "string",
+		editable : false,
+		width : 120
+	}, {
+		dataField : "plmTempCode",
+		headerText : "PLM 임시코드",
+		dataType : "string",
+	}, {	
 		dataField : "oid",
 		headerText : "oid",
 		dataType : "string",
@@ -295,37 +281,6 @@ WTPart part = (WTPart) request.getAttribute("part");
 	// 		formatString : "###0"
 	// 	} ];
 
-	var auiLeftProps = {
-		// 		rowIdField : "uid",
-		headerHeight : 30,
-		rowHeight : 30,
-		showRowNumColumn : false,
-		displayTreeOpen : true,
-		treeColumnIndex : 2,
-		// 		showFooter : true,
-		selectionMode: "multipleCells",
-		enableDrag : true,
-		enableMultipleDrag: true,
-		enableDragByCellDrag : true,
-		enableDrop : false,
-		enableUndoRedo : true,
-		dropToOthers : true,
-		fixedColumnCount : 3,
-		treeLevelIndent : 20,
-		enableSorting : false,
-		showStateColumn : true,
-		softRemoveRowMode : true,
-		showTooltip : true,
-		rowStyleFunction : function(rowIndex, item) {
-			if (item.library) {
-				return "library";
-			} else if(item.state == "릴리즈됨") {
-				return "released";
-			}
-			return "";
-		}
-	};
-
 	var auiRightProps = {
 		// 		rowIdField : "uid",
 		headerHeight : 30,
@@ -335,11 +290,11 @@ WTPart part = (WTPart) request.getAttribute("part");
 		displayTreeOpen : true,
 		treeColumnIndex : 2,
 		// 		showFooter : true,
-		selectionMode : "multipleCells",
-		enableMultipleDrag: true,
+		fillColumnSizeMode : true,
 		enableDrag : true,
 		enableDragByCellDrag : true,
 		enableDrop : true,
+		selectionMode : "multipleRows",
 		enableUndoRedo : true,
 		dropToOthers : true,
 		softRemoveRowMode : false,
@@ -358,100 +313,48 @@ WTPart part = (WTPart) request.getAttribute("part");
 		}
 	};
 
-	leftGridID = AUIGrid.create("#grid_left", columnLayout, auiLeftProps);
-	rightGridID = AUIGrid.create("#grid_right", columnLayout, auiRightProps);
+// 	leftGridID = AUIGrid.create("#grid_left", columnLayout, auiLeftProps);
+	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiRightProps);
 	// 	AUIGrid.setFooter(leftGridID, footerLayout);
 	// 	AUIGrid.setFooter(rightGridID, footerLayout);
 
-	// 위
-	AUIGrid.bind(rightGridID, "indent", function(event) {
-		// 		if (event.items.length == 0) {
+	// 	AUIGrid.bind(leftGridID, "dropEndBefore", function(event) {
+	// 		// 이벤트의 isMoveMode 속성을 false 설정하면 행(Row) 복사를 합니다.
+	// 		event.isMoveMode = false;
+	// 		return true;
+	// 	});
+
+	AUIGrid.bind(myGridID, "keyDown", function(event) {
+		var keyCode = event.keyCode;
+		// 		if (keyCode == 45) {
 		// 			return false;
 		// 		}
-		// 		var item = event.items[0];
-		// 		var cCd = item.partTypeCd; // 이동할 타입
-		// 		var parent = AUIGrid.getItemByRowId(rightGridID, item._$parent);
-		// 		if (parent != undefined) {
-		// 			var pCd = parent.partTypeCd; // 부모 타입
-
-		// 			// 단품일 경우
-		// 			if (cCd == "ITEM") {
-		// 				// 자재 아래로 이동 불가
-		// 				if (pCd == "MAT") {
-		// 					alert("단품은 자재 아래로 이동이 불가능 합니다.");
-		// // 					AUIGrid.undo(rightGridID);
-		// 					return false;
-		// 				}
-
-		// 				if (pCd == "ITEM") {
-		// 					alert("단품은 단품 아래로 이동이 불가능 합니다.");
-		// // 					AUIGrid.undo(rightGridID);
-		// 					return false;
-		// 				}
-		// 			}
+		// 		var selectedItems = AUIGrid.getSelectedItems(event.pid);
+		// 		var rowIndex = selectedItems[0].rowIndex;
+		// 		console.log(rowIndex);
+		// 		if (rowIndex == 0) {
+		// // 			return false;
 		// 		}
-	});
+		// 		var shiftKey = event.shiftKey;
+		// 		var altKey = event.orgEvent.altKey;
+		// 		if ((shiftKey && altKey) && keyCode == 39) {
 
-	// 아래
-	AUIGrid.bind(rightGridID, "outdent", function(event) {
-		// 		var item = event.items[0];
-		// 		var cCd = item.partTypeCd; // 이동할 타입
-		// 		console.log(event.type + " 이벤트\r\n" + "\r\n적용된 행 개수 : " + event.items.length);
-		// 		console.log(item);
-		// 		if (event.items.length == 0) {
-		// 			return false;
+		// 			console.log(selectedItems);
 		// 		}
-
-		// 		if (item._$depth == 1) {
-		// 			alert("최하위 레벨로 이동은 불가능 합니다.");
-		// // 			AUIGrid.undo(rightGridID);
-		// 			return false;
-		// 		}
-		// 		console.log("A");
-		// 		var parent = AUIGrid.getItemByRowId(rightGridID, item._$parent);
-		// 		if (parent != undefined) {
-		// 			var pCd = parent.partTypeCd; // 부모 타입
-
-		// 			// 		// 자재일경우..
-		// 			if (cCd == "MAT") {
-		// 				// 세트 아래로 옴기기 불가능
-		// 				if (pCd == "SET") {
-		// // 					alert("자재는 세트 아래에 존재가 불가능 합니다.");
-		// // 					AUIGrid.undo(rightGridID);
-		// 					return;
-
-		// 				}
-		// 				console.log("C");
-		// 			}
-		// 			// 단품일 경우
-		// 			if (cCd == "ITEM") {
-		// 				// 자재 아래로 이동 불가
-		// 				if (pCd == "MAT") {
-		// 					alert("단품은 자재 아래로 이동이 불가능 합니다.");
-		// // 					AUIGrid.undo(rightGridID);
-		// 					return false;
-		// 				}
-
-		// 				if (pCd == "ITEM") {
-		// 					alert("단품은 단품 아래로 이동이 불가능 합니다.");
-		// // 					AUIGrid.undo(rightGridID);
-		// 					return false;
-		// 				}
-		// 			}
-		// 		}
+		return true;
 	});
 
 	// drag prevent
-	AUIGrid.bind(leftGridID, "dragBegin", function(event) {
-		var rowIndex = event.rowIndex;
-		if (rowIndex == 0) {
-			alert("최상위는 편집 불가능합니다.");
-			return false;
-		}
-		return true;
-	})
+// 	AUIGrid.bind(myGridID, "dragBegin", function(event) {
+// 		var rowIndex = event.rowIndex;
+// 		if (rowIndex == 0) {
+// 			alert("최상위는 편집 불가능합니다.");
+// 			return false;
+// 		}
+// 		return true;
+// 	})
 
-	AUIGrid.bind(rightGridID, "cellEditBegin", function(event) {
+	AUIGrid.bind(myGridID, "cellEditBegin", function(event) {
 		var rowIndex = event.rowIndex;
 		if (rowIndex == 0) {
 			return false;
@@ -471,8 +374,8 @@ WTPart part = (WTPart) request.getAttribute("part");
 	// 	      alert(str);
 	// 	});
 
-	AUIGrid.bind(rightGridID, "contextMenu", function(event) {
-		AUIGrid.setSelectionByIndex(rightGridID, event.rowIndex, event.columnIndex);
+	AUIGrid.bind(myGridID, "contextMenu", function(event) {
+		AUIGrid.setSelectionByIndex(myGridID, event.rowIndex, event.columnIndex);
 		var menus = [ {
 			label : "최상위 추가",
 			callback : contextItemHandler
@@ -482,6 +385,9 @@ WTPart part = (WTPart) request.getAttribute("part");
 		}, {
 			label : "기존부품 추가",
 			callback : contextItemHandler
+// 		}, {
+// 			label : "재공 추가",
+// 			callback : contextItemHandler
 		}, {
 			label : "_$line"
 		}, {
@@ -508,7 +414,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 			label : "삭제 (Ctrl + Delete)",
 			callback : contextItemHandler
 		}, ]
-		if (event.dataField == "number") {
+		if (event.dataField == "erpCode" || event.dataField == "partName") {
 			var item = event.item;
 			// 			if (item.state == "릴리즈됨") {
 			// 				return false;
@@ -525,7 +431,8 @@ WTPart part = (WTPart) request.getAttribute("part");
 		case 0:
 			var root = AUIGrid.getItemByRowIndex(rightGridID, 0);
 			console.log(root);
-			var url = "/Windchill/platform/part/top?partTypeCd=" + item.partTypeCd + "&rowId=" + root._$uid + "&poid=" + root.oid + "&callBack=_top";
+// 			var url = "/Windchill/platform/part/top?partTypeCd=" + item.partTypeCd + "&rowId=" + root._$uid + "&poid=" + root.oid + "&callBack=_top";
+			var url = "/Windchill/platform/part/top?partTypeCd=" + item.partTypeCd + "&callBack=_top";
 			_popup(url, 1100, 380, "n");
 			break;
 		case 1:
@@ -583,17 +490,6 @@ WTPart part = (WTPart) request.getAttribute("part");
 			alert("ARTICLE 및 ZONE 이 포함 되어있습니다.");
 			return false;
 		}
-
-		var pidToDrop = event.pidToDrop;
-		console.log(item.uid);
-		var notHave = AUIGrid.isUniqueValue(pidToDrop, "uid", item.uid); // 이미 존재하는지 검사
-		if (!notHave) {
-			if (confirm("지금 드랍되는 행은 이미 이전에 드랍된 행입니다. 또 드랍하시겠습니까?")) {
-				return true;
-			} else {
-				return false; // 기본 행위 안함.
-			}
-		}
 		return true;
 	});
 
@@ -619,10 +515,18 @@ WTPart part = (WTPart) request.getAttribute("part");
 	// 		}
 	// 		return true; // 만약 return false 를 하게 되면 드랍 행위를 하지 않습니다.(즉, 기본 행위를 안함)
 	// 	});
+		AUIGrid.bind(myGridID, "cellDoubleClick", function(event) {
+				if (event.dataField == "erpCode" && event.item.partType!= "자재") {
+					var rowItem = event.item;
+// 					var url = _url("/erp/getErpCode", rowItem.oid);
+					var url = _url("/erp/getErpCode?callBack=setErpCode&key=" + rowItem.oid);
+					_popup(url, 1300, 600, "n");
+				} 
+			});
+	
 
 	$(window).resize(function() {
-		AUIGrid.resize("#grid_left");
-		AUIGrid.resize("#grid_right");
+		AUIGrid.resize("#grid_wrap");
 	})
 
 	function validate(item) {
@@ -638,53 +542,116 @@ WTPart part = (WTPart) request.getAttribute("part");
 	}
 
 	function _child(node, rowId) {
-		AUIGrid.addTreeRow(rightGridID, node, rowId, "last");
+		AUIGrid.addTreeRow(myGridID, node, rowId, "last");
 	}
 
 	function _top(node, rowId) {
-		AUIGrid.addTreeRow(rightGridID, node, rowId, "first");
+		AUIGrid.addTreeRow(myGridID, node, rowId, "first");
 	}
 	
+	//depth별 확장
 	function showItemsOnDepth(event) {
 		var depthSelect = document.getElementById("depthSelect");
 		var depth = depthSelect.value;
 		
 		if( depth == "expandAll"){
-			AUIGrid.expandAll(leftGridID);
+			AUIGrid.expandAll(myGridID);
 		}
 		//해당 depth까지 오픈함
-		AUIGrid.showItemsOnDepth(leftGridID, Number(depth));
-	}
-	function showItemsOnDepthR(event) {
-		var depthSelect = document.getElementById("depthSelectR");
-		var depth = depthSelect.value;
-		
-		if( depth == "expandAll"){
-			AUIGrid.expandAll(rightGridID);
-		}
-		//해당 depth까지 오픈함
-		AUIGrid.showItemsOnDepth(rightGridID, Number(depth));
+		AUIGrid.showItemsOnDepth(myGridID, Number(depth));
 	}
 
+	function loadTree() {
+		requestData("/Windchill/jsp/ebom/mockup/ebom-modify2.json");
+	}
+
+	function requestData(url) {
+
+		// ajax 요청 전 그리드에 로더 표시
+		AUIGrid.showAjaxLoader(myGridID);
+
+		// ajax (XMLHttpRequest) 로 그리드 데이터 요청
+		ajax({
+			url : url,
+			onSuccess : function(data) {
+
+				//console.log(data);
+
+				// 그리드에 데이터 세팅
+				// data 는 JSON 을 파싱한 Array-Object 입니다.
+				AUIGrid.setGridData(myGridID, data);
+
+				// 로더 제거
+				AUIGrid.removeAjaxLoader(myGridID);
+			},
+			onError : function(status, e) {
+				alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
+				// 로더 제거
+				AUIGrid.removeAjaxLoader(myGridID);
+			}
+		});
+	};
 	
 	$(function() {
-
+		loadTree();
 		_selector("depthSelect");
-		_selector("depthSelectR");
 		
+		$("#plmTempCodeBtn").click(function() {
+			var item = {
+				plmTempCode : "ITEM-2302-0002"
+			};
+			AUIGrid.updateRow(myGridID, item, 5);
+		})
 		
+		$("#matCodeBtn").click(function() {
+			var item = {
+				erpCode : "WDWW015129"	,
+				partNo : "WDWW015129"
+			};
+			AUIGrid.updateRow(myGridID, item, 2);
+		})
+
 		$("#verifyBtn").click(function() {
-			var url = _url("/ebom/verify", $("input[name=oid]").val());
+			var url = _url("/ebom/verify", $("input[name=eoid]").val());
 			_popup(url, 1400, 800, "n");
+		})
+
+		$("#modifyBtn").click(function() {
+			
+			if(!confirm("수정 하시겠습니까?")) {
+				return false;
+			}
+			
+			var gridData = AUIGrid.getTreeGridData(myGridID);
+			console.log(gridData);
+			
+			var json = btoa(unescape(encodeURIComponent(JSON.stringify(AUIGrid.getTreeGridData(myGridID)))));
+			var url = "/Windchill/platform/ebom/modify";
+			var params = new Object();
+			params.json = json;
+			params.oid = $("input[name=eoid]").val();
+			_call(url, params, function(data) {
+				document.location.href = "/Windchill/platform/ebom/modify?oid=" + data.oid;
+			}, "POST");
+		})
+
+		$("#compareBtn1").click(function() {
+			var oid = $("input[name=oid]").val();
+			var url = "/Windchill/platform/ebom/compare?oid=" + oid;
+			var popW = 1400;
+			var popH = 800;
+			var left = (screen.width - popW) / 2;
+			var top = (screen.height - popH) / 2;
+
+			opt = "scrollbars=yes resizable=yes";
+
+			var popup = window.open(url, "", opt + ", top=" + (top - 50) + ", left=" + left + ", height=" + popH + ", width=" + popW);
+			popup.cbom = AUIGrid.getGridData(leftGridID);
+			popup.ebom = AUIGrid.getGridData(rightGridID);
 		})
 
 		$("input[name=number]").click(function() {
 			var url = "/Windchill/platform/part/popup?box=1";
-			_popup(url, "", "", "f");
-		})
-		
-		$("input[name=eNumber]").click(function(){
-			var url = "/Windchill/platform/ebom/popup?box=1&purpose=reference";
 			_popup(url, "", "", "f");
 		})
 
@@ -692,9 +659,9 @@ WTPart part = (WTPart) request.getAttribute("part");
 			self.close();
 		})
 
-		$("#createBtn").click(function() {
+		$("#compareBtn").click(function() {
 
-			var d = AUIGrid.getGridData(rightGridID);  
+			var d = AUIGrid.getGridData(rightGridID);
 			for (var i = 0; i < d.length; i++) {
 				var item = d[i];
 				var depth = item._$depth;
@@ -705,8 +672,7 @@ WTPart part = (WTPart) request.getAttribute("part");
 				// 				}
 			}
 
-			// 			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
-			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.")) {
+			if (!confirm("저장 후 검증 페이지로 이동 되어집니다.\n기존 저장된 EBOM이 있을 경우는 다시 저장을 하지 않습니다.\n진행 하시겠습니까?")) {
 				return false;
 			}
 
@@ -716,56 +682,34 @@ WTPart part = (WTPart) request.getAttribute("part");
 			var params = new Object();
 			params.json = json;
 			params.oid = $("input[name=oid]").val();
+			console.log(params);
 			_call(url, params, function(data) {
-				var url = _url("/ebom/verify", data.oid);
+				var url = _url("/ebom/compare", $("input[name=oid]").val());
 				_popup(url, 1600, 800, "n");
 			}, "POST");
 		})
 	})
-
-	function part(info) {
-		// 		$("#input[name=number]").add("input[name=name]").off();
-		$("input[name=oid]").val(info[0].oid);
-		$("input[name=number]").val(info[0].number);
-		// 		$("input[name=name]").val(data[0].name);
-		$("input[name=partType]").val(info[0].partType);
-		$("input[name=color]").val(info[0].color);
-		$("input[name=search]").attr("readonly", false);
-		loadLeftTree(info[0].oid);
-		loadRightTree(info[0].oid);
+	
+	//erpCode 추가시 itemName도 입력 
+	function setErpCode(itm_cd) {
+		var selectedItems = AUIGrid.getSelectedItems(myGridID);
+		var selItem = selectedItems[0].item;
+		
+		selItem.erpCode= itm_cd;
+		selItem.itemName = selItem.erpCode;
+		
+		AUIGrid.updateRowsById(myGridID, selItem);
 	}
-
-	function loadLeftTree(oid) {
-		var params = new Object();
-		AUIGrid.showAjaxLoader(leftGridID);
-		var url = _url("/ebom/left", oid);
-		_call(url, params, function(data) {
-			console.log(data.list);
-			AUIGrid.removeAjaxLoader(leftGridID);
-			AUIGrid.setGridData(leftGridID, data.list);
-		}, "GET");
+	
+	//셀스타일 함수 정의(MAT 일 때 erpCode)
+	function erpCodeStyle(rowIndex, value, item, dataField, event) {
+		console.log(event.parType);
+		
+		if (event.partType == "단품" || event.partType == "세트"){
+			return "aui-grid-erpCode-custom";
+		}
 	}
-
-	function loadRightTree(oid) {
-		var params = new Object();
-		AUIGrid.showAjaxLoader(rightGridID);
-		params = JSON.stringify(params);
-		var url = "/Windchill/platform/ebom/right?oid=" + oid;
-		$.ajax({
-			type : "GET",
-			url : url,
-			dataType : "JSON",
-			crossDomain : true,
-			data : params,
-			async : true, //동기처리를 해야만 펑션리턴이 가능함
-			contentType : "application/json; charset=UTF-8",
-			success : function(data) {
-				AUIGrid.removeAjaxLoader(rightGridID);
-				AUIGrid.setGridData(rightGridID, data.list);
-			},
-		});
-	}
-
+	
 	function closeAndLoad() {
 		opener.load();
 		self.close();

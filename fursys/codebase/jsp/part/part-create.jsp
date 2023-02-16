@@ -83,39 +83,11 @@ String ccode = CommonUtils.getSessionCompany();
 					</label>
 				</td>
 			</tr>
-			<tr>
-				<th>카테고리_대</th>
-				<td>
-					<select name="cat_l" id = "cat_l" class="AXSelect w200px">
-						<option value="">선택</option>
-						<%
-						for(BaseCode c : cat_l) {
-						%>
-							<option value="<%=c.getCode()%>" ><%=c.getName()%></option>
-						<%
-						}
-						%>
-					</select>
-				</td>
-				<th>카테고리_중</th>
-				<td>
-				<select name="cat_m" id = "cat_m" class="AXSelect w200px">
-						<option value="">선택</option>
-						<%
-						for(BaseCode d : cat_m) {
-						%>
-							<option value="<%=d.getCode()%>" ><%=d.getName()%></option>
-						<%
-						}
-						%>
-					</select>
-				</td>
-			</tr>
+			
 			<tr>
 				<th>단위</th>
 				<td>
 					<select name="unit" id="unit" class="AXSelect w200px">
-						<option value="">선택</option>
 						<%
 						for (QuantityUnit unit : units) {
 						%>
@@ -131,7 +103,7 @@ String ccode = CommonUtils.getSessionCompany();
 					<input type="text" class="AXInput w60p" name="erpCode" readonly="readonly">
 				</td>
 			</tr>
-			<tr>
+			<tr class="material">
 				<th>회사</th>
 				<td>
 					<select name="company" id="company" class="AXSelect w200px">
@@ -159,13 +131,13 @@ String ccode = CommonUtils.getSessionCompany();
 					</select>
 				</td>
 			</tr>
-			<tr>
-				<th>파생부품</th>
-				<td colspan="3">
-					<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber">
-					<input type="hidden" readonly="readonly" name="ref">
-				</td>
-			</tr>
+<!-- 			<tr> -->
+<!-- 				<th>파생부품</th> -->
+<!-- 				<td colspan="3"> -->
+<!-- 					<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber"> -->
+<!-- 					<input type="hidden" readonly="readonly" name="ref"> -->
+<!-- 				</td> -->
+<!-- 			</tr> -->
 			<!-- // 11 15  -->
 <!-- 			<tr> -->
 <!-- 				<th>규격 가로(W)</th> -->
@@ -186,6 +158,34 @@ String ccode = CommonUtils.getSessionCompany();
 <!-- 					(mm) -->
 <!-- 				</td> -->
 <!-- 			</tr> -->
+			<tr class="material">
+				<th>카테고리_대</th>
+				<td>
+					<select name="cat_l" id = "cat_l" class="AXSelect w200px">
+						<option value="">선택</option>
+						<%
+						for(BaseCode c : cat_l) {
+						%>
+							<option value="<%=c.getCode()%>" ><%=c.getName()%></option>
+						<%
+						}
+						%>
+					</select>
+				</td>
+				<th>카테고리_중</th>
+				<td>
+				<select name="cat_m" id = "cat_m" class="AXSelect w200px">
+						<option value="">선택</option>
+						<%
+						for(BaseCode d : cat_m) {
+						%>
+							<option value="<%=d.getCode()%>" ><%=d.getName()%></option>
+						<%
+						}
+						%>
+					</select>
+				</td>
+			</tr>
 			<tr class="material">
 				<th>규격</th>
 				<td>
@@ -248,15 +248,24 @@ String ccode = CommonUtils.getSessionCompany();
 					$(".material").show();
 					$(".items").hide();
 					_selector("standard_code");
+				} else if ($(this).val() == "WIP") {
+					$(".material").show();
+					$(".items").hide();
+					_selector("standard_code");
 				}
 			})
 			$("#closeBtn").click(function() {
 				self.close();
 			})
+			
+			$("input[name=erpCode]").click(function() {
+				var url = _url("/erp/getErpCode?callBack=setErpCodePartName");
+				_popup(url, 1300, 600, "n");
+			})
 
 			$("#saveBtn").click(function() {
 				$part_name = $("input[name=part_name]");
-				$partType = $("input[name=partType]");
+				$partType = $("input[name=partType]:checked");
 				$cat_l = $("select[name=cat_l]");
 				$cat_m =$("select[name=cat_m]");
 				$unit = $("select[name=unit]");
@@ -268,34 +277,32 @@ String ccode = CommonUtils.getSessionCompany();
 					$part_name.focus();
 					return false;
 				}
-				if($partType.val() == ""){
-					alert("부품타입을 선택하세요.");
-					$partType.focus();
-					return false;
-				}
-				if($cat_l.val() == ""){
-					alert("카테고리 대를 선택하세요.");
-					$cat_l.focus();
-					return false;
-				}
-				if($cat_m.val() == ""){
-					alert("카테고리 중를 선택하세요.");
-					$cat_.focus();
-					return false;
+				console.log($partType.val());
+				if($partType.val() == "MAT" || $partType.val() == "WIP"){
+					if($cat_l.val() == ""){
+						alert("카테고리 대를 선택하세요.");
+						$cat_l.focus();
+						return false;
+					}
+					if($cat_m.val() == ""){
+						alert("카테고리 중를 선택하세요.");
+						$cat_.focus();
+						return false;
+					}
+					if($company.val() == ""){
+						alert("회사를 선택하세요.");
+						$company.focus();
+						return false;
+					}
+					if($brand.val() == ""){
+						alert("브랜드를 선택하세요.");
+						$brand.focus();
+						return false;
+					}
 				}
 				if($unit.val() == ""){
 					alert("단위를 선택하세요.");
 					$unit.focus();
-					return false;
-				}
-				if($company.val() == ""){
-					alert("회사를 선택하세요.");
-					$company.focus();
-					return false;
-				}
-				if($brand.val() == ""){
-					alert("브랜드를 선택하세요.");
-					$brand.focus();
 					return false;
 				}
 				
@@ -307,6 +314,7 @@ String ccode = CommonUtils.getSessionCompany();
 				var url = _url("/part/create");
 				_call(url, params, function(data) {
 					opener.load();
+					alert("###############jsp");
 					self.close();
 				}, "POST");
 			})
@@ -355,6 +363,12 @@ String ccode = CommonUtils.getSessionCompany();
 			_folder("location", "/Default/부품");
 			$("input[name=partType]").checks();
 		})
+		
+		//erpCode 넣을 때 부품명도 같이
+		function setErpCodePartName(itm_cd, itm_nm){
+			$("input[name=erpCode]").val(itm_cd);
+			$("input[name=part_name]").val(itm_nm);
+		}
 	</script>
 </body>
 </html>

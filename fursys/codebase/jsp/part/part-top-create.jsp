@@ -102,37 +102,37 @@ String callBack = (String)request.getParameter("callBack");
 			</select>
 		</td>
 	</tr>
-	<tr>
-		<th>파생부품</th>
-		<td colspan="3">
-			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber">
-			<input type="hidden" readonly="readonly" name="ref">
-		</td>
-	</tr>
-	<tr>
-		<th>PLM 임시코드</th>
-		<td colspan="3">
-			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber">
-		</td>
-	</tr>
-	<tr>
-		<th>주문품여부</th>
-		<td>
-			<select name="purchase_yn" id="purchase_yn" class="AXSelect w200px">
-				<option value="">선택</option>
-				<option value="Y">주문품(Y)</option>
-				<option value="N">주문품 아님(N)</option>
-			</select>
-		</td>
-		<th>사용여부</th>
-		<td>
-			<select name="use_type_code" id="use_type_code" class="AXSelect w200px">
-				<option value="">선택</option>
-				<option value="Y">사용(Y)</option>
-				<option value="N">미사용(N)</option>
-			</select>
-		</td>
-	</tr>
+<!-- 	<tr> -->
+<!-- 		<th>파생부품</th> -->
+<!-- 		<td colspan="3"> -->
+<!-- 			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber"> -->
+<!-- 			<input type="hidden" readonly="readonly" name="ref"> -->
+<!-- 		</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr> -->
+<!-- 		<th>PLM 임시코드</th> -->
+<!-- 		<td colspan="3"> -->
+<!-- 			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber"> -->
+<!-- 		</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr> -->
+<!-- 		<th>주문품여부</th> -->
+<!-- 		<td> -->
+<!-- 			<select name="purchase_yn" id="purchase_yn" class="AXSelect w200px"> -->
+<!-- 				<option value="">선택</option> -->
+<!-- 				<option value="Y">주문품(Y)</option> -->
+<!-- 				<option value="N">주문품 아님(N)</option> -->
+<!-- 			</select> -->
+<!-- 		</td> -->
+<!-- 		<th>사용여부</th> -->
+<!-- 		<td> -->
+<!-- 			<select name="use_type_code" id="use_type_code" class="AXSelect w200px"> -->
+<!-- 				<option value="">선택</option> -->
+<!-- 				<option value="Y">사용(Y)</option> -->
+<!-- 				<option value="N">미사용(N)</option> -->
+<!-- 			</select> -->
+<!-- 		</td> -->
+<!-- 	</tr> -->
 </table>
 
 <jsp:include page="/jsp/common/ref-doc-attach.jsp"></jsp:include>
@@ -149,6 +149,23 @@ String callBack = (String)request.getParameter("callBack");
 
 <script type="text/javascript">
 	$(function() {
+		$("input[name=partType]").click(function() {
+			if ($(this).val() == "ITEM") {
+				$(".items").show();
+				$(".material").hide();
+				_selector("purchase_yn");
+				_selector("use_type_code");
+			} else if ($(this).val() == "MAT") {
+				$(".material").show();
+				$(".items").hide();
+				_selector("standard_code");
+			} else if ($(this).val() == "WIP") {
+				$(".material").show();
+				$(".items").hide();
+				_selector("standard_code");
+			}
+		})
+		
 		$("#closeBtn").click(function() {
 			self.close();
 		})
@@ -164,7 +181,8 @@ String callBack = (String)request.getParameter("callBack");
 			}
 			
 			if("<%=partTypeCd%>" == "SET") {
-				if ($("input[name=partType]:checked").val() == "MAT") {
+				if ($("input[name=partType]:checked").val() == "MAT"
+						|| $("input[name=partType]:checked").val() == "WIP") {
 					alert("세트 아래에 자재는 추가가 불가능합니다.");
 					return false;
 				}

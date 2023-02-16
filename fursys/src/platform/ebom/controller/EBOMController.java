@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.sf.json.JSONArray;
+import platform.code.entity.BaseCode;
+import platform.code.service.BaseCodeHelper;
 import platform.doc.service.DocumentHelper;
 import platform.ebom.entity.EBOM;
 import platform.ebom.service.EBOMHelper;
@@ -22,6 +24,7 @@ import platform.util.CommonUtils;
 import wt.doc.WTDocument;
 import wt.federation.PrincipalManager.DirContext;
 import wt.federation.PrincipalManager.PrincipalManagerResource;
+import wt.part.QuantityUnit;
 import wt.part.WTPart;
 import wt.part.WTPartMaster;
 
@@ -29,13 +32,6 @@ import wt.part.WTPartMaster;
 @RequestMapping(value = "/ebom/**")
 public class EBOMController {
 	
-	@RequestMapping(value="/derived", method = RequestMethod.GET)
-	public ModelAndView derived() throws Exception {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("popup:/ebom/ebom-derivedMockup");
-		return model;
-	}
-
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() throws Exception {
 		ModelAndView model = new ModelAndView();
@@ -56,6 +52,14 @@ public class EBOMController {
 			result.put("msg", e.toString());
 		}
 		return result;
+	}
+
+
+	@RequestMapping(value="/derived", method = RequestMethod.GET)
+	public ModelAndView derived() throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("popup:/ebom/ebom-derivedMockup");
+		return model;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -160,6 +164,28 @@ public class EBOMController {
 		return result;
 	}
 
+	@RequestMapping(value = "/derived", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> derived(@RequestBody Map<String, Object> params) {
+		String oid = (String) params.get("oid");
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			WTPart part = (WTPart) CommonUtils.persistable(oid);
+			WTPartMaster master = part.getMaster();
+			EBOM header = EBOMHelper.manager.getHeader(master);
+			if (header == null) {
+				header = EBOMHelper.service.create(params);
+			}
+			result.put("oid", header.getPersistInfo().getObjectIdentifier().getStringValue());
+			result.put("result", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("result", false);
+			result.put("msg", e.toString());
+		}
+		return result;
+	}
+	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> modify(@RequestBody Map<String, Object> params) {
@@ -220,7 +246,25 @@ public class EBOMController {
 		model.addObject("oid", oid);
 		model.addObject("part", part);
 		model.addObject("ebom", ebom);
-		model.setViewName("popup:/ebom/ebom-view");
+		model.setViewName("popup:/ebom/ebom-modify2");
+//		model.setViewName("popup:/ebom/ebom-view");
+		return model;
+	}
+	
+	@RequestMapping(value = "/popup", method = RequestMethod.GET)
+	public ModelAndView popup() throws Exception {
+		ModelAndView model = new ModelAndView();
+		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND"); // 브랜드
+		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY"); // 회사
+		ArrayList<BaseCode> cat_l = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_L"); // 회사
+		ArrayList<BaseCode> cat_m = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_M"); // 회사
+		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
+		model.addObject("brand", brand);
+		model.addObject("company", company);
+		model.addObject("cat_l", cat_l);
+		model.addObject("cat_m", cat_m);
+		model.addObject("units", units);
+		model.setViewName("popup:/ebom/ebom-popup-list");
 		return model;
 	}
 

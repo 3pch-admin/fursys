@@ -584,15 +584,7 @@ String oid = (String) request.getParameter("oid");
 						}
 					})
 					
-					$("#derivedBtn").click(function() {
-						var items = AUIGrid.getCheckedRowItems(myGridID);
-						if (items.length == 0) {
-							alert("파생할 EBOM을 선택하세요.");
-							return false;
-						}
-						var url = "/Windchill/platform/ebom/derived";
-						_popup(url, "", "", "f");
-					})
+				
 					
 // 						var items = AUIGrid.getCheckedRowItems(myGridID);
 // 						if (items.length == 0) {
@@ -647,6 +639,24 @@ String oid = (String) request.getParameter("oid");
 					$("#closeBtn").click(function() {
 						self.close();
 					})
+					
+					$("#derivedBtn").click(function() {
+						var items = AUIGrid.getCheckedRowItems(myGridID);
+						if (items.length == 0) {
+							alert("파생할 EBOM을 선택하세요.");
+							return false;
+						}
+						var params = new Object();
+						params.oid = items[0].item.oid;
+	// 					var url = "/Windchill/platform/ebom/derived";
+// 						_popup(url, "", "", "f");
+						var url = _url("/part/info");
+						_call(url, params, function(data) {
+							opener.part(data.info);
+							self.close();
+						}, "POST");
+					})
+					
 					$("#addBtn").click(function() {
 						var items = AUIGrid.getCheckedRowItems(myGridID);
 						if (items.length == 0) {

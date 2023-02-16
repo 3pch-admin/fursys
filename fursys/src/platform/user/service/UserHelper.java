@@ -14,6 +14,7 @@ import platform.util.PageUtils;
 import platform.util.StringUtils;
 import wt.fc.PersistenceHelper;
 import wt.fc.QueryResult;
+import wt.org.WTUser;
 import wt.query.ClassAttribute;
 import wt.query.ColumnExpression;
 import wt.query.ConstantExpression;
@@ -217,5 +218,24 @@ public class UserHelper {
 			list.add(data);
 		}
 		return list;
+	}
+	
+	public User getToWTUser(WTUser uu) throws Exception {
+		User uu2 = null;
+		QuerySpec query = new QuerySpec();
+		int idx = query.appendClassList(User.class, true);
+		query.appendWhere(new SearchCondition(User.class, "wtUserReference.key.id", "=",
+				CommonUtils.longValue(uu)));
+		
+		ClassAttribute ca = new ClassAttribute(User.class, User.USER_NAME);
+		OrderBy orderBy = new OrderBy(ca, false);
+		query.appendOrderBy(orderBy, new int[] { idx });
+		QueryResult result = PersistenceHelper.manager.find(query);
+		while (result.hasMoreElements()) {
+			Object[] obj = (Object[]) result.nextElement();
+			User u = (User) obj[0];
+			uu2 = u;
+		}
+		return uu2;
 	}
 }

@@ -262,12 +262,19 @@ boolean isAdmin = CommonUtils.isAdmin();
 							var state = rowItem.state;
 							if (dataField == "number") {
 								if (state == "EBOM 임시저장") {
-									var url = _url("/ebom/modify", rowItem.oid);
-									_popup(url, "", "", "f");
-								} else if(state == "EBOM 작성중(검증완료)") {
 									var url = _url("/ebom/view", rowItem.oid);
 									_popup(url, "", "", "f");
+								} else if(state == "EBOM 작성중(검증완료)") {
+									var url = _url("/ebom/modify", rowItem.oid);
+									_popup(url, "", "", "f");
 								}
+// 								if (state == "EBOM 임시저장") {
+// 									var url = _url("/ebom/modify", rowItem.oid);
+// 									_popup(url, "", "", "f");
+// 								} else if(state == "EBOM 작성중(검증완료)") {
+// 									var url = _url("/ebom/view", rowItem.oid);
+// 									_popup(url, "", "", "f");
+// 								}
 							} else if (event.dataField == "thumb") {
 								_openCreoView(event.item.toid);
 							}
@@ -275,13 +282,14 @@ boolean isAdmin = CommonUtils.isAdmin();
 						$(function() {
 
 							$("#derivedBtn").click(function() {
-								var items = AUIGrid.getCheckedRowItems(myGridID);
-								if (items.length == 0) {
-									alert("파생할 EBOM을 선택하세요.");
-									return false;
-								}
-                                var oid = items[0].item.oid;
-                                var url = _url("/part/popup?box=1&callBack=derived&oid=" + oid);
+// 								var items = AUIGrid.getCheckedRowItems(myGridID);
+// 								if (items.length == 0) {
+// 									alert("파생할 EBOM을 선택하세요.");
+// 									return false;
+// 								}
+//                                 var oid = items[0].item.oid;
+//                                 var url = _url("/part/popup?box=1&callBack=derived&oid=" + oid);
+								var url = "/Windchill/platform/ebom/derived";
 								_popup(url, "", "", "f");
 							})
 

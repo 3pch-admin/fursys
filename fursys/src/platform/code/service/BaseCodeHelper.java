@@ -36,7 +36,9 @@ public class BaseCodeHelper {
 		SearchCondition sc = new SearchCondition(BaseCode.class, BaseCode.CODE_TYPE, "=", codeType);
 		query.appendWhere(sc, new int[] { idx });
 
-		ClassAttribute ca = new ClassAttribute(BaseCode.class, WTAttributeNameIfc.CREATE_STAMP_NAME);
+//		ClassAttribute ca = new ClassAttribute(BaseCode.class, WTAttributeNameIfc.CREATE_STAMP_NAME);
+		ClassAttribute ca = new ClassAttribute(BaseCode.class, BaseCode.NAME);
+		System.out.println("##### ca: " + ca);
 		OrderBy by = new OrderBy(ca, false);
 		query.appendOrderBy(by, new int[] { idx });
 

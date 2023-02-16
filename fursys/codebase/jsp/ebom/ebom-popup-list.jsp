@@ -2,6 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 String callBack = (String) request.getParameter("callBack");
+String box = (String) request.getParameter("box");
+String purpose = (String) request.getParameter("purpose");
 %>
 <div class="header-title">
 	<img src="/Windchill/jsp/images/home.png" class="home">
@@ -62,11 +64,14 @@ String callBack = (String) request.getParameter("callBack");
 					</td>
 				</tr>
 			</table>
-
 			<table class="button-table">
 				<tr>
 					<td class="right">
+					<%if(!purpose.equals("reference")) {%>
 						<button type="button" id="addBtn">추가</button>
+					<%
+					}
+					%>
 						<button type="button" id="searchBtn">조회</button>
 						<button type="button" id="closeBtn">닫기</button>
 					</td>
@@ -103,9 +108,10 @@ String callBack = (String) request.getParameter("callBack");
 					}
 				}, {
 					dataField : "number",
-					headerText : "부품번호",
+					// 							headerText : "부품번호",
+					headerText : "CREO 파일명",
 					dataType : "string",
-					width : 250,
+					// 							width : 250,
 					style : "left indent10"
 				}, {
 					dataField : "partType",
@@ -113,35 +119,41 @@ String callBack = (String) request.getParameter("callBack");
 					dataType : "string",
 					width : 90
 				}, {
-					dataField : "name",
-					headerText : "부품명칭",
+					dataField : "erpCode",
+					headerText : "세트/단품코드",
 					dataType : "string",
-					style : "left indent10"
+					style : "center",
+					width : 200
+// 				}, {
+// 					dataField : "name",
+// 					headerText : "부품명칭",
+// 					dataType : "string",
+// 					style : "left indent10"
 				}, {
 					dataField : "version",
 					headerText : "버전",
 					dataType : "string",
 					width : 80
-				}, {
-					dataField : "ecoNumber",
-					headerText : "ECO 번호",
-					dataType : "string",
-					width : 150
-				}, {
-					dataField : "erpCode",
-					headerText : "ERP CODE",
-					dataType : "string",
-					width : 150
+// 				}, {
+// 					dataField : "ecoNumber",
+// 					headerText : "ECO 번호",
+// 					dataType : "string",
+// 					width : 150
+// 				}, {
+// 					dataField : "erpCode",
+// 					headerText : "ERP CODE",
+// 					dataType : "string",
+// 					width : 150
 				}, {
 					dataField : "state",
 					headerText : "BOM 상태",
 					dataType : "string",
 					width : 130
-				}, {
-					dataField : "org",
-					headerText : "조직",
-					dataType : "string",
-					width : 100
+// 				}, {
+// 					dataField : "org",
+// 					headerText : "조직",
+// 					dataType : "string",
+// 					width : 100
 				}, {
 					dataField : "creator",
 					headerText : "작성자",
@@ -168,6 +180,9 @@ String callBack = (String) request.getParameter("callBack");
 					rowIdField : "oid",
 					headerHeight : 30,
 					rowHeight : 30,
+					<%if (box.equals("1")) {%>
+					rowCheckToRadio : true,
+					<%}%>
 					fillColumnSizeMode : true,
 // 					rowCheckToRadio : true,
 					showRowCheckColumn : true,
@@ -175,6 +190,7 @@ String callBack = (String) request.getParameter("callBack");
 // 					usePaging : true
 				};
 				myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
+				
 
 				function load() {
 					var params = _data($("#form"));
@@ -220,10 +236,40 @@ String callBack = (String) request.getParameter("callBack");
 						load();
 					})
 
-					AUIGrid.bind(myGridID, "cellClick", function(event) {
+				<%if ("1".equals(box)) {%>
+				AUIGrid.bind(myGridID, "cellClick", function(event) {
+						var dataField = event.dataField;
 						var rowItem = event.item;
-						AUIGrid.setCheckedRowsByIds(myGridID, rowItem.oid);
+						var state = rowItem.state;
+						if (dataField == "number") {
+							if (state == "EBOM 임시저장") {
+								var url = _url("/ebom/view", rowItem.oid);
+								_popup(url, "", "", "f");
+							} else if(state == "EBOM 작성중(검증완료)") {
+								var url = _url("/ebom/modify", rowItem.oid);
+								_popup(url, "", "", "f");
+							}
+						} else if (event.dataField == "thumb") {
+							_openCreoView(event.item.toid);
+						}
 					});
+				<%} else {%>
+				AUIGrid.bind(myGridID, "cellClick", function(event) {
+					var item = event.item, rowIdField, rowId;
+					rowIdField = AUIGrid.getProp(event.pid, "rowIdField"); // rowIdField 얻기
+					rowId = item[rowIdField];
+					
+					// 이미 체크 선택되었는지 검사
+					if(AUIGrid.isCheckedRowById(event.pid, rowId)) {
+						// 엑스트라 체크박스 체크해제 추가
+						AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
+					} else {
+						// 엑스트라 체크박스 체크 추가
+						AUIGrid.addCheckedRowsByIds(event.pid, rowId);
+					}
+				});	
+				<%}%>
+				
 					// 작성자, 수정자 선택바인드
 					_selector("state");
 					_user("creator");

@@ -70,6 +70,7 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 	<tr class="factory">
 		<th>배포처</th>
 		<td>
+			<input type="hidden" name="distributorOid" id="distributorOid">
 			<input type="text" class="AXInput w70p" name="distributor" id="distributor">
 			<i class="axi axi-close2 axicon deleteDistributor"></i>
 		</td>
@@ -235,7 +236,9 @@ ArrayList<BaseCode> factory = (ArrayList<BaseCode>) request.getAttribute("factor
 	}
 	
 	// distributor-popup-list 에서 배포처  
-	function dist(name){
+	function dist(name, oid ){
 		$("input[name=distributor]").val(name);
+		$("input[name=distributorOid]").val(oid);
+		
 	}
 </script>

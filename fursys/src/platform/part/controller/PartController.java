@@ -138,6 +138,7 @@ public class PartController {
 	public Map<String, Object> create(@RequestBody PartDTO params) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			System.out.println("######controller");
 			WTPart part = PartHelper.service.create(params);
 			result.put("result", true);
 			result.put("msg", part.getName() + " 부품이 등록 되었습니다.");
@@ -207,12 +208,16 @@ public class PartController {
 		ModelAndView model = new ModelAndView();
 		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY");
 		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND");
-
+		ArrayList<BaseCode> cat_l = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_L");
+		ArrayList<BaseCode> cat_m = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_M");
+		
 		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
 
 		model.addObject("units", units);
 		model.addObject("company", company);
 		model.addObject("brand", brand);
+		model.addObject("cat_l", cat_l);
+		model.addObject("cat_m", cat_m);
 		model.addObject("partTypeCd", partTypeCd);
 		model.setViewName("popup:/part/part-append-create");
 		return model;
@@ -223,12 +228,15 @@ public class PartController {
 		ModelAndView model = new ModelAndView();
 		ArrayList<BaseCode> company = BaseCodeHelper.manager.getBaseCodeByCodeType("COMPANY");
 		ArrayList<BaseCode> brand = BaseCodeHelper.manager.getBaseCodeByCodeType("BRAND");
-
+		ArrayList<BaseCode> cat_l = BaseCodeHelper.manager.getBaseCodeByCodeType("CAT_L");
+		ArrayList<BaseCode> cat_m = BaseCodeHelper.manager.getBaseCodeByCodeType("CAL_M");
 		QuantityUnit[] units = QuantityUnit.getQuantityUnitSet();
 
 		model.addObject("units", units);
 		model.addObject("company", company);
 		model.addObject("brand", brand);
+		model.addObject("cat_l", cat_l);
+		model.addObject("cat_m", cat_m);
 		model.addObject("partTypeCd", partTypeCd);
 		model.setViewName("popup:/part/part-top-create");
 		return model;

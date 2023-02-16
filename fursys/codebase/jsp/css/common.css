@@ -323,7 +323,7 @@ table.search-table td label {
 
 table.create-table td label {
 	position: relative;
-	top: 4px;
+	top: 3px;
 	cursor: pointer;
 }
 
@@ -374,30 +374,6 @@ table.create-table td {
 	border-right: 1px solid #c8c8c8;
 	border-bottom: 1px solid #c8c8c8;
 	text-indent: 5px;
-	height: 24px;
-}
-
-/** dist-create-table **/
-table.dist-create-table {
-	width: 100%;
-	border-top: 2px solid #2b85c1;
-	font-size: 12px;
-}
-
-table.dist-create-table th {
-	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
-	border-right: 1px solid #c8c8c8;
-	border-bottom: 1px solid #c8c8c8;
-	height: 36px;
-}
-
-table.dist-create-table th:first-child {
-	border-left: 1px solid #c8c8c8;
-}
-
-table.dist-create-table td {
-	border-right: 1px solid #c8c8c8;
-	border-bottom: 1px solid #c8c8c8;
 	height: 24px;
 }
 
@@ -868,28 +844,57 @@ textarea.none {
 	margin: 0 !important;
 }
 
+/* 부품유형 자재일 때 erpCode Style */
+.aui-grid-erpCode-custom {
+	background : #e1e2de;
+}
+
 
 /*lump 일괄대체*/
 table.lump-table {
-	width: 100%;
-	/* 	border-top: 2px solid #2b85c1; */
-	font-size: 12px;
+    width: 100%;
+    /*     border-top: 2px solid #2b85c1; */
+    font-size: 12px;
 }
 
 table.lump-table th {
-	background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
-	border-right: 1px solid #c8c8c8;
-	border-bottom: 1px solid #c8c8c8;
-	height: 36px;
-	border-left: 1px solid #c8c8c8;
+    background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+    border-right: 1px solid #c8c8c8;
+    border-bottom: 1px solid #c8c8c8;
+    height: 36px;
+    border-left: 1px solid #c8c8c8;
 }
 
 /* table.lump-table th:first-child { */
-/* 	border-left: 1px solid #c8c8c8; */
+/*     border-left: 1px solid #c8c8c8; */
 /* } */
 
 table.lump-table td {
-/* 	border-right: 1px solid #c8c8c8; */
-	border-bottom: 1px solid #c8c8c8;
-	text-indent: 5px;
+/*     border-right: 1px solid #c8c8c8; */
+    border-bottom: 1px solid #c8c8c8;
+    text-indent: 5px;
+}
+
+/** dist-create-table **/
+table.dist-create-table {
+    width: 100%;
+    border-top: 2px solid #2b85c1;
+    font-size: 12px;
+}
+
+table.dist-create-table th {
+    background: linear-gradient(to bottom, #f8f8f8, #eaeaea);
+    border-right: 1px solid #c8c8c8;
+    border-bottom: 1px solid #c8c8c8;
+    height: 36px;
+}
+
+table.dist-create-table th:first-child {
+    border-left: 1px solid #c8c8c8;
+}
+
+table.dist-create-table td {
+    border-right: 1px solid #c8c8c8;
+    border-bottom: 1px solid #c8c8c8;
+    height: 24px;
 }

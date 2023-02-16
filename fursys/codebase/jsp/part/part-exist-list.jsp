@@ -97,6 +97,10 @@ String callBack = (String) request.getParameter("callBack");
 							단품
 						</label>
 						<label>
+							<input type="radio" name="partType" value="WIP">
+							재공
+						</label>
+						<label>
 							<input type="radio" name="partType" value="MAT">
 							자재
 						</label>
@@ -573,6 +577,7 @@ String callBack = (String) request.getParameter("callBack");
 					$("#closeBtn").click(function() {
 						self.close();
 					})
+					
 					$(".addBtn").click(function() {
 						var items = AUIGrid.getCheckedRowItems(myGridID);
 						if (items.length == 0) {
@@ -589,16 +594,22 @@ String callBack = (String) request.getParameter("callBack");
 							}
 						}
 						
-						if("<%=partTypeCd%>" == "SET") {
-							if(partType == "세트") {
-								alert("세트 아래에 세트 추가는 불가능합니다.");
-								return false;
-							}
-						}
+<%-- 						if("<%=partTypeCd%>" == "SET") { --%>
+// 							if(partType == "세트") {
+// 								alert("세트 아래에 세트 추가는 불가능합니다.");
+// 								return false;
+// 							}
+// 						}
 						
 						if("<%=partTypeCd%>" == "MAT") {
 							if(partType == "세트" || partType == "단품") {
 								alert("자재 아래에 세트/단품은 추가는 불가능합니다.");
+								return false;
+							}
+						}
+						if("<%=partTypeCd%>" == "WIP") {
+							if(partType == "세트" || partType == "단품") {
+								alert("재공 아래에 세트/단품은 추가는 불가능합니다.");
 								return false;
 							}
 						}

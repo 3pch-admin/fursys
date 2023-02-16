@@ -1,5 +1,41 @@
 [
     {
+        "itm_type": "세트" ,
+        "itm_cd": "CCC104N" ,
+        "col_cd": "BKRCN",
+        "itm_nm": "4단 라커",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "세트" ,
+        "itm_cd": "CCC104N" ,
+        "col_cd": "BKRCN",
+        "itm_nm": "4단 라커",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "세트" ,
+        "itm_cd": "CCC104N" ,
+        "col_cd": "WWRCN",
+        "itm_nm": "4단 라커",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
+        "itm_type": "세트" ,
+        "itm_cd": "CCC104N" ,
+        "col_cd": "WWWW",
+        "itm_nm": "4단 라커",
+        "com_brand_nm": "",
+        "com_stdsec": "표준품",
+        "use_yn": "사용"
+    },
+    {
         "itm_type": "단품" ,
         "itm_cd": "CCB0104" ,
         "col_cd": "RCN",

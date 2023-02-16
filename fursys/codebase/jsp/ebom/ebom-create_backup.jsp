@@ -1,7 +1,23 @@
+<%@page import="platform.util.IBAUtils"%>
+<%@page import="platform.util.CommonUtils"%>
+<%@ page import="wt.part.WTPart" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+String oid = (String) request.getAttribute("oid");
+WTPart part = (WTPart) request.getAttribute("part");
+%>
 <style type="text/css">
 .library {
 	background-color: #fefbc0;
+}
+
+.released {
+	background-color: #dbdbfd;
+}
+
+.aui-grid-row-state-added {
+	background: url(/Windchill/jsp/images/grd_WF_treeClose.png) 50% 50% no-repeat !important;
+	cursor: pointer;
 }
 
 .aui-grid-tree-minus-icon {
@@ -67,7 +83,7 @@
 	>
 	<span>BOM관리</span>
 	>
-	<span>EBOM 파생</span>
+	<span>EBOM 등록</span>
 </div>
 <table class="search-table top-color">
 	<colgroup>
@@ -77,48 +93,24 @@
 		<col width="580">
 	</colgroup>
 	<tr>
-		<th>부품명칭 / 유형</th>
+		<th>부품명칭</th>
 		<td>
 			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly">
-			<input type="text" name="number" class="AXInput w40p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요.">
-			 / <input type="text" name="partType" class="AXInput w20p" readonly="readonly">
+			<input type="text" name="number" class="AXInput w70p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요.">
 		</td>
-		<th>참조부품 / 유형</th>
+		<th>유형</th>
 		<td>
-			<input type="hidden" name="eoid" class="AXInput w70p" readonly="readonly">
-			<input type="text" name="eNumber" class="AXInput w40p" readonly="readonly" placeholder="클릭하여 참조할 부품을 선택하세요.">
-		</td>
-	</tr>
-	<tr>
-		<th>조회</th>
-		<td colspan="3">
-			<input type="text" name="search" class="AXInput w40p">
+			<input type="text" name="partType" class="AXInput w30p" readonly="readonly">
 		</td>
 	</tr>
 </table>
 
 <table class="button-table">
-<colgroup>
-		<col width="150">
-		<col width="610">
-		<col width="150">
-		<col width="580">
-	</colgroup>
 	<tr>
-		<td colspan="2" class="left">
+	<td class="left">
 			<select class="AXSelect w100px" id="depthSelect" onchange="showItemsOnDepth()">
 				<option value="expandAll">전체확장</option>
 				<option value="1">1레벨</option>
-				<option value="2">2레벨</option>
-				<option value="3">3레벨</option>
-				<option value="4">4레벨</option>
-				<option value="5">5레벨</option>
-			</select>
-		</td>
-		<td>
-		<select class="AXSelect w100px" id="depthSelectR" onchange="showItemsOnDepthR()">
-				<option value="expandAll">전체확장</option>
-				<option value="1" >1레벨</option>
 				<option value="2">2레벨</option>
 				<option value="3">3레벨</option>
 				<option value="4">4레벨</option>
@@ -142,11 +134,11 @@
 	</colgroup>
 	<tr>
 		<td class="center none" valign="top">
-			<div id="grid_left" style="height: 740px;"></div>
+			<div id="grid_left" style="height: 820px;"></div>
 		</td>
 		<td class="none" valign="top">&nbsp;</td>
 		<td class="center none" valign="top">
-			<div id="grid_right" style="height: 740px;"></div>
+			<div id="grid_right" style="height: 820px;"></div>
 		</td>
 	</tr>
 </table>
@@ -211,35 +203,11 @@
 	// 			tooltipHtml : "레벨 내리기 단축키 : Shift + Alt + -><br>레벨 올리기 단축키 : Shift + Alt + <-<br>행 삭제 단축키 : Ctrl + Delete"
 	// 		},
 	}, {
-		dataField : "itemName",
-		headerText : "ITEM_NAME",
-		dataType : "string",
-		width : 150,
-		editable : false,
-	}, {
-		dataField : "partNo",
-		headerText : "PART_NO",
-		dataType : "string",
-		editable : false,
-		width : 150
-	}, {
 		dataField : "partName",
 		headerText : "부품명",
 		dataType : "string",
 		editable : false,
 		width : 200
-	}, {
-		dataField : "state",
-		headerText : "상태",
-		dataType : "string",
-		editable : false,
-		width : 120
-	}, {
-		dataField : "version",
-		headerText : "버전",
-		dataType : "string",
-		editable : false,
-		width : 80
 	}, {
 		dataField : "amount",
 		headerText : "수량",
@@ -261,6 +229,30 @@
 				};
 			}
 		},
+	}, {
+		dataField : "itemName",
+		headerText : "ITEM_NAME",
+		dataType : "string",
+		width : 150,
+		editable : false,
+	}, {
+		dataField : "partNo",
+		headerText : "PART_NO",
+		dataType : "string",
+		editable : false,
+		width : 150
+	}, {
+		dataField : "state",
+		headerText : "상태",
+		dataType : "string",
+		editable : false,
+		width : 120
+	}, {
+		dataField : "version",
+		headerText : "버전",
+		dataType : "string",
+		editable : false,
+		width : 80
 	}, {
 		dataField : "oid",
 		headerText : "oid",
@@ -293,7 +285,9 @@
 		displayTreeOpen : true,
 		treeColumnIndex : 2,
 		// 		showFooter : true,
+		selectionMode: "multipleCells",
 		enableDrag : true,
+		enableMultipleDrag: true,
 		enableDragByCellDrag : true,
 		enableDrop : false,
 		enableUndoRedo : true,
@@ -307,6 +301,8 @@
 		rowStyleFunction : function(rowIndex, item) {
 			if (item.library) {
 				return "library";
+			} else if(item.state == "릴리즈됨") {
+				return "released";
 			}
 			return "";
 		}
@@ -321,10 +317,11 @@
 		displayTreeOpen : true,
 		treeColumnIndex : 2,
 		// 		showFooter : true,
+		selectionMode : "multipleCells",
+		enableMultipleDrag: true,
 		enableDrag : true,
 		enableDragByCellDrag : true,
 		enableDrop : true,
-		selectionMode : "multipleRows",
 		enableUndoRedo : true,
 		dropToOthers : true,
 		softRemoveRowMode : false,
@@ -427,14 +424,14 @@
 	});
 
 	// drag prevent
-// 	AUIGrid.bind(leftGridID, "dragBegin", function(event) {
-// 		var rowIndex = event.rowIndex;
-// 		if (rowIndex == 0) {
-// 			alert("최상위는 편집 불가능합니다.");
-// 			return false;
-// 		}
-// 		return true;
-// 	})
+	AUIGrid.bind(leftGridID, "dragBegin", function(event) {
+		var rowIndex = event.rowIndex;
+		if (rowIndex == 0) {
+			alert("최상위는 편집 불가능합니다.");
+			return false;
+		}
+		return true;
+	})
 
 	AUIGrid.bind(rightGridID, "cellEditBegin", function(event) {
 		var rowIndex = event.rowIndex;
@@ -509,6 +506,7 @@
 		switch (event.contextIndex) {
 		case 0:
 			var root = AUIGrid.getItemByRowIndex(rightGridID, 0);
+			console.log(root);
 			var url = "/Windchill/platform/part/top?partTypeCd=" + item.partTypeCd + "&rowId=" + root._$uid + "&poid=" + root.oid + "&callBack=_top";
 			_popup(url, 1100, 380, "n");
 			break;
@@ -628,49 +626,33 @@
 	function _top(node, rowId) {
 		AUIGrid.addTreeRow(rightGridID, node, rowId, "first");
 	}
-
+	
 	function showItemsOnDepth(event) {
 		var depthSelect = document.getElementById("depthSelect");
 		var depth = depthSelect.value;
 		
 		if( depth == "expandAll"){
 			AUIGrid.expandAll(leftGridID);
-		}
-		//해당 depth까지 오픈함
-		AUIGrid.showItemsOnDepth(leftGridID, Number(depth));
-	}
-	
-	function showItemsOnDepthR(event) {
-		var depthSelect = document.getElementById("depthSelectR");
-		var depth = depthSelect.value;
-		
-		console.log(depth);
-		if( depth == "expandAll"){
 			AUIGrid.expandAll(rightGridID);
 		}
 		//해당 depth까지 오픈함
+		AUIGrid.showItemsOnDepth(leftGridID, Number(depth));
 		AUIGrid.showItemsOnDepth(rightGridID, Number(depth));
 	}
+
 	
 	$(function() {
-// 		loadLeft();
-		loadRight();
-		
+
 		_selector("depthSelect");
-		_selector("depthSelectR");
 		
-// 		$("input[name=number]").click(function() {
-// 			var url = "/Windchill/platform/part/popup?box=1";
-// 			_popup(url, "", "", "f");
-// 		})
+		
+		$("#verifyBtn").click(function() {
+			var url = _url("/ebom/verify", $("input[name=oid]").val());
+			_popup(url, 1400, 800, "n");
+		})
 
 		$("input[name=number]").click(function() {
-			var url = "/Windchill/platform/part/popup?box=1&callBack=derived";
-			_popup(url, "", "", "f");
-		})
-		
-		$("input[name=eNumber]").click(function() {
-			var url = "/Windchill/platform/ebom/popup?box=1&purpose=reference";
+			var url = "/Windchill/platform/part/popup?box=1";
 			_popup(url, "", "", "f");
 		})
 
@@ -718,16 +700,9 @@
 		$("input[name=color]").val(info[0].color);
 		$("input[name=search]").attr("readonly", false);
 		loadLeftTree(info[0].oid);
-// 		loadRightTree(info[0].oid);
+		loadRightTree(info[0].oid);
 	}
 
-// 	function loadLeft() {
-// 		loadLeftTree("/Windchill/jsp/ebom/mockup/ebom-derived-left.json");
-// 	}
-	function loadRight() {
-		loadRightTree("/Windchill/jsp/ebom/mockup/ebom-derived-right.json");
-	}
-	
 	function loadLeftTree(oid) {
 		var params = new Object();
 		AUIGrid.showAjaxLoader(leftGridID);
@@ -738,71 +713,26 @@
 			AUIGrid.setGridData(leftGridID, data.list);
 		}, "GET");
 	}
-// 		// ajax 요청 전 그리드에 로더 표시
-// 		AUIGrid.showAjaxLoader(leftGridID);
-// 		console.log(oid);
 
-// 		// ajax (XMLHttpRequest) 로 그리드 데이터 요청
-// 		ajax({
-// 			url : oid,
-// 			onSuccess : function(data) {
-
-// 				console.log(data);
-
-// 				// 그리드에 데이터 세팅
-// 				// data 는 JSON 을 파싱한 Array-Object 입니다.
-// 				AUIGrid.setGridData(leftGridID, data);
-
-// 				// 로더 제거
-// 				AUIGrid.removeAjaxLoader(leftGridID);
-// 			},
-// 			onError : function(status, e) {
-// 				alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS 로 사용하는 경우 json 확장자가 web.config 의 handler 에 등록되었는지 확인하십시오.");
-// 				// 로더 제거
-// 				AUIGrid.removeAjaxLoader(leftGridID);
-// 			}
-// 		});
-// 	}
-
-	
-	function loadRightTree(url) {
+	function loadRightTree(oid) {
+		var params = new Object();
 		AUIGrid.showAjaxLoader(rightGridID);
-		console.log(url);
-
-		ajax({
+		params = JSON.stringify(params);
+		var url = "/Windchill/platform/ebom/right?oid=" + oid;
+		$.ajax({
+			type : "GET",
 			url : url,
-			onSuccess : function(data) {
-				console.log(data);
-				AUIGrid.setGridData(rightGridID, data);
+			dataType : "JSON",
+			crossDomain : true,
+			data : params,
+			async : true, //동기처리를 해야만 펑션리턴이 가능함
+			contentType : "application/json; charset=UTF-8",
+			success : function(data) {
 				AUIGrid.removeAjaxLoader(rightGridID);
+				AUIGrid.setGridData(rightGridID, data.list);
 			},
-			onError : function(status, e) {
-				alert("데이터 요청에 실패하였습니다.\r\n status : " + status + "\r\nWAS 를 IIS로 사용하는 경우 json 확장자가 web.config의 handler에 등록되었는지 확인하십시오.");
-				AUIGrid.removeAjaxLoader(rightGridID);
-			}
 		});
-	};
-	
-	// 	function loadRightTree(oid) {
-	// 		var params = new Object();
-	// 		AUIGrid.showAjaxLoader(rightGridID);
-	// 		params = JSON.stringify(params);
-	// // 		var url = "/Windchill/platform/mbom/right?oid=" + oid;
-	// 		var url = "/Windchill/jsp/mbom/mockup/mbom-derived-right.json";
-	// 		$.ajax({
-	// 			type : "GET",
-	// 			url : url,
-	// 			dataType : "JSON",
-	// 			crossDomain : true,
-	// 			data : params,
-	// 			async : true, //동기처리를 해야만 펑션리턴이 가능함
-	// 			contentType : "application/json; charset=UTF-8",
-	// 			success : function(data) {
-	// 				AUIGrid.removeAjaxLoader(rightGridID);
-	// 				AUIGrid.setGridData(rightGridID, data.list);
-	// 			},
-	// 		});
-	// 	}
+	}
 
 	function closeAndLoad() {
 		opener.load();

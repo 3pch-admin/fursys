@@ -78,47 +78,7 @@ String ccode = CommonUtils.getSessionCompany();
 								<input type="text" name="erpCode" class="AXInput w60p">
 							</td>
 						</tr>
-						<tr>
-							<th>버전</th>
-							<td>
-								<label>
-									<input type="radio" name="latest" value="true" checked="checked">
-									최신버전
-								</label>
-								&nbsp;
-								<label>
-									<input type="radio" name="latest" value="false">
-									모든버전
-								</label>
-							</td>
-							<th>부품유형</th>
-							<td colspan="3">
-								<label>
-									<input type="radio" name="partType" value="ALL" checked="checked">
-									전체
-								</label>
-								&nbsp;
-								<label>
-									<input type="radio" name="partType" value="SET">
-									세트
-								</label>
-								&nbsp;
-								<label>
-									<input type="radio" name="partType" value="ITEM">
-									단품
-								</label>
-								&nbsp;
-								<label>
-									<input type="radio" name="partType" value="WIP">
-									재공
-								</label>
-								&nbsp;
-								<label>
-									<input type="radio" name="partType" value="MAT">
-									자재
-								</label>
-							</td>
-						</tr>
+					
 						<tr>
 							<th>단위</th>
 							<td>
@@ -162,16 +122,6 @@ String ccode = CommonUtils.getSessionCompany();
 							</td>
 						</tr>
 						<tr>
-							<th>상태</th>
-							<td>
-								<select name="state" id="state" class="AXSelect w200px">
-									<option value="">선택</option>
-									<option value="INWORK">작업 중</option>
-									<option value="UNDERAPPROVAL">승인 중</option>
-									<option value="RELEASED">릴리즈됨</option>
-									<option value="RETURN">반려됨</option>
-								</select>
-							</td>
 							<th>회사</th>
 							<td>
 								<select name="company" id="company" class="AXSelect w200px">
@@ -198,6 +148,37 @@ String ccode = CommonUtils.getSessionCompany();
 									%>
 								</select>
 							</td>
+							<th>상태</th>
+							<td>
+								<select name="state" id="state" class="AXSelect w200px">
+									<option value="">선택</option>
+									<option value="INWORK">작업 중</option>
+									<option value="UNDERAPPROVAL">승인 중</option>
+									<option value="RELEASED">릴리즈됨</option>
+									<option value="RETURN">반려됨</option>
+								</select>
+							</td>
+						</tr>
+							<tr>
+							<th>작성자</th>
+							<td>
+							<input type="text" class = "AXInput w200px" name="creator" id="creator" value="관리자">
+							<i class="axi axi-close2 axicon clearUser" data-target="creator"></i>
+							</td>
+							<th>작성일자</th>
+							<td>
+								<input type="text" class="AXInput w100px" name="startCreatedDate" id="startCreatedDate" maxlength="8">
+								~
+								<input type="text" class="AXInput w100px" name="endCreatedDate" id="endCreatedDate" data-start="startCreatedDate" maxlength="8">
+								<i class="axi axi-close2 axicon"></i>
+							</td>
+							<th>수정일자</th>
+							<td>
+								<input type="text" class="AXInput w100px" name="startModifiedDate" id="startModifiedDate" maxlength="8">
+								~
+								<input type="text" class="AXInput w100px" name="endModifiedDate" id="endModifiedDate" data-start="startModifiedDate" maxlength="8">
+								<i class="axi axi-close2 axicon"></i>
+							</td>
 						</tr>
 						<tr>
 							<th>조회조건 확장</th>
@@ -213,23 +194,48 @@ String ccode = CommonUtils.getSessionCompany();
 								</label>
 								&nbsp;
 								<label>
-									<input type="radio" name="attr" value="hide">
+									<input type="radio" name="attr" value="hide" checked>
 									숨김
 								</label>
 							</td>
-							<th>작성일자</th>
-							<td>
-								<input type="text" class="AXInput w100px" name="startCreatedDate" id="startCreatedDate" maxlength="8">
-								~
-								<input type="text" class="AXInput w100px" name="endCreatedDate" id="endCreatedDate" data-start="startCreatedDate" maxlength="8">
-								<i class="axi axi-close2 axicon"></i>
+							<th>부품유형</th>
+							<td colspan="">
+								<label>
+									<input type="radio" name="partType" value="ALL" checked="checked">
+									전체
+								</label>
+								&nbsp;
+								<label>
+									<input type="radio" name="partType" value="SET">
+									세트
+								</label>
+								&nbsp;
+								<label>
+									<input type="radio" name="partType" value="ITEM">
+									단품
+								</label>
+								&nbsp;
+								<label>
+									<input type="radio" name="partType" value="WIP">
+									재공
+								</label>
+								&nbsp;
+								<label>
+									<input type="radio" name="partType" value="MAT">
+									자재
+								</label>
 							</td>
-							<th>수정일자</th>
+								<th>버전</th>
 							<td>
-								<input type="text" class="AXInput w100px" name="startModifiedDate" id="startModifiedDate" maxlength="8">
-								~
-								<input type="text" class="AXInput w100px" name="endModifiedDate" id="endModifiedDate" data-start="startModifiedDate" maxlength="8">
-								<i class="axi axi-close2 axicon"></i>
+								<label>
+									<input type="radio" name="latest" value="true" checked="checked">
+									최신버전
+								</label>
+								&nbsp;
+								<label>
+									<input type="radio" name="latest" value="false">
+									모든버전
+								</label>
 							</td>
 						</tr>
 					</table>
@@ -605,6 +611,7 @@ String ccode = CommonUtils.getSessionCompany();
 							})
 							// 작성자, 수정자 선택바인드
 							_folder("location", "/Default/부품");
+							_fixeduser("creator");
 							_selector("state");
 							_selector("cat_l");
 							_selector("cat_m");

@@ -56,6 +56,7 @@ public class StandardPartService extends StandardManager implements PartService 
 		String ref = params.getRef();
 		
 		WTPart part = null;
+		System.out.println("######create");
 		try {
 			trs.start();
 			part = WTPart.newWTPart();

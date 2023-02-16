@@ -7,6 +7,8 @@
 <%
 ArrayList<BaseCode> company = (ArrayList<BaseCode>) request.getAttribute("company");
 ArrayList<BaseCode> brand = (ArrayList<BaseCode>) request.getAttribute("brand");
+ArrayList<BaseCode> cat_l = (ArrayList<BaseCode>) request.getAttribute("cat_l");
+ArrayList<BaseCode> cat_m = (ArrayList<BaseCode>) request.getAttribute("cat_m");
 QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
 String partTypeCd = (String) request.getAttribute("partTypeCd");
 String rowId = (String) request.getParameter("rowId");
@@ -52,34 +54,61 @@ String callBack = (String)request.getParameter("callBack");
 			if ("SET".equals(partTypeCd)) {
 			%>
 			<label>
-				<input name="partType" type="radio" value="MAT" disabled="disabled">
-				자재 &nbsp;&nbsp;
-			</label>
-			<label>
 				<input name="partType" type="radio" value="ITEM" checked="checked">
 				단품
+			</label>
+			<label>
+				<input name="partType" type="radio" value="WIP" disabled="disabled">
+				재공 &nbsp;&nbsp;
+			</label>
+			<label>
+				<input name="partType" type="radio" value="MAT" disabled="disabled">
+				자재 &nbsp;&nbsp;
 			</label>
 			<%
 			} else if ("ITEM".equals(partTypeCd)) {
 			%>
 			<label>
-				<input name="partType" type="radio" value="MAT" checked="checked">
-				자재 &nbsp;&nbsp;
-			</label>
-			<label>
 				<input name="partType" type="radio" value="ITEM" disabled="disabled">
 				단품
+			</label>
+			<label>
+				<input name="partType" type="radio" value="WIP" >
+				재공 &nbsp;&nbsp;
+			</label>
+			<label>
+				<input name="partType" type="radio" value="MAT" >
+				자재 &nbsp;&nbsp;
 			</label>
 			<%
 			} else if ("MAT".equals(partTypeCd)) {
 			%>
 			<label>
-				<input name="partType" type="radio" value="MAT" checked="checked">
+				<input name="partType" type="radio" value="ITEM" disabled="disabled">
+				단품
+			</label>
+			<label>
+				<input name="partType" type="radio" value="WIP" >
+				재공 &nbsp;&nbsp;
+			</label>
+			<label>
+				<input name="partType" type="radio" value="MAT" >
 				자재 &nbsp;&nbsp;
 			</label>
+			<%
+			} else if ("WIP".equals(partTypeCd)) {
+			%>
 			<label>
 				<input name="partType" type="radio" value="ITEM" disabled="disabled">
 				단품
+			</label>
+			<label>
+				<input name="partType" type="radio" value="WIP" >
+				재공 &nbsp;&nbsp;
+			</label>
+			<label>
+				<input name="partType" type="radio" value="MAT" >
+				자재 &nbsp;&nbsp;
 			</label>
 			<%
 			}
@@ -134,28 +163,48 @@ String callBack = (String)request.getParameter("callBack");
 			</select>
 		</td>
 	</tr>
-	<tr>
-		<th>파생부품</th>
-		<td colspan="3">
-			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber">
-			<input type="hidden" readonly="readonly" name="ref">
-		</td>
-	</tr>
-	<%
-		if("SET".equals(partTypeCd)) {
-	%>
-	<tr>
-		<th>PLM 임시코드</th>
-		<td colspan="3">
-			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber">
-		</td>
-	</tr>
-	<%
-		}
-	%>
-	<%
-		if("ITEM".equals(partTypeCd) || "MAT".equals(partTypeCd)) {
-	%>
+<!-- 	<tr> -->
+<!-- 		<th>파생부품</th> -->
+<!-- 		<td colspan="3"> -->
+<!-- 			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber"> -->
+<!-- 			<input type="hidden" readonly="readonly" name="ref"> -->
+<!-- 		</td> -->
+<!-- 	</tr> -->
+<!-- 	<tr> -->
+<!-- 		<th>PLM 임시코드</th> -->
+<!-- 		<td colspan="3"> -->
+<!-- 			<input type="text" class="AXInput w60p" readonly="readonly" name="refNumber"> -->
+<!-- 		</td> -->
+<!-- 	</tr> -->
+<%if("SET" != partTypeCd) {%>
+	<tr class="material">
+				<th>카테고리_대</th>
+				<td>
+					<select name="cat_l" id = "cat_l" class="AXSelect w200px">
+						<option value="">선택</option>
+						<%
+						for(BaseCode c : cat_l) {
+						%>
+							<option value="<%=c.getCode()%>" ><%=c.getName()%></option>
+						<%
+						}
+						%>
+					</select>
+				</td>
+				<th>카테고리_중</th>
+				<td>
+				<select name="cat_m" id = "cat_m" class="AXSelect w200px">
+						<option value="">선택</option>
+						<%
+						for(BaseCode d : cat_m) {
+						%>
+							<option value="<%=d.getCode()%>" ><%=d.getName()%></option>
+						<%
+						}
+						%>
+					</select>
+				</td>
+			</tr>
 	<tr class="material">
 		<th>규격</th>
 		<td>
@@ -208,6 +257,24 @@ String callBack = (String)request.getParameter("callBack");
 
 <script type="text/javascript">
 	$(function() {
+		$(".material").hide();
+		$("input[name=partType]").click(function() {
+			if ($(this).val() == "ITEM") {
+				$(".items").show();
+				$(".material").hide();
+				_selector("purchase_yn");
+				_selector("use_type_code");
+			} else if ($(this).val() == "MAT") {
+				$(".material").show();
+				$(".items").hide();
+				_selector("standard_code");
+			} else if ($(this).val() == "WIP") {
+				$(".material").show();
+				$(".items").hide();
+				_selector("standard_code");
+			}
+		})
+		
 		$("#closeBtn").click(function() {
 			self.close();
 		})
@@ -223,7 +290,8 @@ String callBack = (String)request.getParameter("callBack");
 			}
 			
 			if("<%=partTypeCd%>" == "SET") {
-				if ($("input[name=partType]:checked").val() == "MAT") {
+				if ($("input[name=partType]:checked").val() == "MAT" 
+					||	$("input[name=partType]:checked").val() == "WIP") {
 					alert("세트 아래에 자재는 추가가 불가능합니다.");
 					return false;
 				}
@@ -245,10 +313,12 @@ String callBack = (String)request.getParameter("callBack");
 			}, "POST");
 		})
 
-		$("input[name=partType]").checks();
 		// 		_check("partType");
+		$("input[name=partType]").checks();
 		_selector("company");
 		_selector("brand");
+		_selector("cat_l");
+		_selector("cat_m");
 		_selector("unit");
 		_folder("location", "/Default/부품");
 		_selector("standard_code");

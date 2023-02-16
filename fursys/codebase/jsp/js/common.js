@@ -206,6 +206,46 @@ function _user(ids) {
 	})
 }
 
+function _fixeduser(ids) {
+	$("#" + ids).bindSelector({
+		reserveKeys: {
+			options: "list",
+			optionValue: "value",
+			optionText: "name"
+		},
+		optionPrintLength: "all",
+		onsearch: function(id, val, callBack) {
+			var key = $("#" + id).val();
+			var params = new Object();
+			params.key = key;
+			var url = "/Windchill/platform/util/user";
+			_call(url, params, function(data) {
+				callBack({
+					options: data.list
+				})
+			}, "POST");
+		},
+		onchange: function() {
+			var value;
+			var targetID = this.targetID;
+			var target = targetID + "Oid";
+			if (this.selectedOption != null) {
+				value = this.selectedOption.value;
+			}
+			$("#" + target).remove();
+			$("#" + targetID).before("<input type=\"hidden\" name=\"" + target + "\" id=\"" + target + "\"> ");
+			$("#" + target).val(value);
+		},
+		finder: {
+			onclick: function() {
+				var targetID = this.targetID;
+				var url = "/Windchill/platform/user/popup?target=" + targetID;
+				_popup(url, 1200, 650, "n");
+			}
+		}
+	})
+}
+
 function _distributor(ids) {
 	$("#" + ids).bindSelector({
 		reserveKeys: {

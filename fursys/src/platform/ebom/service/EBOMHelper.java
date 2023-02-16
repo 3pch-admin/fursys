@@ -64,7 +64,7 @@ public class EBOMHelper {
 		query.appendWhere(sc, new int[] { idx });
 
 		ca = new ClassAttribute(EBOM.class, EBOM.CREATE_TIMESTAMP);
-		OrderBy by = new OrderBy(ca, false);
+		OrderBy by = new OrderBy(ca, true);
 		query.appendOrderBy(by, new int[] { idx });
 
 		PageUtils pager = new PageUtils(params, query);

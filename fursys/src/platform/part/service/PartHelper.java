@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import platform.echange.eco.entity.ECO;
 import platform.part.entity.PartColumns;
 import platform.util.CommonUtils;
 import platform.util.DateUtils;
@@ -17,6 +18,7 @@ import platform.util.IBAUtils;
 import platform.util.PageUtils;
 import platform.util.StringUtils;
 import platform.util.ThumbnailUtils;
+import wt.doc.WTDocument;
 import wt.enterprise.MadeFromLink;
 import wt.enterprise.RevisionControlled;
 import wt.epm.EPMDocument;
@@ -25,7 +27,9 @@ import wt.epm.build.EPMBuildRule;
 import wt.fc.PersistenceHelper;
 import wt.fc.QueryResult;
 import wt.fc.ReferenceFactory;
+import wt.iba.value.StringValue;
 import wt.lifecycle.State;
+import wt.org.WTUser;
 import wt.part.WTPart;
 import wt.part.WTPartHelper;
 import wt.part.WTPartMaster;
@@ -113,15 +117,18 @@ public class PartHelper {
 		String latest = (String) params.get("latest");
 		String unit = (String) params.get("unit");
 		String state = (String) params.get("state");
+		String creator = (String) params.get("creator");
+		System.out.println("####name" + creator);
+		
 		String company = (String) params.get("company");
 		String brand = (String) params.get("brand");
 		String cat_l = (String) params.get("cat_l");
 		String cat_m = (String) params.get("cat_m");
 		String partType = (String) params.get("partType");
-		String createStartDate = (String) params.get("createStartDate");
-		String createEndDate = (String) params.get("createEndDate");
-		String updateStartDate = (String) params.get("updateStartDate");
-		String updateEndDate = (String) params.get("updateEndDate");
+		String createStartDate = (String) params.get("startCreatedDate");
+		String createEndDate = (String) params.get("endCreatedDate");
+		String updateStartDate = (String) params.get("startModifiedDate");
+		String updateEndDate = (String) params.get("endModifiedDate");
 		String location = (String) params.get("location");
 		String part_width = (String) params.get("part_width");
 		String part_depth = (String) params.get("part_depth");
@@ -138,7 +145,7 @@ public class PartHelper {
 		String dtWoodGrain = (String) params.get("dtWoodGrain");
 		String packType = (String) params.get("packType");
 		String imCamGcode = (String) params.get("imCamGcode");
-
+		
 		QuerySpec query = new QuerySpec();
 		int idx = query.appendClassList(WTPart.class, true);
 		int idx_master = query.appendClassList(WTPartMaster.class, false);
@@ -194,6 +201,26 @@ public class PartHelper {
 			}
 			sc = new SearchCondition(WTPart.class, "state.state", "=", state);
 			query.appendWhere(sc, new int[] { idx });
+		}
+		
+		if (StringUtils.isNotNull(creator)) {
+			if (query.getConditionCount() > 0) {
+				query.appendAnd();
+			}
+				int idx2 = query.appendClassList(WTUser.class, false);
+				ClassAttribute ca1 =new ClassAttribute(WTPart.class, "iterationInfo.creator.key.id");
+				ClassAttribute ca2 =new ClassAttribute(WTUser.class, "thePersistInfo.theObjectIdentifier.id");
+				SearchCondition sc2 = new SearchCondition(ca1 ,"=", ca2);
+						
+				query.appendWhere(sc2, new int[] { idx, idx2 });
+				query.appendAnd();
+				sc = new SearchCondition(WTUser.class, WTUser.FULL_NAME, "=", creator);
+				query.appendWhere(sc, new int[] { idx2 });
+
+//			WTUser creator = (WTUser) CommonUtils.persistable(creatorOid);
+//			sc = new SearchCondition(WTPart.class, "iterationInfo.creator.key.id", "=",
+//					creator.getPersistInfo().getObjectIdentifier().getId());
+//			query.appendWhere(sc, new int[] { idx });
 		}
 
 		if (StringUtils.isNotNull(company)) {
@@ -374,7 +401,7 @@ public class PartHelper {
 		ca = new ClassAttribute(WTPart.class, WTAttributeNameIfc.CREATE_STAMP_NAME);
 		OrderBy orderBy = new OrderBy(ca, true);
 		query.appendOrderBy(orderBy, new int[] { idx });
-
+		System.out.println("####query: " + query.toString());
 //		QueryResult result = PersistenceHelper.manager.find(query);
 
 		PageUtils pager = new PageUtils(params, query);
@@ -385,7 +412,7 @@ public class PartHelper {
 			PartColumns columns = new PartColumns((WTPart) obj[0]);
 			columns.setNo(total--);
 			list.add(columns);
-		}
+		}	
 		map.put("list", list);
 		map.put("topListCount", pager.getTotal());
 		map.put("sessionid", pager.getSessionId());

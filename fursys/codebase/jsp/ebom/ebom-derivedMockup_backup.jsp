@@ -79,14 +79,19 @@
 	<tr>
 		<th>부품명칭 / 유형</th>
 		<td>
+			F2-SWS-LOCKER-4X2-DIAL-N.ASSY.ASM / 세트
+			<br>
 			<input type="hidden" name="oid" class="AXInput w70p" readonly="readonly">
 			<input type="text" name="number" class="AXInput w40p" readonly="readonly" placeholder="클릭하여 편집할 부품을 선택하세요.">
 			 / <input type="text" name="partType" class="AXInput w20p" readonly="readonly">
 		</td>
 		<th>참조부품 / 유형</th>
 		<td>
+		F1-SWS-LOCKER-4X2-DIAL-N.ASSY.ASM / 세트
+		<br>
 			<input type="hidden" name="eoid" class="AXInput w70p" readonly="readonly">
 			<input type="text" name="eNumber" class="AXInput w40p" readonly="readonly" placeholder="클릭하여 참조할 부품을 선택하세요.">
+			 / <input type="text" name="ePartType" class="AXInput w20p" readonly="readonly">
 		</td>
 	</tr>
 	<tr>
@@ -98,14 +103,8 @@
 </table>
 
 <table class="button-table">
-<colgroup>
-		<col width="150">
-		<col width="610">
-		<col width="150">
-		<col width="580">
-	</colgroup>
 	<tr>
-		<td colspan="2" class="left">
+		<td class="left">
 			<select class="AXSelect w100px" id="depthSelect" onchange="showItemsOnDepth()">
 				<option value="expandAll">전체확장</option>
 				<option value="1">1레벨</option>
@@ -115,19 +114,8 @@
 				<option value="5">5레벨</option>
 			</select>
 		</td>
-		<td>
-		<select class="AXSelect w100px" id="depthSelectR" onchange="showItemsOnDepthR()">
-				<option value="expandAll">전체확장</option>
-				<option value="1" >1레벨</option>
-				<option value="2">2레벨</option>
-				<option value="3">3레벨</option>
-				<option value="4">4레벨</option>
-				<option value="5">5레벨</option>
-			</select>
-		</td>
 		<td class="right">
 			<button type="button" id="createBtn">등록</button>
-			<button type="button" id="verifyBtn">수량검증</button>
 			<button type="button" id="closeBtn">닫기</button>
 		</td>
 	</tr>
@@ -635,20 +623,10 @@
 		
 		if( depth == "expandAll"){
 			AUIGrid.expandAll(leftGridID);
-		}
-		//해당 depth까지 오픈함
-		AUIGrid.showItemsOnDepth(leftGridID, Number(depth));
-	}
-	
-	function showItemsOnDepthR(event) {
-		var depthSelect = document.getElementById("depthSelectR");
-		var depth = depthSelect.value;
-		
-		console.log(depth);
-		if( depth == "expandAll"){
 			AUIGrid.expandAll(rightGridID);
 		}
 		//해당 depth까지 오픈함
+		AUIGrid.showItemsOnDepth(leftGridID, Number(depth));
 		AUIGrid.showItemsOnDepth(rightGridID, Number(depth));
 	}
 	
@@ -657,7 +635,6 @@
 		loadRight();
 		
 		_selector("depthSelect");
-		_selector("depthSelectR");
 		
 // 		$("input[name=number]").click(function() {
 // 			var url = "/Windchill/platform/part/popup?box=1";
@@ -670,7 +647,7 @@
 		})
 		
 		$("input[name=eNumber]").click(function() {
-			var url = "/Windchill/platform/ebom/popup?box=1&purpose=reference";
+			var url = "/Windchill/platform/ebom/popup?box=1";
 			_popup(url, "", "", "f");
 		})
 

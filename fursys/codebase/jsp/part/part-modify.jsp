@@ -72,25 +72,27 @@ QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
 		<th>카테고리 대</th>
 		<td>
 			<select name="cat_l" id="cat_l" class="AXSelect w200px">
+				<option value="">선택</option>
 				<%
 				for (BaseCode c : cat_l){
 				%>
 				<option value="<%=c.getCode() %>" <% if(c.getCode().equals(dto.getCat_l())) {%> selected="selected" <% } %>><%=c.getName() %></option>
 				<%
-				}
+					}
 				%>
 <%-- 			<%=dto.getCompanyNm()%> --%>
 			</select></td>
 		<th>카테고리 중</th>
 		<td>
 			<select name="cat_m" id="cat_m" class="AXSelect w200px">
+				<option value="">선택</option>
 				<%
 				for (BaseCode c : cat_m) {
 				%>
 				<option value="<%=c.getCode()%>" <%if (c.getCode().equals(dto.getCat_m())) {%> selected="selected" <%}%>><%=c.getName()%></option>
 				<%
-				}
-			%>
+					}
+				%>
 			</select>
 <%-- 		<%=dto.getBrandNm()%> --%>
 		</td>
@@ -272,6 +274,7 @@ QuantityUnit[] units = (QuantityUnit[]) request.getAttribute("units");
 		})
 
 		$("#saveBtn").click(function() {
+			
 			var params = _data($("#form"));
 			var url = _url("/part/modify");
 			_call(url, params, function(data) {
