@@ -149,7 +149,15 @@
 		headerText : "distributorUser_oid",
 		dataType : "string",
 		visible : false
-	}, ];
+	}
+	, {
+		dataField : "uoid",
+		headerText : "uoid",
+		dataType : "string",
+		visible : false
+	}
+	
+	];
 	var dist_auiGridProps = {
 			rowIdField : "distributorUser_oid",
 			headerHeight : 30,
@@ -233,9 +241,9 @@
 			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
 			dependentMode : false, 			
 			position : "bottom", // 기본값 "bottom"
-// 			onClick: function (e) {
-// 				myCheckboxHandler(e, "pdf");
-// 			},
+ 			onClick: function (e) {
+ 				myCheckboxHandler(e, "pdf");
+ 			}
 		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
@@ -268,9 +276,9 @@
 			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
 			dependentMode : false, 			
 			position : "bottom", // 기본값 "bottom"
-// 			onClick: function (e) {
-// 				myCheckboxHandler(e, "dwg");
-// 			},
+ 			onClick: function (e) {
+ 				myCheckboxHandler(e, "dwg");
+ 			}
 		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
@@ -303,9 +311,9 @@
 			// true 설정했을 때 클릭하면 해당 열의 필드(데모 상은 isActive 필드)의 모든 데이터를 true, false 로 자동 바꿈
 			dependentMode : false, 			
 			position : "bottom", // 기본값 "bottom"
-			onClick: function (e) {
-				myCheckboxHandler(e);
-			},
+ 			onClick: function (e) {
+ 				myCheckboxHandler(e, "step");
+ 			}
 		},
 		renderer : {
 			type : "CheckBoxEditRenderer",
@@ -321,9 +329,9 @@
 		// 				return true;
 		// 			}
 			disabledFunction: function (rowIndex, columnIndex, value, isChecked, item, dataField) {
-				console.log(item);
-				console.log("############ linkStep y/s");
-				console.log(item.linkStep);
+//				console.log(item);
+//				console.log("############ linkStep y/s"); 
+//				console.log(item.linkStep);
 				if (item.linkStep == false)
 					return true; // true 반환하면 disabled 시킴
 				return false;
@@ -357,53 +365,7 @@
 	
 	
 	myGridID = AUIGrid.create("#grid_wrap", columnLayout, auiGridProps);
-
-	AUIGrid.bind(myGridID, "cellEditEnd", function(event) {
-		var dataField = event.dataField;
-		var value = event.value;
-		var item = event.item;
-
-		if (dataField == "distributor") {
-			if (value == "") {
-				return false;
-			}
-			var params = new Object();
-			params.oid = value;
-			var url = _url("/distributor/info");
-			_call(url, params, function(data) {
-				var userName = data.userName;
-				var type = data.type;
-				var email = data.email;
-				item.type = type;
-				item.user = userName + " / " + email;
-				AUIGrid.updateRow(myGridID, item, event.rowIndex);
-			}, "POST");
-		}
-	});
-
-	AUIGrid.bind(myGridID, "cellClick", function(event) {
-		if (event.dataField == "user") {
-			var rowItem = event.item;
-			var url = _url("/distributor/popupUser", rowItem.oid);
-			_popup(url, 900, 600, "n");
-		}
-
-		if (event.dataField == "number" || event.dataField == "name") {
-			var rowItem = event.item;
-			var url = _url("/dist/detail", rowItem.oid);
-			_popup(url, 1200, 600, "n");
-		}
-
-		var rowItem = event.item;
-		var rowIdFeild, rowId;
-		rowIdField = AUIGrid.getProp(event.pid, "rowIdField");
-		rowId = rowItem[rowIdField];
-		if (AUIGrid.isCheckedRowById(event.pid, rowId)) {
-			AUIGrid.addUncheckedRowsByIds(event.pid, rowId);
-		} else {
-			AUIGrid.addCheckedRowsByIds(event.pid, rowId);
-		}
-	})
+	
 
 	$(function() {
 		$("#closeBtn").click(function() {
@@ -486,23 +448,16 @@
 			}
 			AUIGrid.removeCheckedRows(myGridID);
 		})
-
-// 		$("#daddBtn").click(function() {
-// 			var items = AUIGrid.getCheckedRowItems(myGridID);
-// 			if (items.length > 1) {
-// 				alert("하나의 행을 선택하세요.");
-// 				return false;
-// 			}
-// 			items[0].item.type = "";
-// 			items[0].item.user = "";
-// 			AUIGrid.addRow(myGridID, items[0].item, items[0].rowIndex + 1);
-// 		})
-
 		_selector("duration");
 	})
 
 	function info(list) {
-		AUIGrid.addRow(dist_GridID, list);
+		list.forEach(function(v, n) {
+			var notHave = AUIGrid.isUniqueValue(dist_GridID, "uoid", v.uoid); // 이미 존재하는지 검사
+			if (notHave) {
+				AUIGrid.addRow(dist_GridID, v);
+			}
+		});
 	}
 	
 	function dist(list) {
@@ -510,37 +465,58 @@
 	}
 
 	function part(list) {
-		AUIGrid.addRow(myGridID, list);
+		list.forEach(function(v, n) {
+			var notHave = AUIGrid.isUniqueValue(myGridID, "oid", v.oid); // 이미 존재하는지 검사
+			if (notHave) {
+				AUIGrid.addRow(myGridID, v);
+			}
+		});
 	}
 	
-	function myCheckboxHandler(event) {
-		var item = AUIGrid.getRowsByValue(event.pid, item, item.linkStep);
-		console.log(item);
-		var linkValue = AUIGrid.getColumnDistinctValues(event.pid, "step");
-		//Anna 제외하기
-		linkValue.splice(linkValue.indexOf(false), 0);
-		console.log(linkValue);
-		//Anna 제외한 행들 모두 얻기
-		var rows = AUIGrid.getRowsByValue(event.pid, "step", linkValue);
+	//일괄체크 disable 제외
+	function myCheckboxHandler(event, type) {
+		
+		var rows2 = AUIGrid.getGridData(myGridID);
+		
+		console.log(rows2);
+		
 		var items = [];
 		var rowIdField = AUIGrid.getProp(event.pid, "rowIdField");
-		console.log("######rowsssssss");
-		console.log(rows);
+		//console.log("######rowsssssss");
+		//console.log(rows);
 		console.log(rowIdField);
-		rows.forEach(function(v, n) {
-			console.log(v);
-			var item = {
-				id : v[rowIdField],
-				isChecked : event.checked,
-				step : event.checked
-			};
-			console.log("#########itemmmmmmmmm");
-			console.log(item);
-			items.push(item);
-			console.log("######### 푸쉬");
-			console.log(items);
+		rows2.forEach(function(v, n) {
+			var itemValue = AUIGrid.getItemByRowId(v[rowIdField]);
+			if("pdf"==type){
+				if( v["linkPdf"]==true){
+					var item = {
+						rowId : v[rowIdField],
+						pdf : event.checked,
+						pdfValue : event.checked
+					};
+				}
+			}else if("dwg"==type){
+				if( v["linkDwg"]==true){
+					var item = {
+						rowId : v[rowIdField],
+						dwg : event.checked,
+						dwgValue : event.checked
+					};
+				}
+			}else if("step"==type){
+				if( v["linkStep"]==true){
+					var item = {
+						rowId : v[rowIdField],
+						step : event.checked,
+						stepValue : event.checked
+					};
+				}
+			}
+			
+			AUIGrid.updateRowsById(myGridID, item); // 1개 업데이트
+			
 		});
 		//행 수정
-		AUIGrid.updateRowsById(event.pid, items);
 	}
+	
 </script>
